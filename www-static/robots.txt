@@ -1,0 +1,16 @@
+# Robots.txt for Airplane ID
+# https://airplane-id.com
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location (coming soon)
+# Sitemap: https://airplane-id.com/sitemap.xml
+
+# Note to crawlers: This is a launching soon page.
+# The full site and app will be available soon.
+# Please check back regularly for updates.
+
+# Cache this page for 24 hours
+# Crawl-delay: 86400
