@@ -1,0 +1,92 @@
+Functionality requirements
+
+    IMAGE CAPTURE (Camera)
+        - Prominant round camera button on UI
+            - Button should look like the apple Camera button with a solid white center and a gray circle around it.
+                - the icon should be picked up form the apple app and maintain their standards.  
+                - If an iOS update changes the button then our app will maintain the same styling.  
+        - Landscape photo
+            - Regardless of phone orientation, the image should be taken in a 16:9 frame size.  
+            - When holding the phone vertical the view to the user should show a small 16:9 image at the top of their screen
+            - When the phone rotates horizontal, the image will rotate to wide screen.  
+                - The round photo button should stay in the same locaiton while the image flips.  
+                - If the phone rotates to the left the capture button will be on the right side. 
+                - If the phone rotates to the right the capture button will remain on the left side. 
+        - Zoom functionality 
+            - The iPhone zoom icons and functionality should be identical to the standard photo app. 
+                - e.g. (.5, 1x, 2, 5)
+                - The macro icon (flower) should not be displayed
+        - Flash functionality
+            - Flash should be exponsed the same as the camera icon.  
+            - The user can turn it on or off.
+            - Flash should be off by default.
+                - when opening the image capture process flash should be off.
+                - if the user turns it on then flash will remain on during the app session.
+                - on the next restart of the app, flash will default to off.
+        - Live Timer, Styles and Aspect ratio should be disabled.
+            - live photo capture should be turned off and disabled.   
+            - Timed photos should be disabled and not usable.
+            - Styles should be set to standard and the user cannot change the setting.
+        - Night Mode
+            - Night mode should be an option in dark lighting situations 
+            - functionalty of Night Mode should be the same as how the Apple Camera app works.  
+                - Genreally the iPhone will automatically turn on night mode to capture an image if the flash is off and lighting is not sufficient.  
+        - Video disabled 
+            Video capture should be disabled. 
+        - Capture save 
+            - All images captured should save to the users photo library (eg. iPhoto) in the original native file size. 
+            - Images captured should be resampled to a 5mb or less file size
+            - Images captured should be converted to a .jpg format
+            - Images captured should be named a unique sequence number retained in the Photo Capture App library database 
+            - Metadata should be saved in the .jpg image that specifies the original high resolution locaiton on the device
+                - iCloud Library file path 
+
+
+    PHOTO UPLOAD (iPhoto app)
+        - users should be able to pick an image from their iPhoto library or from any locaiton accessable on their phone
+            - The upload functionality should work like a standard iPhone app.  
+                - for gudence reference iMessage specs
+            - There should be a + sign with a circle around it like iMessage 
+                - Clicking the circle pulls upload locations supported by that particular device.
+                - The menu should open up like iMessage and list out capture options
+                    - Minimum options should be Camera and Photos.  
+                        - Phones that have file storage should display file that opens the phone file database that is often iCloud Drive
+                        - Phones that have Dropbox installed should display Dropbox as an option and connect to Dropbox for file retrieval 
+    External App Share
+        - The plane capture app should be listed as a share destination when in other Apple apps that support sharing.  
+            - Dropbox has a share option.  When selected the user can select Share to. 
+                - Share to opens up a list of sharable devices like imessages, mail, notes, etc.  
+                    - the plane capture app should show up in the list as sharable destinations.  
+                    - Only images should be accepted.  Non-images should present a message to the users saying only images are supported 
+                        - standard image types Should be allowed (JPG, JPEG, PNG, HEIC)
+                        - Videos sharing is not supported.  Do not allow transfer of movie formats (e.g. MOV)
+            - Any app that supports share should funciton exactly the same as Dropbox referenced above.  
+
+    METADATA
+        - All images processed should retain the metadata when being sent and saved
+        - Data should include all metadata available including:      
+                    - Create Date
+                    - Dimensions
+                    - Color space
+                    - F number 
+                    - Device make
+                    - Device Model
+                    - Focal length 
+                    - Flash (yes/no)
+                    - Longitude, Latitude
+        
+    Image TRANSFER size
+        - Images should be captured as HD quality at a 16:9 aspect ratio 
+        - Images being shared from an iPhone library or external file share: 
+            - Should maintain the aspect ratio of the image.  Do not crop. 
+            - Images should be sent as a medium resolution.  
+                - If the image is high res with a large file size, the image should be reduced in size on device before sending
+                - File sizes sent should be less than 5 mb in size. 
+
+    Mass Select processing 
+        - Users may select multiple photos at one time to send to the app for processing 
+        - The image transfer will follow the same as the Image TRANSFER size specs
+            - Large images should be resampled prior to sending to the server 
+        - When images are sent though the app, a duplicate resampled copy of the image should be saved locally in the Phone Capture database 
+            - Images saved should be renamed to an the standard app format defined in these specifications.  
+            - The original iCloud, iPhoto or file locaiton of the high-resolution image should be maintained as metadata in the image saved in the app database. 
