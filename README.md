@@ -73,4 +73,4 @@ This project uses Claude AI for development assistance. The `CONTEXT.md` file ma
 
 ## License
 
-[Your license here]
+Copyright Passion Highway, Inc.  All rights reserved. 
