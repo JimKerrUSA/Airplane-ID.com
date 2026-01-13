@@ -1,0 +1,49 @@
+# .github/workflows/sync-to-gitea.yml
+# 
+# How It Works:
+# 1. Claude Code web makes changes on GitHub and creates a PR
+# 2. You review and merge the PR on GitHub
+# 3. The GitHub Action automatically triggers on the merge
+# 4. The Action pushes all changes to your Gitea instance
+#
+# Required Secrets:
+# - GITEA_USER: Your Gitea username (for authentication)
+# - GITEA_TOKEN: Your Gitea API token
+# - GITEA_URL: git.kerrnet.net
+#
+# Optional Secrets:
+# - GITEA_ORG: Gitea organization name (if not set, uses GITEA_USER)
+
+name: Sync to Gitea
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    types: [closed]
+    branches: [main, master]
+
+jobs:
+  sync:
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Push to Gitea
+        env:
+          GITEA_USER: ${{ secrets.GITEA_USER }}
+          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
+          GITEA_URL: ${{ secrets.GITEA_URL }}
+          GITEA_ORG: ${{ secrets.GITEA_ORG }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          OWNER="${GITEA_ORG:-$GITEA_USER}"
+          git remote add gitea "https://${GITEA_USER}:${GITEA_TOKEN}@${GITEA_URL}/${OWNER}/${REPO_NAME}.git"
+          git push gitea --all --force
+          git push gitea --tags --force
+
