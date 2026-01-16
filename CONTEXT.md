@@ -7,6 +7,7 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 
 ## Current State
 - SwiftUI app with SwiftData for persistence
+- **Full navigation system working:** Home, Maps, Camera, Hangar, Settings, Journey pages
 - Three orientation templates: PortraitTemplate, LandscapeLeftTemplate, LandscapeRightTemplate
 - Portrait view fully working with data boxes, progress bar, and recent sightings
 - **Landscape views now have full content matching mockups:**
@@ -16,22 +17,29 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - Landscape Left template: footer offset x: 20, content padding leading: 120
 - Landscape Right template: footer offset x: 100, content padding trailing: 120
 - Landscape header person icon positioned (trailing padding: 86)
-- Test data loading working via HomePage.onAppear (moved to top level)
-- Templates renamed for clarity and long-term maintainability
-- **Level progression logic added:** nextLevel computed property determines progress bar label
-- **Data passed from parent:** Landscape content views receive latestSightings and nextLevel as params
+- Test data loading working via Airplane_IDApp.swift onAppear
+- **Level progression system:** NEWBIE → SPOTTER → ENTHUSIAST → EXPERT → ACE → LEGEND
+- **JourneyPage:** Tap person icon to view level, stats, badges (coming soon), leaderboard (coming soon)
+- **Database-driven stats:** Aircraft count, unique types, and level all computed from SwiftData
 
 ## Key Files
 - `ContentView.swift` - All reusable components and templates
-  - TopMenuView / TopMenuViewLandscape - Header components
-  - BottomMenuView / BottomMenuViewLandscape - Footer/nav components
+  - `NavigationDestination` enum - All app screens (home, maps, camera, hangar, settings, journey)
+  - `AppState` - Global observable state (status, counts, currentScreen, etc.)
+  - TopMenuView / TopMenuViewLandscape - Header components (with person icon tap)
+  - BottomMenuView / BottomMenuViewLandscape - Footer/nav components (with nav taps)
   - **PortraitTemplate** - Portrait orientation template
   - **LandscapeLeftTemplate** - Landscape with footer on LEFT edge
   - **LandscapeRightTemplate** - Landscape with footer on RIGHT edge
   - OrientationAwarePage - Wrapper that switches templates based on geometry
 - `HomePage.swift` - Main home screen content with data boxes and recent sightings
+  - Level progression computed properties (currentStatus, nextLevel, levelProgress)
+  - uniqueTypesCount - Counts unique ICAO codes
 - `Item.swift` - Contains CapturedAircraft SwiftData model
-- `Airplane_IDApp.swift` - App entry point with test data loading
+- `Airplane_IDApp.swift` - App entry point and navigation
+  - MainView - Navigation router (switches pages based on currentScreen)
+  - PlaceholderPage - Generic "Coming Soon" page
+  - JourneyPage - User profile/progress page
 
 ## Recent Decisions
 
@@ -76,6 +84,58 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - icao, manufacturer, model
 - engine, numberOfEngines, registration
 - rating, thumbsUp, iPhotoReference
+
+### Level Progression System
+Levels are based on total aircraft captured (database record count).
+
+| Level | Aircraft Required | Progress To | Description |
+|-------|------------------|-------------|-------------|
+| NEWBIE | 0-9 | SPOTTER | "You're just getting started!" |
+| SPOTTER | 10-99 | ENTHUSIAST | "You've got sharp eyes!" |
+| ENTHUSIAST | 100-249 | EXPERT | "You're hooked on aviation!" |
+| EXPERT | 250-499 | ACE | "Your knowledge is impressive!" |
+| ACE | 500-1099 | LEGEND | "You're among the elite!" |
+| LEGEND | 1100+ | (max) | "You've reached the pinnacle!" |
+
+**Implementation:**
+- `currentStatus` - Computed from `allAircraft.count` using thresholds above
+- `nextLevel` - Returns the next level name based on currentStatus
+- `levelProgress` - Returns 0.0-1.0 progress toward next threshold
+- `uniqueTypesCount` - Counts unique ICAO codes: `Set(allAircraft.compactMap { $0.icao }).count`
+- AppState is updated in `onAppear` and `onChange(of: allAircraft.count)`
+
+### Navigation System
+| Destination | Icon | Tap Location | Page |
+|-------------|------|--------------|------|
+| home | house | Footer | HomePage |
+| maps | map | Footer | PlaceholderPage |
+| camera | camera | Footer (center) | PlaceholderPage |
+| hangar | airplane.departure | Footer | PlaceholderPage |
+| settings | gearshape | Footer | PlaceholderPage |
+| journey | person | Header (top right) | JourneyPage |
+
+**Implementation:**
+- `NavigationDestination` enum in ContentView.swift
+- `appState.currentScreen` tracks active page
+- `MainView` in Airplane_IDApp.swift switches views based on currentScreen
+- All nav buttons have `onTapGesture` handlers
+
+### JourneyPage
+User profile/progress page accessed by tapping person icon in header.
+
+**Features:**
+- Dynamic title: "{Level}'s Journey" (e.g., "Spotter's Journey")
+- Current status display (large yellow text)
+- Aircraft count
+- Level description (explains next milestone)
+- Badges section (Coming Soon)
+- Leaderboard section (Coming Soon)
+
+**Future enhancements:**
+- Badge system for achievements
+- Global leaderboard
+- Statistics breakdown
+- Sharing capabilities
 
 ## Next Steps
 
