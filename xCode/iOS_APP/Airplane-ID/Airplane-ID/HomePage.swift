@@ -296,22 +296,23 @@ struct HomePage: View {
 
                                             // Manufacturer and Registration/Model stacked
                                             VStack(alignment: .leading, spacing: 2) {
-                                                // Line 1: Manufacturer in ALL CAPS, SF Pro Regular 22pt
+                                                // Line 1: Manufacturer in ALL CAPS, SF Pro Regular 23pt
                                                 Text((aircraft.manufacturer ?? "Unknown").uppercased())
-                                                    .font(.system(size: 22, weight: .regular))
+                                                    .font(.system(size: 23, weight: .regular))
                                                     .foregroundStyle(Color(hex: "082A49"))
 
-                                                // Line 2: Registration (CAPS) + Model (Title Case), SF Pro Regular 18pt
+                                                // Line 2: Registration (CAPS) + Model (Title Case), SF Pro Regular 19pt
                                                 if let registration = aircraft.registration, !registration.isEmpty {
                                                     Text("\(registration.uppercased()) \(aircraft.model ?? "")")
-                                                        .font(.system(size: 18, weight: .regular))
+                                                        .font(.system(size: 19, weight: .regular))
                                                         .foregroundStyle(Color(hex: "082A49"))
                                                 } else {
                                                     Text(aircraft.model ?? "")
-                                                        .font(.system(size: 18, weight: .regular))
+                                                        .font(.system(size: 19, weight: .regular))
                                                         .foregroundStyle(Color(hex: "082A49"))
                                                 }
                                             }
+                                            .padding(.leading, 3) // Move text 3px right
                                         }
                                     }
                                 }
