@@ -456,9 +456,10 @@ struct HomePageLeftHorizontal<Content: View>: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
 
-                    // Left side navigation bar - positioned on left edge
+                    // Left side navigation bar - vertically centered on left edge
                     BottomMenuViewLandscape()
-                        .position(x: 50, y: geometry.size.height / 2)
+                        .position(x: 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
+                        .offset(x: -5)
                 }
             }
 #if os(iOS)
@@ -498,9 +499,10 @@ struct HomePageRightHorizontal<Content: View>: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
 
-                    // Right side navigation bar - positioned on right edge
+                    // Right side navigation bar - vertically centered on right edge
                     BottomMenuViewLandscape()
-                        .position(x: geometry.size.width - 50, y: geometry.size.height / 2)
+                        .position(x: geometry.size.width - 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
+                        .offset(x: 5)
                 }
             }
 #if os(iOS)
