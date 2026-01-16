@@ -23,6 +23,13 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - **Database-driven stats:** Aircraft count, unique types, and level all computed from SwiftData
 
 ## Key Files
+
+### App Entry Point
+- `Airplane_IDApp.swift` - App entry point, ModelContainer, and test data loading
+  - MainView - Navigation router (switches pages based on currentScreen)
+  - Test data import functions
+
+### Core Components
 - `ContentView.swift` - All reusable components and templates
   - `NavigationDestination` enum - All app screens (home, maps, camera, hangar, settings, journey)
   - `AppState` - Global observable state (status, counts, currentScreen, etc.)
@@ -32,16 +39,23 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - **LandscapeLeftTemplate** - Landscape with footer on LEFT edge
   - **LandscapeRightTemplate** - Landscape with footer on RIGHT edge
   - OrientationAwarePage - Wrapper that switches templates based on geometry
+- `Item.swift` - Contains CapturedAircraft SwiftData model
+
+### Page Files (each with #Preview for Portrait, Landscape Left, Landscape Right)
 - `HomePage.swift` - Main home screen content with data boxes and recent sightings
   - Level progression computed properties (currentStatus, nextLevel, levelProgress)
   - uniqueTypesCount - Counts unique ICAO codes
-- `Item.swift` - Contains CapturedAircraft SwiftData model
-- `Airplane_IDApp.swift` - App entry point and navigation
-  - MainView - Navigation router (switches pages based on currentScreen)
-  - PlaceholderPage - Generic "Coming Soon" page
-  - JourneyPage - User profile/progress page
-  - SettingsPage - Settings page (portrait only, dark theme)
-  - SettingsRow - Reusable settings menu row component
+- `SettingsPage.swift` - Settings page with dark theme (#121516) in all orientations
+  - Custom orientation handling (not OrientationAwarePage)
+  - SettingsPortraitView, SettingsLandscapeLeftView, SettingsLandscapeRightView
+  - SettingsContent, SettingsScrollContent, SettingsRow components
+  - Scrollable in landscape mode
+- `JourneyPage.swift` - User profile/progress page
+  - Dynamic title based on level
+  - Level descriptions and stats
+- `HangarPage.swift` - Aircraft collection page (placeholder)
+- `MapsPage.swift` - Map view page (placeholder)
+- `CameraPage.swift` - Camera capture page (placeholder)
 
 ## Recent Decisions
 
@@ -140,13 +154,20 @@ User profile/progress page accessed by tapping person icon in header.
 - Sharing capabilities
 
 ### SettingsPage
-Settings page with dark theme - **portrait only** (does not rotate).
+Settings page with dark theme - supports all orientations with custom handling.
 
 **Design:**
-- Background color: #121516 (dark)
-- Row background: #1E2328 (slightly lighter)
-- Uses same header (TopMenuView) and footer (BottomMenuView) as portrait template
-- Does NOT use OrientationAwarePage - stays portrait regardless of device rotation
+- Background color: #121516 (dark) - covers entire screen including behind footer
+- Row background: #1D1E21
+- Row spacing: 15px
+- Custom orientation views (not OrientationAwarePage) to ensure dark background everywhere
+- Uses safe area insets to detect landscape left vs right orientation
+- Scrollable content in landscape mode (ScrollView)
+
+**Orientation Handling:**
+- Portrait: SettingsPortraitView with TopMenuView/BottomMenuView
+- Landscape Left: SettingsLandscapeLeftView with TopMenuViewLandscape/BottomMenuViewLandscape
+- Landscape Right: SettingsLandscapeRightView (detected via safeArea.leading > safeArea.trailing)
 
 **Current menu items (placeholders):**
 - Account - Manage your account
@@ -156,7 +177,12 @@ Settings page with dark theme - **portrait only** (does not rotate).
 - About - Version and credits
 
 **Components:**
-- `SettingsPage` - Main settings view
+- `SettingsPage` - Main view with GeometryReader for orientation detection
+- `SettingsPortraitView` - Portrait layout
+- `SettingsLandscapeLeftView` - Landscape left layout (footer on left)
+- `SettingsLandscapeRightView` - Landscape right layout (footer on right)
+- `SettingsContent` - Portrait content wrapper with ScrollView
+- `SettingsScrollContent` - Inner content (title + rows) used in all orientations
 - `SettingsRow` - Reusable row component with icon, title, subtitle, chevron
 
 ## Next Steps
@@ -238,3 +264,30 @@ Settings page with dark theme - **portrait only** (does not rotate).
   - Placeholder sections for Badges and Leaderboard
   - Supports all orientations
 - Next: Build out individual page content, test on physical device
+
+### 2026-01-16
+- **Refactored pages into separate files:**
+  - Created `SettingsPage.swift` with SettingsRow component and preview
+  - Created `JourneyPage.swift` with preview
+  - Created `HangarPage.swift` with placeholder content and preview
+  - Created `MapsPage.swift` with placeholder content and preview
+  - Created `CameraPage.swift` with placeholder content and preview
+- Cleaned up `Airplane_IDApp.swift`:
+  - Now only contains MainView, app entry point, and test data loading
+  - Removed PlaceholderPage (pages now have their own files)
+  - MainView now routes to actual page files instead of placeholders
+- **Added landscape previews to all pages:**
+  - Each page now has Portrait, Landscape Left, Landscape Right previews
+  - Uses LandscapeLeftTemplate and LandscapeRightTemplate directly in previews
+  - Proper padding for footer position (leading: 120 for left, trailing: 120 for right)
+- **SettingsPage rebuilt with custom orientation handling:**
+  - Dark background (#121516) now covers entire screen including behind footer
+  - Created separate views: SettingsPortraitView, SettingsLandscapeLeftView, SettingsLandscapeRightView
+  - Uses safe area insets to detect landscape left vs right (safeArea.leading > safeArea.trailing)
+  - No UIKit required - pure SwiftUI orientation detection
+  - Settings row background: #1D1E21
+  - Settings row spacing: 15px
+  - ScrollView enables scrolling in landscape mode when menu is longer than screen
+  - SettingsScrollContent separated from SettingsContent for proper scroll behavior
+- All pages have #Preview blocks for Xcode canvas viewing
+- Each page supports all three orientations
