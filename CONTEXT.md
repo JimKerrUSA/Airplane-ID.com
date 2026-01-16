@@ -40,6 +40,8 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - MainView - Navigation router (switches pages based on currentScreen)
   - PlaceholderPage - Generic "Coming Soon" page
   - JourneyPage - User profile/progress page
+  - SettingsPage - Settings page (portrait only, dark theme)
+  - SettingsRow - Reusable settings menu row component
 
 ## Recent Decisions
 
@@ -111,7 +113,7 @@ Levels are based on total aircraft captured (database record count).
 | maps | map | Footer | PlaceholderPage |
 | camera | camera | Footer (center) | PlaceholderPage |
 | hangar | airplane.departure | Footer | PlaceholderPage |
-| settings | gearshape | Footer | PlaceholderPage |
+| settings | gearshape | Footer | SettingsPage |
 | journey | person | Header (top right) | JourneyPage |
 
 **Implementation:**
@@ -136,6 +138,26 @@ User profile/progress page accessed by tapping person icon in header.
 - Global leaderboard
 - Statistics breakdown
 - Sharing capabilities
+
+### SettingsPage
+Settings page with dark theme - **portrait only** (does not rotate).
+
+**Design:**
+- Background color: #121516 (dark)
+- Row background: #1E2328 (slightly lighter)
+- Uses same header (TopMenuView) and footer (BottomMenuView) as portrait template
+- Does NOT use OrientationAwarePage - stays portrait regardless of device rotation
+
+**Current menu items (placeholders):**
+- Account - Manage your account
+- Notifications - Configure alerts
+- Sync - Cloud backup settings
+- Help - FAQ and support
+- About - Version and credits
+
+**Components:**
+- `SettingsPage` - Main settings view
+- `SettingsRow` - Reusable row component with icon, title, subtitle, chevron
 
 ## Next Steps
 

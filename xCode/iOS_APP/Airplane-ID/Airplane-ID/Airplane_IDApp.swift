@@ -27,8 +27,7 @@ struct MainView: View {
             // Placeholder - will be replaced with HangarPage()
             PlaceholderPage(title: "Hangar", icon: "airplane.departure")
         case .settings:
-            // Placeholder - will be replaced with SettingsPage()
-            PlaceholderPage(title: "Settings", icon: "gearshape")
+            SettingsPage()
         case .journey:
             JourneyPage()
         }
@@ -263,6 +262,109 @@ struct JourneyPage: View {
             }
         )
     }
+}
+
+// MARK: - Settings Page
+/// Settings page - Portrait only, dark background (#121516)
+/// Does not rotate with device orientation
+struct SettingsPage: View {
+    @Environment(AppState.self) private var appState
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Top Menu Bar - Same as portrait template
+                TopMenuView()
+
+                // Main content area with dark background
+                ZStack(alignment: .bottom) {
+                    // Dark background
+                    Color(hex: "121516")
+                        .ignoresSafeArea()
+
+                    // Settings content
+                    VStack {
+                        Spacer().frame(height: 20)
+
+                        // Settings title
+                        Text("Settings")
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 20)
+
+                        Spacer().frame(height: 30)
+
+                        // Placeholder content - will be replaced with actual settings
+                        VStack(spacing: 16) {
+                            SettingsRow(icon: "person.circle", title: "Account", subtitle: "Manage your account")
+                            SettingsRow(icon: "bell", title: "Notifications", subtitle: "Configure alerts")
+                            SettingsRow(icon: "icloud", title: "Sync", subtitle: "Cloud backup settings")
+                            SettingsRow(icon: "questionmark.circle", title: "Help", subtitle: "FAQ and support")
+                            SettingsRow(icon: "info.circle", title: "About", subtitle: "Version and credits")
+                        }
+                        .padding(.horizontal, 20)
+
+                        Spacer()
+                    }
+
+                    // Bottom Navigation Bar - Same as portrait template
+                    BottomMenuView()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .background(Color(hex: "121516"))
+            .ignoresSafeArea()
+#if os(iOS)
+            .navigationBarHidden(true)
+#endif
+        }
+    }
+}
+
+// MARK: - Settings Row Component
+/// Reusable row for settings menu items
+struct SettingsRow: View {
+    let icon: String
+    let title: String
+    let subtitle: String
+
+    var body: some View {
+        HStack(spacing: 16) {
+            // Icon
+            Image(systemName: icon)
+                .font(.system(size: 24))
+                .foregroundStyle(Color(hex: "F27C31"))
+                .frame(width: 40)
+
+            // Text
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.white)
+                Text(subtitle)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white.opacity(0.6))
+            }
+
+            Spacer()
+
+            // Chevron
+            Image(systemName: "chevron.right")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.4))
+        }
+        .padding(.vertical, 16)
+        .padding(.horizontal, 16)
+        .background(Color(hex: "1E2328"))
+        .cornerRadius(12)
+    }
+}
+
+// MARK: - Settings Page Preview
+#Preview("Settings Page") {
+    SettingsPage()
+        .environment(AppState())
 }
 
 @main
