@@ -240,7 +240,7 @@ struct TopMenuViewLandscape: View {
                         .font(.custom("Helvetica", size: 12))
                         .foregroundStyle(.white)
                 }
-                .padding(.trailing, 16)
+                .padding(.trailing, 86)
                 .padding(.top, 8)
             }
         }
