@@ -11,7 +11,18 @@ import SwiftData
 struct HomePage: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AppState.self) private var appState
-    
+
+    // Query to fetch the most recent aircraft captures
+    @Query(
+        sort: \CapturedAircraft.captureDate,
+        order: .reverse
+    ) private var allAircraft: [CapturedAircraft]
+
+    // Computed property to get the 3 most recent sightings
+    private var recentSightings: [CapturedAircraft] {
+        Array(allAircraft.prefix(3))
+    }
+
     // Helper function to format numbers with commas
     func formatNumber(_ number: Int) -> String {
         let formatter = NumberFormatter()
@@ -177,22 +188,68 @@ struct HomePage: View {
                     }
                     .padding(.top, 13) // 13px below second box
                     
-                    // Bottom box - Recent Finds
+                    // Bottom box - Recent Sightings
                     VStack(spacing: 0) {
                         // Top section - Dark blue header with rounded top corners
                         ZStack {
                             Color(hex: "082A49")
-                            
-                            Text("Recent Finds")
+
+                            Text("Recent Sightings")
                                 .font(.system(size: 26, weight: .bold, design: .default))
                                 .foregroundStyle(.white)
                         }
                         .frame(width: 347, height: 39)
                         .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
-                        
+
                         // Bottom section - White with blue border and rounded bottom corners
                         ZStack {
                             Color(hex: "FFFFFF")
+
+                            // Recent sightings list
+                            if recentSightings.isEmpty {
+                                // Empty state
+                                VStack(spacing: 8) {
+                                    Image(systemName: "airplane.departure")
+                                        .font(.system(size: 40))
+                                        .foregroundStyle(Color(hex: "F27C31").opacity(0.5))
+                                    Text("No sightings yet")
+                                        .font(.system(size: 18, weight: .regular))
+                                        .foregroundStyle(Color(hex: "082A49").opacity(0.6))
+                                }
+                            } else {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    ForEach(recentSightings) { aircraft in
+                                        HStack(alignment: .center, spacing: 10) {
+                                            // Airplane icon - centered vertically with text
+                                            Image(systemName: "airplane")
+                                                .font(.system(size: 28))
+                                                .foregroundStyle(Color(hex: "F27C31"))
+
+                                            // Manufacturer and Registration/Model stacked
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                // Line 1: Manufacturer in ALL CAPS, SF Pro Regular 22pt
+                                                Text((aircraft.manufacturer ?? "Unknown").uppercased())
+                                                    .font(.system(size: 22, weight: .regular))
+                                                    .foregroundStyle(Color(hex: "082A49"))
+
+                                                // Line 2: Registration (CAPS) + Model (Title Case), SF Pro Regular 18pt
+                                                if let registration = aircraft.registration, !registration.isEmpty {
+                                                    Text("\(registration.uppercased()) \(aircraft.model ?? "")")
+                                                        .font(.system(size: 18, weight: .regular))
+                                                        .foregroundStyle(Color(hex: "082A49"))
+                                                } else {
+                                                    Text(aircraft.model ?? "")
+                                                        .font(.system(size: 18, weight: .regular))
+                                                        .foregroundStyle(Color(hex: "082A49"))
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.leading, 20)
+                                .padding(.trailing, 20)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                         }
                         .frame(width: 347, height: 211)
                         .overlay(
@@ -230,6 +287,6 @@ struct HomePage: View {
 
 #Preview {
     HomePage()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: CapturedAircraft.self, inMemory: true)
         .environment(AppState())
 }
