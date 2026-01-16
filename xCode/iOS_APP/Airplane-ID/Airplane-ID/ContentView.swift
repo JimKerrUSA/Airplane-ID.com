@@ -192,6 +192,164 @@ struct BottomMenuView: View {
     }
 }
 
+// MARK: - Top Menu Component - Landscape Version
+/// Landscape version of the top menu - reduced height (83px vs 140px portrait)
+struct TopMenuViewLandscape: View {
+    @Environment(AppState.self) private var appState
+
+    var body: some View {
+        ZStack {
+            Color(hex: "082A49")
+                .ignoresSafeArea(edges: .horizontal)
+
+            // Search bar (centered to screen)
+            VStack {
+                Spacer()
+
+                HStack(spacing: 0) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 30, weight: .bold))
+                        .foregroundStyle(Color(hex: "000000").opacity(0.5))
+                        .padding(.leading, 12)
+
+                    TextField("", text: Binding(
+                        get: { appState.search },
+                        set: { appState.search = $0 }
+                    ))
+                    .padding(.leading, 10)
+
+                    Spacer()
+                }
+                .frame(width: 240, height: 50)
+                .background(Color(hex: "FFFFFF"))
+                .cornerRadius(10)
+                .padding(.bottom, 8)
+            }
+            .frame(maxWidth: .infinity)
+
+            // Status indicator (top right)
+            HStack(alignment: .top) {
+                Spacer()
+
+                VStack(spacing: 4) {
+                    Image(systemName: "person")
+                        .font(.system(size: 45))
+                        .foregroundStyle(.white)
+
+                    Text(appState.status)
+                        .font(.custom("Helvetica", size: 12))
+                        .foregroundStyle(.white)
+                }
+                .padding(.trailing, 16)
+                .padding(.top, 8)
+            }
+        }
+        .frame(height: 83)
+        .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - Bottom Menu Component - Landscape Version
+/// Landscape version of the bottom menu - vertical layout for side positioning
+struct BottomMenuViewLandscape: View {
+    @Environment(AppState.self) private var appState
+
+    var body: some View {
+        ZStack(alignment: .center) {
+            // Navigation bar rectangle - vertical orientation
+            RoundedRectangle(cornerRadius: 50)
+                .fill(Color(hex: "082A49"))
+                .frame(width: 65, height: 385)
+
+            // Navigation icons in vertical layout
+            VStack(spacing: 0) {
+                // Top section
+                VStack {
+                    Spacer()
+
+                    // Settings icon
+                    VStack(spacing: 4) {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 35, weight: .regular))
+                            .foregroundStyle(Color(hex: "FFFFFF"))
+
+                        Text("Settings")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color(hex: "FFFFFF"))
+                    }
+
+                    Spacer()
+
+                    // Maps icon
+                    VStack(spacing: 4) {
+                        Image(systemName: "map")
+                            .font(.system(size: 35, weight: .regular))
+                            .foregroundStyle(Color(hex: "FFFFFF"))
+
+                        Text("Maps")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color(hex: "FFFFFF"))
+                    }
+
+                    Spacer()
+                }
+                .frame(height: 142.5)
+
+                // Center camera button
+                ZStack {
+                    Circle()
+                        .fill(Color(hex: "FFFFFF"))
+                        .frame(width: 100, height: 100)
+                        .overlay(
+                            Circle()
+                                .stroke(Color(hex: "313131"), lineWidth: 5)
+                        )
+
+                    // Capture mode icon
+                    Image(systemName: appState.captureMode)
+                        .font(.system(size: 35, weight: .regular))
+                        .foregroundStyle(Color(hex: "3A3A3C"))
+                }
+                .frame(width: 100, height: 100)
+
+                // Bottom section
+                VStack {
+                    Spacer()
+
+                    // Hangar icon
+                    VStack(spacing: 4) {
+                        Image(systemName: "airplane.departure")
+                            .font(.system(size: 35, weight: .regular))
+                            .foregroundStyle(Color(hex: "FFFFFF"))
+
+                        Text("Hangar")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color(hex: "FFFFFF"))
+                    }
+
+                    Spacer()
+
+                    // Home icon
+                    VStack(spacing: 4) {
+                        Image(systemName: "house")
+                            .font(.system(size: 35, weight: .regular))
+                            .foregroundStyle(Color(hex: "FFFFFF"))
+
+                        Text("Home")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color(hex: "FFFFFF"))
+                    }
+
+                    Spacer()
+                }
+                .frame(height: 142.5)
+            }
+            .frame(height: 385)
+        }
+        .frame(width: 100, height: 385)
+    }
+}
+
 // MARK: - Page Template
 /// Standard page template with top menu, bottom menu, and consistent styling
 /// Use this as the base for all pages in the app
@@ -269,36 +427,86 @@ struct HomePagePortrait<Content: View>: View {
 }
 
 // MARK: - Page Template - Left Horizontal Orientation
-/// Template for LEFT HORIZONTAL orientation
-/// TODO: Build this template when ready for landscape left support
+/// Template for LEFT HORIZONTAL orientation (footer on LEFT side)
+/// Phone rotated with device top on RIGHT side
 struct HomePageLeftHorizontal<Content: View>: View {
     let content: Content
-    
+
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
-    
+
     var body: some View {
-        // Placeholder for left horizontal layout
-        Text("Left Horizontal - To Be Implemented")
-            .foregroundStyle(.white)
+        NavigationStack {
+            GeometryReader { geometry in
+                ZStack {
+                    // Background color
+                    Color(hex: "1D58A4")
+                        .ignoresSafeArea()
+
+                    // Main layout with header
+                    VStack(spacing: 0) {
+                        // Top Menu Bar - Landscape version
+                        TopMenuViewLandscape()
+
+                        // Content area
+                        VStack {
+                            content
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+
+                    // Left side navigation bar - positioned on left edge
+                    BottomMenuViewLandscape()
+                        .position(x: 50, y: geometry.size.height / 2)
+                }
+            }
+#if os(iOS)
+            .navigationBarHidden(true)
+#endif
+        }
     }
 }
 
 // MARK: - Page Template - Right Horizontal Orientation
-/// Template for RIGHT HORIZONTAL orientation
-/// TODO: Build this template when ready for landscape right support
+/// Template for RIGHT HORIZONTAL orientation (footer on RIGHT side)
+/// Phone rotated with device top on LEFT side
 struct HomePageRightHorizontal<Content: View>: View {
     let content: Content
-    
+
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
-    
+
     var body: some View {
-        // Placeholder for right horizontal layout
-        Text("Right Horizontal - To Be Implemented")
-            .foregroundStyle(.white)
+        NavigationStack {
+            GeometryReader { geometry in
+                ZStack {
+                    // Background color
+                    Color(hex: "1D58A4")
+                        .ignoresSafeArea()
+
+                    // Main layout with header
+                    VStack(spacing: 0) {
+                        // Top Menu Bar - Landscape version
+                        TopMenuViewLandscape()
+
+                        // Content area
+                        VStack {
+                            content
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+
+                    // Right side navigation bar - positioned on right edge
+                    BottomMenuViewLandscape()
+                        .position(x: geometry.size.width - 50, y: geometry.size.height / 2)
+                }
+            }
+#if os(iOS)
+            .navigationBarHidden(true)
+#endif
+        }
     }
 }
 

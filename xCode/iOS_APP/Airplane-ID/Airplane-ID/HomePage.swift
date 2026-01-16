@@ -334,22 +334,12 @@ struct HomePage: View {
                 }
             },
             leftHorizontal: {
-                // Left horizontal version content
-                VStack {
-                    Text("HOME - Left Landscape")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                }
+                // Left horizontal version content (footer on LEFT side)
+                Spacer()
             },
             rightHorizontal: {
-                // Right horizontal version content
-                VStack {
-                    Text("HOME - Right Landscape")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                }
+                // Right horizontal version content (footer on RIGHT side)
+                Spacer()
             }
         )
     }
