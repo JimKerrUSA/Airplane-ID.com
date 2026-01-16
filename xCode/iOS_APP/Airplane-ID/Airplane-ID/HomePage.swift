@@ -28,15 +28,54 @@ struct HomePage: View {
         Array(allAircraft.prefix(3))
     }
 
-    // Computed property for next level based on current status
+    // MARK: - Level Progression Logic
+    // Thresholds: 0=NEWBIE, 10=SPOTTER, 100=ENTHUSIAST, 250=EXPERT, 500=ACE, 1100=LEGEND
+
+    // Current aircraft count from database
+    private var aircraftCount: Int {
+        allAircraft.count
+    }
+
+    // Current status based on aircraft count
+    private var currentStatus: String {
+        switch aircraftCount {
+        case 0..<10: return "NEWBIE"
+        case 10..<100: return "SPOTTER"
+        case 100..<250: return "ENTHUSIAST"
+        case 250..<500: return "EXPERT"
+        case 500..<1100: return "ACE"
+        default: return "LEGEND"
+        }
+    }
+
+    // Next level to achieve
     private var nextLevel: String {
-        switch appState.status {
-        case "NOVICE": return "SPOTTER"
+        switch currentStatus {
+        case "NEWBIE": return "SPOTTER"
         case "SPOTTER": return "ENTHUSIAST"
         case "ENTHUSIAST": return "EXPERT"
         case "EXPERT": return "ACE"
-        case "ACE": return "ACE" // Already at max
+        case "ACE": return "LEGEND"
+        case "LEGEND": return "LEGEND" // Already at max
         default: return "SPOTTER"
+        }
+    }
+
+    // Progress percentage toward next level (0.0 to 1.0)
+    private var levelProgress: Double {
+        switch aircraftCount {
+        case 0..<10:
+            return Double(aircraftCount) / 10.0  // 0-9 toward 10
+        case 10..<100:
+            return Double(aircraftCount - 10) / 90.0  // 10-99 toward 100
+        case 100..<250:
+            return Double(aircraftCount - 100) / 150.0  // 100-249 toward 250
+        case 250..<500:
+            return Double(aircraftCount - 250) / 250.0  // 250-499 toward 500
+        case 500..<1100:
+            return Double(aircraftCount - 500) / 600.0  // 500-1099 toward 1100
+        default:
+            return 1.0  // LEGEND - max level achieved
         }
     }
 
@@ -248,7 +287,7 @@ struct HomePage: View {
                                     // Progress (completed portion)
                                     Rectangle()
                                         .fill(Color(hex: "2B81C5"))
-                                        .frame(width: 313 * appState.levelProgress, height: 25)
+                                        .frame(width: 313 * levelProgress, height: 25)
                                 }
                                 .overlay(
                                     Rectangle()
@@ -346,15 +385,23 @@ struct HomePage: View {
             },
             leftHorizontal: {
                 // Left horizontal version content (footer on LEFT side)
-                HomePageLandscapeLeftContent(latestSightings: latestSightings, nextLevel: nextLevel)
+                HomePageLandscapeLeftContent(latestSightings: latestSightings, nextLevel: nextLevel, levelProgress: levelProgress)
             },
             rightHorizontal: {
                 // Right horizontal version content (footer on RIGHT side)
-                HomePageLandscapeRightContent(latestSightings: latestSightings, nextLevel: nextLevel)
+                HomePageLandscapeRightContent(latestSightings: latestSightings, nextLevel: nextLevel, levelProgress: levelProgress)
             }
         )
         .onAppear {
             loadTestDataIfNeeded()
+            // Update AppState from database
+            appState.status = currentStatus
+            appState.totalAircraftCount = aircraftCount
+        }
+        .onChange(of: allAircraft.count) { _, _ in
+            // Update AppState when aircraft count changes
+            appState.status = currentStatus
+            appState.totalAircraftCount = aircraftCount
         }
     }
 }
@@ -365,6 +412,7 @@ struct HomePageLandscapeLeftContent: View {
     @Environment(AppState.self) private var appState
     let latestSightings: [CapturedAircraft]
     let nextLevel: String
+    let levelProgress: Double
 
     func formatNumber(_ number: Int) -> String {
         let formatter = NumberFormatter()
@@ -505,7 +553,7 @@ struct HomePageLandscapeLeftContent: View {
                         Color(hex: "FFFFFF")
                         ZStack(alignment: .leading) {
                             Rectangle().fill(Color(hex: "B9C6D1")).frame(height: 22)
-                            Rectangle().fill(Color(hex: "2B81C5")).frame(width: 310 * appState.levelProgress, height: 22)
+                            Rectangle().fill(Color(hex: "2B81C5")).frame(width: 310 * levelProgress, height: 22)
                         }
                         .frame(width: 310, height: 22)
                         .overlay(Rectangle().stroke(Color(hex: "000000"), lineWidth: 1))
@@ -527,6 +575,7 @@ struct HomePageLandscapeRightContent: View {
     @Environment(AppState.self) private var appState
     let latestSightings: [CapturedAircraft]
     let nextLevel: String
+    let levelProgress: Double
 
     func formatNumber(_ number: Int) -> String {
         let formatter = NumberFormatter()
@@ -669,7 +718,7 @@ struct HomePageLandscapeRightContent: View {
                         Color(hex: "FFFFFF")
                         ZStack(alignment: .leading) {
                             Rectangle().fill(Color(hex: "B9C6D1")).frame(height: 22)
-                            Rectangle().fill(Color(hex: "2B81C5")).frame(width: 310 * appState.levelProgress, height: 22)
+                            Rectangle().fill(Color(hex: "2B81C5")).frame(width: 310 * levelProgress, height: 22)
                         }
                         .frame(width: 310, height: 22)
                         .overlay(Rectangle().stroke(Color(hex: "000000"), lineWidth: 1))
@@ -701,7 +750,7 @@ private let previewSampleAircraft: [CapturedAircraft] = {
 
 #Preview("Landscape Left", traits: .landscapeLeft) {
     LandscapeLeftTemplate {
-        HomePageLandscapeLeftContent(latestSightings: previewSampleAircraft, nextLevel: "ACE")
+        HomePageLandscapeLeftContent(latestSightings: previewSampleAircraft, nextLevel: "LEGEND", levelProgress: 0.78)
     }
     .modelContainer(for: CapturedAircraft.self, inMemory: true)
     .environment(AppState())
@@ -709,7 +758,7 @@ private let previewSampleAircraft: [CapturedAircraft] = {
 
 #Preview("Landscape Right", traits: .landscapeRight) {
     LandscapeRightTemplate {
-        HomePageLandscapeRightContent(latestSightings: previewSampleAircraft, nextLevel: "ACE")
+        HomePageLandscapeRightContent(latestSightings: previewSampleAircraft, nextLevel: "LEGEND", levelProgress: 0.78)
     }
     .modelContainer(for: CapturedAircraft.self, inMemory: true)
     .environment(AppState())

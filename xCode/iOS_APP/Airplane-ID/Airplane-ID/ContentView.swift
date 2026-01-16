@@ -20,12 +20,11 @@ enum NavigationDestination: String, CaseIterable {
 // MARK: - Global App State
 @Observable
 class AppState {
-    var status: String = "EXPERT"
+    var status: String = "NEWBIE" // Updated by HomePage based on aircraft count
     var search: String = ""
     var captureMode: String = "camera" // Options: "camera" or "photo.stack"
-    var totalAircraftCount: Int = 1234 // Placeholder value
-    var totalTypes: Int = 142
-    var levelProgress: Double = 0.78 // Progress as decimal (78%)
+    var totalAircraftCount: Int = 0 // Updated by HomePage from database
+    var totalTypes: Int = 0 // Updated by HomePage from database
     var currentScreen: NavigationDestination = .home // Track current navigation
 }
 

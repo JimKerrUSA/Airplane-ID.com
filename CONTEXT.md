@@ -142,4 +142,10 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - All footer buttons now have onTapGesture handlers for navigation
   - Created MainView as navigation router (switches views based on currentScreen)
   - Created PlaceholderPage for screens not yet built (Maps, Camera, Hangar, Settings)
+- **Level progression logic updated:**
+  - Corrected level names: NEWBIE → SPOTTER → ENTHUSIAST → EXPERT → ACE → LEGEND
+  - Thresholds: 0=NEWBIE, 10=SPOTTER, 100=ENTHUSIAST, 250=EXPERT, 500=ACE, 1100=LEGEND
+  - Status now computed from database aircraft count (allAircraft.count)
+  - Progress bar percentage calculated based on progress toward next threshold
+  - AppState.status and totalAircraftCount updated dynamically from database
 - Next: Build out individual page content, test on physical device
