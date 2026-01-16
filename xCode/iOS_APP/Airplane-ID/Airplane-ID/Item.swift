@@ -8,15 +8,54 @@
 import Foundation
 import SwiftData
 
+// MARK: - User Model
+/// Represents the app user with account and preferences
 @Model
-final class Item {
-    var timestamp: Date
+final class User {
+    var name: String
+    var email: String
+    var phone: String?
+    var passwordHash: String?
+    var passwordRequired: Bool
+    var faceIDEnabled: Bool
+    var displayName: String
+    var memberDate: Date
+    var homeAirport: String?
+    var memberLevel: String
+    var lastSyncDate: Date?
+    var syncToken: String?
 
-    init(timestamp: Date) {
-        self.timestamp = timestamp
+    init(
+        name: String,
+        email: String,
+        phone: String? = nil,
+        passwordHash: String? = nil,
+        passwordRequired: Bool = false,
+        faceIDEnabled: Bool = false,
+        displayName: String,
+        memberDate: Date = Date(),
+        homeAirport: String? = nil,
+        memberLevel: String = "free",
+        lastSyncDate: Date? = nil,
+        syncToken: String? = nil
+    ) {
+        self.name = name
+        self.email = email
+        self.phone = phone
+        self.passwordHash = passwordHash
+        self.passwordRequired = passwordRequired
+        self.faceIDEnabled = faceIDEnabled
+        self.displayName = displayName
+        self.memberDate = memberDate
+        self.homeAirport = homeAirport
+        self.memberLevel = memberLevel
+        self.lastSyncDate = lastSyncDate
+        self.syncToken = syncToken
     }
 }
 
+// MARK: - CapturedAircraft Model
+/// Represents an aircraft that has been captured/identified by the user
 @Model
 final class CapturedAircraft {
     var captureDate: Date

@@ -1,0 +1,27 @@
+Edit the second line with your actual info. Fields:                                                                             
+  - name: Full name                                                                                                               
+  - email: Email address                                                                                                          
+  - phone: Phone number (optional)                                                                                                
+  - password: Leave blank for now (optional)                                                                                      
+  - passwordRequired: true/false                                                                                                  
+  - faceIDEnabled: true/false                                                                                                     
+  - displayName: Short name shown in app                                                                                          
+  - memberDate: YYYY-MM-DD format                                                                                                 
+  - homeAirport: ICAO code (e.g., KOSH)                                                                                           
+  - memberLevel: free/premium/etc.                                                                                                
+                                                                                                                                  
+  Developer Tools (Settings Page)                                                                                                 
+                                                                                                                                  
+  - Import 25/100/500/1100/2000 Aircraft - Real FAA data with GPS near US airports                                                
+  - Import User Profile - Loads your user data from CSV                                                                           
+  - Delete All Aircraft - Clears aircraft table only                                                                              
+  - Reset App - Clears both aircraft AND user data                                                                                
+                                                                                                                                  
+  To Regenerate Test Data                                                                                                         
+                                                                                                                                  
+  cd ~/dev/projects/Airplane-ID.com/Data                                                                                          
+  python3 generate_test_data.py --count 2000                                                                                      
+                                                                                                                                  
+  Then copy to Xcode project folder to update the bundled file.                                                                   
+
+

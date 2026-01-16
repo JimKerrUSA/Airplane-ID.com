@@ -1,0 +1,2 @@
+name,email,phone,password,passwordRequired,faceIDEnabled,displayName,memberDate,homeAirport,memberLevel
+Jim Kerr,jim@kerr.aero,312-623-0041,,FALSE,FALSE,JimKerrUSA,2026-01-16,KGYY,premium

@@ -17,17 +17,18 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - Landscape Left template: footer offset x: 20, content padding leading: 120
 - Landscape Right template: footer offset x: 100, content padding trailing: 120
 - Landscape header person icon positioned (trailing padding: 86)
-- Test data loading working via Airplane_IDApp.swift onAppear
+- **NO TEST DATA** - App uses actual database (delete data function coming to Settings)
 - **Level progression system:** NEWBIE → SPOTTER → ENTHUSIAST → EXPERT → ACE → LEGEND
 - **JourneyPage:** Tap person icon to view level, stats, badges (coming soon), leaderboard (coming soon)
 - **Database-driven stats:** Aircraft count, unique types, and level all computed from SwiftData
+- **Centralized theming:** Theme.swift contains all colors, fonts, and styling utilities
 
 ## Key Files
 
 ### App Entry Point
-- `Airplane_IDApp.swift` - App entry point, ModelContainer, and test data loading
+- `Airplane_IDApp.swift` - App entry point and ModelContainer setup
   - MainView - Navigation router (switches pages based on currentScreen)
-  - Test data import functions
+  - Clean startup - no test data loading
 
 ### Core Components
 - `ContentView.swift` - All reusable components and templates
@@ -39,12 +40,18 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - **LandscapeLeftTemplate** - Landscape with footer on LEFT edge
   - **LandscapeRightTemplate** - Landscape with footer on RIGHT edge
   - OrientationAwarePage - Wrapper that switches templates based on geometry
-- `Item.swift` - Contains CapturedAircraft SwiftData model
+- `Item.swift` - Contains CapturedAircraft SwiftData model with UUID index
+- `Theme.swift` - **NEW** Centralized colors, fonts, spacing, and utilities
+  - AppColors - All app color constants
+  - AppFonts - Typography helpers
+  - AppSpacing - Layout spacing constants
+  - Color(hex:) extension, RoundedCorner shape, TextShadow modifier
 
 ### Page Files (each with #Preview for Portrait, Landscape Left, Landscape Right)
 - `HomePage.swift` - Main home screen content with data boxes and recent sightings
   - Level progression computed properties (currentStatus, nextLevel, levelProgress)
   - uniqueTypesCount - Counts unique ICAO codes
+  - **HomePageLandscapeContent** - Consolidated parameterized landscape view (footerOnLeft param)
 - `SettingsPage.swift` - Settings page with dark theme (#121516) in all orientations
   - Custom orientation handling (not OrientationAwarePage)
   - SettingsPortraitView, SettingsLandscapeLeftView, SettingsLandscapeRightView
@@ -101,6 +108,12 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - engine, numberOfEngines, registration
 - rating, thumbsUp, iPhotoReference
 
+### User Model Properties
+- name, email, phone
+- passwordHash, passwordRequired, faceIDEnabled
+- displayName, memberDate, homeAirport, memberLevel
+- lastSyncDate, syncToken (for future server sync)
+
 ### Level Progression System
 Levels are based on total aircraft captured (database record count).
 
@@ -154,44 +167,89 @@ User profile/progress page accessed by tapping person icon in header.
 - Sharing capabilities
 
 ### SettingsPage
-Settings page with dark theme - supports all orientations with custom handling.
+Settings page with dark theme - uses sheet overlays for sub-pages.
 
 **Design:**
-- Background color: #121516 (dark) - covers entire screen including behind footer
+- Background color: #121516 (dark)
 - Row background: #1D1E21
-- Row spacing: 15px
-- Custom orientation views (not OrientationAwarePage) to ensure dark background everywhere
-- Uses safe area insets to detect landscape left vs right orientation
-- Scrollable content in landscape mode (ScrollView)
+- Tapping a row opens a sheet overlay with Back button
+- Developer Tools only visible when `AppConfig.developerToolsEnabled = true`
 
-**Orientation Handling:**
-- Portrait: SettingsPortraitView with TopMenuView/BottomMenuView
-- Landscape Left: SettingsLandscapeLeftView with TopMenuViewLandscape/BottomMenuViewLandscape
-- Landscape Right: SettingsLandscapeRightView (detected via safeArea.leading > safeArea.trailing)
+**Menu Items (open as sheets):**
+- Account Settings → `AccountSettingsView` (shows user profile, security)
+- App Preferences → `AppPreferencesView` (Coming Soon)
+- System → `SystemSettingsView` (Coming Soon)
+- About → `AboutView` (version, copyright)
+- Developer Tools → `DeveloperToolsView` (import/delete functions)
 
-**Current menu items (placeholders):**
-- Account - Manage your account
-- Notifications - Configure alerts
-- Sync - Cloud backup settings
-- Help - FAQ and support
-- About - Version and credits
+**Developer Tools Sections:**
+- Import Aircraft (25, 100, 500, 1100, 2000 options)
+- User Data (Import User Profile from CSV)
+- Danger Zone (Delete All Aircraft, Reset App)
 
-**Components:**
-- `SettingsPage` - Main view with GeometryReader for orientation detection
-- `SettingsPortraitView` - Portrait layout
-- `SettingsLandscapeLeftView` - Landscape left layout (footer on left)
-- `SettingsLandscapeRightView` - Landscape right layout (footer on right)
-- `SettingsContent` - Portrait content wrapper with ScrollView
-- `SettingsScrollContent` - Inner content (title + rows) used in all orientations
-- `SettingsRow` - Reusable row component with icon, title, subtitle, chevron
+**Global Config Flag (ContentView.swift):**
+```swift
+struct AppConfig {
+    static let developerToolsEnabled = true  // Set false before App Store
+}
+```
+
+## Authentication & Offline Mode (Future Implementation)
+
+### Account Creation Flow
+1. User downloads app and is prompted to sign in or create account
+2. Account creation connects to servers
+3. Password is encrypted on device before storage
+4. Password is decrypted locally for validation (never sent in plaintext)
+
+### Password & Security Fields
+- `passwordHash` - Encrypted password stored on device
+- `passwordRequired` - "Do I need to enter password to open the app?" (separate from having a password)
+- `faceIDEnabled` - Use FaceID as alternative to password entry
+
+### Offline Mode Scenarios
+
+**Scenario 1: Account Exists**
+- User data cached on device
+- App functions fully offline
+- Changes sync when connection restored (LTE/WiFi)
+- Daily sync job updates aircraft GPS positions from server
+
+**Scenario 2: No Account (Guest Mode)**
+- Limited to 10 aircraft captures
+- Nag message on every app open encouraging FREE account creation
+- Data stored locally but not synced
+
+### Membership Tiers
+| Tier | Capture Limit | Features |
+|------|---------------|----------|
+| Guest (No Account) | 10 aircraft | Local only, nag messages |
+| Free | Higher limit (TBD) | Server sync, basic features |
+| Premium | Unlimited | All features, priority sync |
+
+### Server Sync Features (Planned)
+- Bi-directional sync between iPhone and server
+- "Where is this plane now?" - Current GPS position lookup
+- Daily background job updates aircraft positions
+- Sync over LTE or WiFi
+
+### Hangar/Map Integration (Planned)
+- Tap plane in Hangar → Show on Map
+- Tap marker on Map → Show Hangar details
+- Current location tracking for aircraft
 
 ## Next Steps
 
 1. Build out Maps page content
 2. Build out Hangar page content
-3. Build out Settings page content
-4. Add proper orientation detection for runtime (without UIKit)
-5. Test on physical device
+3. Build out remaining Settings page functionality
+4. Implement password encryption/decryption
+5. Implement FaceID authentication
+6. Implement offline mode with capture limits
+7. Build server sync infrastructure
+8. Add proper orientation detection for runtime (without UIKit)
+9. Test on physical device
+10. Gradually migrate hardcoded colors to use AppColors constants
 
 ## Session Log
 
@@ -291,3 +349,85 @@ Settings page with dark theme - supports all orientations with custom handling.
   - SettingsScrollContent separated from SettingsContent for proper scroll behavior
 - All pages have #Preview blocks for Xcode canvas viewing
 - Each page supports all three orientations
+
+- **Code audit and optimization completed:**
+  - Removed all test data loading code from Airplane_IDApp.swift
+  - Removed duplicate test data loading from HomePage.swift
+  - Removed unused `Item` class from Item.swift
+  - Added UUID index to CapturedAircraft model
+  - Consolidated duplicate landscape views into single `HomePageLandscapeContent` view
+  - Created `Theme.swift` with centralized colors, fonts, spacing, and utilities
+  - Moved Color(hex:), RoundedCorner, RectCorner from ContentView.swift to Theme.swift
+  - Added TextShadow view modifier for consistent text shadow styling
+- **Database usage change:** App now uses actual database with no test data
+  - Developer Tools section in Settings for testing/reset
+  - Before App Store deployment: run delete data to clear test records
+
+- **Real FAA Test Data System:**
+  - Created `generate_test_data.py` script in `/Data/` folder
+  - Sources: FAA-Registered-Aircraft.csv (309K records) + FAA-Manufacturer-Reference.csv (93K records)
+  - ICAO codes matched from PlaneFinder's MasterAircraftList.csv
+  - Generated `AirplaneID-TestData.csv` with 2,000 real aircraft records
+  - Real N-numbers, real ICAO codes, real manufacturer/model data
+  - GPS coordinates near 30 major US airports
+  - Dates span 1 year (oldest to now), most recent = import time
+
+- **Developer Tools - Import Options:**
+  - Import 25 Aircraft (quick test)
+  - Import 100 Aircraft (ENTHUSIAST level)
+  - Import 500 Aircraft (ACE level)
+  - Import 1,100 Aircraft (LEGEND level)
+  - Import All 2,000 Aircraft (full map coverage test)
+  - Delete All Aircraft (confirmation required)
+  - Reset App (clears ALL data, confirmation required)
+
+- **Test Data Files (bundled with app):**
+  - `AirplaneID-TestData.csv` - 2,000 aircraft records
+    - Columns: icao, manufacturer, model, registration, engine_type, num_engines, latitude, longitude, capture_date, capture_time, year, month, day, near_airport
+  - `AirplaneID-UserData.csv` - User profile template
+    - Columns: name, email, phone, password, passwordRequired, faceIDEnabled, displayName, memberDate, homeAirport, memberLevel
+    - Edit this file to add your info before importing
+
+- **Data Generation Script:** `/Data/generate_test_data.py`
+  - Usage: `python3 generate_test_data.py --count 2000`
+  - Sources FAA databases and matches ICAO codes from PlaneFinder project
+  - Run again anytime to regenerate fresh test data
+
+- **User Model added to Item.swift:**
+  - Registered in schema (Airplane_IDApp.swift)
+  - Import User Profile button in Developer Tools
+  - Reset App now clears both aircraft and user data
+
+- **Settings page refactored with sheet overlays:**
+  - Account Settings → Shows user profile from database
+  - App Preferences → Placeholder (Coming Soon)
+  - System → Placeholder (Coming Soon)
+  - About → App version and copyright info
+  - Developer Tools → All import/delete functions (conditional visibility)
+  - AppConfig.developerToolsEnabled flag controls Developer Tools visibility
+  - Each sub-page opens as a sheet with Back button
+
+- **Documented authentication and offline mode requirements:**
+  - Password encryption/decryption flow
+  - FaceID authentication option
+  - Offline mode with capture limits (10 for guests)
+  - Free vs Premium membership tiers
+  - Server sync behavior and Hangar/Map integration plans
+
+- **LEGEND level celebration display:**
+  - When user reaches LEGEND status (1100+ aircraft), progress bar shows "You Are a LEGEND!"
+  - Progress bar changes from blue (#2B81C5) to green (#28A745) at LEGEND level
+  - Applies to Portrait, Landscape Left, and Landscape Right views
+
+- **Fixed Landscape Right footer positioning:**
+  - **Root cause found:** `OrientationAwarePage` was ALWAYS using `LandscapeLeftTemplate` for all landscape orientations (code comment said "using left template for now")
+  - `OrientationAwarePage` now properly detects landscape left vs right orientation
+  - Uses `geometry.safeAreaInsets` to determine which side has the notch/dynamic island
+  - When `safeArea.leading > safeArea.trailing` → Landscape Left (footer on left)
+  - When `safeArea.trailing > safeArea.leading` → Landscape Right (footer on right)
+  - Footer now correctly appears on the RIGHT side when in Landscape Right orientation
+
+- **Added app icon:**
+  - Created AirplaneID-icon.png and configured in AppIcon.appiconset
+  - Icon appears on iPhone home screen
+  - Xcode auto-generates all required sizes from 1024x1024 source

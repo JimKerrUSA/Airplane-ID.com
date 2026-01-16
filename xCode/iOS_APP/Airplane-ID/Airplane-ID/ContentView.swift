@@ -18,6 +18,13 @@ enum NavigationDestination: String, CaseIterable {
     case journey = "Journey"
 }
 
+// MARK: - App Configuration
+/// Global configuration flags - set developerToolsEnabled to false before App Store release
+struct AppConfig {
+    /// Set to false before publishing to App Store
+    static let developerToolsEnabled = true
+}
+
 // MARK: - Global App State
 @Observable
 class AppState {
@@ -573,9 +580,20 @@ struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightConte
                     portraitContent
                 }
             } else {
-                // Landscape orientation - using left template for now
-                LandscapeLeftTemplate {
-                    leftHorizontalContent
+                // Landscape orientation - detect left vs right using safe area insets
+                // When device top is on RIGHT (landscape left), safeAreaInsets.leading > trailing
+                // When device top is on LEFT (landscape right), safeAreaInsets.trailing > leading
+                let safeArea = geometry.safeAreaInsets
+                if safeArea.leading > safeArea.trailing {
+                    // Landscape Left - footer on LEFT side (device top on RIGHT)
+                    LandscapeLeftTemplate {
+                        leftHorizontalContent
+                    }
+                } else {
+                    // Landscape Right - footer on RIGHT side (device top on LEFT)
+                    LandscapeRightTemplate {
+                        rightHorizontalContent
+                    }
                 }
             }
         }
@@ -584,7 +602,7 @@ struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightConte
 
 #Preview("Default") {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: CapturedAircraft.self, inMemory: true)
         .environment(AppState())
 }
 
@@ -618,7 +636,7 @@ extension Color {
         default:
             (a, r, g, b) = (255, 0, 0, 0)
         }
-        
+
         self.init(
             .sRGB,
             red: Double(r) / 255,
@@ -649,22 +667,22 @@ struct RectCorner: OptionSet, Sendable {
 struct RoundedCorner: Shape, Sendable {
     var radius: CGFloat = .infinity
     var corners: RectCorner = .allCorners
-    
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        
+
         let topLeft = CGPoint(x: rect.minX, y: rect.minY)
         let topRight = CGPoint(x: rect.maxX, y: rect.minY)
         let bottomLeft = CGPoint(x: rect.minX, y: rect.maxY)
         let bottomRight = CGPoint(x: rect.maxX, y: rect.maxY)
-        
+
         // Start from top left
         if corners.contains(.topLeft) {
             path.move(to: CGPoint(x: rect.minX + radius, y: rect.minY))
         } else {
             path.move(to: topLeft)
         }
-        
+
         // Top right corner
         if corners.contains(.topRight) {
             path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.minY))
@@ -676,7 +694,7 @@ struct RoundedCorner: Shape, Sendable {
         } else {
             path.addLine(to: topRight)
         }
-        
+
         // Bottom right corner
         if corners.contains(.bottomRight) {
             path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - radius))
@@ -688,7 +706,7 @@ struct RoundedCorner: Shape, Sendable {
         } else {
             path.addLine(to: bottomRight)
         }
-        
+
         // Bottom left corner
         if corners.contains(.bottomLeft) {
             path.addLine(to: CGPoint(x: rect.minX + radius, y: rect.maxY))
@@ -700,7 +718,7 @@ struct RoundedCorner: Shape, Sendable {
         } else {
             path.addLine(to: bottomLeft)
         }
-        
+
         // Back to top left corner
         if corners.contains(.topLeft) {
             path.addLine(to: CGPoint(x: rect.minX, y: rect.minY + radius))
@@ -712,10 +730,8 @@ struct RoundedCorner: Shape, Sendable {
         } else {
             path.addLine(to: topLeft)
         }
-        
+
         path.closeSubpath()
         return path
     }
 }
-
-
