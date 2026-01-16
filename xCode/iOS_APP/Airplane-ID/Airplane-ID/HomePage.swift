@@ -345,8 +345,22 @@ struct HomePage: View {
     }
 }
 
-#Preview {
+#Preview("Default") {
     HomePage()
         .modelContainer(for: CapturedAircraft.self, inMemory: true)
         .environment(AppState())
+}
+
+#Preview("Landscape Left", traits: .landscapeLeft) {
+    HomePageLeftHorizontal {
+        Spacer()
+    }
+    .environment(AppState())
+}
+
+#Preview("Landscape Right", traits: .landscapeRight) {
+    HomePageRightHorizontal {
+        Spacer()
+    }
+    .environment(AppState())
 }

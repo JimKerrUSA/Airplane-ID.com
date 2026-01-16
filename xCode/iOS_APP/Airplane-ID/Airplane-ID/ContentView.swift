@@ -459,7 +459,7 @@ struct HomePageLeftHorizontal<Content: View>: View {
                     // Left side navigation bar - vertically centered on left edge, ignoring safe area
                     BottomMenuViewLandscape()
                         .position(x: 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
-                        .offset(x: 5)
+                        .offset(x: 20)
                         .ignoresSafeArea()
                 }
             }
@@ -503,7 +503,8 @@ struct HomePageRightHorizontal<Content: View>: View {
                     // Right side navigation bar - vertically centered on right edge
                     BottomMenuViewLandscape()
                         .position(x: geometry.size.width - 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
-                        .offset(x: 5)
+                        .offset(x: 100)
+                        .ignoresSafeArea()
                 }
             }
 #if os(iOS)
@@ -519,11 +520,11 @@ struct HomePageRightHorizontal<Content: View>: View {
 struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightContent: View>: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
-    
+
     let portraitContent: PortraitContent
     let leftHorizontalContent: LeftContent
     let rightHorizontalContent: RightContent
-    
+
     init(
         @ViewBuilder portrait: () -> PortraitContent,
         @ViewBuilder leftHorizontal: () -> LeftContent,
@@ -533,7 +534,7 @@ struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightConte
         self.leftHorizontalContent = leftHorizontal()
         self.rightHorizontalContent = rightHorizontal()
     }
-    
+
     var body: some View {
         GeometryReader { geometry in
             if geometry.size.width < geometry.size.height {
@@ -542,8 +543,7 @@ struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightConte
                     portraitContent
                 }
             } else {
-                // Landscape orientation - detect left vs right
-                // For now, we'll use the same content for both until templates are built
+                // Landscape orientation - using left template for now
                 HomePageLeftHorizontal {
                     leftHorizontalContent
                 }
@@ -552,10 +552,24 @@ struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightConte
     }
 }
 
-#Preview {
+#Preview("Default") {
     ContentView()
         .modelContainer(for: Item.self, inMemory: true)
         .environment(AppState())
+}
+
+#Preview("Landscape Left", traits: .landscapeLeft) {
+    HomePageLeftHorizontal {
+        Spacer()
+    }
+    .environment(AppState())
+}
+
+#Preview("Landscape Right", traits: .landscapeRight) {
+    HomePageRightHorizontal {
+        Spacer()
+    }
+    .environment(AppState())
 }
 // MARK: - Color Extension for Hex Support
 extension Color {
