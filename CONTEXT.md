@@ -94,5 +94,9 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - HomePagePortrait → PortraitTemplate
   - HomePageLeftHorizontal → LandscapeLeftTemplate
   - HomePageRightHorizontal → LandscapeRightTemplate
+- Added 1px gray border to footer nav bars (both portrait and landscape)
+- Added 1px gray bottom line to header components (both portrait and landscape)
+  - Uses overlay with Rectangle and ignoresSafeArea to extend to edges
+- Confirmed component-based architecture works: changes propagate to all templates
 - IMPORTANT: Do not use UIKit - causes build failures
 - Next: Build out landscape content areas

@@ -86,6 +86,13 @@ struct TopMenuView: View {
         }
         .frame(height: 140)
         .frame(maxWidth: .infinity)
+        .overlay(
+            Rectangle()
+                .frame(height: 1)
+                .foregroundStyle(Color.gray)
+                .ignoresSafeArea(),
+            alignment: .bottom
+        )
     }
 }
 
@@ -250,6 +257,13 @@ struct TopMenuViewLandscape: View {
         }
         .frame(height: 83)
         .frame(maxWidth: .infinity)
+        .overlay(
+            Rectangle()
+                .frame(height: 1)
+                .foregroundStyle(Color.gray)
+                .ignoresSafeArea(),
+            alignment: .bottom
+        )
     }
 }
 
