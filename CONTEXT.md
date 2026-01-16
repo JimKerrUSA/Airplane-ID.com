@@ -9,11 +9,17 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - SwiftUI app with SwiftData for persistence
 - Three orientation templates: PortraitTemplate, LandscapeLeftTemplate, LandscapeRightTemplate
 - Portrait view fully working with data boxes, progress bar, and recent sightings
-- Landscape Left template positioned correctly (footer offset x: 20)
-- Landscape Right template positioned correctly (footer offset x: 100)
+- **Landscape views now have full content matching mockups:**
+  - Two stat boxes on left (270w x 103h each, 14px gap between)
+  - Latest Sightings on right (270w x 220h, shows 3 items with 2-line format)
+  - Progress bar at bottom (240 label + 346 bar = 586w x 40h)
+- Landscape Left template: footer offset x: 20, content padding leading: 120
+- Landscape Right template: footer offset x: 100, content padding trailing: 120
 - Landscape header person icon positioned (trailing padding: 86)
-- Test data loading working via HomePage.onAppear
+- Test data loading working via HomePage.onAppear (moved to top level)
 - Templates renamed for clarity and long-term maintainability
+- **Level progression logic added:** nextLevel computed property determines progress bar label
+- **Data passed from parent:** Landscape content views receive latestSightings and nextLevel as params
 
 ## Key Files
 - `ContentView.swift` - All reusable components and templates
@@ -73,10 +79,10 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 
 ## Next Steps
 
-1. Fix Landscape Right footer - move to RIGHT edge (currently on left)
+1. Fine-tune landscape layout based on user feedback
 2. Add proper orientation detection for runtime (without UIKit)
-3. Build out landscape content areas
-4. Test on physical device
+3. Test on physical device
+4. Build out additional screens
 
 ## Session Log
 
@@ -99,4 +105,27 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - Uses overlay with Rectangle and ignoresSafeArea to extend to edges
 - Confirmed component-based architecture works: changes propagate to all templates
 - IMPORTANT: Do not use UIKit - causes build failures
-- Next: Build out landscape content areas
+- Built out landscape content areas with stat boxes, latest sightings, and progress bar
+- Added `latestSightings` computed property (4 items for landscape vs 3 for portrait)
+- Landscape layout dimensions:
+  - Stat boxes: 347w (125 label + 222 value) x 106h each
+  - Latest Sightings: 221w x 250h (39h header + 211h content)
+  - Progress to ACE: 648w x 46h (200 label + 448 bar)
+- Both landscape templates now have matching content with appropriate padding for footer position
+- Refined landscape layout proportions:
+  - Made stat boxes and Latest Sightings equal width (270w each)
+  - Increased stat box heights to 103h for tighter gap (14px)
+  - Added 3px padding between columns for visual separation
+  - Progress bar widened (240 label) to fit "Progress to ENTHUSIAST"
+  - Progress bar moved down 5px from boxes
+- Fixed Latest Sightings data display:
+  - Changed from @Query in content views to receiving data as parameter from HomePage
+  - Now properly shows manufacturer, registration, and model
+  - Format: Line 1 = Manufacturer (ALL CAPS), Line 2 = Registration + Model
+  - Icon: 22pt, Manufacturer: 19pt, Reg/Model: 15pt
+- Added level progression logic (nextLevel computed property):
+  - NOVICE → SPOTTER → ENTHUSIAST → EXPERT → ACE
+  - Progress bar label shows "Progress to {nextLevel}"
+- Changed landscape sightings from 4 to 3 items
+- Fixed landscape right preview to use LandscapeRightTemplate directly
+- Next: Test on physical device, build additional screens

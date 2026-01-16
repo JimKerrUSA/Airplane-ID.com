@@ -18,9 +18,26 @@ struct HomePage: View {
         order: .reverse
     ) private var allAircraft: [CapturedAircraft]
 
-    // Computed property to get the 3 most recent sightings
+    // Computed property to get the 3 most recent sightings (portrait)
     private var recentSightings: [CapturedAircraft] {
         Array(allAircraft.prefix(3))
+    }
+
+    // Computed property to get the 3 most recent sightings (landscape)
+    private var latestSightings: [CapturedAircraft] {
+        Array(allAircraft.prefix(3))
+    }
+
+    // Computed property for next level based on current status
+    private var nextLevel: String {
+        switch appState.status {
+        case "NOVICE": return "SPOTTER"
+        case "SPOTTER": return "ENTHUSIAST"
+        case "ENTHUSIAST": return "EXPERT"
+        case "EXPERT": return "ACE"
+        case "ACE": return "ACE" // Already at max
+        default: return "SPOTTER"
+        }
     }
 
     // Load test data if needed
@@ -99,12 +116,6 @@ struct HomePage: View {
             portrait: {
                 // Portrait version content
                 VStack(spacing: 0) {
-                    // Empty view to trigger onAppear
-                    Color.clear
-                        .frame(height: 0)
-                        .onAppear {
-                            loadTestDataIfNeeded()
-                        }
                     // Top data boxes row
                     HStack(spacing: 0) {
                         // Left box - Dark blue with rounded top-left and bottom-left corners
@@ -335,13 +346,342 @@ struct HomePage: View {
             },
             leftHorizontal: {
                 // Left horizontal version content (footer on LEFT side)
-                Spacer()
+                HomePageLandscapeLeftContent(latestSightings: latestSightings, nextLevel: nextLevel)
             },
             rightHorizontal: {
                 // Right horizontal version content (footer on RIGHT side)
-                Spacer()
+                HomePageLandscapeRightContent(latestSightings: latestSightings, nextLevel: nextLevel)
             }
         )
+        .onAppear {
+            loadTestDataIfNeeded()
+        }
+    }
+}
+
+// MARK: - Landscape Content Views for Previews
+
+struct HomePageLandscapeLeftContent: View {
+    @Environment(AppState.self) private var appState
+    let latestSightings: [CapturedAircraft]
+    let nextLevel: String
+
+    func formatNumber(_ number: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: number)) ?? "\(number)"
+    }
+
+    var body: some View {
+        // Content group - all boxes together, offset from footer on left
+        HStack {
+            VStack(spacing: 8) {
+                // Main content area - two columns
+                HStack(alignment: .top, spacing: 10) {
+                    // Left column - Stat boxes stacked
+                    VStack(spacing: 0) {
+                        // Total Aircraft Found box
+                        HStack(spacing: 0) {
+                            ZStack {
+                                Color(hex: "082A49")
+                                VStack(alignment: .trailing, spacing: 0) {
+                                    Text("Total").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Text("Aircraft").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Text("Found").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                }
+                            }
+                            .frame(width: 100, height: 103)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
+                            ZStack {
+                                Color(hex: "FFFFFF")
+                                HStack {
+                                    Text(formatNumber(appState.totalAircraftCount)).font(.system(size: 36, weight: .regular)).foregroundStyle(Color(hex: "FBBD1C"))
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Image(systemName: "airplane").font(.system(size: 24)).foregroundStyle(Color(hex: "F27C31"))
+                                }
+                            }
+                            .frame(width: 170, height: 103)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
+                        }
+
+                        Spacer()
+
+                        // Total Aircraft Types box
+                        HStack(spacing: 0) {
+                            ZStack {
+                                Color(hex: "082A49")
+                                VStack(alignment: .trailing, spacing: 0) {
+                                    Text("Total").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Text("Aircraft").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Text("Types").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                }
+                            }
+                            .frame(width: 100, height: 103)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
+                            ZStack {
+                                Color(hex: "FFFFFF")
+                                HStack {
+                                    Text(formatNumber(appState.totalTypes)).font(.system(size: 36, weight: .regular)).foregroundStyle(Color(hex: "FBBD1C"))
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Image(systemName: "airplane").font(.system(size: 24)).foregroundStyle(Color(hex: "F27C31"))
+                                }
+                            }
+                            .frame(width: 170, height: 103)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
+                        }
+                    }
+                    .frame(width: 270, height: 220)
+                    .padding(.trailing, 3)
+
+                    // Right column - Latest Sightings (same height as stat boxes combined)
+                    VStack(spacing: 0) {
+                        ZStack {
+                            Color(hex: "082A49")
+                            Text("Latest Sightings").font(.system(size: 20, weight: .bold)).foregroundStyle(.white)
+                        }
+                        .frame(height: 35)
+                        .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
+                        ZStack {
+                            Color(hex: "FFFFFF")
+                            if latestSightings.isEmpty {
+                                VStack(spacing: 4) {
+                                    Image(systemName: "airplane.departure").font(.system(size: 30)).foregroundStyle(Color(hex: "F27C31").opacity(0.5))
+                                    Text("No sightings yet").font(.system(size: 14)).foregroundStyle(Color(hex: "082A49").opacity(0.6))
+                                }
+                            } else {
+                                VStack(alignment: .leading, spacing: 6) {
+                                    ForEach(latestSightings) { aircraft in
+                                        HStack(alignment: .center, spacing: 6) {
+                                            Image(systemName: "airplane").font(.system(size: 22)).foregroundStyle(Color(hex: "F27C31"))
+                                            VStack(alignment: .leading, spacing: 1) {
+                                                Text((aircraft.manufacturer ?? "Unknown").uppercased())
+                                                    .font(.system(size: 19, weight: .regular)).foregroundStyle(Color(hex: "082A49"))
+                                                if let registration = aircraft.registration, !registration.isEmpty {
+                                                    Text("\(registration.uppercased()) \(aircraft.model ?? "")")
+                                                        .font(.system(size: 15, weight: .regular)).foregroundStyle(Color(hex: "082A49")).lineLimit(1)
+                                                } else {
+                                                    Text(aircraft.model ?? "")
+                                                        .font(.system(size: 15, weight: .regular)).foregroundStyle(Color(hex: "082A49")).lineLimit(1)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 8).padding(.vertical, 6).frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+                        .frame(height: 185)
+                        .overlay(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]).stroke(Color(hex: "124A93"), lineWidth: 1))
+                        .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
+                    }
+                    .frame(width: 270, height: 220)
+                    .padding(.leading, 3)
+                }
+
+                // Progress bar - centered under boxes above
+                HStack(spacing: 0) {
+                    ZStack {
+                        Color(hex: "082A49")
+                        Text("Progress to \(nextLevel)").font(.system(size: 18, weight: .bold)).foregroundStyle(.white)
+                    }
+                    .frame(width: 240, height: 40)
+                    .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
+                    ZStack {
+                        Color(hex: "FFFFFF")
+                        ZStack(alignment: .leading) {
+                            Rectangle().fill(Color(hex: "B9C6D1")).frame(height: 22)
+                            Rectangle().fill(Color(hex: "2B81C5")).frame(width: 310 * appState.levelProgress, height: 22)
+                        }
+                        .frame(width: 310, height: 22)
+                        .overlay(Rectangle().stroke(Color(hex: "000000"), lineWidth: 1))
+                    }
+                    .frame(width: 346, height: 40)
+                    .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
+                }
+                .padding(.top, 5)
+            }
+            .padding(.top, 8)
+            .padding(.leading, 120) // Space for footer on left
+
+            Spacer()
+        }
+    }
+}
+
+struct HomePageLandscapeRightContent: View {
+    @Environment(AppState.self) private var appState
+    let latestSightings: [CapturedAircraft]
+    let nextLevel: String
+
+    func formatNumber(_ number: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: number)) ?? "\(number)"
+    }
+
+    var body: some View {
+        // Content group - all boxes together, offset from footer on right
+        HStack {
+            Spacer()
+
+            VStack(spacing: 8) {
+                // Main content area - two columns
+                HStack(alignment: .top, spacing: 10) {
+                    // Left column - Stat boxes stacked
+                    VStack(spacing: 0) {
+                        // Total Aircraft Found box
+                        HStack(spacing: 0) {
+                            ZStack {
+                                Color(hex: "082A49")
+                                VStack(alignment: .trailing, spacing: 0) {
+                                    Text("Total").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Text("Aircraft").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Text("Found").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                }
+                            }
+                            .frame(width: 100, height: 103)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
+                            ZStack {
+                                Color(hex: "FFFFFF")
+                                HStack {
+                                    Text(formatNumber(appState.totalAircraftCount)).font(.system(size: 36, weight: .regular)).foregroundStyle(Color(hex: "FBBD1C"))
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Image(systemName: "airplane").font(.system(size: 24)).foregroundStyle(Color(hex: "F27C31"))
+                                }
+                            }
+                            .frame(width: 170, height: 103)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
+                        }
+
+                        Spacer()
+
+                        // Total Aircraft Types box
+                        HStack(spacing: 0) {
+                            ZStack {
+                                Color(hex: "082A49")
+                                VStack(alignment: .trailing, spacing: 0) {
+                                    Text("Total").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Text("Aircraft").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Text("Types").font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                }
+                            }
+                            .frame(width: 100, height: 103)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
+                            ZStack {
+                                Color(hex: "FFFFFF")
+                                HStack {
+                                    Text(formatNumber(appState.totalTypes)).font(.system(size: 36, weight: .regular)).foregroundStyle(Color(hex: "FBBD1C"))
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1).shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    Image(systemName: "airplane").font(.system(size: 24)).foregroundStyle(Color(hex: "F27C31"))
+                                }
+                            }
+                            .frame(width: 170, height: 103)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
+                        }
+                    }
+                    .frame(width: 270, height: 220)
+                    .padding(.trailing, 3)
+
+                    // Right column - Latest Sightings (same height as stat boxes combined)
+                    VStack(spacing: 0) {
+                        ZStack {
+                            Color(hex: "082A49")
+                            Text("Latest Sightings").font(.system(size: 20, weight: .bold)).foregroundStyle(.white)
+                        }
+                        .frame(height: 35)
+                        .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
+                        ZStack {
+                            Color(hex: "FFFFFF")
+                            if latestSightings.isEmpty {
+                                VStack(spacing: 4) {
+                                    Image(systemName: "airplane.departure").font(.system(size: 30)).foregroundStyle(Color(hex: "F27C31").opacity(0.5))
+                                    Text("No sightings yet").font(.system(size: 14)).foregroundStyle(Color(hex: "082A49").opacity(0.6))
+                                }
+                            } else {
+                                VStack(alignment: .leading, spacing: 6) {
+                                    ForEach(latestSightings) { aircraft in
+                                        HStack(alignment: .center, spacing: 6) {
+                                            Image(systemName: "airplane").font(.system(size: 22)).foregroundStyle(Color(hex: "F27C31"))
+                                            VStack(alignment: .leading, spacing: 1) {
+                                                Text((aircraft.manufacturer ?? "Unknown").uppercased())
+                                                    .font(.system(size: 19, weight: .regular)).foregroundStyle(Color(hex: "082A49"))
+                                                if let registration = aircraft.registration, !registration.isEmpty {
+                                                    Text("\(registration.uppercased()) \(aircraft.model ?? "")")
+                                                        .font(.system(size: 15, weight: .regular)).foregroundStyle(Color(hex: "082A49")).lineLimit(1)
+                                                } else {
+                                                    Text(aircraft.model ?? "")
+                                                        .font(.system(size: 15, weight: .regular)).foregroundStyle(Color(hex: "082A49")).lineLimit(1)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 8).padding(.vertical, 6).frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+                        .frame(height: 185)
+                        .overlay(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]).stroke(Color(hex: "124A93"), lineWidth: 1))
+                        .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
+                    }
+                    .frame(width: 270, height: 220)
+                    .padding(.leading, 3)
+                }
+
+                // Progress bar - centered under boxes above
+                HStack(spacing: 0) {
+                    ZStack {
+                        Color(hex: "082A49")
+                        Text("Progress to \(nextLevel)").font(.system(size: 18, weight: .bold)).foregroundStyle(.white)
+                    }
+                    .frame(width: 240, height: 40)
+                    .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
+                    ZStack {
+                        Color(hex: "FFFFFF")
+                        ZStack(alignment: .leading) {
+                            Rectangle().fill(Color(hex: "B9C6D1")).frame(height: 22)
+                            Rectangle().fill(Color(hex: "2B81C5")).frame(width: 310 * appState.levelProgress, height: 22)
+                        }
+                        .frame(width: 310, height: 22)
+                        .overlay(Rectangle().stroke(Color(hex: "000000"), lineWidth: 1))
+                    }
+                    .frame(width: 346, height: 40)
+                    .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
+                }
+                .padding(.top, 5)
+            }
+            .padding(.top, 8)
+            .padding(.trailing, 120) // Space for footer on right
+        }
     }
 }
 
@@ -353,14 +693,16 @@ struct HomePage: View {
 
 #Preview("Landscape Left", traits: .landscapeLeft) {
     LandscapeLeftTemplate {
-        Spacer()
+        HomePageLandscapeLeftContent(latestSightings: [], nextLevel: "ACE")
     }
+    .modelContainer(for: CapturedAircraft.self, inMemory: true)
     .environment(AppState())
 }
 
 #Preview("Landscape Right", traits: .landscapeRight) {
     LandscapeRightTemplate {
-        Spacer()
+        HomePageLandscapeRightContent(latestSightings: [], nextLevel: "ACE")
     }
+    .modelContainer(for: CapturedAircraft.self, inMemory: true)
     .environment(AppState())
 }
