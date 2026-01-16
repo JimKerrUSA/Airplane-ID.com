@@ -8,6 +8,84 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - Main View (Navigation Router)
+/// Switches between screens based on appState.currentScreen
+struct MainView: View {
+    @Environment(AppState.self) private var appState
+
+    var body: some View {
+        switch appState.currentScreen {
+        case .home:
+            HomePage()
+        case .maps:
+            // Placeholder - will be replaced with MapsPage()
+            PlaceholderPage(title: "Maps", icon: "map")
+        case .camera:
+            // Placeholder - will be replaced with CameraPage()
+            PlaceholderPage(title: "Camera", icon: "camera")
+        case .hangar:
+            // Placeholder - will be replaced with HangarPage()
+            PlaceholderPage(title: "Hangar", icon: "airplane.departure")
+        case .settings:
+            // Placeholder - will be replaced with SettingsPage()
+            PlaceholderPage(title: "Settings", icon: "gearshape")
+        }
+    }
+}
+
+// MARK: - Placeholder Page
+/// Temporary placeholder for pages not yet built
+struct PlaceholderPage: View {
+    let title: String
+    let icon: String
+
+    var body: some View {
+        OrientationAwarePage(
+            portrait: {
+                VStack(spacing: 20) {
+                    Image(systemName: icon)
+                        .font(.system(size: 80))
+                        .foregroundStyle(.white.opacity(0.6))
+                    Text(title)
+                        .font(.system(size: 36, weight: .bold))
+                        .foregroundStyle(.white)
+                    Text("Coming Soon")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+            },
+            leftHorizontal: {
+                VStack(spacing: 16) {
+                    Image(systemName: icon)
+                        .font(.system(size: 60))
+                        .foregroundStyle(.white.opacity(0.6))
+                    Text(title)
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundStyle(.white)
+                    Text("Coming Soon")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+                .padding(.leading, 120)
+            },
+            rightHorizontal: {
+                VStack(spacing: 16) {
+                    Image(systemName: icon)
+                        .font(.system(size: 60))
+                        .foregroundStyle(.white.opacity(0.6))
+                    Text(title)
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundStyle(.white)
+                    Text("Coming Soon")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+                .padding(.trailing, 120)
+            }
+        )
+    }
+}
+
 @main
 struct Airplane_IDApp: App {
     @State private var appState = AppState()
@@ -32,7 +110,7 @@ struct Airplane_IDApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HomePage()
+            MainView()
                 .environment(appState)
                 .onAppear {
                     print("🚀 App onAppear triggered")

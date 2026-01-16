@@ -79,10 +79,11 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 
 ## Next Steps
 
-1. Link Home buttons on footer bars to navigation (portrait and landscape)
-2. Add proper orientation detection for runtime (without UIKit)
-3. Test on physical device
-4. Build out additional screens (Maps, Hangar, Settings)
+1. Build out Maps page content
+2. Build out Hangar page content
+3. Build out Settings page content
+4. Add proper orientation detection for runtime (without UIKit)
+5. Test on physical device
 
 ## Session Log
 
@@ -135,4 +136,10 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - Left padding increased from 8 to 23px (pushed 15px right)
   - Spacing between results: 6 → 9px
 - Added sample preview data for landscape previews (previewSampleAircraft array)
-- Next: Link Home buttons to navigation, test on physical device
+- **Navigation system implemented:**
+  - Added NavigationDestination enum (home, maps, camera, hangar, settings)
+  - Added currentScreen property to AppState
+  - All footer buttons now have onTapGesture handlers for navigation
+  - Created MainView as navigation router (switches views based on currentScreen)
+  - Created PlaceholderPage for screens not yet built (Maps, Camera, Hangar, Settings)
+- Next: Build out individual page content, test on physical device

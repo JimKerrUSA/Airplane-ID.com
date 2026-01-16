@@ -8,6 +8,15 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - Navigation Destinations
+enum NavigationDestination: String, CaseIterable {
+    case home = "Home"
+    case maps = "Maps"
+    case camera = "Camera"
+    case hangar = "Hangar"
+    case settings = "Settings"
+}
+
 // MARK: - Global App State
 @Observable
 class AppState {
@@ -17,6 +26,7 @@ class AppState {
     var totalAircraftCount: Int = 1234 // Placeholder value
     var totalTypes: Int = 142
     var levelProgress: Double = 0.78 // Progress as decimal (78%)
+    var currentScreen: NavigationDestination = .home // Track current navigation
 }
 
 struct ContentView: View {
@@ -123,29 +133,35 @@ struct BottomMenuView: View {
                         Image(systemName: "house")
                             .font(.system(size: 35, weight: .regular))
                             .foregroundStyle(Color(hex: "FFFFFF"))
-                        
+
                         Text("Home")
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
                     }
-                    
+                    .onTapGesture {
+                        appState.currentScreen = .home
+                    }
+
                     Spacer()
-                    
+
                     // Hangar icon
                     VStack(spacing: 4) {
                         Image(systemName: "airplane.departure")
                             .font(.system(size: 35, weight: .regular))
                             .foregroundStyle(Color(hex: "FFFFFF"))
-                        
+
                         Text("Hangar")
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
                     }
-                    
+                    .onTapGesture {
+                        appState.currentScreen = .hangar
+                    }
+
                     Spacer()
                 }
                 .frame(width: 142.5) // Half of 385 minus half of camera button (192.5 - 50)
-                
+
                 // Center camera button
                 ZStack {
                     Circle()
@@ -155,42 +171,51 @@ struct BottomMenuView: View {
                             Circle()
                                 .stroke(Color(hex: "313131"), lineWidth: 5)
                         )
-                    
+
                     // Capture mode icon
                     Image(systemName: appState.captureMode)
                         .font(.system(size: 35, weight: .regular))
                         .foregroundStyle(Color(hex: "3A3A3C"))
                 }
                 .frame(width: 100)
-                
+                .onTapGesture {
+                    appState.currentScreen = .camera
+                }
+
                 // Right side icons
                 HStack {
                     Spacer()
-                    
+
                     // Maps icon
                     VStack(spacing: 4) {
                         Image(systemName: "map")
                             .font(.system(size: 35, weight: .regular))
                             .foregroundStyle(Color(hex: "FFFFFF"))
-                        
+
                         Text("Maps")
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
                     }
-                    
+                    .onTapGesture {
+                        appState.currentScreen = .maps
+                    }
+
                     Spacer()
-                    
+
                     // Settings icon
                     VStack(spacing: 4) {
                         Image(systemName: "gearshape")
                             .font(.system(size: 35, weight: .regular))
                             .foregroundStyle(Color(hex: "FFFFFF"))
-                        
+
                         Text("Settings")
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
                     }
-                    
+                    .onTapGesture {
+                        appState.currentScreen = .settings
+                    }
+
                     Spacer()
                 }
                 .frame(width: 142.5) // Half of 385 minus half of camera button (192.5 - 50)
@@ -299,6 +324,9 @@ struct BottomMenuViewLandscape: View {
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
                     }
+                    .onTapGesture {
+                        appState.currentScreen = .home
+                    }
 
                     Spacer()
 
@@ -311,6 +339,9 @@ struct BottomMenuViewLandscape: View {
                         Text("Maps")
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
+                    }
+                    .onTapGesture {
+                        appState.currentScreen = .maps
                     }
 
                     Spacer()
@@ -333,6 +364,9 @@ struct BottomMenuViewLandscape: View {
                         .foregroundStyle(Color(hex: "3A3A3C"))
                 }
                 .frame(width: 100, height: 100)
+                .onTapGesture {
+                    appState.currentScreen = .camera
+                }
 
                 // Bottom section
                 VStack {
@@ -348,6 +382,9 @@ struct BottomMenuViewLandscape: View {
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
                     }
+                    .onTapGesture {
+                        appState.currentScreen = .hangar
+                    }
 
                     Spacer()
 
@@ -360,6 +397,9 @@ struct BottomMenuViewLandscape: View {
                         Text("Settings")
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
+                    }
+                    .onTapGesture {
+                        appState.currentScreen = .settings
                     }
 
                     Spacer()
