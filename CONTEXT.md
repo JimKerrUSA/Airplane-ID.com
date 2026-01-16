@@ -7,19 +7,21 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 
 ## Current State
 - SwiftUI app with SwiftData for persistence
-- Three orientation templates: Portrait, Landscape Left, Landscape Right
+- Three orientation templates: PortraitTemplate, LandscapeLeftTemplate, LandscapeRightTemplate
 - Portrait view fully working with data boxes, progress bar, and recent sightings
-- Landscape Left template positioned correctly (footer on left edge)
-- Landscape Right template needs footer repositioned (currently on wrong side)
+- Landscape Left template positioned correctly (footer offset x: 20)
+- Landscape Right template positioned correctly (footer offset x: 100)
+- Landscape header person icon positioned (trailing padding: 86)
 - Test data loading working via HomePage.onAppear
+- Templates renamed for clarity and long-term maintainability
 
 ## Key Files
 - `ContentView.swift` - All reusable components and templates
   - TopMenuView / TopMenuViewLandscape - Header components
   - BottomMenuView / BottomMenuViewLandscape - Footer/nav components
-  - HomePagePortrait - Portrait template
-  - HomePageLeftHorizontal - Landscape with footer on LEFT
-  - HomePageRightHorizontal - Landscape with footer on RIGHT
+  - **PortraitTemplate** - Portrait orientation template
+  - **LandscapeLeftTemplate** - Landscape with footer on LEFT edge
+  - **LandscapeRightTemplate** - Landscape with footer on RIGHT edge
   - OrientationAwarePage - Wrapper that switches templates based on geometry
 - `HomePage.swift` - Main home screen content with data boxes and recent sightings
 - `Item.swift` - Contains CapturedAircraft SwiftData model
@@ -83,8 +85,14 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - Rebuilt test data loading in HomePage.onAppear
 - Fixed Recent Sightings display with proper styling
 - Created TopMenuViewLandscape and BottomMenuViewLandscape components
-- Created HomePageLeftHorizontal and HomePageRightHorizontal templates
-- Positioned left landscape footer correctly with ignoresSafeArea and offset(x: 5)
-- Added separate Xcode previews for each landscape template
+- Created landscape templates with proper footer positioning
+- Positioned left landscape footer: offset(x: 20) with ignoresSafeArea
+- Positioned right landscape footer: offset(x: 100) with ignoresSafeArea
+- Positioned landscape header person icon: trailing padding 86
+- Added separate Xcode previews for each landscape template (with traits)
+- Renamed templates for clarity:
+  - HomePagePortrait → PortraitTemplate
+  - HomePageLeftHorizontal → LandscapeLeftTemplate
+  - HomePageRightHorizontal → LandscapeRightTemplate
 - IMPORTANT: Do not use UIKit - causes build failures
-- Next: Fix right landscape footer positioning
+- Next: Build out landscape content areas
