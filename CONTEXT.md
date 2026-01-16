@@ -148,4 +148,11 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - Status now computed from database aircraft count (allAircraft.count)
   - Progress bar percentage calculated based on progress toward next threshold
   - AppState.status and totalAircraftCount updated dynamically from database
+  - Added uniqueTypesCount (counts unique ICAO codes)
+- **JourneyPage added:**
+  - Tap person icon in header to access
+  - Dynamic title based on status (e.g., "Spotter's Journey")
+  - Shows current level, aircraft count, and level description
+  - Placeholder sections for Badges and Leaderboard
+  - Supports all orientations
 - Next: Build out individual page content, test on physical device
