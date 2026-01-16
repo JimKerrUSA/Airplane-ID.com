@@ -99,6 +99,10 @@ struct BottomMenuView: View {
             RoundedRectangle(cornerRadius: 50)
                 .fill(Color(hex: "082A49"))
                 .frame(width: 385, height: 65)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 50)
+                        .stroke(Color.gray, lineWidth: 1)
+                )
                 .offset(y: -35) // Center on the circle
             
             // Navigation icons in horizontal layout
@@ -260,6 +264,10 @@ struct BottomMenuViewLandscape: View {
             RoundedRectangle(cornerRadius: 50)
                 .fill(Color(hex: "082A49"))
                 .frame(width: 65, height: 385)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 50)
+                        .stroke(Color.gray, lineWidth: 1)
+                )
 
             // Navigation icons in vertical layout
             VStack(spacing: 0) {
