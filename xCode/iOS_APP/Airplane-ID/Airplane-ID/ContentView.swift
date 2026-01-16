@@ -289,13 +289,13 @@ struct BottomMenuViewLandscape: View {
                 VStack {
                     Spacer()
 
-                    // Settings icon
+                    // Home icon
                     VStack(spacing: 4) {
-                        Image(systemName: "gearshape")
+                        Image(systemName: "house")
                             .font(.system(size: 35, weight: .regular))
                             .foregroundStyle(Color(hex: "FFFFFF"))
 
-                        Text("Settings")
+                        Text("Home")
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
                     }
@@ -351,13 +351,13 @@ struct BottomMenuViewLandscape: View {
 
                     Spacer()
 
-                    // Home icon
+                    // Settings icon
                     VStack(spacing: 4) {
-                        Image(systemName: "house")
+                        Image(systemName: "gearshape")
                             .font(.system(size: 35, weight: .regular))
                             .foregroundStyle(Color(hex: "FFFFFF"))
 
-                        Text("Home")
+                        Text("Settings")
                             .font(.system(size: 12))
                             .foregroundStyle(Color(hex: "FFFFFF"))
                     }

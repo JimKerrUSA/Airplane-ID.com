@@ -464,7 +464,7 @@ struct HomePageLandscapeLeftContent: View {
                                     Text("No sightings yet").font(.system(size: 14)).foregroundStyle(Color(hex: "082A49").opacity(0.6))
                                 }
                             } else {
-                                VStack(alignment: .leading, spacing: 6) {
+                                VStack(alignment: .leading, spacing: 9) {
                                     ForEach(latestSightings) { aircraft in
                                         HStack(alignment: .center, spacing: 6) {
                                             Image(systemName: "airplane").font(.system(size: 22)).foregroundStyle(Color(hex: "F27C31"))
@@ -482,7 +482,7 @@ struct HomePageLandscapeLeftContent: View {
                                         }
                                     }
                                 }
-                                .padding(.horizontal, 8).padding(.vertical, 6).frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, 23).padding(.trailing, 8).padding(.vertical, 6).frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                         .frame(height: 185)
@@ -628,7 +628,7 @@ struct HomePageLandscapeRightContent: View {
                                     Text("No sightings yet").font(.system(size: 14)).foregroundStyle(Color(hex: "082A49").opacity(0.6))
                                 }
                             } else {
-                                VStack(alignment: .leading, spacing: 6) {
+                                VStack(alignment: .leading, spacing: 9) {
                                     ForEach(latestSightings) { aircraft in
                                         HStack(alignment: .center, spacing: 6) {
                                             Image(systemName: "airplane").font(.system(size: 22)).foregroundStyle(Color(hex: "F27C31"))
@@ -646,7 +646,7 @@ struct HomePageLandscapeRightContent: View {
                                         }
                                     }
                                 }
-                                .padding(.horizontal, 8).padding(.vertical, 6).frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, 23).padding(.trailing, 8).padding(.vertical, 6).frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                         .frame(height: 185)
@@ -691,9 +691,17 @@ struct HomePageLandscapeRightContent: View {
         .environment(AppState())
 }
 
+// Sample data for landscape previews
+private let previewSampleAircraft: [CapturedAircraft] = {
+    let aircraft1 = CapturedAircraft(captureDate: Date(), gpsLongitude: -88.5, gpsLatitude: 43.9, year: 2026, month: 1, day: 15, icao: "HDJT", manufacturer: "Honda", model: "HondaJet", registration: "N769F")
+    let aircraft2 = CapturedAircraft(captureDate: Date(), gpsLongitude: -88.5, gpsLatitude: 43.9, year: 2026, month: 1, day: 7, icao: "ACAM", manufacturer: "Lockwood", model: "Air Cam", registration: "N79QF")
+    let aircraft3 = CapturedAircraft(captureDate: Date(), gpsLongitude: -88.5, gpsLatitude: 43.9, year: 2026, month: 1, day: 5, icao: "DC3", manufacturer: "Douglas", model: "DC-3", registration: "N1573")
+    return [aircraft1, aircraft2, aircraft3]
+}()
+
 #Preview("Landscape Left", traits: .landscapeLeft) {
     LandscapeLeftTemplate {
-        HomePageLandscapeLeftContent(latestSightings: [], nextLevel: "ACE")
+        HomePageLandscapeLeftContent(latestSightings: previewSampleAircraft, nextLevel: "ACE")
     }
     .modelContainer(for: CapturedAircraft.self, inMemory: true)
     .environment(AppState())
@@ -701,7 +709,7 @@ struct HomePageLandscapeRightContent: View {
 
 #Preview("Landscape Right", traits: .landscapeRight) {
     LandscapeRightTemplate {
-        HomePageLandscapeRightContent(latestSightings: [], nextLevel: "ACE")
+        HomePageLandscapeRightContent(latestSightings: previewSampleAircraft, nextLevel: "ACE")
     }
     .modelContainer(for: CapturedAircraft.self, inMemory: true)
     .environment(AppState())

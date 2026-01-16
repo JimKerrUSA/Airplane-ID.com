@@ -79,10 +79,10 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 
 ## Next Steps
 
-1. Fine-tune landscape layout based on user feedback
+1. Link Home buttons on footer bars to navigation (portrait and landscape)
 2. Add proper orientation detection for runtime (without UIKit)
 3. Test on physical device
-4. Build out additional screens
+4. Build out additional screens (Maps, Hangar, Settings)
 
 ## Session Log
 
@@ -128,4 +128,11 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - Progress bar label shows "Progress to {nextLevel}"
 - Changed landscape sightings from 4 to 3 items
 - Fixed landscape right preview to use LandscapeRightTemplate directly
-- Next: Test on physical device, build additional screens
+- Swapped Home/Settings positions in landscape footer for better ergonomics:
+  - Old order (top to bottom): Settings, Maps, Camera, Hangar, Home
+  - New order (top to bottom): Home, Maps, Camera, Hangar, Settings
+- Adjusted Latest Sightings spacing in landscape:
+  - Left padding increased from 8 to 23px (pushed 15px right)
+  - Spacing between results: 6 → 9px
+- Added sample preview data for landscape previews (previewSampleAircraft array)
+- Next: Link Home buttons to navigation, test on physical device
