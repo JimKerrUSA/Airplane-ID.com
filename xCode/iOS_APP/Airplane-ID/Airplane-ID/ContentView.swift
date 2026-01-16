@@ -456,10 +456,11 @@ struct HomePageLeftHorizontal<Content: View>: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
 
-                    // Left side navigation bar - vertically centered on left edge
+                    // Left side navigation bar - vertically centered on left edge, ignoring safe area
                     BottomMenuViewLandscape()
                         .position(x: 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
-                        .offset(x: -5)
+                        .offset(x: 5)
+                        .ignoresSafeArea()
                 }
             }
 #if os(iOS)
