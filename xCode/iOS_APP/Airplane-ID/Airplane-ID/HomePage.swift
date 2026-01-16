@@ -23,6 +23,69 @@ struct HomePage: View {
         Array(allAircraft.prefix(3))
     }
 
+    // Load test data if needed
+    private func loadTestDataIfNeeded() {
+        print("🏠 HomePage: Checking for test data...")
+
+        // Check if we already have data
+        if allAircraft.count > 0 {
+            print("ℹ️ Data already exists (\(allAircraft.count) records)")
+            return
+        }
+
+        print("📥 Loading test data...")
+
+        // Test data from CSV
+        let testData: [(icao: String, manufacturer: String, model: String, registration: String, year: Int, month: Int, day: Int, lat: Double, lon: Double)] = [
+            ("A500", "Adam", "A-500", "N12345", 2024, 1, 27, 43.99083, -88.57411),
+            ("M346", "Aermacchi", "M-346 Master", "N4455", 2024, 2, 8, 43.99056, -88.56877),
+            ("M339", "Aermacchi", "MB-339", "N12VS", 2025, 3, 14, 43.98986, -88.56456),
+            ("AAT3", "Aero", "3 AT-3", "N3344", 2025, 5, 20, 43.98964, -88.55993),
+            ("B701", "Boeing", "707-100", "N1678", 2025, 6, 5, 43.99007, -88.55594),
+            ("C172", "Cessna", "Skyhawk", "N2757", 2025, 10, 31, 43.99289, -88.57291),
+            ("SR22", "Cirrus", "SR-22", "N252Q", 2025, 12, 24, 43.98845, -88.55797),
+            ("S22T", "Cirrus", "SR22 Turbo", "N7779", 2026, 1, 5, 43.98959, -88.55556),
+            ("DC3", "Douglas", "DC-3", "N1573", 2026, 1, 5, 43.99073, -88.55169),
+            ("ACAM", "Lockwood", "Air Cam", "N79QF", 2026, 1, 7, 43.9879, -88.55548),
+            ("HDJT", "Honda", "HondaJet", "N769F", 2026, 1, 15, 43.98968, -88.55128)
+        ]
+
+        for data in testData {
+            var dateComponents = DateComponents()
+            dateComponents.year = data.year
+            dateComponents.month = data.month
+            dateComponents.day = data.day
+            dateComponents.hour = 20
+            dateComponents.minute = 9
+            dateComponents.second = 45
+            dateComponents.timeZone = TimeZone(identifier: "UTC")
+
+            guard let captureDate = Calendar.current.date(from: dateComponents) else { continue }
+
+            let aircraft = CapturedAircraft(
+                captureDate: captureDate,
+                gpsLongitude: data.lon,
+                gpsLatitude: data.lat,
+                year: data.year,
+                month: data.month,
+                day: data.day,
+                icao: data.icao,
+                manufacturer: data.manufacturer,
+                model: data.model,
+                registration: data.registration
+            )
+
+            modelContext.insert(aircraft)
+        }
+
+        do {
+            try modelContext.save()
+            print("✅ Loaded 11 test aircraft")
+        } catch {
+            print("❌ Error saving: \(error)")
+        }
+    }
+
     // Helper function to format numbers with commas
     func formatNumber(_ number: Int) -> String {
         let formatter = NumberFormatter()
@@ -36,6 +99,12 @@ struct HomePage: View {
             portrait: {
                 // Portrait version content
                 VStack(spacing: 0) {
+                    // Empty view to trigger onAppear
+                    Color.clear
+                        .frame(height: 0)
+                        .onAppear {
+                            loadTestDataIfNeeded()
+                        }
                     // Top data boxes row
                     HStack(spacing: 0) {
                         // Left box - Dark blue with rounded top-left and bottom-left corners

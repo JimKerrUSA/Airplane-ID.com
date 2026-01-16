@@ -14,6 +14,7 @@ struct Airplane_IDApp: App {
 
     // MARK: - Development Settings
     private let loadTestData = true // Set to true to load test data on launch
+    private let forceClearDatabase = true // Set to true to clear and reload all test data
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -34,12 +35,35 @@ struct Airplane_IDApp: App {
             HomePage()
                 .environment(appState)
                 .onAppear {
+                    print("🚀 App onAppear triggered")
+                    if forceClearDatabase {
+                        print("🗑️ Clearing database...")
+                        clearAllData()
+                    }
                     if loadTestData {
+                        print("📥 Loading test data...")
                         loadTestDataOnce()
                     }
+                    print("✅ Startup complete")
                 }
         }
         .modelContainer(sharedModelContainer)
+    }
+
+    // MARK: - Database Management
+
+    /// Clears all data from the database
+    private func clearAllData() {
+        let context = sharedModelContainer.mainContext
+
+        do {
+            try context.delete(model: CapturedAircraft.self)
+            try context.delete(model: Item.self)
+            try context.save()
+            print("🗑️ Database cleared successfully")
+        } catch {
+            print("❌ Error clearing database: \(error)")
+        }
     }
 
     // MARK: - Test Data Loading
@@ -47,15 +71,23 @@ struct Airplane_IDApp: App {
     /// Loads test data only once (checks if data already exists)
     private func loadTestDataOnce() {
         let context = sharedModelContainer.mainContext
+        print("📊 Checking existing data...")
 
         // Check if we already have data
         let fetchDescriptor = FetchDescriptor<CapturedAircraft>()
-        if let existingCount = try? context.fetchCount(fetchDescriptor), existingCount > 0 {
-            print("ℹ️ Test data already exists (\(existingCount) records), skipping import")
-            return
+        do {
+            let existingCount = try context.fetchCount(fetchDescriptor)
+            print("📊 Existing count: \(existingCount)")
+            if existingCount > 0 {
+                print("ℹ️ Test data already exists (\(existingCount) records), skipping import")
+                return
+            }
+        } catch {
+            print("❌ Error checking count: \(error)")
         }
 
         // Load test data
+        print("📥 Calling importTestData...")
         importTestData()
     }
 
