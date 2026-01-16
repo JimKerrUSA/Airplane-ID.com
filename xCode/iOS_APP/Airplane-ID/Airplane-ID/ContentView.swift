@@ -24,11 +24,11 @@ struct ContentView: View {
     @Environment(AppState.self) private var appState
     
     var body: some View {
-        PageTemplate {
+        PortraitTemplate {
             Spacer()
-            
+
             // Main page content will go here
-            
+
             Spacer()
         }
     }
@@ -350,48 +350,10 @@ struct BottomMenuViewLandscape: View {
     }
 }
 
-// MARK: - Page Template
-/// Standard page template with top menu, bottom menu, and consistent styling
-/// Use this as the base for all pages in the app
-struct PageTemplate<Content: View>: View {
-    let content: Content
-    
-    init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
-    
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                // Top Menu Bar - Reusable component
-                TopMenuView()
-                
-                // Main content area
-                ZStack(alignment: .bottom) {
-                    // Content area
-                    VStack {
-                        content
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                    // Bottom Navigation Bar - Reusable component
-                    BottomMenuView()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .background(Color(hex: "1D58A4"))
-            .ignoresSafeArea()
-#if os(iOS)
-            .navigationBarHidden(true)
-#endif
-        }
-    }
-}
-
-// MARK: - Page Template - Portrait Orientation
+// MARK: - Portrait Template
 /// Standard page template for PORTRAIT orientation with top menu, bottom menu, and consistent styling
 /// Use this as the base for all portrait pages in the app
-struct HomePagePortrait<Content: View>: View {
+struct PortraitTemplate<Content: View>: View {
     let content: Content
     
     init(@ViewBuilder content: () -> Content) {
@@ -426,10 +388,10 @@ struct HomePagePortrait<Content: View>: View {
     }
 }
 
-// MARK: - Page Template - Left Horizontal Orientation
-/// Template for LEFT HORIZONTAL orientation (footer on LEFT side)
+// MARK: - Landscape Left Template
+/// Template for LEFT LANDSCAPE orientation (footer on LEFT side)
 /// Phone rotated with device top on RIGHT side
-struct HomePageLeftHorizontal<Content: View>: View {
+struct LandscapeLeftTemplate<Content: View>: View {
     let content: Content
 
     init(@ViewBuilder content: () -> Content) {
@@ -470,10 +432,10 @@ struct HomePageLeftHorizontal<Content: View>: View {
     }
 }
 
-// MARK: - Page Template - Right Horizontal Orientation
-/// Template for RIGHT HORIZONTAL orientation (footer on RIGHT side)
+// MARK: - Landscape Right Template
+/// Template for RIGHT LANDSCAPE orientation (footer on RIGHT side)
 /// Phone rotated with device top on LEFT side
-struct HomePageRightHorizontal<Content: View>: View {
+struct LandscapeRightTemplate<Content: View>: View {
     let content: Content
 
     init(@ViewBuilder content: () -> Content) {
@@ -539,12 +501,12 @@ struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightConte
         GeometryReader { geometry in
             if geometry.size.width < geometry.size.height {
                 // Portrait orientation
-                HomePagePortrait {
+                PortraitTemplate {
                     portraitContent
                 }
             } else {
                 // Landscape orientation - using left template for now
-                HomePageLeftHorizontal {
+                LandscapeLeftTemplate {
                     leftHorizontalContent
                 }
             }
@@ -559,14 +521,14 @@ struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightConte
 }
 
 #Preview("Landscape Left", traits: .landscapeLeft) {
-    HomePageLeftHorizontal {
+    LandscapeLeftTemplate {
         Spacer()
     }
     .environment(AppState())
 }
 
 #Preview("Landscape Right", traits: .landscapeRight) {
-    HomePageRightHorizontal {
+    LandscapeRightTemplate {
         Spacer()
     }
     .environment(AppState())

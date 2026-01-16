@@ -352,14 +352,14 @@ struct HomePage: View {
 }
 
 #Preview("Landscape Left", traits: .landscapeLeft) {
-    HomePageLeftHorizontal {
+    LandscapeLeftTemplate {
         Spacer()
     }
     .environment(AppState())
 }
 
 #Preview("Landscape Right", traits: .landscapeRight) {
-    HomePageRightHorizontal {
+    LandscapeRightTemplate {
         Spacer()
     }
     .environment(AppState())
