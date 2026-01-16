@@ -15,6 +15,7 @@ enum NavigationDestination: String, CaseIterable {
     case camera = "Camera"
     case hangar = "Hangar"
     case settings = "Settings"
+    case journey = "Journey"
 }
 
 // MARK: - Global App State
@@ -79,15 +80,18 @@ struct TopMenuView: View {
             // Status indicator (top right) - independently positioned
             HStack(alignment: .top) {
                 Spacer()
-                
+
                 VStack(spacing: 4) {
                     Image(systemName: "person")
                         .font(.system(size: 45))
                         .foregroundStyle(.white)
-                    
+
                     Text(appState.status)
                         .font(.custom("Helvetica", size: 12))
                         .foregroundStyle(.white)
+                }
+                .onTapGesture {
+                    appState.currentScreen = .journey
                 }
                 .padding(.trailing, 16)
                 .padding(.top, 52)
@@ -274,6 +278,9 @@ struct TopMenuViewLandscape: View {
                     Text(appState.status)
                         .font(.custom("Helvetica", size: 12))
                         .foregroundStyle(.white)
+                }
+                .onTapGesture {
+                    appState.currentScreen = .journey
                 }
                 .padding(.trailing, 86)
                 .padding(.top, 8)

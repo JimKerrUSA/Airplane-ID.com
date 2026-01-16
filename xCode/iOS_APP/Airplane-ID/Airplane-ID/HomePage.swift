@@ -36,6 +36,11 @@ struct HomePage: View {
         allAircraft.count
     }
 
+    // Count of unique aircraft types (unique ICAO codes)
+    private var uniqueTypesCount: Int {
+        Set(allAircraft.compactMap { $0.icao }).count
+    }
+
     // Current status based on aircraft count
     private var currentStatus: String {
         switch aircraftCount {
@@ -259,13 +264,13 @@ struct HomePage: View {
                     }
                     .padding(.top, 13) // 13px below first box
                     
-                    // Progress to ACE box
+                    // Progress box
                     VStack(spacing: 0) {
                         // Top section - Dark blue header with rounded top corners
                         ZStack {
                             Color(hex: "082A49")
-                            
-                            Text("Progress to ACE")
+
+                            Text("Progress to \(nextLevel)")
                                 .font(.system(size: 26, weight: .bold, design: .default))
                                 .foregroundStyle(.white)
                         }
@@ -397,11 +402,13 @@ struct HomePage: View {
             // Update AppState from database
             appState.status = currentStatus
             appState.totalAircraftCount = aircraftCount
+            appState.totalTypes = uniqueTypesCount
         }
         .onChange(of: allAircraft.count) { _, _ in
             // Update AppState when aircraft count changes
             appState.status = currentStatus
             appState.totalAircraftCount = aircraftCount
+            appState.totalTypes = uniqueTypesCount
         }
     }
 }
@@ -748,18 +755,27 @@ private let previewSampleAircraft: [CapturedAircraft] = {
     return [aircraft1, aircraft2, aircraft3]
 }()
 
+// Preview AppState with realistic values
+private func previewAppState() -> AppState {
+    let state = AppState()
+    state.status = "SPOTTER"
+    state.totalAircraftCount = 11
+    state.totalTypes = 11
+    return state
+}
+
 #Preview("Landscape Left", traits: .landscapeLeft) {
     LandscapeLeftTemplate {
-        HomePageLandscapeLeftContent(latestSightings: previewSampleAircraft, nextLevel: "LEGEND", levelProgress: 0.78)
+        HomePageLandscapeLeftContent(latestSightings: previewSampleAircraft, nextLevel: "ENTHUSIAST", levelProgress: 0.01)
     }
     .modelContainer(for: CapturedAircraft.self, inMemory: true)
-    .environment(AppState())
+    .environment(previewAppState())
 }
 
 #Preview("Landscape Right", traits: .landscapeRight) {
     LandscapeRightTemplate {
-        HomePageLandscapeRightContent(latestSightings: previewSampleAircraft, nextLevel: "LEGEND", levelProgress: 0.78)
+        HomePageLandscapeRightContent(latestSightings: previewSampleAircraft, nextLevel: "ENTHUSIAST", levelProgress: 0.01)
     }
     .modelContainer(for: CapturedAircraft.self, inMemory: true)
-    .environment(AppState())
+    .environment(previewAppState())
 }
