@@ -198,6 +198,10 @@ VStack { /* content */ }
 - passwordHash, passwordRequired, faceIDEnabled
 - displayName, memberDate, homeAirport, memberLevel
 - lastSyncDate, syncToken (for future server sync)
+- **Privacy preferences** (all default true):
+  - showOnlineStatus, showLocation (visibility settings)
+  - receiveNews, receiveUpdates, receiveActivitySummary (notifications)
+  - allowFollow, showInSearch (social/discovery - future use)
 
 ### Level Progression System
 Levels are based on total aircraft captured (database record count).
@@ -261,7 +265,7 @@ Settings page with dark theme - uses sheet overlays for sub-pages.
 - Developer Tools only visible when `AppConfig.developerToolsEnabled = true`
 
 **Menu Items (open as sheets):**
-- Account Settings → `AccountSettingsView` (shows user profile, security)
+- Account Settings → `AccountSettingsView` (shows user profile, security, privacy)
 - App Preferences → `AppPreferencesView` (Coming Soon)
 - System → `SystemSettingsView` (Coming Soon)
 - About → `AboutView` (version, copyright)
@@ -669,3 +673,11 @@ The app must handle large datasets efficiently:
   - Fix: Parse CSV on background thread, dispatch to main thread for SwiftData operations
   - Pattern: Collect raw data in tuples, then create/insert @Model objects on main thread
   - Commit: eba6aad "Fix background thread SwiftData access in CSV import"
+
+- **Privacy preferences added to Account Settings:**
+  - New Privacy section below Security with toggle switches
+  - UI toggles: Show Online Status, Show Location, Receive Latest News, Receive Activity Summary
+  - Additional DB fields for future: receiveUpdates, allowFollow, showInSearch
+  - All privacy preferences default to true (on)
+  - Toggle changes save immediately to database
+  - Commit: f42a7b4 "Add Privacy section to Account Settings"
