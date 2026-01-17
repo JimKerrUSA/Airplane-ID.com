@@ -17,6 +17,9 @@ struct HomePage: View {
         order: .reverse
     ) private var allAircraft: [CapturedAircraft]
 
+    // Selected aircraft for detail view
+    @State private var selectedAircraft: CapturedAircraft?
+
     // Computed property to get the 6 most recent sightings (portrait)
     private var recentSightings: [CapturedAircraft] {
         Array(allAircraft.prefix(6))
@@ -270,6 +273,11 @@ struct HomePage: View {
                                                     .foregroundStyle(AppColors.darkBlue.opacity(0.7))
                                             }
                                         }
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            selectedAircraft = aircraft
+                                        }
                                     }
                                 }
                                 .padding(.horizontal, 12)
@@ -304,6 +312,10 @@ struct HomePage: View {
             appState.status = currentStatus
             appState.totalAircraftCount = aircraftCount
             appState.totalTypes = uniqueTypesCount
+        }
+        .fullScreenCover(item: $selectedAircraft) { aircraft in
+            // Uses AircraftDetailView from HangarPage.swift (shared component)
+            AircraftDetailView(aircraft: aircraft)
         }
     }
 }
