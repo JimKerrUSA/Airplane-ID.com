@@ -1295,11 +1295,23 @@ struct ICAOSearchSheet: View {
         if searchText.isEmpty {
             return []  // Don't show all 2700+ aircraft when search is empty
         }
-        let search = searchText.lowercased()
+
+        // Split search into keywords - each word is an AND filter
+        // "Cessna 172" → must contain "cessna" AND "172"
+        let keywords = searchText.lowercased()
+            .split(separator: " ")
+            .map { String($0) }
+            .filter { !$0.isEmpty }
+
+        guard !keywords.isEmpty else { return [] }
+
         return allAircraft.filter { aircraft in
-            aircraft.icao.lowercased().contains(search) ||
-            aircraft.manufacturer.lowercased().contains(search) ||
-            aircraft.model.lowercased().contains(search)
+            // Combine all searchable fields into one string
+            let searchableText = "\(aircraft.icao) \(aircraft.manufacturer) \(aircraft.model)".lowercased()
+            // ALL keywords must be found somewhere in the combined text
+            return keywords.allSatisfy { keyword in
+                searchableText.contains(keyword)
+            }
         }
         .prefix(50)  // Limit results for performance
         .map { $0 }
@@ -1426,11 +1438,23 @@ struct AirlineSearchSheet: View {
         if searchText.isEmpty {
             return []  // Don't show all 5000+ airlines when search is empty
         }
-        let search = searchText.lowercased()
+
+        // Split search into keywords - each word is an AND filter
+        // "United Airlines" → must contain "united" AND "airlines"
+        let keywords = searchText.lowercased()
+            .split(separator: " ")
+            .map { String($0) }
+            .filter { !$0.isEmpty }
+
+        guard !keywords.isEmpty else { return [] }
+
         return allAirlines.filter { airline in
-            airline.airlineName.lowercased().contains(search) ||
-            airline.airlineCode.lowercased().contains(search) ||
-            (airline.iata?.lowercased().contains(search) ?? false)
+            // Combine all searchable fields into one string
+            let searchableText = "\(airline.airlineName) \(airline.airlineCode) \(airline.iata ?? "")".lowercased()
+            // ALL keywords must be found somewhere in the combined text
+            return keywords.allSatisfy { keyword in
+                searchableText.contains(keyword)
+            }
         }
         .prefix(50)  // Limit results for performance
         .map { $0 }
