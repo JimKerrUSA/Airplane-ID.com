@@ -98,12 +98,12 @@ struct HomePage: View {
 
     // MARK: - Aircraft Display Formatting
 
-    /// Line 1: [IATA] MANUFACTURER MODEL
-    /// Example: "UA BOEING 747" or "PIPER PA-46-310P" (if no IATA)
+    /// Line 1: [AIRLINE CODE] MANUFACTURER MODEL
+    /// Example: "UAL BOEING 747" or "PIPER PA-46-310P" (if no airline)
     func aircraftLine1(_ aircraft: CapturedAircraft) -> String {
         var parts: [String] = []
-        if let iata = aircraft.iata, !iata.isEmpty {
-            parts.append(iata.uppercased())
+        if let code = aircraft.airlineCode, !code.isEmpty {
+            parts.append(code.uppercased())
         }
         parts.append(aircraft.manufacturer.uppercased())
         parts.append(aircraft.model)
@@ -487,11 +487,11 @@ struct HomePageLandscapeContent: View {
 
     // MARK: - Aircraft Display Formatting
 
-    /// Line 1: [IATA] MANUFACTURER MODEL
+    /// Line 1: [AIRLINE CODE] MANUFACTURER MODEL
     private func aircraftLine1(_ aircraft: CapturedAircraft) -> String {
         var parts: [String] = []
-        if let iata = aircraft.iata, !iata.isEmpty {
-            parts.append(iata.uppercased())
+        if let code = aircraft.airlineCode, !code.isEmpty {
+            parts.append(code.uppercased())
         }
         parts.append(aircraft.manufacturer.uppercased())
         parts.append(aircraft.model)

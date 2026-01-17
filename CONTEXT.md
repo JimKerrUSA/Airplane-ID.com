@@ -935,3 +935,53 @@ The app must handle large datasets efficiently:
     - Changing existing rating requires entering edit mode first
     - Clear Rating option available in selector sheet when rating exists
   - **NOTE:** This was a breaking schema change - required deleting app from device and reinstalling
+
+- **Airline Lookup System:**
+  - Created Python scraper (`Data/scrape_airline_codes.py`) to extract airline codes from airlinecodes.info
+  - Generated `AirlineCodes.csv` with 5,316 unique airlines (bundled with app)
+  - CSV columns: airlineCode (3-letter ICAO), iata (2-letter IATA), airlineName
+  - **SwiftData model:** `AirlineLookup` with unique airlineCode constraint
+  - Added AirlineLookup to schema in Airplane_IDApp.swift
+  - **Auto-loading on first launch:**
+    - `MainView.loadReferenceDataIfNeeded()` runs on app startup
+    - Checks if AirlineLookup table is empty
+    - If empty, automatically imports from bundled `AirlineCodes.csv`
+    - Users never need to manually import - data is always available
+    - Future updates: Bundle updated CSV, users get new data on fresh install/reset
+  - **Model change:** CapturedAircraft `iata` field renamed to `airlineCode` (3-letter code)
+  - **HangarPage updates:**
+    - Removed IATA text field from edit mode
+    - Added `AirlinePickerRow` component showing airline name (tappable in edit mode)
+    - Added `AirlineSearchSheet` with typeahead search (filters by name, code, or IATA)
+    - User must select from lookup list (no freeform entry)
+    - Filter state updated: `selectedIATA` → `selectedAirlineCode`
+  - **HomePage updates:**
+    - All `aircraft.iata` references changed to `aircraft.airlineCode`
+    - Display format comments updated to "[AIRLINE CODE]" instead of "[IATA]"
+  - **Developer Tools:** "Import Airline Codes" button for manual refresh (deletes existing, then imports)
+
+### Session Summary - 2026-01-17 (afternoon)
+
+**Goal:** Enable airline selection from a curated lookup table instead of free-form text entry.
+
+**Why:**
+- IATA codes are only a subset of airline codes (2-letter vs 3-letter)
+- Users shouldn't have to know/remember airline codes
+- Ensures data consistency across all captured aircraft
+- Reference data can be updated via app store updates
+
+**What was built:**
+1. Scraped 5,316 airline codes from airlinecodes.info (Python script)
+2. Created `AirlineLookup` SwiftData model with unique constraint on airlineCode
+3. Renamed `CapturedAircraft.iata` to `airlineCode` (3-letter code is more universal)
+4. Built typeahead search UI - user searches by airline name, code, or IATA
+5. Auto-loads airline data on first app launch from bundled CSV
+6. Added manual import button in Developer Tools for testing/refresh
+
+**Files changed:**
+- `Airplane_IDApp.swift` - Auto-load logic in MainView
+- `HomePage.swift` - Updated iata → airlineCode references
+- `SettingsPage.swift` - Added Reference Data section with import button
+- `AirlineCodes.csv` - Bundled reference data (5,316 airlines)
+- `Item.swift` - AirlineLookup model, renamed field
+- `HangarPage.swift` - AirlinePickerRow and AirlineSearchSheet components
