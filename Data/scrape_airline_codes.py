@@ -88,16 +88,16 @@ def scrape_page(letter: str) -> list[dict]:
     airlines = []
     for row in parser.rows:
         if len(row) >= 3:
-            icao = row[0]
+            airline_code = row[0]
             iata = row[1]
-            airline = row[2]
+            airline_name = row[2]
 
             # Skip header row
-            if icao and icao.upper() != "ICAO":
+            if airline_code and airline_code.upper() != "ICAO":
                 airlines.append({
-                    "icao": icao,
+                    "airlineCode": airline_code,
                     "iata": iata if iata and iata != "-" else "",
-                    "airline": airline
+                    "airlineName": airline_name
                 })
 
     print(f"    Found {len(airlines)} airlines")
@@ -122,23 +122,23 @@ def main():
     print()
     print(f"Total airlines scraped: {len(all_airlines)}")
 
-    # Remove duplicates based on ICAO code
-    seen_icao = set()
+    # Remove duplicates based on airline code
+    seen_codes = set()
     unique_airlines = []
     for airline in all_airlines:
-        if airline["icao"] not in seen_icao:
-            seen_icao.add(airline["icao"])
+        if airline["airlineCode"] not in seen_codes:
+            seen_codes.add(airline["airlineCode"])
             unique_airlines.append(airline)
 
-    print(f"Unique airlines (by ICAO): {len(unique_airlines)}")
+    print(f"Unique airlines (by airlineCode): {len(unique_airlines)}")
 
-    # Sort by ICAO code
-    unique_airlines.sort(key=lambda x: x["icao"])
+    # Sort by airline code
+    unique_airlines.sort(key=lambda x: x["airlineCode"])
 
     # Write to CSV
     print(f"\nWriting to {OUTPUT_FILE}...")
     with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["icao", "iata", "airline"])
+        writer = csv.DictWriter(f, fieldnames=["airlineCode", "iata", "airlineName"])
         writer.writeheader()
         writer.writerows(unique_airlines)
 
@@ -147,7 +147,7 @@ def main():
     # Show sample
     print("\nSample records:")
     for airline in unique_airlines[:5]:
-        print(f"  {airline['icao']}: {airline['iata'] or '(no IATA)'} - {airline['airline']}")
+        print(f"  {airline['airlineCode']}: {airline['iata'] or '(no IATA)'} - {airline['airlineName']}")
 
 
 if __name__ == "__main__":

@@ -218,18 +218,18 @@ final class CapturedAircraft: Identifiable {
     }
 }
 
-// MARK: - AirlineCode Model
-/// Reference table for airline ICAO and IATA codes
+// MARK: - AirlineLookup Model
+/// Reference table for airline codes (separate from aircraft data)
 /// Data source: airlinecodes.info
 @Model
-final class AirlineCode {
-    @Attribute(.unique) var icao: String   // ICAO airline code (3-letter, primary key)
-    var iata: String?                       // IATA airline code (2-letter, may be nil)
-    var airline: String                     // Airline name
+final class AirlineLookup {
+    @Attribute(.unique) var airlineCode: String  // 3-letter airline code (primary key)
+    var iata: String?                             // 2-letter IATA code (may be nil)
+    var airlineName: String                       // Full airline name
 
-    init(icao: String, iata: String? = nil, airline: String) {
-        self.icao = icao
+    init(airlineCode: String, iata: String? = nil, airlineName: String) {
+        self.airlineCode = airlineCode
         self.iata = iata
-        self.airline = airline
+        self.airlineName = airlineName
     }
 }
