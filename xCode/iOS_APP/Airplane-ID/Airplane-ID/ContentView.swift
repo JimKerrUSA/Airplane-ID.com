@@ -91,6 +91,20 @@ class AppState {
     var totalAircraftCount: Int = 0 // Updated by HomePage from database
     var totalTypes: Int = 0 // Updated by HomePage from database
     var currentScreen: NavigationDestination = .home // Track current navigation
+
+    /// Display title for the current page shown in header
+    /// Add new pages to this dictionary - defaults to enum rawValue uppercased as reminder
+    var pageDisplayTitle: String {
+        let titles: [NavigationDestination: String] = [
+            .home: "HOME",
+            .maps: "MAPS",
+            .camera: "CAMERA",
+            .hangar: "YOUR HANGAR",
+            .settings: "SETTINGS",
+            .journey: "JOURNEY STATS"
+        ]
+        return titles[currentScreen] ?? currentScreen.rawValue.uppercased()
+    }
 }
 
 struct ContentView: View {
@@ -116,8 +130,9 @@ struct TopMenuView: View {
         ZStack {
             AppColors.darkBlue
 
-            // Status indicator (left side) - pushed down to avoid status bar
-            HStack {
+            // Header content - person icon left, page title right
+            HStack(alignment: .bottom) {
+                // Status indicator (left side)
                 VStack(spacing: 2) {
                     Image(systemName: "person")
                         .font(.system(size: 32))
@@ -131,10 +146,16 @@ struct TopMenuView: View {
                     appState.currentScreen = .journey
                 }
                 .padding(.leading, 16)
-                .padding(.top, 28)
 
                 Spacer()
+
+                // Page title (right side) - bottom aligned with status text
+                Text(appState.pageDisplayTitle)
+                    .font(.custom("Helvetica", size: 11))
+                    .foregroundStyle(.white)
+                    .padding(.trailing, 16)
             }
+            .padding(.top, 28)
         }
         .frame(height: 93)
         .frame(maxWidth: .infinity)
@@ -290,10 +311,9 @@ struct TopMenuViewLandscape: View {
             AppColors.darkBlue
                 .ignoresSafeArea(edges: .horizontal)
 
-            // Status indicator (right side)
-            HStack {
-                Spacer()
-
+            // Header content - person icon left, page title right
+            HStack(alignment: .bottom) {
+                // Status indicator (left side)
                 VStack(spacing: 2) {
                     Image(systemName: "person")
                         .font(.system(size: 28))
@@ -306,7 +326,15 @@ struct TopMenuViewLandscape: View {
                 .onTapGesture {
                     appState.currentScreen = .journey
                 }
-                .padding(.trailing, 86)
+                .padding(.leading, 16)
+
+                Spacer()
+
+                // Page title (right side) - bottom aligned with status text
+                Text(appState.pageDisplayTitle)
+                    .font(.custom("Helvetica", size: 10))
+                    .foregroundStyle(.white)
+                    .padding(.trailing, 86)
             }
         }
         .frame(height: 50)
