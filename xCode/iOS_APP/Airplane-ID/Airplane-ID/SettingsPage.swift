@@ -920,7 +920,8 @@ struct DeveloperToolsView: View {
                 //              num_engines(5), aircraft_type(6), aircraft_classification(7),
                 //              latitude(8), longitude(9), capture_date(10), capture_time(11),
                 //              year(12), month(13), day(14), near_airport(15)
-                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, Int?, String?, String?, Int?, Double?, Bool?)] = []
+                // Tuple: (captureDate, longitude, latitude, year, month, day, icao, manufacturer, model, engineType, engineCount, registration, aircraftType, aircraftClassification, rating, thumbsUp)
+                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, Int?, Int?, String?, String?, Int?, Double?, Bool?)] = []
 
                 for line in dataLines {
                     let columns = self.parseCSVLine(line)
@@ -937,7 +938,7 @@ struct DeveloperToolsView: View {
                         columns[0],                  // icao
                         columns[1],                  // manufacturer
                         columns[2],                  // model
-                        columns[4],                  // engineType
+                        columns[4].isEmpty ? nil : Int(columns[4]),  // engineType (Int?)
                         Int(columns[5]) ?? 1,        // engineCount
                         columns[3],                  // registration
                         columns[6].isEmpty ? nil : columns[6],  // aircraftType (String)
