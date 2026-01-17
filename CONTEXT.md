@@ -534,3 +534,33 @@ struct AppConfig {
     - `SecurityToggleRow` - Toggle switch with blue tint
   - Toggle switches save to database immediately on change
   - Edit mode changes are saved when "Save" is tapped, reverted on "Cancel"
+
+- **CRITICAL PATTERN: fullScreenCover with TextFields:**
+  - **Problem:** When using `sheet` or `fullScreenCover` with editable TextFields, tapping a TextField can cause the modal to dismiss unexpectedly
+  - **Root cause:** If the @State variable controlling the modal is in a child view (like SettingsScrollContent), SwiftUI may recreate that view when focus changes, resetting the state to false
+  - **Solution:** Move the presentation state to the TOP-LEVEL view and pass @Binding down
+  - **Implementation pattern for editable modals:**
+    ```swift
+    // TOP-LEVEL VIEW (e.g., SettingsPage)
+    struct SettingsPage: View {
+        @State private var showingEditableModal = false  // State lives HERE
+
+        var body: some View {
+            ChildView(showingEditableModal: $showingEditableModal)
+                .fullScreenCover(isPresented: $showingEditableModal) {
+                    EditableModalView()
+                }
+        }
+    }
+
+    // CHILD VIEWS pass binding down
+    struct ChildView: View {
+        @Binding var showingEditableModal: Bool
+        // ...
+    }
+    ```
+  - **Additional requirements:**
+    - Use `fullScreenCover` instead of `sheet` for modals with TextFields
+    - Add `.scrollDismissesKeyboard(.never)` to ScrollViews containing TextFields
+    - Hide Back button during edit mode (force Cancel/Save)
+  - **SwiftData migrations:** When adding new non-optional fields, provide default value at property declaration (not just in init) for existing records to migrate
