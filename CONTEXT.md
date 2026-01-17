@@ -279,8 +279,12 @@ let type = AircraftLookup.typeName(aircraft.aircraftType) // "Fixed Wing Single-
 - registeredOwner, registeredAddress1, registeredAddress2 (String?)
 - registeredCity, registeredState, registeredZip (String?)
 
+**Future features (for map tracking):**
+- gpsLongitudeNow, gpsLatitudeNow (Double?) - Current aircraft position from server sync
+
 **User interaction (null unless user acts):**
-- rating (Bool?), thumbsUp (Bool?)
+- rating (Double?) - Star rating 0.5 to 5.0 in 0.5 increments
+- thumbsUp (Bool?) - AI training feedback (not shown in UI)
 
 ### User Model Properties
 - memberNumber (primary key for server sync)
@@ -916,3 +920,18 @@ The app must handle large datasets efficiently:
     - `DetailRow` - Reusable row with label (left, white 60% opacity) and value (right, white)
     - `detailSection()` - ViewBuilder function for consistent section styling
   - Edit mode scaffolding in place for future implementation
+
+- **Star Rating System:**
+  - Rating field changed from `Bool?` to `Double?` (supports 0.5 to 5.0 in 0.5 increments)
+  - Added `gpsLatitudeNow` and `gpsLongitudeNow` fields (Double?) for future map tracking
+  - **UI Components:**
+    - `StarRatingDisplay` - Shows filled, half-filled, and empty stars with yellow color
+    - `RatingSelectorSheet` - Grid of 10 rating options (0.5 to 5.0) with visual stars
+  - **Rating overlay on photo:**
+    - Unrated: Shows "Rate" text (white text on black/opacity background, always tappable)
+    - Rated: Shows star display (only tappable when in edit mode)
+  - **Edit mode requirement:**
+    - Initial rating can be set in view mode (tap "Rate")
+    - Changing existing rating requires entering edit mode first
+    - Clear Rating option available in selector sheet when rating exists
+  - **NOTE:** This was a breaking schema change - required deleting app from device and reinstalling

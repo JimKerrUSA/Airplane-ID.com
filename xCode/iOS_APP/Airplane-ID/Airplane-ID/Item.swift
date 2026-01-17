@@ -92,8 +92,10 @@ final class CapturedAircraft: Identifiable {
     var year: Int                      // Derived from captureTime (for filtering)
     var month: Int                     // Derived from captureTime (for filtering)
     var day: Int                       // Derived from captureTime (for filtering)
-    var gpsLongitude: Double           // Photo location
-    var gpsLatitude: Double            // Photo location
+    var gpsLongitude: Double           // Photo location (where captured)
+    var gpsLatitude: Double            // Photo location (where captured)
+    var gpsLongitudeNow: Double?       // Current aircraft location (for map, future)
+    var gpsLatitudeNow: Double?        // Current aircraft location (for map, future)
     var iPhotoReference: String        // Link to photo in device iPhoto library
 
     // Aircraft identification (required at save - from AI recognition)
@@ -131,8 +133,8 @@ final class CapturedAircraft: Identifiable {
     var registeredZip: String?         // Owner zip code
 
     // User interaction (optional - null unless user acts)
-    var rating: Bool?                  // User rating
-    var thumbsUp: Bool?                // User like (true) / dislike (false)
+    var rating: Double?                // User star rating (0.5 to 5.0 in 0.5 increments)
+    var thumbsUp: Bool?                // User like/dislike for AI training (not shown in UI)
 
     init(
         // Required - from device at capture
@@ -143,6 +145,8 @@ final class CapturedAircraft: Identifiable {
         day: Int,
         gpsLongitude: Double,
         gpsLatitude: Double,
+        gpsLongitudeNow: Double? = nil,
+        gpsLatitudeNow: Double? = nil,
         iPhotoReference: String,
         // Required - from AI recognition
         icao: String,
@@ -172,7 +176,7 @@ final class CapturedAircraft: Identifiable {
         registeredState: String? = nil,
         registeredZip: String? = nil,
         // Optional - user interaction
-        rating: Bool? = nil,
+        rating: Double? = nil,
         thumbsUp: Bool? = nil
     ) {
         self.captureTime = captureTime
@@ -182,6 +186,8 @@ final class CapturedAircraft: Identifiable {
         self.day = day
         self.gpsLongitude = gpsLongitude
         self.gpsLatitude = gpsLatitude
+        self.gpsLongitudeNow = gpsLongitudeNow
+        self.gpsLatitudeNow = gpsLatitudeNow
         self.iPhotoReference = iPhotoReference
         self.icao = icao
         self.manufacturer = manufacturer

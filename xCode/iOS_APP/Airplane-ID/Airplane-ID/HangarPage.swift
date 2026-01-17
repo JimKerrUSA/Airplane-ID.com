@@ -660,6 +660,7 @@ struct AircraftDetailView: View {
 
     // Edit mode state
     @State private var isEditing = false
+    @State private var showingRatingSelector = false
 
     // Edit values (populated when entering edit mode)
     @State private var editManufacturer = ""
@@ -676,10 +677,13 @@ struct AircraftDetailView: View {
 
                 ScrollView {
                     VStack(spacing: 0) {
-                        // Photo placeholder
-                        ZStack {
+                        // Photo placeholder with rating overlay
+                        ZStack(alignment: .bottom) {
+                            // Photo background
                             Rectangle()
                                 .fill(AppColors.darkBlue.opacity(0.3))
+
+                            // Photo placeholder content
                             VStack(spacing: 12) {
                                 Image(systemName: "photo")
                                     .font(.system(size: 60))
@@ -688,6 +692,10 @@ struct AircraftDetailView: View {
                                     .font(.custom("Helvetica", size: 14))
                                     .foregroundStyle(.white.opacity(0.5))
                             }
+
+                            // Star rating overlay at bottom
+                            starRatingOverlay
+                                .padding(.bottom, 12)
                         }
                         .frame(height: 220)
 
@@ -828,6 +836,46 @@ struct AircraftDetailView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingRatingSelector) {
+                RatingSelectorSheet(
+                    currentRating: aircraft.rating,
+                    onSelect: { newRating in
+                        aircraft.rating = newRating
+                        try? modelContext.save()
+                    }
+                )
+                .presentationDetents([.height(280)])
+            }
+        }
+    }
+
+    // MARK: - Star Rating Overlay
+
+    @ViewBuilder
+    private var starRatingOverlay: some View {
+        if let rating = aircraft.rating, rating > 0 {
+            // Rated: Show stars (tappable only in edit mode)
+            Button(action: {
+                if isEditing {
+                    showingRatingSelector = true
+                }
+            }) {
+                StarRatingDisplay(rating: rating)
+            }
+            .disabled(!isEditing)
+        } else {
+            // Unrated: Show "Rate" text (always tappable)
+            Button(action: {
+                showingRatingSelector = true
+            }) {
+                Text("Rate")
+                    .font(.custom("Helvetica", size: 14))
+                    .foregroundStyle(.white.opacity(0.8))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 6)
+                    .background(Color.black.opacity(0.4))
+                    .cornerRadius(12)
+            }
         }
     }
 
@@ -955,6 +1003,120 @@ struct DetailRow: View {
         .padding(.horizontal, 16)
         .background(AppColors.settingsRow)
         .cornerRadius(10)
+    }
+}
+
+// MARK: - Star Rating Display
+/// Displays star rating with filled, half-filled, and empty stars
+struct StarRatingDisplay: View {
+    let rating: Double
+    let starSize: CGFloat
+
+    init(rating: Double, starSize: CGFloat = 20) {
+        self.rating = rating
+        self.starSize = starSize
+    }
+
+    var body: some View {
+        HStack(spacing: 4) {
+            ForEach(1...5, id: \.self) { index in
+                starImage(for: index)
+                    .font(.system(size: starSize))
+                    .foregroundStyle(.yellow)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(Color.black.opacity(0.4))
+        .cornerRadius(12)
+    }
+
+    private func starImage(for index: Int) -> Image {
+        let threshold = Double(index)
+        if rating >= threshold {
+            return Image(systemName: "star.fill")
+        } else if rating >= threshold - 0.5 {
+            return Image(systemName: "star.leadinghalf.filled")
+        } else {
+            return Image(systemName: "star")
+        }
+    }
+}
+
+// MARK: - Rating Selector Sheet
+/// Sheet for selecting a star rating in 0.5 increments
+struct RatingSelectorSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let currentRating: Double?
+    let onSelect: (Double?) -> Void
+
+    // Available ratings: 0 (clear), 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0
+    private let ratings: [Double] = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                Text("Rate this aircraft")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .padding(.top, 10)
+
+                // Star rating options
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 12) {
+                    ForEach(ratings, id: \.self) { rating in
+                        Button(action: {
+                            onSelect(rating)
+                            dismiss()
+                        }) {
+                            VStack(spacing: 4) {
+                                StarRatingDisplay(rating: rating, starSize: 16)
+                                Text(formatRating(rating))
+                                    .font(.system(size: 12))
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .padding(8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(currentRating == rating ? AppColors.linkBlue.opacity(0.2) : Color.clear)
+                        )
+                    }
+                }
+                .padding(.horizontal, 20)
+
+                // Clear rating button
+                if currentRating != nil {
+                    Button(action: {
+                        onSelect(nil)
+                        dismiss()
+                    }) {
+                        Text("Clear Rating")
+                            .font(.system(size: 16))
+                            .foregroundStyle(AppColors.orange)
+                    }
+                    .padding(.top, 10)
+                }
+
+                Spacer()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private func formatRating(_ rating: Double) -> String {
+        if rating == rating.rounded() {
+            return String(format: "%.0f", rating)
+        } else {
+            return String(format: "%.1f", rating)
+        }
     }
 }
 
