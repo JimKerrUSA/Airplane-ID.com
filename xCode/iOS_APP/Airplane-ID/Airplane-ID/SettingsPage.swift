@@ -917,7 +917,7 @@ struct DeveloperToolsView: View {
 
                 // Parse CSV into raw data tuples on background thread
                 // (captureDate, longitude, latitude, year, month, day, icao, manufacturer, model, engineType, engineCount, registration, rating, thumbsUp)
-                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, Int?, String?, Int?, Bool?)] = []
+                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, Int?, String?, Bool?, Bool?)] = []
 
                 for line in dataLines {
                     let columns = self.parseCSVLine(line)
@@ -937,7 +937,7 @@ struct DeveloperToolsView: View {
                         columns[4],                 // engineType
                         Int(columns[5]) ?? 1,       // engineCount
                         columns[3],                 // registration
-                        Int.random(in: 0...5) == 0 ? nil : Int.random(in: 1...5),  // rating
+                        [nil, true, false].randomElement()!,  // rating
                         [nil, true, false].randomElement()!  // thumbsUp
                     ))
                 }

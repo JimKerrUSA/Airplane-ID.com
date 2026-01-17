@@ -128,7 +128,7 @@ final class CapturedAircraft {
     var registeredZip: String?         // Owner zip code
 
     // User interaction (null unless user acts)
-    var rating: Int?                   // User rating 1-5 stars
+    var rating: Bool?                  // User rating
     var thumbsUp: Bool?                // User like (true) / dislike (false)
 
     init(
@@ -163,7 +163,7 @@ final class CapturedAircraft {
         registeredCity: String? = nil,
         registeredState: String? = nil,
         registeredZip: String? = nil,
-        rating: Int? = nil,
+        rating: Bool? = nil,
         thumbsUp: Bool? = nil
     ) {
         self.captureDate = captureDate
