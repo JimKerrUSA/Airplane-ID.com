@@ -10,9 +10,8 @@ import SwiftData
 
 // MARK: - User Model
 /// Represents the app user with account and preferences
+/// Note: memberNumber and email are key lookup fields for server sync and login
 @Model
-@Index([\.memberNumber])  // Primary key for server sync
-@Index([\.email])         // Unique identifier for login
 final class User {
     var memberNumber: String = ""  // Primary key for server sync
     var name: String
@@ -61,10 +60,8 @@ final class User {
 
 // MARK: - CapturedAircraft Model
 /// Represents an aircraft that has been captured/identified by the user
+/// Key fields: captureDate (sorting), icao (unique types), registration (search)
 @Model
-@Index([\.captureDate])   // Sorting by recent sightings
-@Index([\.icao])          // Counting unique aircraft types
-@Index([\.registration])  // Searching by registration number
 final class CapturedAircraft {
     var captureDate: Date
     var gpsLongitude: Double
