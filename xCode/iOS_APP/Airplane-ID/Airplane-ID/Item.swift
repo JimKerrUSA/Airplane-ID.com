@@ -85,7 +85,7 @@ final class User {
 /// Represents an aircraft that has been captured/identified by the user
 /// Key fields: captureDate (sorting), icao (unique types), registration (search)
 @Model
-final class CapturedAircraft {
+final class CapturedAircraft: Identifiable {
     // Capture metadata (required at save - from device)
     var captureTime: Date              // Full timestamp when photo taken/uploaded
     var captureDate: Date              // Date only (derived from captureTime)
