@@ -736,6 +736,12 @@ struct AircraftDetailView: View {
                             if !editRegistration.isEmpty || isEditing {
                                 EditableDetailRow(label: "Registration", value: $editRegistration, isEditing: isEditing, placeholder: "e.g. N12345")
                             }
+                            // Country (from FAA data)
+                            if let country = aircraft.country, !country.isEmpty {
+                                DetailRow(label: "Country", value: country)
+                            } else if isEditing {
+                                DetailRow(label: "Country", value: "—")
+                            }
                         }
 
                         // Operator Section (IATA editable, owner info from FAA)
@@ -746,24 +752,36 @@ struct AircraftDetailView: View {
                                 }
                                 if let owner = aircraft.registeredOwner, !owner.isEmpty {
                                     DetailRow(label: "Owner", value: owner)
+                                } else if isEditing {
+                                    DetailRow(label: "Owner", value: "—")
                                 }
                                 if let ownerType = aircraft.ownerType, !ownerType.isEmpty {
                                     DetailRow(label: "Owner Type", value: ownerType)
+                                } else if isEditing {
+                                    DetailRow(label: "Owner Type", value: "—")
                                 }
                                 if let addr1 = aircraft.registeredAddress1, !addr1.isEmpty {
                                     DetailRow(label: "Address", value: addr1)
+                                } else if isEditing {
+                                    DetailRow(label: "Address", value: "—")
                                 }
                                 if let addr2 = aircraft.registeredAddress2, !addr2.isEmpty {
                                     DetailRow(label: "Address 2", value: addr2)
                                 }
                                 if let city = aircraft.registeredCity, !city.isEmpty {
                                     DetailRow(label: "City", value: city)
+                                } else if isEditing {
+                                    DetailRow(label: "City", value: "—")
                                 }
                                 if let state = aircraft.registeredState, !state.isEmpty {
                                     DetailRow(label: "State", value: state)
+                                } else if isEditing {
+                                    DetailRow(label: "State", value: "—")
                                 }
                                 if let zip = aircraft.registeredZip, !zip.isEmpty {
                                     DetailRow(label: "Zip", value: zip)
+                                } else if isEditing {
+                                    DetailRow(label: "Zip", value: "—")
                                 }
                             }
                         }
@@ -807,11 +825,6 @@ struct AircraftDetailView: View {
                         // Certification Section (read-only from FAA data)
                         if hasCertificationData || isEditing {
                             detailSection(title: "Certification") {
-                                if let country = aircraft.country, !country.isEmpty {
-                                    DetailRow(label: "Country", value: country)
-                                } else if isEditing {
-                                    DetailRow(label: "Country", value: "—")
-                                }
                                 if aircraft.airworthinessDate != nil || isEditing {
                                     DetailRow(label: "Airworthiness Date", value: aircraft.airworthinessDate != nil ? formatDate(aircraft.airworthinessDate!) : "—")
                                 }
@@ -968,7 +981,6 @@ struct AircraftDetailView: View {
     }
 
     private var hasCertificationData: Bool {
-        (aircraft.country != nil && !aircraft.country!.isEmpty) ||
         aircraft.airworthinessDate != nil ||
         aircraft.certificateIssueDate != nil ||
         aircraft.certificateExpireDate != nil
