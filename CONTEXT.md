@@ -8,15 +8,14 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 ## Current State
 - SwiftUI app with SwiftData for persistence
 - **Full navigation system working:** Home, Maps, Camera, Hangar, Settings, Journey pages
-- Three orientation templates: PortraitTemplate, LandscapeLeftTemplate, LandscapeRightTemplate
+- **PORTRAIT-ONLY MODE:** App locked to portrait orientation (like Uber/Instagram)
+  - AppDelegate with `supportedInterfaceOrientationsFor` returns `.portrait`
+  - Landscape templates kept in code but not used
 - Portrait view fully working with data boxes, progress bar, and recent sightings
-- **Landscape views now have full content matching mockups:**
-  - Two stat boxes on left (270w x 103h each, 14px gap between)
-  - Latest Sightings on right (270w x 220h, shows 3 items with 2-line format)
-  - Progress bar at bottom (240 label + 346 bar = 586w x 40h)
-- Landscape Left template: footer offset x: 20, content padding leading: 120
-- Landscape Right template: footer offset x: 100, content padding trailing: 120
-- Landscape header person icon positioned (trailing padding: 86)
+  - Two stat boxes side-by-side with bold numbers (Helvetica-Bold headers)
+  - Recent Sightings shows 6 results (240px minHeight)
+  - Top menu: 90px height
+  - Footer: 80px camera button, centered icons
 - **NO TEST DATA** - App uses actual database (delete data function coming to Settings)
 - **Level progression system:** NEWBIE → SPOTTER → ENTHUSIAST → EXPERT → ACE → LEGEND
 - **JourneyPage:** Tap person icon to view level, stats, badges (coming soon), leaderboard (coming soon)
@@ -511,3 +510,12 @@ struct AppConfig {
   - Templates inject ScreenScale into environment via GeometryReader
   - HomePage portrait and landscape content use `.scaleEffect(screenScale.scale)`
   - Content now scales proportionally to fit any screen size
+
+- **UI Layout Refinements (after testing on iPhone 16 Pro):**
+  - Top menu height: 93px with person icon `.padding(.top, 28)` to clear status bar
+  - Footer layout fixed with separate offsets:
+    - Blue bar: `barOffset = -25` (positioned higher)
+    - Icons/camera: `iconsOffset = -15` (positioned lower, overlapping bar)
+    - Added `sideWidth` with min value of 40 to prevent negative frame crash
+  - Settings menu rows: smaller fonts (16pt title, 13pt subtitle) with `.lineLimit(1)` to prevent word wrap
+  - Matches DevToolButtonContent styling for consistency

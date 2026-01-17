@@ -531,34 +531,6 @@ struct DeveloperToolsView: View {
                                 .padding(.top, 10)
                         }
 
-                        // Import Aircraft Section
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text("Import Aircraft")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 20)
-
-                            VStack(spacing: 12) {
-                                Button(action: { importFromCSV(count: 25) }) {
-                                    DevToolButtonContent(title: "Import 25 Aircraft", subtitle: "Quick test", iconColor: "4CAF50")
-                                }
-                                Button(action: { importFromCSV(count: 100) }) {
-                                    DevToolButtonContent(title: "Import 100 Aircraft", subtitle: "ENTHUSIAST level", iconColor: "8BC34A")
-                                }
-                                Button(action: { importFromCSV(count: 500) }) {
-                                    DevToolButtonContent(title: "Import 500 Aircraft", subtitle: "ACE level", iconColor: "2196F3")
-                                }
-                                Button(action: { importFromCSV(count: 1100) }) {
-                                    DevToolButtonContent(title: "Import 1,100 Aircraft", subtitle: "LEGEND level", iconColor: "9C27B0")
-                                }
-                                Button(action: { importFromCSV(count: 2000) }) {
-                                    DevToolButtonContent(title: "Import All 2,000 Aircraft", subtitle: "Full map coverage", iconColor: "FF9800")
-                                }
-                            }
-                            .padding(.horizontal, 20)
-                        }
-                        .padding(.top, 10)
-
                         // User Data Section
                         VStack(alignment: .leading, spacing: 15) {
                             Text("User Data")
@@ -589,6 +561,35 @@ struct DeveloperToolsView: View {
                             }
                             .padding(.horizontal, 20)
                         }
+                        
+                        // Import Aircraft Section
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("Import Aircraft")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 20)
+
+                            VStack(spacing: 12) {
+                                Button(action: { importFromCSV(count: 25) }) {
+                                    DevToolButtonContent(title: "Import 25 Aircraft", subtitle: "Quick test", iconColor: "4CAF50")
+                                }
+                                Button(action: { importFromCSV(count: 100) }) {
+                                    DevToolButtonContent(title: "Import 100 Aircraft", subtitle: "ENTHUSIAST level", iconColor: "8BC34A")
+                                }
+                                Button(action: { importFromCSV(count: 500) }) {
+                                    DevToolButtonContent(title: "Import 500 Aircraft", subtitle: "ACE level", iconColor: "2196F3")
+                                }
+                                Button(action: { importFromCSV(count: 1100) }) {
+                                    DevToolButtonContent(title: "Import 1,100 Aircraft", subtitle: "LEGEND level", iconColor: "9C27B0")
+                                }
+                                Button(action: { importFromCSV(count: 2000) }) {
+                                    DevToolButtonContent(title: "Import All 2,000 Aircraft", subtitle: "Full map coverage", iconColor: "FF9800")
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                        }
+                        .padding(.top, 10)
+
 
                         // Danger Zone Section
                         VStack(alignment: .leading, spacing: 15) {
@@ -868,30 +869,31 @@ struct SettingsRowContent: View {
     var body: some View {
         HStack(spacing: 16) {
             Image(systemName: icon)
-                .font(.system(size: 25))
+                .font(.system(size: 22))
                 .foregroundStyle(Color(hex: "639BEC"))
-                .shadow(color: .black, radius: 0, x: -1, y: 1).shadow(color: .black, radius: 0, x: 1, y: 1)
-                .frame(width: 40)
+                .frame(width: 36)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
+                    .lineLimit(1)
                 Text(subtitle)
-                    .font(.system(size: 14))
+                    .font(.system(size: 13))
                     .foregroundStyle(.white.opacity(0.6))
+                    .lineLimit(1)
             }
 
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.white.opacity(0.4))
         }
-        .padding(.vertical, 16)
-        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .padding(.horizontal, 14)
         .background(Color(hex: "1D1E21"))
-        .cornerRadius(12)
+        .cornerRadius(10)
     }
 }
 

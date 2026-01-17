@@ -116,7 +116,7 @@ struct TopMenuView: View {
         ZStack {
             Color(hex: "082A49")
 
-            // Status indicator (right side)
+            // Status indicator (right side) - pushed down to avoid status bar
             HStack {
                 Spacer()
 
@@ -133,9 +133,10 @@ struct TopMenuView: View {
                     appState.currentScreen = .journey
                 }
                 .padding(.trailing, 16)
+                .padding(.top, 28)
             }
         }
-        .frame(height: 80)
+        .frame(height: 93)
         .frame(maxWidth: .infinity)
         .overlay(
             Rectangle()
@@ -153,8 +154,11 @@ struct BottomMenuView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let menuWidth = min(geo.size.width * 0.95, 340) // 95% of screen width, max 340
-            let cameraSize: CGFloat = 70 // Smaller camera button
+            let menuWidth = max(min(geo.size.width * 0.95, 340), 160) // 95% of screen, min 160, max 340
+            let cameraSize: CGFloat = 70
+            let sideWidth = max((menuWidth - cameraSize) / 2, 40) // Prevent negative width
+            let barOffset: CGFloat = -25 // Blue bar position (higher up)
+            let iconsOffset: CGFloat = -15 // Icons/camera position
 
             ZStack(alignment: .bottom) {
                 // Navigation bar rectangle - positioned behind camera button
@@ -165,7 +169,7 @@ struct BottomMenuView: View {
                         RoundedRectangle(cornerRadius: 40)
                             .stroke(Color.gray, lineWidth: 1)
                     )
-                    .offset(y: -cameraSize/2 + 10)
+                    .offset(y: barOffset)
 
                 // Navigation icons in horizontal layout
                 HStack(spacing: 0) {
@@ -205,7 +209,7 @@ struct BottomMenuView: View {
 
                         Spacer()
                     }
-                    .frame(width: (menuWidth - cameraSize) / 2)
+                    .frame(width: sideWidth)
 
                     // Center camera button
                     ZStack {
@@ -263,10 +267,10 @@ struct BottomMenuView: View {
 
                         Spacer()
                     }
-                    .frame(width: (menuWidth - cameraSize) / 2)
+                    .frame(width: sideWidth)
                 }
                 .frame(width: menuWidth)
-                .offset(y: -10) // Align with the navigation bar
+                .offset(y: iconsOffset) // Icons positioned lower than bar
             }
             .frame(maxWidth: .infinity)
             .frame(height: cameraSize + 10)
