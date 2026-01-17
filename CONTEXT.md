@@ -1135,3 +1135,22 @@ The app must handle large datasets efficiently:
    - Applied to both `ICAOSearchSheet` and `AirlineSearchSheet`
    - Implementation: Split on spaces, filter with `allSatisfy` on keywords
    - Commit: 45336c3
+
+4. **Added searchable Manufacturer filter:**
+   - Replaced long Picker dropdown with `ManufacturerSearchSheet`
+   - Shows all manufacturers from user's aircraft collection on open
+   - Supports keyword search (same AND logic as ICAO/Airline)
+   - Respects bi-directional filtering (only shows manufacturers matching other active filters)
+   - Note: FAA data has inconsistencies (e.g., 4 different Mooney entries)
+   - Commit: 2552349
+
+5. **Shortened filter placeholder text to prevent word wrap:**
+   - Search fields: "Search MFG", "Search ICAO", "Search Airline"
+   - Select fields: "Select Year/Month/Category/Type/Country/State/City"
+   - Commit: b50a5a2
+
+6. **Standardized search box styling across all search sheets:**
+   - White background with blue border (AppColors.borderBlue)
+   - Darker magnifying glass icon (AppColors.darkGray)
+   - Applied to: ManufacturerSearchSheet, ICAOSearchSheet, AirlineSearchSheet
+   - Commits: 8f9325c, cc53140
