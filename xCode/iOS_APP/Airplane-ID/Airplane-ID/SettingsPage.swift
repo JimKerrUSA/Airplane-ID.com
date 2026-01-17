@@ -947,19 +947,23 @@ struct DeveloperToolsView: View {
                     do {
                         for data in parsedData {
                             let aircraft = CapturedAircraft(
+                                // Required - from device
+                                captureTime: data.0,
                                 captureDate: data.0,
+                                year: data.3 ?? 0,
+                                month: data.4 ?? 0,
+                                day: data.5 ?? 0,
                                 gpsLongitude: data.1,
                                 gpsLatitude: data.2,
-                                captureTime: data.0,  // Same as captureDate (includes time)
-                                year: data.3,
-                                month: data.4,
-                                day: data.5,
-                                icao: data.6,
-                                manufacturer: data.7,
-                                model: data.8,
+                                iPhotoReference: "test-import-\(UUID().uuidString)",  // Placeholder for test data
+                                // Required - from AI
+                                icao: data.6 ?? "",
+                                manufacturer: data.7 ?? "",
+                                model: data.8 ?? "",
+                                // Optional
+                                registration: data.11,
                                 engineType: data.9,
                                 engineCount: data.10,
-                                registration: data.11,
                                 rating: data.12,
                                 thumbsUp: data.13
                             )

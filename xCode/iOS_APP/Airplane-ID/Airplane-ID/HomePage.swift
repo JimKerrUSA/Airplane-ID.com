@@ -532,9 +532,9 @@ struct HomePageLandscapeContentRight: View {
 
 // Sample data for previews
 private let previewSampleAircraft: [CapturedAircraft] = {
-    let aircraft1 = CapturedAircraft(captureDate: Date(), gpsLongitude: -88.5, gpsLatitude: 43.9, year: 2026, month: 1, day: 15, icao: "HDJT", manufacturer: "Honda", model: "HondaJet", registration: "N769F")
-    let aircraft2 = CapturedAircraft(captureDate: Date(), gpsLongitude: -88.5, gpsLatitude: 43.9, year: 2026, month: 1, day: 7, icao: "ACAM", manufacturer: "Lockwood", model: "Air Cam", registration: "N79QF")
-    let aircraft3 = CapturedAircraft(captureDate: Date(), gpsLongitude: -88.5, gpsLatitude: 43.9, year: 2026, month: 1, day: 5, icao: "DC3", manufacturer: "Douglas", model: "DC-3", registration: "N1573")
+    let aircraft1 = CapturedAircraft(captureTime: Date(), captureDate: Date(), year: 2026, month: 1, day: 15, gpsLongitude: -88.5, gpsLatitude: 43.9, iPhotoReference: "preview-1", icao: "HDJT", manufacturer: "Honda", model: "HondaJet", registration: "N769F")
+    let aircraft2 = CapturedAircraft(captureTime: Date(), captureDate: Date(), year: 2026, month: 1, day: 7, gpsLongitude: -88.5, gpsLatitude: 43.9, iPhotoReference: "preview-2", icao: "ACAM", manufacturer: "Lockwood", model: "Air Cam", registration: "N79QF")
+    let aircraft3 = CapturedAircraft(captureTime: Date(), captureDate: Date(), year: 2026, month: 1, day: 5, gpsLongitude: -88.5, gpsLatitude: 43.9, iPhotoReference: "preview-3", icao: "DC3", manufacturer: "Douglas", model: "DC-3", registration: "N1573")
     return [aircraft1, aircraft2, aircraft3]
 }()
 

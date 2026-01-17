@@ -86,25 +86,27 @@ final class User {
 /// Key fields: captureDate (sorting), icao (unique types), registration (search)
 @Model
 final class CapturedAircraft {
-    // Capture metadata
-    var captureDate: Date              // When captured (required)
-    var captureTime: Date?             // Full timestamp of photo upload/capture
-    var gpsLongitude: Double           // Capture location (required)
-    var gpsLatitude: Double            // Capture location (required)
-    var year: Int?                     // Capture year
-    var month: Int?                    // Capture month
-    var day: Int?                      // Capture day
-    var iPhotoReference: String?       // Link to photo in device iPhoto library
+    // Capture metadata (required at save - from device)
+    var captureTime: Date              // Full timestamp when photo taken/uploaded
+    var captureDate: Date              // Date only (derived from captureTime)
+    var year: Int                      // Derived from captureTime (for filtering)
+    var month: Int                     // Derived from captureTime (for filtering)
+    var day: Int                       // Derived from captureTime (for filtering)
+    var gpsLongitude: Double           // Photo location
+    var gpsLatitude: Double            // Photo location
+    var iPhotoReference: String        // Link to photo in device iPhoto library
 
-    // Aircraft identification
-    var icao: String?                  // ICAO aircraft type code
+    // Aircraft identification (required at save - from AI recognition)
+    var icao: String                   // ICAO aircraft type code
+    var manufacturer: String           // Aircraft manufacturer
+    var model: String                  // Aircraft model name
+
+    // Aircraft identification (optional - if AI detects in photo)
     var iata: String?                  // IATA airline code (e.g., AA, UA) - airliners only
-    var registration: String?          // N-number / tail number
-    var serialNumber: String?          // Aircraft serial number
-    var manufacturer: String?          // Aircraft manufacturer
-    var model: String?                 // Aircraft model name
+    var registration: String?          // N-number / tail number (if visible in photo)
 
-    // Aircraft specifications
+    // Aircraft specifications (optional - populated via cloud sync from FAA data)
+    var serialNumber: String?          // Aircraft serial number
     var yearMfg: Int?                  // Year manufactured
     var aircraftClassification: String? // Aircraft classification
     var engineType: String?            // Engine type
@@ -112,14 +114,14 @@ final class CapturedAircraft {
     var seatCount: Int?                // Number of seats
     var weightClass: String?           // Weight class
 
-    // Registration/certification details
+    // Registration/certification details (optional - populated via cloud sync)
     var country: String?               // Country of registration
     var airworthinessDate: Date?       // Airworthiness certificate date
     var certificateIssueDate: Date?    // Certificate issue date
     var certificateExpireDate: Date?   // Certificate expiration date
     var ownerType: String?             // Owner type (individual, corporate, etc.)
 
-    // Registered owner info
+    // Registered owner info (optional - populated via cloud sync)
     var registeredOwner: String?       // Owner name
     var registeredAddress1: String?    // Owner address line 1
     var registeredAddress2: String?    // Owner address line 2
@@ -127,25 +129,29 @@ final class CapturedAircraft {
     var registeredState: String?       // Owner state
     var registeredZip: String?         // Owner zip code
 
-    // User interaction (null unless user acts)
+    // User interaction (optional - null unless user acts)
     var rating: Bool?                  // User rating
     var thumbsUp: Bool?                // User like (true) / dislike (false)
 
     init(
+        // Required - from device at capture
+        captureTime: Date,
         captureDate: Date,
+        year: Int,
+        month: Int,
+        day: Int,
         gpsLongitude: Double,
         gpsLatitude: Double,
-        captureTime: Date? = nil,
-        year: Int? = nil,
-        month: Int? = nil,
-        day: Int? = nil,
-        iPhotoReference: String? = nil,
-        icao: String? = nil,
+        iPhotoReference: String,
+        // Required - from AI recognition
+        icao: String,
+        manufacturer: String,
+        model: String,
+        // Optional - if AI detects in photo
         iata: String? = nil,
         registration: String? = nil,
+        // Optional - populated via cloud sync
         serialNumber: String? = nil,
-        manufacturer: String? = nil,
-        model: String? = nil,
         yearMfg: Int? = nil,
         aircraftClassification: String? = nil,
         engineType: String? = nil,
@@ -163,23 +169,24 @@ final class CapturedAircraft {
         registeredCity: String? = nil,
         registeredState: String? = nil,
         registeredZip: String? = nil,
+        // Optional - user interaction
         rating: Bool? = nil,
         thumbsUp: Bool? = nil
     ) {
-        self.captureDate = captureDate
-        self.gpsLongitude = gpsLongitude
-        self.gpsLatitude = gpsLatitude
         self.captureTime = captureTime
+        self.captureDate = captureDate
         self.year = year
         self.month = month
         self.day = day
+        self.gpsLongitude = gpsLongitude
+        self.gpsLatitude = gpsLatitude
         self.iPhotoReference = iPhotoReference
         self.icao = icao
+        self.manufacturer = manufacturer
+        self.model = model
         self.iata = iata
         self.registration = registration
         self.serialNumber = serialNumber
-        self.manufacturer = manufacturer
-        self.model = model
         self.yearMfg = yearMfg
         self.aircraftClassification = aircraftClassification
         self.engineType = engineType
