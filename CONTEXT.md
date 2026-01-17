@@ -296,7 +296,13 @@ struct AppConfig {
 7. Build server sync infrastructure
 8. Add proper orientation detection for runtime (without UIKit)
 9. Test on physical device
-10. Gradually migrate hardcoded colors to use AppColors constants
+10. ~~Gradually migrate hardcoded colors to use AppColors constants~~ ✅ COMPLETED
+
+### Code Quality Tasks (from code review)
+- [ ] Phase 2A: Fix UIDevice orientation listener cleanup (battery drain)
+- [ ] Phase 2B: Add database indexes to models
+- [ ] Phase 2C: Fix background thread SwiftData access in CSV import
+- [ ] Phase 2D: Add pagination to HomePage query
 
 ## Session Log
 
@@ -564,3 +570,10 @@ struct AppConfig {
     - Add `.scrollDismissesKeyboard(.never)` to ScrollViews containing TextFields
     - Hide Back button during edit mode (force Cancel/Save)
   - **SwiftData migrations:** When adding new non-optional fields, provide default value at property declaration (not just in init) for existing records to migrate
+
+- **Phase 1D: Standardized all colors to use Theme.swift:**
+  - All hardcoded hex colors replaced with `AppColors` constants
+  - Files updated: HomePage.swift, ContentView.swift, SettingsPage.swift, JourneyPage.swift
+  - **Managing colors:** Edit `Theme.swift` to change colors globally
+  - Color categories: Primary brand, Background, UI elements, Status, Progress bar
+  - Commit: 9f78f43 "Replace hardcoded colors with AppColors constants"
