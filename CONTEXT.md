@@ -725,8 +725,11 @@ The app must handle large datasets efficiently:
   - year/month/day are Int for filtering queries ("show me October captures")
 
 - **Swift 6 Compatibility:**
-  - Fixed RectCorner OptionSet actor isolation warnings
-  - Solution: Removed unnecessary `nonisolated(unsafe)` and `nonisolated` markers
-  - Since RectCorner is a Sendable value type with simple Int rawValue, no special isolation needed
-  - Removed nil coalescing from non-optional fields
-  - Commits: 86df12c, 2205704
+  - Fixed RectCorner OptionSet actor isolation warnings (reduced from 10 → 5 → 1)
+  - Solution: Added `@preconcurrency` to OptionSet conformance
+  - **Remaining warning:** "@preconcurrency on conformance to 'OptionSet' has no effect"
+    - This is harmless/informational - app compiles and runs correctly
+    - Leaving as-is because removing @preconcurrency brings back 5 MainActor isolation warnings
+    - Trade-off: 1 harmless warning vs 5 warnings about Swift 6 errors
+  - Also removed unnecessary `nonisolated(unsafe)` markers and nil coalescing on non-optional fields
+  - Commits: 86df12c, 2205704, 4aab954
