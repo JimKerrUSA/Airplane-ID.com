@@ -27,6 +27,15 @@ final class User {
     var lastSyncDate: Date?
     var syncToken: String?
 
+    // Privacy preferences (all default to true/on)
+    var showOnlineStatus: Bool = true
+    var showLocation: Bool = true
+    var receiveNews: Bool = true
+    var receiveUpdates: Bool = true
+    var receiveActivitySummary: Bool = true
+    var allowFollow: Bool = true
+    var showInSearch: Bool = true
+
     init(
         memberNumber: String = "",
         name: String,
@@ -40,7 +49,14 @@ final class User {
         homeAirport: String? = nil,
         memberLevel: String = "free",
         lastSyncDate: Date? = nil,
-        syncToken: String? = nil
+        syncToken: String? = nil,
+        showOnlineStatus: Bool = true,
+        showLocation: Bool = true,
+        receiveNews: Bool = true,
+        receiveUpdates: Bool = true,
+        receiveActivitySummary: Bool = true,
+        allowFollow: Bool = true,
+        showInSearch: Bool = true
     ) {
         self.memberNumber = memberNumber
         self.name = name
@@ -55,6 +71,13 @@ final class User {
         self.memberLevel = memberLevel
         self.lastSyncDate = lastSyncDate
         self.syncToken = syncToken
+        self.showOnlineStatus = showOnlineStatus
+        self.showLocation = showLocation
+        self.receiveNews = receiveNews
+        self.receiveUpdates = receiveUpdates
+        self.receiveActivitySummary = receiveActivitySummary
+        self.allowFollow = allowFollow
+        self.showInSearch = showInSearch
     }
 }
 

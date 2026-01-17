@@ -362,6 +362,60 @@ struct AccountSettingsView: View {
                                 }
                                 .padding(.horizontal, 20)
                             }
+
+                            // Privacy settings with toggle switches
+                            VStack(spacing: 15) {
+                                Text("Privacy")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal, 20)
+                                    .padding(.top, 20)
+
+                                VStack(spacing: 12) {
+                                    SecurityToggleRow(
+                                        label: "Show Online Status",
+                                        isOn: Binding(
+                                            get: { user.showOnlineStatus },
+                                            set: { newValue in
+                                                user.showOnlineStatus = newValue
+                                                try? modelContext.save()
+                                            }
+                                        )
+                                    )
+                                    SecurityToggleRow(
+                                        label: "Show Location",
+                                        isOn: Binding(
+                                            get: { user.showLocation },
+                                            set: { newValue in
+                                                user.showLocation = newValue
+                                                try? modelContext.save()
+                                            }
+                                        )
+                                    )
+                                    SecurityToggleRow(
+                                        label: "Receive Latest News",
+                                        isOn: Binding(
+                                            get: { user.receiveNews },
+                                            set: { newValue in
+                                                user.receiveNews = newValue
+                                                try? modelContext.save()
+                                            }
+                                        )
+                                    )
+                                    SecurityToggleRow(
+                                        label: "Receive Activity Summary",
+                                        isOn: Binding(
+                                            get: { user.receiveActivitySummary },
+                                            set: { newValue in
+                                                user.receiveActivitySummary = newValue
+                                                try? modelContext.save()
+                                            }
+                                        )
+                                    )
+                                }
+                                .padding(.horizontal, 20)
+                            }
                         } else {
                             // No user found
                             VStack(spacing: 15) {
