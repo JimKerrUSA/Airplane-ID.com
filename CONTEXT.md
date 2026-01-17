@@ -59,7 +59,12 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - `JourneyPage.swift` - User profile/progress page
   - Dynamic title based on level
   - Level descriptions and stats
-- `HangarPage.swift` - Aircraft collection page (placeholder)
+- `HangarPage.swift` - Aircraft collection page with filtering
+  - HangarFilterState - Observable filter state with UserDefaults persistence
+  - HangarPage - Main view with filter bar and scrollable grouped list
+  - HangarSectionHeader - Sticky year/month headers (blue background)
+  - HangarListItem - 3-line aircraft display with graceful omission
+  - HangarFilterSheet - Filter form with dynamic dropdown options
 - `MapsPage.swift` - Map view page (placeholder)
 - `CameraPage.swift` - Camera capture page (placeholder)
 
@@ -456,7 +461,8 @@ The app must handle large datasets efficiently:
 ## Next Steps
 
 1. Build out Maps page content
-2. Build out Hangar page content
+2. ~~Build out Hangar page content~~ ✅ COMPLETED (basic implementation)
+   - TO DO: Implement bi-directional filter logic
 3. Build out remaining Settings page functionality
 4. Implement password encryption/decryption
 5. Implement FaceID authentication
@@ -824,3 +830,29 @@ The app must handle large datasets efficiently:
   - Updated CSV import to parse new columns
   - **NOTE:** This was a breaking schema change - required deleting app from device and reinstalling
   - Commit: c7ff940
+
+- **Hangar Page Implementation:**
+  - Complete aircraft collection view with scrollable list
+  - Year/Month sticky section headers (AppColors.darkBlue background, white text)
+  - 3-line aircraft display with graceful omission of missing data:
+    - Line 1: [IATA] MANUFACTURER MODEL (bold)
+    - Line 2: [CLASSIFICATION] [Type] (if available)
+    - Line 3: Registration City State Country (if available)
+  - Filter bar with FILTER button, centered result count (white text), CLEAR button (orange, only visible when filters active)
+  - Compact button styling for narrow screens (no icons, tight padding)
+  - **HangarFilterState class:** Observable filter state with UserDefaults persistence
+    - 11 filter fields: searchText, year, month, manufacturer, IATA, ICAO, classification, type, country, state, city
+    - Auto-loads saved filters on init, auto-saves on changes
+    - `hasActiveFilters` computed property to show/hide CLEAR button
+  - **Filter Sheet:** Full-screen form with dynamic dropdowns
+    - Search section with text field (searches multiple fields)
+    - Date section: Year, Month pickers
+    - Aircraft section: Manufacturer, ICAO Type, IATA Airline
+    - Classification section: Category, Type
+    - Location section: Country, State, City
+    - Clear All Filters button (only when filters active)
+  - **Dynamic filter options:** Dropdowns show only values present in date-filtered results
+    - Selecting Year/Month filters the pool for other dropdowns
+    - Invalid selections auto-cleared when date changes
+  - Empty state displays for no aircraft and no filter matches
+  - **TO DO:** Implement bi-directional filter logic (any filter should narrow all other dropdowns)
