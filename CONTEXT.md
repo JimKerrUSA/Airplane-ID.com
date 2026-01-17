@@ -725,6 +725,8 @@ The app must handle large datasets efficiently:
   - year/month/day are Int for filtering queries ("show me October captures")
 
 - **Swift 6 Compatibility:**
-  - Fixed RectCorner OptionSet actor isolation warnings (ongoing)
+  - Fixed RectCorner OptionSet actor isolation warnings
+  - Solution: Removed unnecessary `nonisolated(unsafe)` and `nonisolated` markers
+  - Since RectCorner is a Sendable value type with simple Int rawValue, no special isolation needed
   - Removed nil coalescing from non-optional fields
-  - Commit: 86df12c
+  - Commits: 86df12c, 2205704
