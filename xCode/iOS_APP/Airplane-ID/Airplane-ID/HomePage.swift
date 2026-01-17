@@ -252,7 +252,8 @@ struct HomePage: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     }
                                 }
-                                .frame(width: contentWidth, minHeight: 120)
+                                .frame(width: contentWidth)
+                                .frame(minHeight: 120)
                                 .overlay(
                                     RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight])
                                         .stroke(Color(hex: "124A93"), lineWidth: 1)
