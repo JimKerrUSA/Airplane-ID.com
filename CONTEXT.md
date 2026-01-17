@@ -198,6 +198,47 @@ VStack { /* content */ }
 - `classificationName(Int?)` → returns classification string or nil
 - `typeName(String?)` → returns type string or nil
 
+### FAA Aircraft Code Lookups (AircraftLookup in Theme.swift)
+
+**Aircraft Classification (AC-CAT)** - stored as Int, displayed in ALL CAPS:
+| Code | Display Name |
+|------|-------------|
+| 1 | STANDARD |
+| 2 | LIMITED |
+| 3 | RESTRICTED |
+| 4 | EXPERIMENTAL |
+| 5 | PROVISIONAL |
+| 6 | MULTIPLE |
+| 7 | PRIMARY |
+| 8 | SPECIAL FLIGHT PERMIT |
+| 9 | LIGHT SPORT |
+
+**Aircraft Type (TYPE-ACFT)** - stored as String, displayed in Title Case:
+| Code | Display Name |
+|------|-------------|
+| 1 | Glider |
+| 2 | Balloon |
+| 3 | Blimp/Dirigible |
+| 4 | Fixed Wing Single-Engine |
+| 5 | Fixed Wing Multi-Engine |
+| 6 | Rotorcraft |
+| 7 | Weight Shift Control |
+| 8 | Powered Parachute |
+| 9 | Gyroplane |
+| H | Hybrid Lift |
+| O | Unclassified |
+
+**Usage in code:**
+```swift
+// Get display strings from codes
+let classification = AircraftLookup.classificationName(aircraft.aircraftClassification) // "STANDARD"
+let type = AircraftLookup.typeName(aircraft.aircraftType) // "Fixed Wing Single-Engine"
+```
+
+**Data source:** FAA ACFTREF file (FAA-Manufacturer-Reference.csv)
+- AC-CAT column → aircraftClassification (Int)
+- TYPE-ACFT column → aircraftType (String)
+
 **Styling:**
 - Portrait: Helvetica-Bold 15pt (line 1), Helvetica 13pt (line 2)
 - Landscape: System 19pt bold (line 1), System 15pt regular (line 2)
@@ -563,14 +604,17 @@ The app must handle large datasets efficiently:
 
 - **Test Data Files (bundled with app):**
   - `AirplaneID-TestData.csv` - 2,000 aircraft records
-    - Columns: icao, manufacturer, model, registration, engine_type, num_engines, latitude, longitude, capture_date, capture_time, year, month, day, near_airport
+    - Columns: icao, manufacturer, model, registration, engine_type, num_engines, aircraft_type, aircraft_classification, latitude, longitude, capture_date, capture_time, year, month, day, near_airport
+    - aircraft_type: FAA TYPE-ACFT code (1-9, H, O)
+    - aircraft_classification: FAA AC-CAT code (1-9)
   - `AirplaneID-UserData.csv` - User profile template
     - Columns: name, email, phone, password, passwordRequired, faceIDEnabled, displayName, memberDate, homeAirport, memberLevel
     - Edit this file to add your info before importing
 
 - **Data Generation Script:** `/Data/generate_test_data.py`
   - Usage: `python3 generate_test_data.py --count 2000`
-  - Sources FAA databases and matches ICAO codes from PlaneFinder project
+  - Sources: FAA-Registered-Aircraft.csv, FAA-Manufacturer-Reference.csv (includes AC-CAT, TYPE-ACFT)
+  - Matches ICAO codes from PlaneFinder MasterAircraftList.csv
   - Run again anytime to regenerate fresh test data
 
 - **User Model added to Item.swift:**
@@ -778,3 +822,5 @@ The app must handle large datasets efficiently:
   - Added AircraftLookup enum in Theme.swift with classification/type dictionaries
   - Updated test data generator to include TYPE-ACFT and AC-CAT columns
   - Updated CSV import to parse new columns
+  - **NOTE:** This was a breaking schema change - required deleting app from device and reinstalling
+  - Commit: c7ff940
