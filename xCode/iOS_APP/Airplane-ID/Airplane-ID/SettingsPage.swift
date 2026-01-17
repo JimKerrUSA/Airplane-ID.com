@@ -16,6 +16,7 @@ import UIKit
 struct SettingsPage: View {
     @Environment(AppState.self) private var appState
     @State private var deviceOrientation: UIDeviceOrientation = UIDevice.current.orientation
+    @State private var showingAccountSettings = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -27,17 +28,17 @@ struct SettingsPage: View {
                 // .landscapeLeft means the device is rotated so camera is on the left (user's "Landscape Right")
                 if deviceOrientation == .landscapeRight {
                     // Camera on right - footer on left
-                    SettingsLandscapeLeftView(geometry: geometry)
+                    SettingsLandscapeLeftView(geometry: geometry, showingAccountSettings: $showingAccountSettings)
                 } else if deviceOrientation == .landscapeLeft {
                     // Camera on left - footer on right
-                    SettingsLandscapeRightView(geometry: geometry)
+                    SettingsLandscapeRightView(geometry: geometry, showingAccountSettings: $showingAccountSettings)
                 } else {
                     // Default to left view
-                    SettingsLandscapeLeftView(geometry: geometry)
+                    SettingsLandscapeLeftView(geometry: geometry, showingAccountSettings: $showingAccountSettings)
                 }
             } else {
                 // Portrait
-                SettingsPortraitView()
+                SettingsPortraitView(showingAccountSettings: $showingAccountSettings)
             }
         }
         .onAppear {
@@ -47,11 +48,16 @@ struct SettingsPage: View {
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
             deviceOrientation = UIDevice.current.orientation
         }
+        .fullScreenCover(isPresented: $showingAccountSettings) {
+            AccountSettingsView()
+        }
     }
 }
 
 // MARK: - Settings Portrait View
 struct SettingsPortraitView: View {
+    @Binding var showingAccountSettings: Bool
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -62,7 +68,7 @@ struct SettingsPortraitView: View {
                     Color(hex: "121516")
                         .ignoresSafeArea()
 
-                    SettingsContent()
+                    SettingsContent(showingAccountSettings: $showingAccountSettings)
 
                     BottomMenuView()
                 }
@@ -80,6 +86,7 @@ struct SettingsPortraitView: View {
 // MARK: - Settings Landscape Left View
 struct SettingsLandscapeLeftView: View {
     let geometry: GeometryProxy
+    @Binding var showingAccountSettings: Bool
 
     var body: some View {
         NavigationStack {
@@ -94,7 +101,7 @@ struct SettingsLandscapeLeftView: View {
 
                     // Content area - ScrollView needs to fill remaining space
                     ScrollView {
-                        SettingsScrollContent()
+                        SettingsScrollContent(showingAccountSettings: $showingAccountSettings)
                             .padding(.leading, 120)
                     }
                 }
@@ -115,6 +122,7 @@ struct SettingsLandscapeLeftView: View {
 // MARK: - Settings Landscape Right View
 struct SettingsLandscapeRightView: View {
     let geometry: GeometryProxy
+    @Binding var showingAccountSettings: Bool
 
     var body: some View {
         NavigationStack {
@@ -129,7 +137,7 @@ struct SettingsLandscapeRightView: View {
 
                     // Content area - ScrollView needs to fill remaining space
                     ScrollView {
-                        SettingsScrollContent()
+                        SettingsScrollContent(showingAccountSettings: $showingAccountSettings)
                             .padding(.trailing, 120)
                     }
                 }
@@ -150,9 +158,11 @@ struct SettingsLandscapeRightView: View {
 // MARK: - Settings Content (Portrait - includes ScrollView)
 /// The settings content for portrait - includes ScrollView wrapper
 struct SettingsContent: View {
+    @Binding var showingAccountSettings: Bool
+
     var body: some View {
         ScrollView {
-            SettingsScrollContent()
+            SettingsScrollContent(showingAccountSettings: $showingAccountSettings)
         }
     }
 }
@@ -161,8 +171,10 @@ struct SettingsContent: View {
 /// The actual settings content - used inside ScrollView
 /// Shows menu categories that open sub-pages as sheets
 struct SettingsScrollContent: View {
-    // Sheet presentation states
-    @State private var showingAccountSettings = false
+    // Account Settings binding from parent (fullScreenCover handled at SettingsPage level)
+    @Binding var showingAccountSettings: Bool
+
+    // Sheet presentation states for other settings
     @State private var showingAppPreferences = false
     @State private var showingSystemSettings = false
     @State private var showingAbout = false
@@ -214,10 +226,7 @@ struct SettingsScrollContent: View {
 
             Spacer().frame(height: 120) // Space for footer
         }
-        // Sheet presentations
-        .fullScreenCover(isPresented: $showingAccountSettings) {
-            AccountSettingsView()
-        }
+        // Sheet presentations (Account Settings handled at SettingsPage level)
         .sheet(isPresented: $showingAppPreferences) {
             AppPreferencesView()
         }
@@ -1045,20 +1054,20 @@ struct SettingsRowContent: View {
 
 // MARK: - Previews
 #Preview("Portrait") {
-    SettingsPortraitView()
+    SettingsPortraitView(showingAccountSettings: .constant(false))
         .environment(AppState())
 }
 
 #Preview("Landscape Left", traits: .landscapeLeft) {
     GeometryReader { geometry in
-        SettingsLandscapeLeftView(geometry: geometry)
+        SettingsLandscapeLeftView(geometry: geometry, showingAccountSettings: .constant(false))
     }
     .environment(AppState())
 }
 
 #Preview("Landscape Right", traits: .landscapeRight) {
     GeometryReader { geometry in
-        SettingsLandscapeRightView(geometry: geometry)
+        SettingsLandscapeRightView(geometry: geometry, showingAccountSettings: .constant(false))
     }
     .environment(AppState())
 }
