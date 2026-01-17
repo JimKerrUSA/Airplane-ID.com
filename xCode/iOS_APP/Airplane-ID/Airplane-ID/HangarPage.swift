@@ -717,9 +717,9 @@ struct AircraftDetailView: View {
                                 .padding(.top, 8)
                         }
 
-                        // Aircraft Details Section
-                        detailSection(title: "Aircraft Details") {
-                            DetailRow(label: "ICAO Type", value: aircraft.icao)
+                        // Aircraft Specifications Section
+                        detailSection(title: "Aircraft Specifications") {
+                            DetailRow(label: "ICAO", value: aircraft.icao)
                             if let iata = aircraft.iata, !iata.isEmpty {
                                 DetailRow(label: "IATA Airline", value: iata)
                             }
@@ -737,9 +737,9 @@ struct AircraftDetailView: View {
                             }
                         }
 
-                        // Specifications Section (only if we have data)
+                        // Powerplant Section (only if we have data)
                         if hasSpecifications {
-                            detailSection(title: "Specifications") {
+                            detailSection(title: "Powerplant") {
                                 if let engineType = aircraft.engineType, !engineType.isEmpty {
                                     DetailRow(label: "Engine Type", value: engineType)
                                 }
@@ -782,9 +782,9 @@ struct AircraftDetailView: View {
                             }
                         }
 
-                        // Capture Info Section
-                        detailSection(title: "Capture Info") {
-                            DetailRow(label: "Captured", value: formatDateTime(aircraft.captureTime))
+                        // Sighting Details Section
+                        detailSection(title: "Sighting Details") {
+                            DetailRow(label: "Date", value: formatDateTime(aircraft.captureTime))
                             DetailRow(label: "Location", value: formatCoordinates(aircraft.gpsLatitude, aircraft.gpsLongitude))
                         }
 
