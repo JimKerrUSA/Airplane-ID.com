@@ -461,8 +461,9 @@ The app must handle large datasets efficiently:
 ## Next Steps
 
 1. Build out Maps page content
-2. ~~Build out Hangar page content~~ ✅ COMPLETED (basic implementation)
-   - TO DO: Implement bi-directional filter logic
+2. ~~Build out Hangar page content~~ ✅ COMPLETED
+   - ~~Bi-directional filter logic~~ ✅ COMPLETED
+   - ~~Filter sheet toolbar (Clear/Search buttons)~~ ✅ COMPLETED
 3. Build out remaining Settings page functionality
 4. Implement password encryption/decryption
 5. Implement FaceID authentication
@@ -851,8 +852,43 @@ The app must handle large datasets efficiently:
     - Classification section: Category, Type
     - Location section: Country, State, City
     - Clear All Filters button (only when filters active)
-  - **Dynamic filter options:** Dropdowns show only values present in date-filtered results
-    - Selecting Year/Month filters the pool for other dropdowns
-    - Invalid selections auto-cleared when date changes
   - Empty state displays for no aircraft and no filter matches
-  - **TO DO:** Implement bi-directional filter logic (any filter should narrow all other dropdowns)
+
+  - **Bi-directional Filter Logic:** ✅ COMPLETED
+    - Each dropdown shows only values from aircraft matching ALL OTHER active filters
+    - Implementation: `aircraftExcluding(_ exclude: String)` function filters by all criteria except the specified one
+    - Example: Select "Weight Shift Control" type → Year shows only 2025, Month shows only Sep/Oct, ICAO shows only applicable codes
+    - Works in any direction - start from any filter and all others update
+
+  - **Filter Sheet Toolbar Pattern (reusable for other sheets):**
+    - Uses conditional navigation title and toolbar buttons based on `hasActiveFilters`
+    - **No filters active state:**
+      - Title: "Filter Aircraft" (center)
+      - Right button: "Done" (default gray, `.borderedProminent` style)
+    - **Filters active state:**
+      - Title: Empty string (hidden)
+      - Left button: "Clear" (orange text, standard toolbar button)
+      - Right button: "Search" (green via `.tint(Color(hex: "28A745"))`, `.borderedProminent` style)
+    - **Implementation pattern:**
+      ```swift
+      .navigationTitle(filterState.hasActiveFilters ? "" : "Filter Aircraft")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+          ToolbarItem(placement: .topBarLeading) {
+              if filterState.hasActiveFilters {
+                  Button { /* clear action */ } label: {
+                      Text("Clear").foregroundStyle(AppColors.orange)
+                  }
+              }
+          }
+          ToolbarItem(placement: .topBarTrailing) {
+              Button { /* done/search action */ } label: {
+                  Text(filterState.hasActiveFilters ? "Search" : "Done")
+                      .fontWeight(.semibold)
+              }
+              .tint(filterState.hasActiveFilters ? Color(hex: "28A745") : nil)
+              .buttonStyle(.borderedProminent)
+          }
+      }
+      ```
+    - **Key insight:** Put Clear and Search in SEPARATE ToolbarItems to prevent iOS from merging them into one button

@@ -400,63 +400,96 @@ struct HangarFilterSheet: View {
     @Bindable var filterState: HangarFilterState
     let allAircraft: [CapturedAircraft]
 
-    // Base aircraft filtered by date (Year/Month) - used to compute other dropdown options
-    private var dateFilteredAircraft: [CapturedAircraft] {
+    // MARK: - Bi-directional Filter Logic
+    // Each dropdown shows options from aircraft matching ALL OTHER active filters (excluding itself)
+
+    /// Filter aircraft by all criteria EXCEPT the specified one
+    private func aircraftExcluding(_ exclude: String) -> [CapturedAircraft] {
         allAircraft.filter { aircraft in
-            if let year = filterState.selectedYear, aircraft.year != year {
+            // Year filter (skip if excluding year)
+            if exclude != "year", let year = filterState.selectedYear, aircraft.year != year {
                 return false
             }
-            if let month = filterState.selectedMonth, aircraft.month != month {
+            // Month filter (skip if excluding month)
+            if exclude != "month", let month = filterState.selectedMonth, aircraft.month != month {
+                return false
+            }
+            // Manufacturer filter (skip if excluding manufacturer)
+            if exclude != "manufacturer", let mfr = filterState.selectedManufacturer, aircraft.manufacturer != mfr {
+                return false
+            }
+            // IATA filter (skip if excluding iata)
+            if exclude != "iata", let iata = filterState.selectedIATA, aircraft.iata != iata {
+                return false
+            }
+            // ICAO filter (skip if excluding icao)
+            if exclude != "icao", let icao = filterState.selectedICAO, aircraft.icao != icao {
+                return false
+            }
+            // Classification filter (skip if excluding classification)
+            if exclude != "classification", let classification = filterState.selectedClassification,
+               aircraft.aircraftClassification != classification {
+                return false
+            }
+            // Type filter (skip if excluding type)
+            if exclude != "type", let type = filterState.selectedType, aircraft.aircraftType != type {
+                return false
+            }
+            // Country filter (skip if excluding country)
+            if exclude != "country", let country = filterState.selectedCountry, aircraft.country != country {
+                return false
+            }
+            // State filter (skip if excluding state)
+            if exclude != "state", let state = filterState.selectedState, aircraft.registeredState != state {
+                return false
+            }
+            // City filter (skip if excluding city)
+            if exclude != "city", let city = filterState.selectedCity, aircraft.registeredCity != city {
                 return false
             }
             return true
         }
     }
 
-    // Years always come from all aircraft
+    // Available options for each dropdown - filtered by all OTHER active filters
     private var availableYears: [Int] {
-        Array(Set(allAircraft.map { $0.year })).sorted(by: >)
+        Array(Set(aircraftExcluding("year").map { $0.year })).sorted(by: >)
     }
 
-    // Months filtered by selected year
     private var availableMonths: [Int] {
-        let source = filterState.selectedYear != nil
-            ? allAircraft.filter { $0.year == filterState.selectedYear }
-            : allAircraft
-        return Array(Set(source.map { $0.month })).sorted()
+        Array(Set(aircraftExcluding("month").map { $0.month })).sorted()
     }
 
-    // All other filters are based on date-filtered aircraft
     private var availableManufacturers: [String] {
-        Array(Set(dateFilteredAircraft.map { $0.manufacturer })).sorted()
+        Array(Set(aircraftExcluding("manufacturer").map { $0.manufacturer })).sorted()
     }
 
     private var availableIATAs: [String] {
-        Array(Set(dateFilteredAircraft.compactMap { $0.iata }.filter { !$0.isEmpty })).sorted()
+        Array(Set(aircraftExcluding("iata").compactMap { $0.iata }.filter { !$0.isEmpty })).sorted()
     }
 
     private var availableICAOs: [String] {
-        Array(Set(dateFilteredAircraft.map { $0.icao })).sorted()
+        Array(Set(aircraftExcluding("icao").map { $0.icao })).sorted()
     }
 
     private var availableClassifications: [Int] {
-        Array(Set(dateFilteredAircraft.compactMap { $0.aircraftClassification })).sorted()
+        Array(Set(aircraftExcluding("classification").compactMap { $0.aircraftClassification })).sorted()
     }
 
     private var availableTypes: [String] {
-        Array(Set(dateFilteredAircraft.compactMap { $0.aircraftType })).sorted()
+        Array(Set(aircraftExcluding("type").compactMap { $0.aircraftType })).sorted()
     }
 
     private var availableCountries: [String] {
-        Array(Set(dateFilteredAircraft.compactMap { $0.country }.filter { !$0.isEmpty })).sorted()
+        Array(Set(aircraftExcluding("country").compactMap { $0.country }.filter { !$0.isEmpty })).sorted()
     }
 
     private var availableStates: [String] {
-        Array(Set(dateFilteredAircraft.compactMap { $0.registeredState }.filter { !$0.isEmpty })).sorted()
+        Array(Set(aircraftExcluding("state").compactMap { $0.registeredState }.filter { !$0.isEmpty })).sorted()
     }
 
     private var availableCities: [String] {
-        Array(Set(dateFilteredAircraft.compactMap { $0.registeredCity }.filter { !$0.isEmpty })).sorted()
+        Array(Set(aircraftExcluding("city").compactMap { $0.registeredCity }.filter { !$0.isEmpty })).sorted()
     }
 
     private let monthNames = ["", "January", "February", "March", "April", "May", "June",
@@ -577,58 +610,34 @@ struct HangarFilterSheet: View {
                     }
                 }
             }
-            .navigationTitle("Filter Aircraft")
+            .navigationTitle(filterState.hasActiveFilters ? "" : "Filter Aircraft")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // CLEAR button on left - only visible when filters are active
+                ToolbarItem(placement: .topBarLeading) {
+                    if filterState.hasActiveFilters {
+                        Button {
+                            filterState.clearAll()
+                        } label: {
+                            Text("Clear")
+                                .foregroundStyle(AppColors.orange)
+                        }
+                    }
+                }
+
+                // Done/Search button on right
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button {
                         filterState.save()
                         dismiss()
+                    } label: {
+                        Text(filterState.hasActiveFilters ? "Search" : "Done")
+                            .fontWeight(.semibold)
                     }
-                    .fontWeight(.semibold)
+                    .tint(filterState.hasActiveFilters ? Color(hex: "28A745") : nil)
+                    .buttonStyle(.borderedProminent)
                 }
             }
-            .onChange(of: filterState.selectedYear) { _, _ in
-                // Reset month if selected year changes and current month not available
-                if let month = filterState.selectedMonth,
-                   !availableMonths.contains(month) {
-                    filterState.selectedMonth = nil
-                }
-                // Reset other filters if their values are no longer available
-                resetInvalidFilters()
-            }
-            .onChange(of: filterState.selectedMonth) { _, _ in
-                // Reset other filters if their values are no longer available
-                resetInvalidFilters()
-            }
-        }
-    }
-
-    // Reset filters whose selected values are no longer in the available options
-    private func resetInvalidFilters() {
-        if let mfr = filterState.selectedManufacturer, !availableManufacturers.contains(mfr) {
-            filterState.selectedManufacturer = nil
-        }
-        if let icao = filterState.selectedICAO, !availableICAOs.contains(icao) {
-            filterState.selectedICAO = nil
-        }
-        if let iata = filterState.selectedIATA, !availableIATAs.contains(iata) {
-            filterState.selectedIATA = nil
-        }
-        if let classification = filterState.selectedClassification, !availableClassifications.contains(classification) {
-            filterState.selectedClassification = nil
-        }
-        if let type = filterState.selectedType, !availableTypes.contains(type) {
-            filterState.selectedType = nil
-        }
-        if let country = filterState.selectedCountry, !availableCountries.contains(country) {
-            filterState.selectedCountry = nil
-        }
-        if let state = filterState.selectedState, !availableStates.contains(state) {
-            filterState.selectedState = nil
-        }
-        if let city = filterState.selectedCity, !availableCities.contains(city) {
-            filterState.selectedCity = nil
         }
     }
 }
