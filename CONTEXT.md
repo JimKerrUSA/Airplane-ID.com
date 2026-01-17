@@ -185,32 +185,34 @@ VStack { /* content */ }
 - Registration/Model: 19pt SF Pro Regular
 - Text padding: 3px left of icon
 
-### CapturedAircraft Model Properties
+### CapturedAircraft Model Properties (31 fields)
 
-**Capture metadata:**
-- captureDate (Date, required), captureTime (Date?)
-- gpsLongitude, gpsLatitude (Double, required)
-- year, month, day (Int?)
-- iPhotoReference (String?) - link to photo in device iPhoto library
+**Required at capture (from device):**
+- captureTime (Date) - full timestamp when photo taken/uploaded
+- captureDate (Date) - date only, derived from captureTime
+- year, month, day (Int) - derived from captureTime for filtering
+- gpsLongitude, gpsLatitude (Double) - photo location
+- iPhotoReference (String) - link to photo in device iPhoto library
 
-**Aircraft identification:**
-- icao, iata, registration, serialNumber, manufacturer, model (String?)
-- iata = airline code (AA, UA, etc.) - airliners only
+**Required at capture (from AI recognition):**
+- icao (String) - ICAO aircraft type code
+- manufacturer (String) - aircraft manufacturer
+- model (String) - aircraft model name
 
-**Aircraft specifications:**
-- yearMfg (Int?), aircraftClassification, engineType, weightClass (String?)
-- engineCount, seatCount (Int?)
+**Optional (if AI detects in photo):**
+- iata (String?) - airline code (AA, UA) - airliners only
+- registration (String?) - N-number if visible in photo
 
-**Registration/certification:**
+**Optional (populated via cloud sync from FAA data):**
+- serialNumber, aircraftClassification, engineType, weightClass (String?)
+- yearMfg, engineCount, seatCount (Int?)
 - country, ownerType (String?)
 - airworthinessDate, certificateIssueDate, certificateExpireDate (Date?)
-
-**Registered owner info:**
 - registeredOwner, registeredAddress1, registeredAddress2 (String?)
 - registeredCity, registeredState, registeredZip (String?)
 
 **User interaction (null unless user acts):**
-- rating (Int? 1-5 stars), thumbsUp (Bool? like/dislike)
+- rating (Bool?), thumbsUp (Bool?)
 
 ### User Model Properties
 - memberNumber (primary key for server sync)
@@ -701,3 +703,28 @@ The app must handle large datasets efficiently:
   - All privacy preferences default to true (on)
   - Toggle changes save immediately to database
   - Commit: f42a7b4 "Add Privacy section to Account Settings"
+
+### 2026-01-17 (continued)
+
+- **UI Improvements:**
+  - Moved person icon and status text to LEFT side of header (TopMenuView)
+  - Swapped Recent Sightings display: Registration/Model on line 1, Manufacturer on line 2
+  - Commit: afcfd3d, 6e2e825
+
+- **CapturedAircraft Model Expansion (31 fields):**
+  - Added 18 new fields for full aircraft data support
+  - Fields organized into categories: capture metadata, AI recognition, cloud sync, user interaction
+  - Required fields: captureTime, captureDate, year, month, day, gpsLongitude, gpsLatitude, iPhotoReference, icao, manufacturer, model
+  - Optional fields: iata, registration, all FAA data (populated via cloud sync), rating, thumbsUp
+  - Captures flow: User takes photo → AI identifies aircraft → User edits/confirms → Save to DB → Cloud sync adds FAA details
+  - Commit: 74912c6
+
+- **Data Type Clarifications:**
+  - rating changed from Int to Bool
+  - captureTime is full Date timestamp, captureDate is date-only derived
+  - year/month/day are Int for filtering queries ("show me October captures")
+
+- **Swift 6 Compatibility:**
+  - Fixed RectCorner OptionSet actor isolation warnings (ongoing)
+  - Removed nil coalescing from non-optional fields
+  - Commit: 86df12c
