@@ -723,7 +723,7 @@ struct ManufacturerSearchSheet: View {
                 // Search field
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppColors.darkGray)
                     TextField("Search manufacturers...", text: $searchText)
                         .textFieldStyle(.plain)
                         .autocorrectionDisabled()
@@ -735,8 +735,12 @@ struct ManufacturerSearchSheet: View {
                     }
                 }
                 .padding(12)
-                .background(Color(.systemGray6))
+                .background(Color.white)
                 .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(AppColors.borderBlue, lineWidth: 1)
+                )
                 .padding()
 
                 // Results
@@ -1452,7 +1456,7 @@ struct ICAOSearchSheet: View {
                 // Search field
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppColors.darkGray)
                     TextField("Search aircraft types...", text: $searchText)
                         .textFieldStyle(.plain)
                         .autocorrectionDisabled()
@@ -1464,8 +1468,12 @@ struct ICAOSearchSheet: View {
                     }
                 }
                 .padding(12)
-                .background(Color(.systemGray6))
+                .background(Color.white)
                 .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(AppColors.borderBlue, lineWidth: 1)
+                )
                 .padding()
 
                 // Results or instructions
