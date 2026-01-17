@@ -40,6 +40,7 @@ struct Airplane_IDApp: App {
         let schema = Schema([
             CapturedAircraft.self,
             User.self,
+            AirlineLookup.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

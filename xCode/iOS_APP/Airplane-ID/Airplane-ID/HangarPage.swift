@@ -17,7 +17,7 @@ class HangarFilterState {
     var selectedYear: Int?
     var selectedMonth: Int?
     var selectedManufacturer: String?
-    var selectedIATA: String?
+    var selectedAirlineCode: String?
     var selectedICAO: String?
     var selectedClassification: Int?
     var selectedType: String?
@@ -31,7 +31,7 @@ class HangarFilterState {
         selectedYear != nil ||
         selectedMonth != nil ||
         selectedManufacturer != nil ||
-        selectedIATA != nil ||
+        selectedAirlineCode != nil ||
         selectedICAO != nil ||
         selectedClassification != nil ||
         selectedType != nil ||
@@ -46,7 +46,7 @@ class HangarFilterState {
         selectedYear = nil
         selectedMonth = nil
         selectedManufacturer = nil
-        selectedIATA = nil
+        selectedAirlineCode = nil
         selectedICAO = nil
         selectedClassification = nil
         selectedType = nil
@@ -69,7 +69,7 @@ class HangarFilterState {
         defaults.set(selectedYear, forKey: keyPrefix + "year")
         defaults.set(selectedMonth, forKey: keyPrefix + "month")
         defaults.set(selectedManufacturer, forKey: keyPrefix + "manufacturer")
-        defaults.set(selectedIATA, forKey: keyPrefix + "iata")
+        defaults.set(selectedAirlineCode, forKey: keyPrefix + "iata")
         defaults.set(selectedICAO, forKey: keyPrefix + "icao")
         defaults.set(selectedClassification, forKey: keyPrefix + "classification")
         defaults.set(selectedType, forKey: keyPrefix + "type")
@@ -83,7 +83,7 @@ class HangarFilterState {
         selectedYear = defaults.object(forKey: keyPrefix + "year") as? Int
         selectedMonth = defaults.object(forKey: keyPrefix + "month") as? Int
         selectedManufacturer = defaults.string(forKey: keyPrefix + "manufacturer")
-        selectedIATA = defaults.string(forKey: keyPrefix + "iata")
+        selectedAirlineCode = defaults.string(forKey: keyPrefix + "iata")
         selectedICAO = defaults.string(forKey: keyPrefix + "icao")
         selectedClassification = defaults.object(forKey: keyPrefix + "classification") as? Int
         selectedType = defaults.string(forKey: keyPrefix + "type")
@@ -118,7 +118,7 @@ struct HangarPage: View {
                     aircraft.model.lowercased().contains(search) ||
                     aircraft.icao.lowercased().contains(search) ||
                     (aircraft.registration?.lowercased().contains(search) ?? false) ||
-                    (aircraft.iata?.lowercased().contains(search) ?? false) ||
+                    (aircraft.airlineCode?.lowercased().contains(search) ?? false) ||
                     (aircraft.registeredCity?.lowercased().contains(search) ?? false) ||
                     (aircraft.registeredState?.lowercased().contains(search) ?? false) ||
                     (aircraft.country?.lowercased().contains(search) ?? false)
@@ -140,8 +140,8 @@ struct HangarPage: View {
                 return false
             }
 
-            // IATA filter
-            if let iata = filterState.selectedIATA, aircraft.iata != iata {
+            // Airline filter
+            if let code = filterState.selectedAirlineCode, aircraft.airlineCode != code {
                 return false
             }
 
@@ -360,11 +360,11 @@ struct HangarListItem: View {
         .padding(.vertical, 4)
     }
 
-    // Line 1: [IATA] MANUFACTURER MODEL
+    // Line 1: [AIRLINE CODE] MANUFACTURER MODEL
     private var line1: String {
         var parts: [String] = []
-        if let iata = aircraft.iata, !iata.isEmpty {
-            parts.append(iata.uppercased())
+        if let code = aircraft.airlineCode, !code.isEmpty {
+            parts.append(code.uppercased())
         }
         parts.append(aircraft.manufacturer.uppercased())
         parts.append(aircraft.model)
@@ -426,8 +426,8 @@ struct HangarFilterSheet: View {
             if exclude != "manufacturer", let mfr = filterState.selectedManufacturer, aircraft.manufacturer != mfr {
                 return false
             }
-            // IATA filter (skip if excluding iata)
-            if exclude != "iata", let iata = filterState.selectedIATA, aircraft.iata != iata {
+            // Airline filter (skip if excluding airlineCode)
+            if exclude != "airlineCode", let code = filterState.selectedAirlineCode, aircraft.airlineCode != code {
                 return false
             }
             // ICAO filter (skip if excluding icao)
@@ -472,8 +472,8 @@ struct HangarFilterSheet: View {
         Array(Set(aircraftExcluding("manufacturer").map { $0.manufacturer })).sorted()
     }
 
-    private var availableIATAs: [String] {
-        Array(Set(aircraftExcluding("iata").compactMap { $0.iata }.filter { !$0.isEmpty })).sorted()
+    private var availableAirlineCodes: [String] {
+        Array(Set(aircraftExcluding("airlineCode").compactMap { $0.airlineCode }.filter { !$0.isEmpty })).sorted()
     }
 
     private var availableICAOs: [String] {
@@ -512,7 +512,7 @@ struct HangarFilterSheet: View {
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                     if !filterState.searchText.isEmpty {
-                        Text("Searches: manufacturer, model, ICAO, registration, IATA, city, state, country")
+                        Text("Searches: manufacturer, model, ICAO, registration, airline, city, state, country")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -551,11 +551,11 @@ struct HangarFilterSheet: View {
                         }
                     }
 
-                    // Always show IATA picker (even if empty, for when data is added)
-                    Picker("IATA Airline", selection: $filterState.selectedIATA) {
+                    // Always show Airline picker (even if empty, for when data is added)
+                    Picker("Airline", selection: $filterState.selectedAirlineCode) {
                         Text("Any Airline").tag(nil as String?)
-                        ForEach(availableIATAs, id: \.self) { iata in
-                            Text(iata).tag(iata as String?)
+                        ForEach(availableAirlineCodes, id: \.self) { code in
+                            Text(code).tag(code as String?)
                         }
                     }
                 }
@@ -667,7 +667,8 @@ struct AircraftDetailView: View {
     @State private var editModel = ""
     @State private var editRegistration = ""
     @State private var editICAO = ""
-    @State private var editIATA = ""
+    @State private var editAirlineCode: String? = nil
+    @State private var showingAirlineSearch = false
 
     var body: some View {
         NavigationStack {
@@ -744,11 +745,15 @@ struct AircraftDetailView: View {
                             }
                         }
 
-                        // Operator Section (IATA editable, owner info from FAA)
+                        // Operator Section (Airline editable, owner info from FAA)
                         if hasOperatorData || isEditing {
                             detailSection(title: "Operator") {
-                                if !editIATA.isEmpty || isEditing {
-                                    EditableDetailRow(label: "IATA", value: $editIATA, isEditing: isEditing, placeholder: "e.g. UA")
+                                if editAirlineCode != nil || isEditing {
+                                    AirlinePickerRow(
+                                        selectedAirlineCode: $editAirlineCode,
+                                        isEditing: isEditing,
+                                        onTap: { showingAirlineSearch = true }
+                                    )
                                 }
                                 if let owner = aircraft.registeredOwner, !owner.isEmpty {
                                     DetailRow(label: "Owner", value: owner)
@@ -893,6 +898,12 @@ struct AircraftDetailView: View {
                 )
                 .presentationDetents([.height(280)])
             }
+            .sheet(isPresented: $showingAirlineSearch) {
+                AirlineSearchSheet(
+                    selectedAirlineCode: $editAirlineCode
+                )
+                .presentationDetents([.large])
+            }
             .onAppear {
                 populateEditValues()
             }
@@ -904,7 +915,7 @@ struct AircraftDetailView: View {
         editManufacturer = aircraft.manufacturer
         editModel = aircraft.model
         editICAO = aircraft.icao
-        editIATA = aircraft.iata ?? ""
+        editAirlineCode = aircraft.airlineCode
         editRegistration = aircraft.registration ?? ""
     }
 
@@ -960,7 +971,7 @@ struct AircraftDetailView: View {
     // MARK: - Section Visibility
 
     private var hasOperatorData: Bool {
-        (aircraft.iata != nil && !aircraft.iata!.isEmpty) ||
+        (aircraft.airlineCode != nil && !aircraft.airlineCode!.isEmpty) ||
         (aircraft.registeredOwner != nil && !aircraft.registeredOwner!.isEmpty) ||
         (aircraft.ownerType != nil && !aircraft.ownerType!.isEmpty) ||
         (aircraft.registeredAddress1 != nil && !aircraft.registeredAddress1!.isEmpty) ||
@@ -1022,7 +1033,7 @@ struct AircraftDetailView: View {
         aircraft.model = editModel
         aircraft.registration = editRegistration.isEmpty ? nil : editRegistration
         aircraft.icao = editICAO
-        aircraft.iata = editIATA.isEmpty ? nil : editIATA
+        aircraft.airlineCode = editAirlineCode
         try? modelContext.save()
         isEditing = false
     }
@@ -1201,6 +1212,181 @@ struct RatingSelectorSheet: View {
             return String(format: "%.0f", rating)
         } else {
             return String(format: "%.1f", rating)
+        }
+    }
+}
+
+// MARK: - Airline Picker Row
+/// Row that displays selected airline and opens search when tapped
+struct AirlinePickerRow: View {
+    @Binding var selectedAirlineCode: String?
+    let isEditing: Bool
+    let onTap: () -> Void
+
+    @Query private var airlines: [AirlineLookup]
+
+    var body: some View {
+        HStack {
+            Text("Airline")
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                Button(action: onTap) {
+                    HStack(spacing: 4) {
+                        Text(selectedAirlineName)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(selectedAirlineCode == nil ? .white.opacity(0.3) : .white)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            } else {
+                Text(selectedAirlineName)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(selectedAirlineCode == nil ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var selectedAirlineName: String {
+        guard let code = selectedAirlineCode,
+              let airline = airlines.first(where: { $0.airlineCode == code }) else {
+            return "—"
+        }
+        return airline.airlineName
+    }
+}
+
+// MARK: - Airline Search Sheet
+/// Searchable sheet for selecting an airline from the lookup table
+struct AirlineSearchSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedAirlineCode: String?
+
+    @Query(sort: \AirlineLookup.airlineName) private var allAirlines: [AirlineLookup]
+    @State private var searchText = ""
+
+    private var filteredAirlines: [AirlineLookup] {
+        if searchText.isEmpty {
+            return []  // Don't show all 5000+ airlines when search is empty
+        }
+        let search = searchText.lowercased()
+        return allAirlines.filter { airline in
+            airline.airlineName.lowercased().contains(search) ||
+            airline.airlineCode.lowercased().contains(search) ||
+            (airline.iata?.lowercased().contains(search) ?? false)
+        }
+        .prefix(50)  // Limit results for performance
+        .map { $0 }
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Search field
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                    TextField("Search airlines...", text: $searchText)
+                        .textFieldStyle(.plain)
+                        .autocorrectionDisabled()
+                    if !searchText.isEmpty {
+                        Button(action: { searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(12)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding()
+
+                // Results or instructions
+                if searchText.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "airplane")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.secondary)
+                        Text("Start typing to search airlines")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
+                        Text("Search by name, code, or IATA")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(maxHeight: .infinity)
+                } else if filteredAirlines.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.secondary)
+                        Text("No airlines found")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxHeight: .infinity)
+                } else {
+                    List(filteredAirlines, id: \.airlineCode) { airline in
+                        Button(action: {
+                            selectedAirlineCode = airline.airlineCode
+                            dismiss()
+                        }) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(airline.airlineName)
+                                        .font(.system(size: 16))
+                                        .foregroundStyle(.primary)
+                                    HStack(spacing: 8) {
+                                        Text(airline.airlineCode)
+                                            .font(.system(size: 12, weight: .medium))
+                                            .foregroundStyle(.secondary)
+                                        if let iata = airline.iata, !iata.isEmpty {
+                                            Text("IATA: \(iata)")
+                                                .font(.system(size: 12))
+                                                .foregroundStyle(.tertiary)
+                                        }
+                                    }
+                                }
+                                Spacer()
+                                if selectedAirlineCode == airline.airlineCode {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(.blue)
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .listStyle(.plain)
+                }
+
+                Spacer(minLength: 0)
+            }
+            .navigationTitle("Select Airline")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if selectedAirlineCode != nil {
+                        Button("Clear") {
+                            selectedAirlineCode = nil
+                            dismiss()
+                        }
+                        .foregroundStyle(AppColors.orange)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 }

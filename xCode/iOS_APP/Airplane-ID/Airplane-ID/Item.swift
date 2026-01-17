@@ -104,7 +104,7 @@ final class CapturedAircraft: Identifiable {
     var model: String                  // Aircraft model name
 
     // Aircraft identification (optional - if AI detects in photo)
-    var iata: String?                  // IATA airline code (e.g., AA, UA) - airliners only
+    var airlineCode: String?           // 3-letter airline code from AirlineLookup table
     var registration: String?          // N-number / tail number (if visible in photo)
 
     // Aircraft specifications (optional - populated via cloud sync from FAA data)
@@ -153,7 +153,7 @@ final class CapturedAircraft: Identifiable {
         manufacturer: String,
         model: String,
         // Optional - if AI detects in photo
-        iata: String? = nil,
+        airlineCode: String? = nil,
         registration: String? = nil,
         // Optional - populated via cloud sync
         serialNumber: String? = nil,
@@ -192,7 +192,7 @@ final class CapturedAircraft: Identifiable {
         self.icao = icao
         self.manufacturer = manufacturer
         self.model = model
-        self.iata = iata
+        self.airlineCode = airlineCode
         self.registration = registration
         self.serialNumber = serialNumber
         self.yearMfg = yearMfg
