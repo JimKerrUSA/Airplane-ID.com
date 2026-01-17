@@ -63,8 +63,10 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - HangarFilterState - Observable filter state with UserDefaults persistence
   - HangarPage - Main view with filter bar and scrollable grouped list
   - HangarSectionHeader - Sticky year/month headers (blue background)
-  - HangarListItem - 3-line aircraft display with graceful omission
+  - HangarListItem - 3-line aircraft display with graceful omission (tappable)
   - HangarFilterSheet - Filter form with dynamic dropdown options
+  - AircraftDetailView - Full-screen detail view for individual aircraft
+  - DetailRow - Reusable label/value row component
 - `MapsPage.swift` - Map view page (placeholder)
 - `CameraPage.swift` - Camera capture page (placeholder)
 
@@ -892,3 +894,25 @@ The app must handle large datasets efficiently:
       }
       ```
     - **Key insight:** Put Clear and Search in SEPARATE ToolbarItems to prevent iOS from merging them into one button
+
+- **Aircraft Detail View (AircraftDetailView):**
+  - Full-screen detail view opened by tapping aircraft in Hangar list
+  - Uses `.fullScreenCover(item: $selectedAircraft)` pattern with state at HangarPage level
+  - **Layout structure:**
+    - Photo placeholder (220px height) - ready for actual photos
+    - Title block (VStack with 2pt spacing):
+      - Line 1: Manufacturer (Helvetica-Bold, size 22, uppercase)
+      - Line 2: Model (system font, size 20, medium weight)
+    - Type subtitle (e.g., "Fixed Wing Single-Engine") - size 16, white opacity 0.7
+    - Aircraft Details section: ICAO Type, IATA Airline, Registration, Classification, Serial Number, Year Manufactured
+    - Specifications section: Engine Type, Engine Count, Seat Count, Weight Class (only shows if data exists)
+    - Registration section: Owner, Owner Type, Country, Location, Certificate dates (only shows if data exists)
+    - Capture Info section: Captured date/time, GPS coordinates
+  - **Graceful omission:** Sections and rows only display if they have data
+  - **Toolbar pattern (matches Account Settings):**
+    - Back button on left (hidden during edit mode)
+    - Edit button on right (switches to Cancel/Save during edit mode)
+  - **Components:**
+    - `DetailRow` - Reusable row with label (left, white 60% opacity) and value (right, white)
+    - `detailSection()` - ViewBuilder function for consistent section styling
+  - Edit mode scaffolding in place for future implementation

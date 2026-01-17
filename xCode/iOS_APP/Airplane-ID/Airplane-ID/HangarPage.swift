@@ -105,6 +105,7 @@ struct HangarPage: View {
 
     @State private var filterState = HangarFilterState()
     @State private var showingFilterSheet = false
+    @State private var selectedAircraft: CapturedAircraft?
 
     // Filtered aircraft based on current filters
     private var filteredAircraft: [CapturedAircraft] {
@@ -281,6 +282,10 @@ struct HangarPage: View {
                                                 HangarListItem(aircraft: aircraft)
                                                     .padding(.horizontal, 12)
                                                     .padding(.vertical, 6)
+                                                    .contentShape(Rectangle())
+                                                    .onTapGesture {
+                                                        selectedAircraft = aircraft
+                                                    }
                                             }
                                         } header: {
                                             HangarSectionHeader(title: group.key)
@@ -299,6 +304,9 @@ struct HangarPage: View {
         }
         .sheet(isPresented: $showingFilterSheet) {
             HangarFilterSheet(filterState: filterState, allAircraft: allAircraft)
+        }
+        .fullScreenCover(item: $selectedAircraft) { aircraft in
+            AircraftDetailView(aircraft: aircraft)
         }
     }
 }
@@ -639,6 +647,314 @@ struct HangarFilterSheet: View {
                 }
             }
         }
+    }
+}
+
+// MARK: - Aircraft Detail View
+/// Full-screen detail view for a captured aircraft
+/// Follows the AccountSettingsView pattern for editable modals
+struct AircraftDetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    let aircraft: CapturedAircraft
+
+    // Edit mode state
+    @State private var isEditing = false
+
+    // Edit values (populated when entering edit mode)
+    @State private var editManufacturer = ""
+    @State private var editModel = ""
+    @State private var editRegistration = ""
+    @State private var editICAO = ""
+    @State private var editIATA = ""
+    @State private var editSerialNumber = ""
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                AppColors.settingsBackground.ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Photo placeholder
+                        ZStack {
+                            Rectangle()
+                                .fill(AppColors.darkBlue.opacity(0.3))
+                            VStack(spacing: 12) {
+                                Image(systemName: "photo")
+                                    .font(.system(size: 60))
+                                    .foregroundStyle(.white.opacity(0.5))
+                                Text("Aircraft Photo")
+                                    .font(.custom("Helvetica", size: 14))
+                                    .foregroundStyle(.white.opacity(0.5))
+                            }
+                        }
+                        .frame(height: 220)
+
+                        // Aircraft identification section
+                        VStack(alignment: .leading, spacing: 2) {
+                            // Line 1: Manufacturer
+                            Text(aircraft.manufacturer.uppercased())
+                                .font(.custom("Helvetica-Bold", size: 22))
+                                .foregroundStyle(.white)
+
+                            // Line 2: Model
+                            Text(aircraft.model)
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundStyle(.white)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 20)
+
+                        // Type (e.g., "Fixed Wing Single-Engine")
+                        if let typeName = AircraftLookup.typeName(aircraft.aircraftType) {
+                            Text(typeName)
+                                .font(.custom("Helvetica", size: 16))
+                                .foregroundStyle(.white.opacity(0.7))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, 20)
+                                .padding(.top, 8)
+                        }
+
+                        // Aircraft Details Section
+                        detailSection(title: "Aircraft Details") {
+                            DetailRow(label: "ICAO Type", value: aircraft.icao)
+                            if let iata = aircraft.iata, !iata.isEmpty {
+                                DetailRow(label: "IATA Airline", value: iata)
+                            }
+                            if let reg = aircraft.registration, !reg.isEmpty {
+                                DetailRow(label: "Registration", value: reg)
+                            }
+                            if let classification = AircraftLookup.classificationName(aircraft.aircraftClassification) {
+                                DetailRow(label: "Classification", value: classification)
+                            }
+                            if let serial = aircraft.serialNumber, !serial.isEmpty {
+                                DetailRow(label: "Serial Number", value: serial)
+                            }
+                            if let yearMfg = aircraft.yearMfg {
+                                DetailRow(label: "Year Manufactured", value: String(yearMfg))
+                            }
+                        }
+
+                        // Specifications Section (only if we have data)
+                        if hasSpecifications {
+                            detailSection(title: "Specifications") {
+                                if let engineType = aircraft.engineType, !engineType.isEmpty {
+                                    DetailRow(label: "Engine Type", value: engineType)
+                                }
+                                if let engineCount = aircraft.engineCount {
+                                    DetailRow(label: "Number of Engines", value: String(engineCount))
+                                }
+                                if let seatCount = aircraft.seatCount {
+                                    DetailRow(label: "Seat Count", value: String(seatCount))
+                                }
+                                if let weightClass = aircraft.weightClass, !weightClass.isEmpty {
+                                    DetailRow(label: "Weight Class", value: weightClass)
+                                }
+                            }
+                        }
+
+                        // Registration Info Section (only if we have data)
+                        if hasRegistrationInfo {
+                            detailSection(title: "Registration") {
+                                if let owner = aircraft.registeredOwner, !owner.isEmpty {
+                                    DetailRow(label: "Owner", value: owner)
+                                }
+                                if let ownerType = aircraft.ownerType, !ownerType.isEmpty {
+                                    DetailRow(label: "Owner Type", value: ownerType)
+                                }
+                                if let country = aircraft.country, !country.isEmpty {
+                                    DetailRow(label: "Country", value: country)
+                                }
+                                if hasAddress {
+                                    DetailRow(label: "Location", value: formattedAddress)
+                                }
+                                if let airworthiness = aircraft.airworthinessDate {
+                                    DetailRow(label: "Airworthiness Date", value: formatDate(airworthiness))
+                                }
+                                if let certIssue = aircraft.certificateIssueDate {
+                                    DetailRow(label: "Certificate Issued", value: formatDate(certIssue))
+                                }
+                                if let certExpire = aircraft.certificateExpireDate {
+                                    DetailRow(label: "Certificate Expires", value: formatDate(certExpire))
+                                }
+                            }
+                        }
+
+                        // Capture Info Section
+                        detailSection(title: "Capture Info") {
+                            DetailRow(label: "Captured", value: formatDateTime(aircraft.captureTime))
+                            DetailRow(label: "Location", value: formatCoordinates(aircraft.gpsLatitude, aircraft.gpsLongitude))
+                        }
+
+                        Spacer().frame(height: 40)
+                    }
+                }
+                .scrollDismissesKeyboard(.never)
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if !isEditing {
+                        Button(action: { dismiss() }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                Text("Back")
+                            }
+                            .foregroundStyle(AppColors.linkBlue)
+                        }
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if isEditing {
+                        HStack(spacing: 16) {
+                            Button("Cancel") {
+                                cancelEditing()
+                            }
+                            .foregroundStyle(.white.opacity(0.6))
+
+                            Button("Save") {
+                                saveChanges()
+                            }
+                            .foregroundStyle(AppColors.linkBlue)
+                            .fontWeight(.semibold)
+                        }
+                    } else {
+                        Button("Edit") {
+                            startEditing()
+                        }
+                        .foregroundStyle(AppColors.linkBlue)
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Helper Views
+
+    @ViewBuilder
+    private func detailSection(title: String, @ViewBuilder content: () -> some View) -> some View {
+        VStack(spacing: 12) {
+            Text(title)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+
+            VStack(spacing: 8) {
+                content()
+            }
+            .padding(.horizontal, 20)
+        }
+    }
+
+    // MARK: - Computed Properties
+
+    private var hasSpecifications: Bool {
+        aircraft.engineType != nil ||
+        aircraft.engineCount != nil ||
+        aircraft.seatCount != nil ||
+        aircraft.weightClass != nil
+    }
+
+    private var hasRegistrationInfo: Bool {
+        aircraft.registeredOwner != nil ||
+        aircraft.ownerType != nil ||
+        aircraft.country != nil ||
+        hasAddress ||
+        aircraft.airworthinessDate != nil ||
+        aircraft.certificateIssueDate != nil ||
+        aircraft.certificateExpireDate != nil
+    }
+
+    private var hasAddress: Bool {
+        (aircraft.registeredCity != nil && !aircraft.registeredCity!.isEmpty) ||
+        (aircraft.registeredState != nil && !aircraft.registeredState!.isEmpty)
+    }
+
+    private var formattedAddress: String {
+        var parts: [String] = []
+        if let city = aircraft.registeredCity, !city.isEmpty {
+            parts.append(city)
+        }
+        if let state = aircraft.registeredState, !state.isEmpty {
+            parts.append(state)
+        }
+        if let zip = aircraft.registeredZip, !zip.isEmpty {
+            parts.append(zip)
+        }
+        return parts.joined(separator: ", ")
+    }
+
+    // MARK: - Formatting Helpers
+
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
+    }
+
+    private func formatDateTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+
+    private func formatCoordinates(_ lat: Double, _ lon: Double) -> String {
+        String(format: "%.4f, %.4f", lat, lon)
+    }
+
+    // MARK: - Edit Mode Functions
+
+    private func startEditing() {
+        editManufacturer = aircraft.manufacturer
+        editModel = aircraft.model
+        editRegistration = aircraft.registration ?? ""
+        editICAO = aircraft.icao
+        editIATA = aircraft.iata ?? ""
+        editSerialNumber = aircraft.serialNumber ?? ""
+        isEditing = true
+    }
+
+    private func cancelEditing() {
+        isEditing = false
+    }
+
+    private func saveChanges() {
+        aircraft.manufacturer = editManufacturer
+        aircraft.model = editModel
+        aircraft.registration = editRegistration.isEmpty ? nil : editRegistration
+        aircraft.icao = editICAO
+        aircraft.iata = editIATA.isEmpty ? nil : editIATA
+        aircraft.serialNumber = editSerialNumber.isEmpty ? nil : editSerialNumber
+        try? modelContext.save()
+        isEditing = false
+    }
+}
+
+// MARK: - Detail Row Component
+struct DetailRow: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            Text(value)
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.trailing)
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
     }
 }
 
