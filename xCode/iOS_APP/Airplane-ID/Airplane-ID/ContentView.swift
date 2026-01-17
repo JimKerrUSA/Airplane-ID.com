@@ -116,10 +116,8 @@ struct TopMenuView: View {
         ZStack {
             AppColors.darkBlue
 
-            // Status indicator (right side) - pushed down to avoid status bar
+            // Status indicator (left side) - pushed down to avoid status bar
             HStack {
-                Spacer()
-
                 VStack(spacing: 2) {
                     Image(systemName: "person")
                         .font(.system(size: 32))
@@ -132,8 +130,10 @@ struct TopMenuView: View {
                 .onTapGesture {
                     appState.currentScreen = .journey
                 }
-                .padding(.trailing, 16)
+                .padding(.leading, 16)
                 .padding(.top, 28)
+
+                Spacer()
             }
         }
         .frame(height: 93)
