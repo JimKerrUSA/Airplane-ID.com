@@ -727,48 +727,104 @@ struct AircraftDetailView: View {
                         }
 
                         // Aircraft Identification Section (editable - AI may get wrong)
+                        // Always visible since manufacturer/model/icao are required
                         detailSection(title: "Aircraft Identification") {
                             EditableDetailRow(label: "Manufacturer", value: $editManufacturer, isEditing: isEditing)
                             EditableDetailRow(label: "Model", value: $editModel, isEditing: isEditing)
                             EditableDetailRow(label: "ICAO", value: $editICAO, isEditing: isEditing, placeholder: "e.g. B738")
-                            EditableDetailRow(label: "Registration", value: $editRegistration, isEditing: isEditing, placeholder: "e.g. N12345")
+                            // Registration only shown if has data or editing
+                            if !editRegistration.isEmpty || isEditing {
+                                EditableDetailRow(label: "Registration", value: $editRegistration, isEditing: isEditing, placeholder: "e.g. N12345")
+                            }
                         }
 
                         // Operator Section (IATA editable, owner info from FAA)
-                        detailSection(title: "Operator") {
-                            EditableDetailRow(label: "IATA", value: $editIATA, isEditing: isEditing, placeholder: "e.g. UA")
-                            DetailRow(label: "Owner", value: aircraft.registeredOwner ?? "—")
-                            DetailRow(label: "Owner Type", value: aircraft.ownerType ?? "—")
-                            DetailRow(label: "Address", value: aircraft.registeredAddress1 ?? "—")
-                            if let addr2 = aircraft.registeredAddress2, !addr2.isEmpty {
-                                DetailRow(label: "Address 2", value: addr2)
+                        if hasOperatorData || isEditing {
+                            detailSection(title: "Operator") {
+                                if !editIATA.isEmpty || isEditing {
+                                    EditableDetailRow(label: "IATA", value: $editIATA, isEditing: isEditing, placeholder: "e.g. UA")
+                                }
+                                if let owner = aircraft.registeredOwner, !owner.isEmpty {
+                                    DetailRow(label: "Owner", value: owner)
+                                }
+                                if let ownerType = aircraft.ownerType, !ownerType.isEmpty {
+                                    DetailRow(label: "Owner Type", value: ownerType)
+                                }
+                                if let addr1 = aircraft.registeredAddress1, !addr1.isEmpty {
+                                    DetailRow(label: "Address", value: addr1)
+                                }
+                                if let addr2 = aircraft.registeredAddress2, !addr2.isEmpty {
+                                    DetailRow(label: "Address 2", value: addr2)
+                                }
+                                if let city = aircraft.registeredCity, !city.isEmpty {
+                                    DetailRow(label: "City", value: city)
+                                }
+                                if let state = aircraft.registeredState, !state.isEmpty {
+                                    DetailRow(label: "State", value: state)
+                                }
+                                if let zip = aircraft.registeredZip, !zip.isEmpty {
+                                    DetailRow(label: "Zip", value: zip)
+                                }
                             }
-                            DetailRow(label: "City", value: aircraft.registeredCity ?? "—")
-                            DetailRow(label: "State", value: aircraft.registeredState ?? "—")
-                            DetailRow(label: "Zip", value: aircraft.registeredZip ?? "—")
                         }
 
                         // Aircraft Specifications Section (read-only from FAA data)
-                        detailSection(title: "Aircraft Specifications") {
-                            DetailRow(label: "Classification", value: AircraftLookup.classificationName(aircraft.aircraftClassification) ?? "—")
-                            DetailRow(label: "Type", value: AircraftLookup.typeName(aircraft.aircraftType) ?? "—")
-                            DetailRow(label: "Serial Number", value: aircraft.serialNumber ?? "—")
-                            DetailRow(label: "Year Manufactured", value: aircraft.yearMfg != nil ? String(aircraft.yearMfg!) : "—")
-                            DetailRow(label: "Engine Type", value: aircraft.engineType ?? "—")
-                            DetailRow(label: "Engine Count", value: aircraft.engineCount != nil ? String(aircraft.engineCount!) : "—")
-                            DetailRow(label: "Seat Count", value: aircraft.seatCount != nil ? String(aircraft.seatCount!) : "—")
-                            DetailRow(label: "Weight Class", value: aircraft.weightClass ?? "—")
+                        if hasSpecificationsData || isEditing {
+                            detailSection(title: "Aircraft Specifications") {
+                                if aircraft.aircraftClassification != nil || isEditing {
+                                    DetailRow(label: "Classification", value: AircraftLookup.classificationName(aircraft.aircraftClassification) ?? "—")
+                                }
+                                if aircraft.aircraftType != nil || isEditing {
+                                    DetailRow(label: "Type", value: AircraftLookup.typeName(aircraft.aircraftType) ?? "—")
+                                }
+                                if let serial = aircraft.serialNumber, !serial.isEmpty {
+                                    DetailRow(label: "Serial Number", value: serial)
+                                } else if isEditing {
+                                    DetailRow(label: "Serial Number", value: "—")
+                                }
+                                if aircraft.yearMfg != nil || isEditing {
+                                    DetailRow(label: "Year Manufactured", value: aircraft.yearMfg != nil ? String(aircraft.yearMfg!) : "—")
+                                }
+                                if let engineType = aircraft.engineType, !engineType.isEmpty {
+                                    DetailRow(label: "Engine Type", value: engineType)
+                                } else if isEditing {
+                                    DetailRow(label: "Engine Type", value: "—")
+                                }
+                                if aircraft.engineCount != nil || isEditing {
+                                    DetailRow(label: "Engine Count", value: aircraft.engineCount != nil ? String(aircraft.engineCount!) : "—")
+                                }
+                                if aircraft.seatCount != nil || isEditing {
+                                    DetailRow(label: "Seat Count", value: aircraft.seatCount != nil ? String(aircraft.seatCount!) : "—")
+                                }
+                                if let weightClass = aircraft.weightClass, !weightClass.isEmpty {
+                                    DetailRow(label: "Weight Class", value: weightClass)
+                                } else if isEditing {
+                                    DetailRow(label: "Weight Class", value: "—")
+                                }
+                            }
                         }
 
                         // Certification Section (read-only from FAA data)
-                        detailSection(title: "Certification") {
-                            DetailRow(label: "Country", value: aircraft.country ?? "—")
-                            DetailRow(label: "Airworthiness Date", value: aircraft.airworthinessDate != nil ? formatDate(aircraft.airworthinessDate!) : "—")
-                            DetailRow(label: "Certificate Issued", value: aircraft.certificateIssueDate != nil ? formatDate(aircraft.certificateIssueDate!) : "—")
-                            DetailRow(label: "Certificate Expires", value: aircraft.certificateExpireDate != nil ? formatDate(aircraft.certificateExpireDate!) : "—")
+                        if hasCertificationData || isEditing {
+                            detailSection(title: "Certification") {
+                                if let country = aircraft.country, !country.isEmpty {
+                                    DetailRow(label: "Country", value: country)
+                                } else if isEditing {
+                                    DetailRow(label: "Country", value: "—")
+                                }
+                                if aircraft.airworthinessDate != nil || isEditing {
+                                    DetailRow(label: "Airworthiness Date", value: aircraft.airworthinessDate != nil ? formatDate(aircraft.airworthinessDate!) : "—")
+                                }
+                                if aircraft.certificateIssueDate != nil || isEditing {
+                                    DetailRow(label: "Certificate Issued", value: aircraft.certificateIssueDate != nil ? formatDate(aircraft.certificateIssueDate!) : "—")
+                                }
+                                if aircraft.certificateExpireDate != nil || isEditing {
+                                    DetailRow(label: "Certificate Expires", value: aircraft.certificateExpireDate != nil ? formatDate(aircraft.certificateExpireDate!) : "—")
+                                }
+                            }
                         }
 
-                        // Sighting Details Section (read-only from device)
+                        // Sighting Details Section (read-only from device) - always visible
                         detailSection(title: "Sighting Details") {
                             DetailRow(label: "Date", value: formatDateTime(aircraft.captureTime))
                             DetailRow(label: "Location", value: formatCoordinates(aircraft.gpsLatitude, aircraft.gpsLongitude))
@@ -886,6 +942,36 @@ struct AircraftDetailView: View {
             }
             .padding(.horizontal, 20)
         }
+    }
+
+    // MARK: - Section Visibility
+
+    private var hasOperatorData: Bool {
+        (aircraft.iata != nil && !aircraft.iata!.isEmpty) ||
+        (aircraft.registeredOwner != nil && !aircraft.registeredOwner!.isEmpty) ||
+        (aircraft.ownerType != nil && !aircraft.ownerType!.isEmpty) ||
+        (aircraft.registeredAddress1 != nil && !aircraft.registeredAddress1!.isEmpty) ||
+        (aircraft.registeredCity != nil && !aircraft.registeredCity!.isEmpty) ||
+        (aircraft.registeredState != nil && !aircraft.registeredState!.isEmpty) ||
+        (aircraft.registeredZip != nil && !aircraft.registeredZip!.isEmpty)
+    }
+
+    private var hasSpecificationsData: Bool {
+        aircraft.aircraftClassification != nil ||
+        aircraft.aircraftType != nil ||
+        (aircraft.serialNumber != nil && !aircraft.serialNumber!.isEmpty) ||
+        aircraft.yearMfg != nil ||
+        (aircraft.engineType != nil && !aircraft.engineType!.isEmpty) ||
+        aircraft.engineCount != nil ||
+        aircraft.seatCount != nil ||
+        (aircraft.weightClass != nil && !aircraft.weightClass!.isEmpty)
+    }
+
+    private var hasCertificationData: Bool {
+        (aircraft.country != nil && !aircraft.country!.isEmpty) ||
+        aircraft.airworthinessDate != nil ||
+        aircraft.certificateIssueDate != nil ||
+        aircraft.certificateExpireDate != nil
     }
 
     // MARK: - Formatting Helpers
