@@ -217,3 +217,19 @@ final class CapturedAircraft: Identifiable {
         self.thumbsUp = thumbsUp
     }
 }
+
+// MARK: - AirlineCode Model
+/// Reference table for airline ICAO and IATA codes
+/// Data source: airlinecodes.info
+@Model
+final class AirlineCode {
+    @Attribute(.unique) var icao: String   // ICAO airline code (3-letter, primary key)
+    var iata: String?                       // IATA airline code (2-letter, may be nil)
+    var airline: String                     // Airline name
+
+    init(icao: String, iata: String? = nil, airline: String) {
+        self.icao = icao
+        self.iata = iata
+        self.airline = airline
+    }
+}
