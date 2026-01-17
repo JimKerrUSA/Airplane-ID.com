@@ -99,234 +99,240 @@ struct HomePage: View {
     var body: some View {
         OrientationAwarePage(
             portrait: {
-                // Portrait version content
-                VStack(spacing: 0) {
-                    // Top data boxes row
-                    HStack(spacing: 0) {
-                        // Left box - Dark blue with rounded top-left and bottom-left corners
-                        ZStack {
-                            Color(hex: "082A49")
-                            
-                            VStack(alignment: .trailing, spacing: 0) {
-                                Text("Total")
-                                    .font(.system(size: 26, weight: .bold, design: .default))
-                                    .foregroundStyle(.white)
-                                    .shadow(color: .black, radius: 0, x: -1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: -1, y: 1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
-                                
-                                Text("Aircraft")
-                                    .font(.system(size: 26, weight: .bold, design: .default))
-                                    .foregroundStyle(.white)
-                                    .shadow(color: .black, radius: 0, x: -1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: -1, y: 1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
-                                
-                                Text("Found")
-                                    .font(.system(size: 26, weight: .bold, design: .default))
-                                    .foregroundStyle(.white)
-                                    .shadow(color: .black, radius: 0, x: -1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: -1, y: 1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
-                            }
-                        }
-                        .frame(width: 125, height: 106)
-                        .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
-                        
-                        // Right box - White with rounded top-right and bottom-right corners
-                        ZStack {
-                            Color(hex: "FFFFFF")
-                            
-                            Text(formatNumber(appState.totalAircraftCount))
-                                .font(.system(size: 40, weight: .regular, design: .default))
-                                .foregroundStyle(Color(hex: "FBBD1C"))
-                                .shadow(color: .black, radius: 0, x: -1, y: -1)
-                                .shadow(color: .black, radius: 0, x: 1, y: -1)
-                                .shadow(color: .black, radius: 0, x: -1, y: 1)
-                                .shadow(color: .black, radius: 0, x: 1, y: 1)
-                        }
-                        .frame(width: 222, height: 106)
-                        .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
-                    }
-                    .padding(.top, 13) // 13px below top menu
-                    
-                    // Second data box row
-                    HStack(spacing: 0) {
-                        // Left box - Dark blue with rounded top-left and bottom-left corners
-                        ZStack {
-                            Color(hex: "082A49")
-                            
-                            VStack(alignment: .trailing, spacing: 0) {
-                                Text("Total")
-                                    .font(.system(size: 26, weight: .bold, design: .default))
-                                    .foregroundStyle(.white)
-                                    .shadow(color: .black, radius: 0, x: -1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: -1, y: 1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
-                                
-                                Text("Aircraft")
-                                    .font(.system(size: 26, weight: .bold, design: .default))
-                                    .foregroundStyle(.white)
-                                    .shadow(color: .black, radius: 0, x: -1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: -1, y: 1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
-                                
-                                Text("Types")
-                                    .font(.system(size: 26, weight: .bold, design: .default))
-                                    .foregroundStyle(.white)
-                                    .shadow(color: .black, radius: 0, x: -1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: -1)
-                                    .shadow(color: .black, radius: 0, x: -1, y: 1)
-                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
-                            }
-                        }
-                        .frame(width: 125, height: 106)
-                        .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
-                        
-                        // Right box - White with rounded top-right and bottom-right corners
-                        ZStack {
-                            Color(hex: "FFFFFF")
-                            
-                            Text(formatNumber(appState.totalTypes))
-                                .font(.system(size: 40, weight: .regular, design: .default))
-                                .foregroundStyle(Color(hex: "FBBD1C"))
-                                .shadow(color: .black, radius: 0, x: -1, y: -1)
-                                .shadow(color: .black, radius: 0, x: 1, y: -1)
-                                .shadow(color: .black, radius: 0, x: -1, y: 1)
-                                .shadow(color: .black, radius: 0, x: 1, y: 1)
-                        }
-                        .frame(width: 222, height: 106)
-                        .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
-                    }
-                    .padding(.top, 13) // 13px below first box
-                    
-                    // Progress box
+                // Portrait version content - responsive layout
+                GeometryReader { geo in
+                    let contentWidth = geo.size.width * 0.88 // 88% of screen width
+                    let leftBoxWidth = contentWidth * 0.36   // 36% of content width
+                    let rightBoxWidth = contentWidth * 0.64  // 64% of content width
+                    let boxHeight: CGFloat = geo.size.height * 0.12 // 12% of screen height
+
                     VStack(spacing: 0) {
-                        // Top section - Dark blue header with rounded top corners
-                        ZStack {
-                            Color(hex: "082A49")
+                        // Top data boxes row
+                        HStack(spacing: 0) {
+                            // Left box - Dark blue with rounded top-left and bottom-left corners
+                            ZStack {
+                                Color(hex: "082A49")
 
-                            Text(isLegend ? "You Are a LEGEND!" : "Progress to \(nextLevel)")
-                                .font(.system(size: 26, weight: .bold, design: .default))
-                                .foregroundStyle(.white)
+                                VStack(alignment: .trailing, spacing: 0) {
+                                    Text("Total")
+                                        .font(.system(size: 26, weight: .bold, design: .default))
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: 1)
+
+                                    Text("Aircraft")
+                                        .font(.system(size: 26, weight: .bold, design: .default))
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: 1)
+
+                                    Text("Found")
+                                        .font(.system(size: 26, weight: .bold, design: .default))
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: 1)
+                                }
+                            }
+                            .frame(width: leftBoxWidth, height: boxHeight)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
+
+                            // Right box - White with rounded top-right and bottom-right corners
+                            ZStack {
+                                Color(hex: "FFFFFF")
+
+                                Text(formatNumber(appState.totalAircraftCount))
+                                    .font(.system(size: 40, weight: .regular, design: .default))
+                                    .foregroundStyle(Color(hex: "FBBD1C"))
+                                    .shadow(color: .black, radius: 0, x: -1, y: -1)
+                                    .shadow(color: .black, radius: 0, x: 1, y: -1)
+                                    .shadow(color: .black, radius: 0, x: -1, y: 1)
+                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
+                            }
+                            .frame(width: rightBoxWidth, height: boxHeight)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
                         }
-                        .frame(width: 347, height: 39)
-                        .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
+                        .padding(.top, 13) // 13px below top menu
+                    
+                        // Second data box row
+                        HStack(spacing: 0) {
+                            // Left box - Dark blue with rounded top-left and bottom-left corners
+                            ZStack {
+                                Color(hex: "082A49")
 
-                        // Bottom section - White with blue border and rounded bottom corners
-                        ZStack {
-                            Color(hex: "FFFFFF")
+                                VStack(alignment: .trailing, spacing: 0) {
+                                    Text("Total")
+                                        .font(.system(size: 26, weight: .bold, design: .default))
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: 1)
 
-                            // Progress bar
-                            GeometryReader { geometry in
+                                    Text("Aircraft")
+                                        .font(.system(size: 26, weight: .bold, design: .default))
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: 1)
+
+                                    Text("Types")
+                                        .font(.system(size: 26, weight: .bold, design: .default))
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: -1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: -1)
+                                        .shadow(color: .black, radius: 0, x: -1, y: 1)
+                                        .shadow(color: .black, radius: 0, x: 1, y: 1)
+                                }
+                            }
+                            .frame(width: leftBoxWidth, height: boxHeight)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
+
+                            // Right box - White with rounded top-right and bottom-right corners
+                            ZStack {
+                                Color(hex: "FFFFFF")
+
+                                Text(formatNumber(appState.totalTypes))
+                                    .font(.system(size: 40, weight: .regular, design: .default))
+                                    .foregroundStyle(Color(hex: "FBBD1C"))
+                                    .shadow(color: .black, radius: 0, x: -1, y: -1)
+                                    .shadow(color: .black, radius: 0, x: 1, y: -1)
+                                    .shadow(color: .black, radius: 0, x: -1, y: 1)
+                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
+                            }
+                            .frame(width: rightBoxWidth, height: boxHeight)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))
+                        }
+                        .padding(.top, 13) // 13px below first box
+
+                        // Progress box
+                        VStack(spacing: 0) {
+                            // Top section - Dark blue header with rounded top corners
+                            ZStack {
+                                Color(hex: "082A49")
+
+                                Text(isLegend ? "You Are a LEGEND!" : "Progress to \(nextLevel)")
+                                    .font(.system(size: 26, weight: .bold, design: .default))
+                                    .foregroundStyle(.white)
+                            }
+                            .frame(width: contentWidth, height: 39)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
+
+                            // Bottom section - White with blue border and rounded bottom corners
+                            ZStack {
+                                Color(hex: "FFFFFF")
+
+                                // Progress bar - responsive width
+                                let progressBarWidth = contentWidth * 0.9
                                 ZStack(alignment: .leading) {
                                     // Background (incomplete portion)
                                     Rectangle()
                                         .fill(Color(hex: "B9C6D1"))
-                                        .frame(width: 313, height: 25)
+                                        .frame(width: progressBarWidth, height: 25)
 
                                     // Progress (completed portion) - Green for LEGEND, blue otherwise
                                     Rectangle()
                                         .fill(Color(hex: isLegend ? "28A745" : "2B81C5"))
-                                        .frame(width: 313 * levelProgress, height: 25)
+                                        .frame(width: progressBarWidth * levelProgress, height: 25)
                                 }
                                 .overlay(
                                     Rectangle()
                                         .stroke(Color(hex: "000000"), lineWidth: 1)
-                                        .frame(width: 313, height: 25)
+                                        .frame(width: progressBarWidth, height: 25)
                                 )
-                                .frame(width: 313, height: 25)
-                                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                                .frame(width: progressBarWidth, height: 25)
                             }
+                            .frame(width: contentWidth, height: 56)
+                            .overlay(
+                                RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight])
+                                    .stroke(Color(hex: "124A93"), lineWidth: 1)
+                            )
+                            .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
                         }
-                        .frame(width: 347, height: 56)
-                        .overlay(
-                            RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight])
-                                .stroke(Color(hex: "124A93"), lineWidth: 1)
-                        )
-                        .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
-                    }
-                    .padding(.top, 13) // 13px below second box
-                    
-                    // Bottom box - Recent Sightings
-                    VStack(spacing: 0) {
-                        // Top section - Dark blue header with rounded top corners
-                        ZStack {
-                            Color(hex: "082A49")
+                        .padding(.top, 13) // 13px below second box
 
-                            Text("Recent Sightings")
-                                .font(.system(size: 26, weight: .bold, design: .default))
-                                .foregroundStyle(.white)
-                        }
-                        .frame(width: 347, height: 39)
-                        .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
+                        // Bottom box - Recent Sightings
+                        VStack(spacing: 0) {
+                            // Top section - Dark blue header with rounded top corners
+                            ZStack {
+                                Color(hex: "082A49")
 
-                        // Bottom section - White with blue border and rounded bottom corners
-                        ZStack {
-                            Color(hex: "FFFFFF")
+                                Text("Recent Sightings")
+                                    .font(.system(size: 26, weight: .bold, design: .default))
+                                    .foregroundStyle(.white)
+                            }
+                            .frame(width: contentWidth, height: 39)
+                            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
 
-                            // Recent sightings list
-                            if recentSightings.isEmpty {
-                                // Empty state
-                                VStack(spacing: 8) {
-                                    Image(systemName: "airplane.departure")
-                                        .font(.system(size: 40))
-                                        .foregroundStyle(Color(hex: "F27C31").opacity(0.5))
-                                    Text("No sightings yet")
-                                        .font(.system(size: 18, weight: .regular))
-                                        .foregroundStyle(Color(hex: "082A49").opacity(0.6))
-                                }
-                            } else {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    ForEach(recentSightings) { aircraft in
-                                        HStack(alignment: .center, spacing: 10) {
-                                            // Airplane icon - centered vertically with text
-                                            Image(systemName: "airplane")
-                                                .font(.system(size: 28))
-                                                .foregroundStyle(Color(hex: "F27C31"))
+                            // Bottom section - White with blue border and rounded bottom corners
+                            ZStack {
+                                Color(hex: "FFFFFF")
 
-                                            // Manufacturer and Registration/Model stacked
-                                            VStack(alignment: .leading, spacing: 2) {
-                                                // Line 1: Manufacturer in ALL CAPS, SF Pro Regular 23pt
-                                                Text((aircraft.manufacturer ?? "Unknown").uppercased())
-                                                    .font(.system(size: 23, weight: .regular))
-                                                    .foregroundStyle(Color(hex: "082A49"))
+                                // Recent sightings list
+                                if recentSightings.isEmpty {
+                                    // Empty state
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "airplane.departure")
+                                            .font(.system(size: 40))
+                                            .foregroundStyle(Color(hex: "F27C31").opacity(0.5))
+                                        Text("No sightings yet")
+                                            .font(.system(size: 18, weight: .regular))
+                                            .foregroundStyle(Color(hex: "082A49").opacity(0.6))
+                                    }
+                                } else {
+                                    VStack(alignment: .leading, spacing: 12) {
+                                        ForEach(recentSightings) { aircraft in
+                                            HStack(alignment: .center, spacing: 10) {
+                                                // Airplane icon - centered vertically with text
+                                                Image(systemName: "airplane")
+                                                    .font(.system(size: 28))
+                                                    .foregroundStyle(Color(hex: "F27C31"))
 
-                                                // Line 2: Registration (CAPS) + Model (Title Case), SF Pro Regular 19pt
-                                                if let registration = aircraft.registration, !registration.isEmpty {
-                                                    Text("\(registration.uppercased()) \(aircraft.model ?? "")")
-                                                        .font(.system(size: 19, weight: .regular))
+                                                // Manufacturer and Registration/Model stacked
+                                                VStack(alignment: .leading, spacing: 2) {
+                                                    // Line 1: Manufacturer in ALL CAPS, SF Pro Regular 23pt
+                                                    Text((aircraft.manufacturer ?? "Unknown").uppercased())
+                                                        .font(.system(size: 23, weight: .regular))
                                                         .foregroundStyle(Color(hex: "082A49"))
-                                                } else {
-                                                    Text(aircraft.model ?? "")
-                                                        .font(.system(size: 19, weight: .regular))
-                                                        .foregroundStyle(Color(hex: "082A49"))
+
+                                                    // Line 2: Registration (CAPS) + Model (Title Case), SF Pro Regular 19pt
+                                                    if let registration = aircraft.registration, !registration.isEmpty {
+                                                        Text("\(registration.uppercased()) \(aircraft.model ?? "")")
+                                                            .font(.system(size: 19, weight: .regular))
+                                                            .foregroundStyle(Color(hex: "082A49"))
+                                                    } else {
+                                                        Text(aircraft.model ?? "")
+                                                            .font(.system(size: 19, weight: .regular))
+                                                            .foregroundStyle(Color(hex: "082A49"))
+                                                    }
                                                 }
+                                                .padding(.leading, 3) // Move text 3px right
                                             }
-                                            .padding(.leading, 3) // Move text 3px right
                                         }
                                     }
+                                    .padding(.leading, 20)
+                                    .padding(.trailing, 20)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 }
-                                .padding(.leading, 20)
-                                .padding(.trailing, 20)
-                                .frame(maxWidth: .infinity, alignment: .leading)
                             }
+                            .frame(width: contentWidth, height: geo.size.height * 0.28)
+                            .overlay(
+                                RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight])
+                                    .stroke(Color(hex: "124A93"), lineWidth: 1)
+                            )
+                            .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
                         }
-                        .frame(width: 347, height: 211)
-                        .overlay(
-                            RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight])
-                                .stroke(Color(hex: "124A93"), lineWidth: 1)
-                        )
-                        .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
+                        .padding(.top, 13) // 13px below progress box
+
+                        Spacer()
                     }
-                    .padding(.top, 13) // 13px below progress box
-                    
-                    Spacer()
+                    .frame(maxWidth: .infinity) // Center the content
                 }
             },
             leftHorizontal: {

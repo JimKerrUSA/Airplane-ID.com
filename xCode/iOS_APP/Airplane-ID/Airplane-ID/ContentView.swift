@@ -176,18 +176,21 @@ struct TopMenuView: View {
 // MARK: - Bottom Menu Component
 struct BottomMenuView: View {
     @Environment(AppState.self) private var appState
-    
+
     var body: some View {
-        ZStack(alignment: .bottom) {
-            // Navigation bar rectangle - positioned behind camera button (rendered first = back layer)
-            RoundedRectangle(cornerRadius: 50)
-                .fill(Color(hex: "082A49"))
-                .frame(width: 385, height: 65)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 50)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
-                .offset(y: -35) // Center on the circle
+        GeometryReader { geo in
+            let menuWidth = min(geo.size.width * 0.98, 385) // 98% of screen width, max 385
+
+            ZStack(alignment: .bottom) {
+                // Navigation bar rectangle - positioned behind camera button (rendered first = back layer)
+                RoundedRectangle(cornerRadius: 50)
+                    .fill(Color(hex: "082A49"))
+                    .frame(width: menuWidth, height: 65)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 50)
+                            .stroke(Color.gray, lineWidth: 1)
+                    )
+                    .offset(y: -35) // Center on the circle
             
             // Navigation icons in horizontal layout
             HStack(spacing: 0) {
@@ -227,7 +230,7 @@ struct BottomMenuView: View {
 
                     Spacer()
                 }
-                .frame(width: 142.5) // Half of 385 minus half of camera button (192.5 - 50)
+                .frame(width: (menuWidth - 100) / 2) // Half of menu minus camera button
 
                 // Center camera button
                 ZStack {
@@ -285,10 +288,13 @@ struct BottomMenuView: View {
 
                     Spacer()
                 }
-                .frame(width: 142.5) // Half of 385 minus half of camera button (192.5 - 50)
+                    .frame(width: (menuWidth - 100) / 2) // Half of menu minus camera button
+                }
+                .frame(width: menuWidth)
+                .offset(y: -17.5) // Align with the navigation bar
             }
-            .frame(width: 385)
-            .offset(y: -17.5) // Align with the navigation bar
+            .frame(maxWidth: .infinity)
+            .frame(height: 100) // Total height is camera button height
         }
         .frame(height: 100) // Total height is camera button height
         .padding(.bottom, -5) // -5px padding to lower the footer
