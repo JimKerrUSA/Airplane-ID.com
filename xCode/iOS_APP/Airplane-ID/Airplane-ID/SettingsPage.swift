@@ -45,6 +45,9 @@ struct SettingsPage: View {
             UIDevice.current.beginGeneratingDeviceOrientationNotifications()
             deviceOrientation = UIDevice.current.orientation
         }
+        .onDisappear {
+            UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        }
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
             deviceOrientation = UIDevice.current.orientation
         }
