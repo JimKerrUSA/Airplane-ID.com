@@ -1154,3 +1154,24 @@ The app must handle large datasets efficiently:
    - Darker magnifying glass icon (AppColors.darkGray)
    - Applied to: ManufacturerSearchSheet, ICAOSearchSheet, AirlineSearchSheet
    - Commits: 8f9325c, cc53140
+
+7. **Recent Sightings tappable on HomePage:**
+   - Click aircraft in Recent Sightings to open detail view
+   - Reuses `AircraftDetailView` component from HangarPage.swift
+   - Single component - edit once, updates everywhere
+   - Commit: 0cb5d6a
+
+8. **ICAO auto-populate and editable fields in AircraftDetailView:**
+   - **Model changes (Item.swift):**
+     - Added `aircraftCategoryCode: Int?` (1=Land, 2=Sea, 3=Amphibian)
+     - Changed `engineType` from `String?` to `Int?` for FAA consistency
+   - **Lookup functions (Theme.swift):**
+     - Added `categoryName()` for Land/Sea/Amphibian
+     - Added `engineTypeName()` for engine type codes (0=None, 1=Recip, 2=Turbo-prop, etc.)
+   - **ICAO selection auto-populates:**
+     - manufacturer, model, aircraftCategoryCode, aircraftType, engineType, engineCount
+   - **Editable fields:** Country, Owner, Owner Type, Address, City, State, Zip, Serial Number, Year Mfg, Engine Count, Seat Count, Weight Class, Sighting Date/Time
+   - **Read-only fields:** GPS location, Airworthiness Date, Certificate dates
+   - **New components:** `EditableIntRow`, `LookupDisplayRow`, `ICAOPickerRow`
+   - Commit: 4cb0f65
+   - **Schema change** - requires app reinstall
