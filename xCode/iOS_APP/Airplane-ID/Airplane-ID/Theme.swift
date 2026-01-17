@@ -66,3 +66,49 @@ enum AppSpacing {
     static let cornerRadius: CGFloat = 10
     static let cornerRadiusLarge: CGFloat = 15
 }
+
+// MARK: - Aircraft Lookup Tables
+/// FAA aircraft classification and type code lookups
+enum AircraftLookup {
+    // MARK: Aircraft Classification (AC-CAT in FAA data)
+    // Stored as Int (1-9), displayed in ALL CAPS
+    static let classifications: [Int: String] = [
+        1: "STANDARD",
+        2: "LIMITED",
+        3: "RESTRICTED",
+        4: "EXPERIMENTAL",
+        5: "PROVISIONAL",
+        6: "MULTIPLE",
+        7: "PRIMARY",
+        8: "SPECIAL FLIGHT PERMIT",
+        9: "LIGHT SPORT"
+    ]
+
+    /// Returns classification display name (ALL CAPS) or nil if not found
+    static func classificationName(_ code: Int?) -> String? {
+        guard let code = code else { return nil }
+        return classifications[code]
+    }
+
+    // MARK: Aircraft Type (TYPE-ACFT in FAA data)
+    // Stored as String (1-9, H, O), displayed in Title Case
+    static let types: [String: String] = [
+        "1": "Glider",
+        "2": "Balloon",
+        "3": "Blimp/Dirigible",
+        "4": "Fixed Wing Single-Engine",
+        "5": "Fixed Wing Multi-Engine",
+        "6": "Rotorcraft",
+        "7": "Weight Shift Control",
+        "8": "Powered Parachute",
+        "9": "Gyroplane",
+        "H": "Hybrid Lift",
+        "O": "Unclassified"
+    ]
+
+    /// Returns type display name (Title Case) or nil if not found
+    static func typeName(_ code: String?) -> String? {
+        guard let code = code else { return nil }
+        return types[code]
+    }
+}

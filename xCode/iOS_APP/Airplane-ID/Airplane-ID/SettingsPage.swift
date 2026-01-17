@@ -916,29 +916,34 @@ struct DeveloperToolsView: View {
                 dateFormatter.timeZone = TimeZone(identifier: "UTC")
 
                 // Parse CSV into raw data tuples on background thread
-                // (captureDate, longitude, latitude, year, month, day, icao, manufacturer, model, engineType, engineCount, registration, rating, thumbsUp)
-                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, Int?, String?, Bool?, Bool?)] = []
+                // CSV columns: icao(0), manufacturer(1), model(2), registration(3), engine_type(4),
+                //              num_engines(5), aircraft_type(6), aircraft_classification(7),
+                //              latitude(8), longitude(9), capture_date(10), capture_time(11),
+                //              year(12), month(13), day(14), near_airport(15)
+                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, Int?, String?, String?, Int?, Bool?, Bool?)] = []
 
                 for line in dataLines {
                     let columns = self.parseCSVLine(line)
-                    guard columns.count >= 13 else { continue }
+                    guard columns.count >= 15 else { continue }
 
-                    let captureDate = dateFormatter.date(from: "\(columns[8]) \(columns[9])") ?? Date()
+                    let captureDate = dateFormatter.date(from: "\(columns[10]) \(columns[11])") ?? Date()
                     parsedData.append((
                         captureDate,
-                        Double(columns[7]) ?? 0.0,  // longitude
-                        Double(columns[6]) ?? 0.0,  // latitude
-                        Int(columns[10]),           // year
-                        Int(columns[11]),           // month
-                        Int(columns[12]),           // day
-                        columns[0],                 // icao
-                        columns[1],                 // manufacturer
-                        columns[2],                 // model
-                        columns[4],                 // engineType
-                        Int(columns[5]) ?? 1,       // engineCount
-                        columns[3],                 // registration
+                        Double(columns[9]) ?? 0.0,   // longitude
+                        Double(columns[8]) ?? 0.0,   // latitude
+                        Int(columns[12]),            // year
+                        Int(columns[13]),            // month
+                        Int(columns[14]),            // day
+                        columns[0],                  // icao
+                        columns[1],                  // manufacturer
+                        columns[2],                  // model
+                        columns[4],                  // engineType
+                        Int(columns[5]) ?? 1,        // engineCount
+                        columns[3],                  // registration
+                        columns[6].isEmpty ? nil : columns[6],  // aircraftType (String)
+                        columns[7].isEmpty ? nil : Int(columns[7]),  // aircraftClassification (Int)
                         [nil, true, false].randomElement()!,  // rating
-                        [nil, true, false].randomElement()!  // thumbsUp
+                        [nil, true, false].randomElement()!   // thumbsUp
                     ))
                 }
 
@@ -962,10 +967,12 @@ struct DeveloperToolsView: View {
                                 model: data.8 ?? "",
                                 // Optional
                                 registration: data.11,
+                                aircraftClassification: data.13,  // Int? (1-9)
+                                aircraftType: data.12,            // String? (1-9, H, O)
                                 engineType: data.9,
                                 engineCount: data.10,
-                                rating: data.12,
-                                thumbsUp: data.13
+                                rating: data.14,
+                                thumbsUp: data.15
                             )
                             self.modelContext.insert(aircraft)
                         }

@@ -95,7 +95,35 @@ struct HomePage: View {
         formatter.groupingSeparator = ","
         return formatter.string(from: NSNumber(value: number)) ?? "\(number)"
     }
-    
+
+    // MARK: - Aircraft Display Formatting
+
+    /// Line 1: [IATA] MANUFACTURER MODEL
+    /// Example: "UA BOEING 747" or "PIPER PA-46-310P" (if no IATA)
+    func aircraftLine1(_ aircraft: CapturedAircraft) -> String {
+        var parts: [String] = []
+        if let iata = aircraft.iata, !iata.isEmpty {
+            parts.append(iata.uppercased())
+        }
+        parts.append(aircraft.manufacturer.uppercased())
+        parts.append(aircraft.model)
+        return parts.joined(separator: " ")
+    }
+
+    /// Line 2: [CLASSIFICATION] [Type]
+    /// Classification in CAPS, Type in Title Case
+    /// Returns nil if neither value is available
+    func aircraftLine2(_ aircraft: CapturedAircraft) -> String? {
+        var parts: [String] = []
+        if let classification = AircraftLookup.classificationName(aircraft.aircraftClassification) {
+            parts.append(classification)
+        }
+        if let type = AircraftLookup.typeName(aircraft.aircraftType) {
+            parts.append(type)
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " ")
+    }
+
     var body: some View {
         // Portrait-only layout (locked orientation)
         PortraitTemplate {
@@ -231,20 +259,16 @@ struct HomePage: View {
                                 VStack(alignment: .leading, spacing: 8) {
                                     ForEach(recentSightings) { aircraft in
                                         VStack(alignment: .leading, spacing: 1) {
-                                            // Line 1: Registration + Model (or just Model if no registration)
-                                            if let registration = aircraft.registration, !registration.isEmpty {
-                                                Text("\(registration.uppercased()) \(aircraft.model)")
-                                                    .font(.custom("Helvetica-Bold", size: 15))
-                                                    .foregroundStyle(AppColors.darkBlue)
-                                            } else {
-                                                Text(aircraft.model)
-                                                    .font(.custom("Helvetica-Bold", size: 15))
-                                                    .foregroundStyle(AppColors.darkBlue)
+                                            // Line 1: [IATA] MANUFACTURER MODEL
+                                            Text(aircraftLine1(aircraft))
+                                                .font(.custom("Helvetica-Bold", size: 15))
+                                                .foregroundStyle(AppColors.darkBlue)
+                                            // Line 2: [CLASSIFICATION] [Type] (if available)
+                                            if let line2 = aircraftLine2(aircraft) {
+                                                Text(line2)
+                                                    .font(.custom("Helvetica", size: 13))
+                                                    .foregroundStyle(AppColors.darkBlue.opacity(0.7))
                                             }
-                                            // Line 2: Manufacturer
-                                            Text(aircraft.manufacturer.uppercased())
-                                                .font(.custom("Helvetica", size: 13))
-                                                .foregroundStyle(AppColors.darkBlue.opacity(0.7))
                                         }
                                     }
                                 }
@@ -446,24 +470,44 @@ struct HomePageLandscapeContent: View {
                 .font(.system(size: 22))
                 .foregroundStyle(AppColors.orange)
             VStack(alignment: .leading, spacing: 1) {
-                // Line 1: Registration + Model (or just Model if no registration)
-                if let registration = aircraft.registration, !registration.isEmpty {
-                    Text("\(registration.uppercased()) \(aircraft.model)")
-                        .font(.system(size: 19, weight: .bold))
-                        .foregroundStyle(AppColors.darkBlue)
-                        .lineLimit(1)
-                } else {
-                    Text(aircraft.model)
-                        .font(.system(size: 19, weight: .bold))
-                        .foregroundStyle(AppColors.darkBlue)
-                        .lineLimit(1)
+                // Line 1: [IATA] MANUFACTURER MODEL
+                Text(aircraftLine1(aircraft))
+                    .font(.system(size: 19, weight: .bold))
+                    .foregroundStyle(AppColors.darkBlue)
+                    .lineLimit(1)
+                // Line 2: [CLASSIFICATION] [Type] (if available)
+                if let line2 = aircraftLine2(aircraft) {
+                    Text(line2)
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundStyle(AppColors.darkBlue.opacity(0.7))
                 }
-                // Line 2: Manufacturer
-                Text(aircraft.manufacturer.uppercased())
-                    .font(.system(size: 15, weight: .regular))
-                    .foregroundStyle(AppColors.darkBlue.opacity(0.7))
             }
         }
+    }
+
+    // MARK: - Aircraft Display Formatting
+
+    /// Line 1: [IATA] MANUFACTURER MODEL
+    private func aircraftLine1(_ aircraft: CapturedAircraft) -> String {
+        var parts: [String] = []
+        if let iata = aircraft.iata, !iata.isEmpty {
+            parts.append(iata.uppercased())
+        }
+        parts.append(aircraft.manufacturer.uppercased())
+        parts.append(aircraft.model)
+        return parts.joined(separator: " ")
+    }
+
+    /// Line 2: [CLASSIFICATION] [Type] - Classification in CAPS, Type in Title Case
+    private func aircraftLine2(_ aircraft: CapturedAircraft) -> String? {
+        var parts: [String] = []
+        if let classification = AircraftLookup.classificationName(aircraft.aircraftClassification) {
+            parts.append(classification)
+        }
+        if let type = AircraftLookup.typeName(aircraft.aircraftType) {
+            parts.append(type)
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " ")
     }
 
     // MARK: - Progress Bar

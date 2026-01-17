@@ -71,6 +71,7 @@ def load_manufacturer_reference():
                     'model': row.get('MODEL', '').strip(),
                     'type_acft': row.get('TYPE-ACFT', '').strip(),
                     'type_eng': row.get('TYPE-ENG', '').strip(),
+                    'ac_cat': row.get('AC-CAT', '').strip(),  # Aircraft classification (1-9)
                     'no_eng': row.get('NO-ENG', '').strip(),
                     'no_seats': row.get('NO-SEATS', '').strip(),
                     'ac_weight': row.get('AC-WEIGHT', '').strip(),
@@ -243,6 +244,8 @@ def generate_test_data(count=2000):
             model = mfr_data['model']
             engine_type = get_engine_type(mfr_data['type_eng'])
             num_engines = mfr_data['no_eng'] or '1'
+            aircraft_type = mfr_data['type_acft']  # 1-9, H, O
+            aircraft_cat = mfr_data['ac_cat']  # 1-9 classification
 
             # Try to find ICAO code
             icao = find_icao(manufacturer, model, icao_map, icao_by_model)
@@ -255,6 +258,8 @@ def generate_test_data(count=2000):
                     'model': model.strip(),
                     'engine_type': engine_type,
                     'num_engines': num_engines,
+                    'aircraft_type': aircraft_type,
+                    'aircraft_classification': aircraft_cat,
                     'city': city.title(),
                     'state': state,
                 })
@@ -292,6 +297,8 @@ def generate_test_data(count=2000):
             'registration': aircraft['registration'],
             'engine_type': aircraft['engine_type'],
             'num_engines': aircraft['num_engines'],
+            'aircraft_type': aircraft['aircraft_type'],
+            'aircraft_classification': aircraft['aircraft_classification'],
             'latitude': lat,
             'longitude': lon,
             'capture_date': capture_date.strftime('%Y-%m-%d'),
@@ -316,7 +323,8 @@ def generate_test_data(count=2000):
     # Write output CSV
     print(f"\nWriting to {OUTPUT_FILE}...")
     fieldnames = ['icao', 'manufacturer', 'model', 'registration', 'engine_type',
-                  'num_engines', 'latitude', 'longitude', 'capture_date', 'capture_time',
+                  'num_engines', 'aircraft_type', 'aircraft_classification',
+                  'latitude', 'longitude', 'capture_date', 'capture_time',
                   'year', 'month', 'day', 'near_airport']
 
     with open(OUTPUT_FILE, 'w', newline='', encoding='utf-8') as f:

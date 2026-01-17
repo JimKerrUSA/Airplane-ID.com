@@ -179,11 +179,29 @@ VStack { /* content */ }
 - Content views read the scale and apply `.scaleEffect()` to their root container
 - Scale factor ensures content designed for baseline device fits on smaller screens
 
-### Recent Sightings Styling
-- Airplane icon: 28pt, color #F27C31
-- Manufacturer: 23pt SF Pro Regular, ALL CAPS
-- Registration/Model: 19pt SF Pro Regular
-- Text padding: 3px left of icon
+### Recent Sightings Display Format
+**Line 1:** `[IATA] MANUFACTURER MODEL` (bold)
+- IATA optional, shown only if present (e.g., "UA")
+- Manufacturer in ALL CAPS
+- Model as stored (mixed case)
+- Example with IATA: "UA BOEING 747"
+- Example without IATA: "PIPER PA-46-310P"
+
+**Line 2:** `[CLASSIFICATION] [Type]` (regular, dimmed)
+- Classification in ALL CAPS (STANDARD, LIMITED, etc.)
+- Type in Title Case (Fixed Wing Single-Engine, Rotorcraft, etc.)
+- Either can be omitted if not in database
+- Example: "STANDARD Fixed Wing Single-Engine"
+- If no data, line 2 is hidden
+
+**Lookup Tables** (Theme.swift - AircraftLookup):
+- `classificationName(Int?)` → returns classification string or nil
+- `typeName(String?)` → returns type string or nil
+
+**Styling:**
+- Portrait: Helvetica-Bold 15pt (line 1), Helvetica 13pt (line 2)
+- Landscape: System 19pt bold (line 1), System 15pt regular (line 2)
+- Text color: AppColors.darkBlue (line 2 at 0.7 opacity)
 
 ### CapturedAircraft Model Properties (31 fields)
 
@@ -204,7 +222,9 @@ VStack { /* content */ }
 - registration (String?) - N-number if visible in photo
 
 **Optional (populated via cloud sync from FAA data):**
-- serialNumber, aircraftClassification, engineType, weightClass (String?)
+- serialNumber, engineType, weightClass (String?)
+- aircraftClassification (Int?) - FAA category 1-9 (see AircraftLookup in Theme.swift)
+- aircraftType (String?) - FAA type code 1-9, H, O (see AircraftLookup in Theme.swift)
 - yearMfg, engineCount, seatCount (Int?)
 - country, ownerType (String?)
 - airworthinessDate, certificateIssueDate, certificateExpireDate (Date?)
@@ -749,3 +769,12 @@ The app must handle large datasets efficiently:
   - Implementation: `pageDisplayTitle` computed property in AppState with dictionary lookup
   - New pages default to enum rawValue uppercased as reminder to add to dictionary
   - Commit: f472f2b
+
+- **Recent Sightings Display Redesign:**
+  - Line 1: [IATA] MANUFACTURER MODEL (removed registration number)
+  - Line 2: [CLASSIFICATION] [Type] - shows aircraft category and type
+  - Changed aircraftClassification from String? to Int? (FAA stores as 1-9)
+  - Added aircraftType field (String? for codes 1-9, H, O)
+  - Added AircraftLookup enum in Theme.swift with classification/type dictionaries
+  - Updated test data generator to include TYPE-ACFT and AC-CAT columns
+  - Updated CSV import to parse new columns
