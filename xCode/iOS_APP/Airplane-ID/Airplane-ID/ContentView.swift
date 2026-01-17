@@ -485,7 +485,6 @@ struct BottomMenuViewLandscape: View {
 // MARK: - Portrait Template
 /// Standard page template for PORTRAIT orientation with top menu, bottom menu, and consistent styling
 /// Use this as the base for all portrait pages in the app
-/// Injects ScreenScale environment for responsive layouts
 struct PortraitTemplate<Content: View>: View {
     let content: Content
 
@@ -494,34 +493,29 @@ struct PortraitTemplate<Content: View>: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            let screenScale = ScreenScale(width: geometry.size.width, height: geometry.size.height)
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Top Menu Bar - Reusable component
+                TopMenuView()
 
-            NavigationStack {
-                VStack(spacing: 0) {
-                    // Top Menu Bar - Reusable component
-                    TopMenuView()
-
-                    // Main content area
-                    ZStack(alignment: .bottom) {
-                        // Content area
-                        VStack {
-                            content
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                        // Bottom Navigation Bar - Reusable component
-                        BottomMenuView()
+                // Main content area
+                ZStack(alignment: .bottom) {
+                    // Content area
+                    VStack {
+                        content
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                    // Bottom Navigation Bar - Reusable component
+                    BottomMenuView()
                 }
-                .background(Color(hex: "1D58A4"))
-                .ignoresSafeArea()
-#if os(iOS)
-                .navigationBarHidden(true)
-#endif
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .environment(\.screenScale, screenScale)
+            .background(Color(hex: "1D58A4"))
+            .ignoresSafeArea()
+#if os(iOS)
+            .navigationBarHidden(true)
+#endif
         }
     }
 }
@@ -529,7 +523,6 @@ struct PortraitTemplate<Content: View>: View {
 // MARK: - Landscape Left Template
 /// Template for LEFT LANDSCAPE orientation (footer on LEFT side)
 /// Phone rotated with device top on RIGHT side
-/// Injects ScreenScale environment for responsive layouts (uses landscape baseline)
 struct LandscapeLeftTemplate<Content: View>: View {
     let content: Content
 
@@ -540,9 +533,6 @@ struct LandscapeLeftTemplate<Content: View>: View {
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                // For landscape, swap baseline dimensions
-                let screenScale = ScreenScale(width: geometry.size.width, height: geometry.size.height)
-
                 ZStack {
                     // Background color
                     Color(hex: "1D58A4")
@@ -566,7 +556,6 @@ struct LandscapeLeftTemplate<Content: View>: View {
                         .offset(x: 16)
                         .ignoresSafeArea()
                 }
-                .environment(\.screenScale, screenScale)
             }
 #if os(iOS)
             .navigationBarHidden(true)
@@ -578,7 +567,6 @@ struct LandscapeLeftTemplate<Content: View>: View {
 // MARK: - Landscape Right Template
 /// Template for RIGHT LANDSCAPE orientation (footer on RIGHT side)
 /// Phone rotated with device top on LEFT side
-/// Injects ScreenScale environment for responsive layouts (uses landscape baseline)
 struct LandscapeRightTemplate<Content: View>: View {
     let content: Content
 
@@ -589,9 +577,6 @@ struct LandscapeRightTemplate<Content: View>: View {
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                // For landscape, swap baseline dimensions
-                let screenScale = ScreenScale(width: geometry.size.width, height: geometry.size.height)
-
                 ZStack {
                     // Background color
                     Color(hex: "1D58A4")
@@ -615,7 +600,6 @@ struct LandscapeRightTemplate<Content: View>: View {
                         .offset(x: 104)
                         .ignoresSafeArea()
                 }
-                .environment(\.screenScale, screenScale)
             }
 #if os(iOS)
             .navigationBarHidden(true)
