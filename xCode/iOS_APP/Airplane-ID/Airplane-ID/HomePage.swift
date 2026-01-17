@@ -37,7 +37,7 @@ struct HomePage: View {
 
     // Count of unique aircraft types (unique ICAO codes)
     private var uniqueTypesCount: Int {
-        Set(allAircraft.compactMap { $0.icao }).count
+        Set(allAircraft.map { $0.icao }).count
     }
 
     // Current status based on aircraft count
@@ -233,16 +233,16 @@ struct HomePage: View {
                                         VStack(alignment: .leading, spacing: 1) {
                                             // Line 1: Registration + Model (or just Model if no registration)
                                             if let registration = aircraft.registration, !registration.isEmpty {
-                                                Text("\(registration.uppercased()) \(aircraft.model ?? "")")
+                                                Text("\(registration.uppercased()) \(aircraft.model)")
                                                     .font(.custom("Helvetica-Bold", size: 15))
                                                     .foregroundStyle(AppColors.darkBlue)
                                             } else {
-                                                Text(aircraft.model ?? "Unknown")
+                                                Text(aircraft.model)
                                                     .font(.custom("Helvetica-Bold", size: 15))
                                                     .foregroundStyle(AppColors.darkBlue)
                                             }
                                             // Line 2: Manufacturer
-                                            Text((aircraft.manufacturer ?? "Unknown").uppercased())
+                                            Text(aircraft.manufacturer.uppercased())
                                                 .font(.custom("Helvetica", size: 13))
                                                 .foregroundStyle(AppColors.darkBlue.opacity(0.7))
                                         }
@@ -448,18 +448,18 @@ struct HomePageLandscapeContent: View {
             VStack(alignment: .leading, spacing: 1) {
                 // Line 1: Registration + Model (or just Model if no registration)
                 if let registration = aircraft.registration, !registration.isEmpty {
-                    Text("\(registration.uppercased()) \(aircraft.model ?? "")")
+                    Text("\(registration.uppercased()) \(aircraft.model)")
                         .font(.system(size: 19, weight: .bold))
                         .foregroundStyle(AppColors.darkBlue)
                         .lineLimit(1)
                 } else {
-                    Text(aircraft.model ?? "Unknown")
+                    Text(aircraft.model)
                         .font(.system(size: 19, weight: .bold))
                         .foregroundStyle(AppColors.darkBlue)
                         .lineLimit(1)
                 }
                 // Line 2: Manufacturer
-                Text((aircraft.manufacturer ?? "Unknown").uppercased())
+                Text(aircraft.manufacturer.uppercased())
                     .font(.system(size: 15, weight: .regular))
                     .foregroundStyle(AppColors.darkBlue.opacity(0.7))
             }
