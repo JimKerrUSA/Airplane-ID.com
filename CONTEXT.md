@@ -186,11 +186,30 @@ VStack { /* content */ }
 - Text padding: 3px left of icon
 
 ### CapturedAircraft Model Properties
-- captureDate, gpsLongitude, gpsLatitude
-- year, month, day, timeUTC
-- icao, manufacturer, model
-- engine, numberOfEngines, registration
-- rating, thumbsUp, iPhotoReference
+
+**Capture metadata:**
+- captureDate (Date, required), captureTime (Date?)
+- gpsLongitude, gpsLatitude (Double, required)
+- year, month, day (Int?)
+- iPhotoReference (String?) - link to photo in device iPhoto library
+
+**Aircraft identification:**
+- icao, registration, serialNumber, manufacturer, model (String?)
+
+**Aircraft specifications:**
+- yearMfg (Int?), aircraftClassification, engineType, weightClass (String?)
+- engineCount, seatCount (Int?)
+
+**Registration/certification:**
+- country, ownerType (String?)
+- airworthinessDate, certificateIssueDate, certificateExpireDate (Date?)
+
+**Registered owner info:**
+- registeredOwner, registeredAddress1, registeredAddress2 (String?)
+- registeredCity, registeredState, registeredZip (String?)
+
+**User interaction (null unless user acts):**
+- rating (Int? 1-5 stars), thumbsUp (Bool? like/dislike)
 
 ### User Model Properties
 - memberNumber (primary key for server sync)
