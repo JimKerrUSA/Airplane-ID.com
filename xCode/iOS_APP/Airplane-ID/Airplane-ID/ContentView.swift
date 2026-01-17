@@ -685,17 +685,17 @@ extension View {
 }
 
 struct RectCorner: OptionSet, Sendable {
-    nonisolated(unsafe) static let topLeft = RectCorner(rawValue: 1 << 0)
-    nonisolated(unsafe) static let topRight = RectCorner(rawValue: 1 << 1)
-    nonisolated(unsafe) static let bottomLeft = RectCorner(rawValue: 1 << 2)
-    nonisolated(unsafe) static let bottomRight = RectCorner(rawValue: 1 << 3)
-    nonisolated(unsafe) static let allCorners: RectCorner = [.topLeft, .topRight, .bottomLeft, .bottomRight]
-
     let rawValue: Int
 
-    nonisolated init(rawValue: Int) {
+    init(rawValue: Int) {
         self.rawValue = rawValue
     }
+
+    static let topLeft = RectCorner(rawValue: 1 << 0)
+    static let topRight = RectCorner(rawValue: 1 << 1)
+    static let bottomLeft = RectCorner(rawValue: 1 << 2)
+    static let bottomRight = RectCorner(rawValue: 1 << 3)
+    static let allCorners: RectCorner = [.topLeft, .topRight, .bottomLeft, .bottomRight]
 }
 
 struct RoundedCorner: Shape, Sendable {
