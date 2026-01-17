@@ -98,6 +98,7 @@ final class CapturedAircraft {
 
     // Aircraft identification
     var icao: String?                  // ICAO aircraft type code
+    var iata: String?                  // IATA airline code (e.g., AA, UA) - airliners only
     var registration: String?          // N-number / tail number
     var serialNumber: String?          // Aircraft serial number
     var manufacturer: String?          // Aircraft manufacturer
@@ -140,6 +141,7 @@ final class CapturedAircraft {
         day: Int? = nil,
         iPhotoReference: String? = nil,
         icao: String? = nil,
+        iata: String? = nil,
         registration: String? = nil,
         serialNumber: String? = nil,
         manufacturer: String? = nil,
@@ -173,6 +175,7 @@ final class CapturedAircraft {
         self.day = day
         self.iPhotoReference = iPhotoReference
         self.icao = icao
+        self.iata = iata
         self.registration = registration
         self.serialNumber = serialNumber
         self.manufacturer = manufacturer
