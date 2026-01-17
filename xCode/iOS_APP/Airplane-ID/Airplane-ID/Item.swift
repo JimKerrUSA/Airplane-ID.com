@@ -110,9 +110,10 @@ final class CapturedAircraft: Identifiable {
     // Aircraft specifications (optional - populated via cloud sync from FAA data)
     var serialNumber: String?          // Aircraft serial number
     var yearMfg: Int?                  // Year manufactured
+    var aircraftCategoryCode: Int?     // FAA category: 1=Land, 2=Sea, 3=Amphibian
     var aircraftClassification: Int?   // Aircraft classification (1-9, see AircraftLookup)
     var aircraftType: String?          // Aircraft type code (1-9, H, O - see AircraftLookup)
-    var engineType: String?            // Engine type
+    var engineType: Int?               // FAA TYPE-ENG: 0=None, 1=Recip, 2=Turbo-prop, 3=Turbo-shaft, 4=Turbo-jet, 9=Unknown, 10=Electric
     var engineCount: Int?              // Number of engines
     var seatCount: Int?                // Number of seats
     var weightClass: String?           // Weight class
@@ -158,9 +159,10 @@ final class CapturedAircraft: Identifiable {
         // Optional - populated via cloud sync
         serialNumber: String? = nil,
         yearMfg: Int? = nil,
+        aircraftCategoryCode: Int? = nil,
         aircraftClassification: Int? = nil,
         aircraftType: String? = nil,
-        engineType: String? = nil,
+        engineType: Int? = nil,
         engineCount: Int? = nil,
         seatCount: Int? = nil,
         weightClass: String? = nil,
@@ -196,6 +198,7 @@ final class CapturedAircraft: Identifiable {
         self.registration = registration
         self.serialNumber = serialNumber
         self.yearMfg = yearMfg
+        self.aircraftCategoryCode = aircraftCategoryCode
         self.aircraftClassification = aircraftClassification
         self.aircraftType = aircraftType
         self.engineType = engineType

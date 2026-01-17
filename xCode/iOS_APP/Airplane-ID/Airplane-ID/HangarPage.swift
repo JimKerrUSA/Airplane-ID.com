@@ -814,11 +814,38 @@ struct AircraftDetailView: View {
     @State private var showingRatingSelector = false
 
     // Edit values (populated when entering edit mode)
+    // Aircraft Identification
     @State private var editManufacturer = ""
     @State private var editModel = ""
     @State private var editRegistration = ""
     @State private var editICAO = ""
+    @State private var editCountry = ""
+
+    // Operator
     @State private var editAirlineCode: String? = nil
+    @State private var editOwner = ""
+    @State private var editOwnerType = ""
+    @State private var editAddress1 = ""
+    @State private var editAddress2 = ""
+    @State private var editCity = ""
+    @State private var editState = ""
+    @State private var editZip = ""
+
+    // Specifications
+    @State private var editSerialNumber = ""
+    @State private var editYearMfg: Int? = nil
+    @State private var editAircraftCategoryCode: Int? = nil
+    @State private var editAircraftClassification: Int? = nil
+    @State private var editAircraftType: String? = nil
+    @State private var editEngineType: Int? = nil
+    @State private var editEngineCount: Int? = nil
+    @State private var editSeatCount: Int? = nil
+    @State private var editWeightClass = ""
+
+    // Sighting
+    @State private var editCaptureTime: Date = Date()
+
+    // Search sheets
     @State private var showingAirlineSearch = false
     @State private var showingICAOSearch = false
 
@@ -893,15 +920,13 @@ struct AircraftDetailView: View {
                             if !editRegistration.isEmpty || isEditing {
                                 EditableDetailRow(label: "Registration", value: $editRegistration, isEditing: isEditing, placeholder: "e.g. N12345")
                             }
-                            // Country (from FAA data)
-                            if let country = aircraft.country, !country.isEmpty {
-                                DetailRow(label: "Country", value: country)
-                            } else if isEditing {
-                                DetailRow(label: "Country", value: "—")
+                            // Country
+                            if !editCountry.isEmpty || isEditing {
+                                EditableDetailRow(label: "Country", value: $editCountry, isEditing: isEditing, placeholder: "e.g. US")
                             }
                         }
 
-                        // Operator Section (Airline editable, owner info from FAA)
+                        // Operator Section
                         if hasOperatorData || isEditing {
                             detailSection(title: "Operator") {
                                 if editAirlineCode != nil || isEditing {
@@ -911,74 +936,84 @@ struct AircraftDetailView: View {
                                         onTap: { showingAirlineSearch = true }
                                     )
                                 }
-                                if let owner = aircraft.registeredOwner, !owner.isEmpty {
-                                    DetailRow(label: "Owner", value: owner)
-                                } else if isEditing {
-                                    DetailRow(label: "Owner", value: "—")
+                                if !editOwner.isEmpty || isEditing {
+                                    EditableDetailRow(label: "Owner", value: $editOwner, isEditing: isEditing)
                                 }
-                                if let ownerType = aircraft.ownerType, !ownerType.isEmpty {
-                                    DetailRow(label: "Owner Type", value: ownerType)
-                                } else if isEditing {
-                                    DetailRow(label: "Owner Type", value: "—")
+                                if !editOwnerType.isEmpty || isEditing {
+                                    EditableDetailRow(label: "Owner Type", value: $editOwnerType, isEditing: isEditing)
                                 }
-                                if let addr1 = aircraft.registeredAddress1, !addr1.isEmpty {
-                                    DetailRow(label: "Address", value: addr1)
-                                } else if isEditing {
-                                    DetailRow(label: "Address", value: "—")
+                                if !editAddress1.isEmpty || isEditing {
+                                    EditableDetailRow(label: "Address", value: $editAddress1, isEditing: isEditing)
                                 }
-                                if let addr2 = aircraft.registeredAddress2, !addr2.isEmpty {
-                                    DetailRow(label: "Address 2", value: addr2)
+                                if !editAddress2.isEmpty || isEditing {
+                                    EditableDetailRow(label: "Address 2", value: $editAddress2, isEditing: isEditing)
                                 }
-                                if let city = aircraft.registeredCity, !city.isEmpty {
-                                    DetailRow(label: "City", value: city)
-                                } else if isEditing {
-                                    DetailRow(label: "City", value: "—")
+                                if !editCity.isEmpty || isEditing {
+                                    EditableDetailRow(label: "City", value: $editCity, isEditing: isEditing)
                                 }
-                                if let state = aircraft.registeredState, !state.isEmpty {
-                                    DetailRow(label: "State", value: state)
-                                } else if isEditing {
-                                    DetailRow(label: "State", value: "—")
+                                if !editState.isEmpty || isEditing {
+                                    EditableDetailRow(label: "State", value: $editState, isEditing: isEditing)
                                 }
-                                if let zip = aircraft.registeredZip, !zip.isEmpty {
-                                    DetailRow(label: "Zip", value: zip)
-                                } else if isEditing {
-                                    DetailRow(label: "Zip", value: "—")
+                                if !editZip.isEmpty || isEditing {
+                                    EditableDetailRow(label: "Zip", value: $editZip, isEditing: isEditing)
                                 }
                             }
                         }
 
-                        // Aircraft Specifications Section (read-only from FAA data)
+                        // Aircraft Specifications Section
                         if hasSpecificationsData || isEditing {
                             detailSection(title: "Aircraft Specifications") {
-                                if aircraft.aircraftClassification != nil || isEditing {
-                                    DetailRow(label: "Classification", value: AircraftLookup.classificationName(aircraft.aircraftClassification) ?? "—")
+                                // Category (Land/Sea/Amphibian) - auto-populated from ICAO
+                                if editAircraftCategoryCode != nil || isEditing {
+                                    LookupDisplayRow(
+                                        label: "Category",
+                                        displayValue: AircraftLookup.categoryName(editAircraftCategoryCode),
+                                        isEditing: isEditing
+                                    )
                                 }
-                                if aircraft.aircraftType != nil || isEditing {
-                                    DetailRow(label: "Type", value: AircraftLookup.typeName(aircraft.aircraftType) ?? "—")
+                                // Classification - editable
+                                if editAircraftClassification != nil || isEditing {
+                                    LookupDisplayRow(
+                                        label: "Classification",
+                                        displayValue: AircraftLookup.classificationName(editAircraftClassification),
+                                        isEditing: isEditing
+                                    )
                                 }
-                                if let serial = aircraft.serialNumber, !serial.isEmpty {
-                                    DetailRow(label: "Serial Number", value: serial)
-                                } else if isEditing {
-                                    DetailRow(label: "Serial Number", value: "—")
+                                // Type - auto-populated from ICAO
+                                if editAircraftType != nil || isEditing {
+                                    LookupDisplayRow(
+                                        label: "Type",
+                                        displayValue: AircraftLookup.typeName(editAircraftType),
+                                        isEditing: isEditing
+                                    )
                                 }
-                                if aircraft.yearMfg != nil || isEditing {
-                                    DetailRow(label: "Year Manufactured", value: aircraft.yearMfg != nil ? String(aircraft.yearMfg!) : "—")
+                                // Serial Number - editable
+                                if !editSerialNumber.isEmpty || isEditing {
+                                    EditableDetailRow(label: "Serial Number", value: $editSerialNumber, isEditing: isEditing)
                                 }
-                                if let engineType = aircraft.engineType, !engineType.isEmpty {
-                                    DetailRow(label: "Engine Type", value: engineType)
-                                } else if isEditing {
-                                    DetailRow(label: "Engine Type", value: "—")
+                                // Year Manufactured - editable
+                                if editYearMfg != nil || isEditing {
+                                    EditableIntRow(label: "Year Manufactured", value: $editYearMfg, isEditing: isEditing, placeholder: "e.g. 1975")
                                 }
-                                if aircraft.engineCount != nil || isEditing {
-                                    DetailRow(label: "Engine Count", value: aircraft.engineCount != nil ? String(aircraft.engineCount!) : "—")
+                                // Engine Type - auto-populated from ICAO
+                                if editEngineType != nil || isEditing {
+                                    LookupDisplayRow(
+                                        label: "Engine Type",
+                                        displayValue: AircraftLookup.engineTypeName(editEngineType),
+                                        isEditing: isEditing
+                                    )
                                 }
-                                if aircraft.seatCount != nil || isEditing {
-                                    DetailRow(label: "Seat Count", value: aircraft.seatCount != nil ? String(aircraft.seatCount!) : "—")
+                                // Engine Count - editable (also auto-populated from ICAO)
+                                if editEngineCount != nil || isEditing {
+                                    EditableIntRow(label: "Engine Count", value: $editEngineCount, isEditing: isEditing, placeholder: "e.g. 2")
                                 }
-                                if let weightClass = aircraft.weightClass, !weightClass.isEmpty {
-                                    DetailRow(label: "Weight Class", value: weightClass)
-                                } else if isEditing {
-                                    DetailRow(label: "Weight Class", value: "—")
+                                // Seat Count - editable
+                                if editSeatCount != nil || isEditing {
+                                    EditableIntRow(label: "Seat Count", value: $editSeatCount, isEditing: isEditing, placeholder: "e.g. 4")
+                                }
+                                // Weight Class - editable
+                                if !editWeightClass.isEmpty || isEditing {
+                                    EditableDetailRow(label: "Weight Class", value: $editWeightClass, isEditing: isEditing)
                                 }
                             }
                         }
@@ -998,9 +1033,22 @@ struct AircraftDetailView: View {
                             }
                         }
 
-                        // Sighting Details Section (read-only from device) - always visible
+                        // Sighting Details Section - always visible
                         detailSection(title: "Sighting Details") {
-                            DetailRow(label: "Date", value: formatDateTime(aircraft.captureTime))
+                            // Date/Time - editable
+                            if isEditing {
+                                DatePicker("Date & Time", selection: $editCaptureTime, displayedComponents: [.date, .hourAndMinute])
+                                    .font(.system(size: 15))
+                                    .foregroundStyle(.white)
+                                    .tint(.white)
+                                    .padding(.vertical, 6)
+                                    .padding(.horizontal, 16)
+                                    .background(AppColors.settingsRow)
+                                    .cornerRadius(10)
+                            } else {
+                                DetailRow(label: "Date", value: formatDateTime(aircraft.captureTime))
+                            }
+                            // Location - read-only (GPS data should not be manually edited)
                             DetailRow(label: "Location", value: formatCoordinates(aircraft.gpsLatitude, aircraft.gpsLongitude))
                         }
 
@@ -1066,6 +1114,12 @@ struct AircraftDetailView: View {
                 )
                 .presentationDetents([.large])
             }
+            .onChange(of: editICAO) { oldValue, newValue in
+                // Auto-populate fields when ICAO is changed during editing
+                if isEditing && !newValue.isEmpty && newValue != oldValue {
+                    populateFromICAO(newValue)
+                }
+            }
             .onAppear {
                 populateEditValues()
             }
@@ -1074,11 +1128,36 @@ struct AircraftDetailView: View {
 
     // MARK: - Populate Edit Values
     private func populateEditValues() {
+        // Aircraft Identification
         editManufacturer = aircraft.manufacturer
         editModel = aircraft.model
         editICAO = aircraft.icao
-        editAirlineCode = aircraft.airlineCode
         editRegistration = aircraft.registration ?? ""
+        editCountry = aircraft.country ?? ""
+
+        // Operator
+        editAirlineCode = aircraft.airlineCode
+        editOwner = aircraft.registeredOwner ?? ""
+        editOwnerType = aircraft.ownerType ?? ""
+        editAddress1 = aircraft.registeredAddress1 ?? ""
+        editAddress2 = aircraft.registeredAddress2 ?? ""
+        editCity = aircraft.registeredCity ?? ""
+        editState = aircraft.registeredState ?? ""
+        editZip = aircraft.registeredZip ?? ""
+
+        // Specifications
+        editSerialNumber = aircraft.serialNumber ?? ""
+        editYearMfg = aircraft.yearMfg
+        editAircraftCategoryCode = aircraft.aircraftCategoryCode
+        editAircraftClassification = aircraft.aircraftClassification
+        editAircraftType = aircraft.aircraftType
+        editEngineType = aircraft.engineType
+        editEngineCount = aircraft.engineCount
+        editSeatCount = aircraft.seatCount
+        editWeightClass = aircraft.weightClass ?? ""
+
+        // Sighting
+        editCaptureTime = aircraft.captureTime
     }
 
     // MARK: - Star Rating Overlay
@@ -1143,11 +1222,12 @@ struct AircraftDetailView: View {
     }
 
     private var hasSpecificationsData: Bool {
+        aircraft.aircraftCategoryCode != nil ||
         aircraft.aircraftClassification != nil ||
         aircraft.aircraftType != nil ||
         (aircraft.serialNumber != nil && !aircraft.serialNumber!.isEmpty) ||
         aircraft.yearMfg != nil ||
-        (aircraft.engineType != nil && !aircraft.engineType!.isEmpty) ||
+        aircraft.engineType != nil ||
         aircraft.engineCount != nil ||
         aircraft.seatCount != nil ||
         (aircraft.weightClass != nil && !aircraft.weightClass!.isEmpty)
@@ -1190,12 +1270,59 @@ struct AircraftDetailView: View {
         isEditing = false
     }
 
+    /// Auto-populate fields from ICAO lookup when user selects an aircraft type
+    private func populateFromICAO(_ icaoCode: String) {
+        // Query for the ICAO lookup data (we need modelContext for this)
+        let descriptor = FetchDescriptor<ICAOLookup>(
+            predicate: #Predicate { $0.icao == icaoCode }
+        )
+        guard let icaoData = try? modelContext.fetch(descriptor).first else { return }
+
+        // Update edit fields from ICAO data
+        editManufacturer = icaoData.manufacturer
+        editModel = icaoData.model
+        editAircraftCategoryCode = icaoData.aircraftCategoryCode
+        editAircraftType = icaoData.aircraftType
+        editEngineType = icaoData.engineType
+        editEngineCount = icaoData.engineCount
+    }
+
     private func saveChanges() {
+        // Aircraft Identification
         aircraft.manufacturer = editManufacturer
         aircraft.model = editModel
-        aircraft.registration = editRegistration.isEmpty ? nil : editRegistration
         aircraft.icao = editICAO
+        aircraft.registration = editRegistration.isEmpty ? nil : editRegistration
+        aircraft.country = editCountry.isEmpty ? nil : editCountry
+
+        // Operator
         aircraft.airlineCode = editAirlineCode
+        aircraft.registeredOwner = editOwner.isEmpty ? nil : editOwner
+        aircraft.ownerType = editOwnerType.isEmpty ? nil : editOwnerType
+        aircraft.registeredAddress1 = editAddress1.isEmpty ? nil : editAddress1
+        aircraft.registeredAddress2 = editAddress2.isEmpty ? nil : editAddress2
+        aircraft.registeredCity = editCity.isEmpty ? nil : editCity
+        aircraft.registeredState = editState.isEmpty ? nil : editState
+        aircraft.registeredZip = editZip.isEmpty ? nil : editZip
+
+        // Specifications
+        aircraft.serialNumber = editSerialNumber.isEmpty ? nil : editSerialNumber
+        aircraft.yearMfg = editYearMfg
+        aircraft.aircraftCategoryCode = editAircraftCategoryCode
+        aircraft.aircraftClassification = editAircraftClassification
+        aircraft.aircraftType = editAircraftType
+        aircraft.engineType = editEngineType
+        aircraft.engineCount = editEngineCount
+        aircraft.seatCount = editSeatCount
+        aircraft.weightClass = editWeightClass.isEmpty ? nil : editWeightClass
+
+        // Sighting - update date components too
+        aircraft.captureTime = editCaptureTime
+        aircraft.captureDate = Calendar.current.startOfDay(for: editCaptureTime)
+        aircraft.year = Calendar.current.component(.year, from: editCaptureTime)
+        aircraft.month = Calendar.current.component(.month, from: editCaptureTime)
+        aircraft.day = Calendar.current.component(.day, from: editCaptureTime)
+
         try? modelContext.save()
         isEditing = false
     }
@@ -1253,6 +1380,88 @@ struct EditableDetailRow: View {
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(value.isEmpty ? .white.opacity(0.3) : .white)
                     .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+}
+
+// MARK: - Editable Int Row Component
+/// Row for editing optional Int values (year, count, etc.)
+struct EditableIntRow: View {
+    let label: String
+    @Binding var value: Int?
+    let isEditing: Bool
+    var placeholder: String = ""
+
+    @State private var textValue: String = ""
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                TextField(placeholder.isEmpty ? label : placeholder, text: $textValue)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.trailing)
+                    .textFieldStyle(.plain)
+                    .keyboardType(.numberPad)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background(AppColors.darkBlue.opacity(0.3))
+                    .cornerRadius(6)
+                    .frame(maxWidth: 120)
+                    .onChange(of: textValue) { _, newValue in
+                        value = Int(newValue)
+                    }
+            } else {
+                Text(value != nil ? String(value!) : "—")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(value != nil ? .white : .white.opacity(0.3))
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+        .onAppear {
+            textValue = value != nil ? String(value!) : ""
+        }
+        .onChange(of: value) { _, newValue in
+            textValue = newValue != nil ? String(newValue!) : ""
+        }
+    }
+}
+
+// MARK: - Lookup Display Row Component
+/// Row that displays a lookup value (editable via ICAO auto-populate)
+struct LookupDisplayRow: View {
+    let label: String
+    let displayValue: String?
+    let isEditing: Bool
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            Text(displayValue ?? "—")
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(displayValue != nil ? .white : .white.opacity(0.3))
+                .multilineTextAlignment(.trailing)
+            if isEditing {
+                // Indicate this is auto-populated from ICAO
+                Image(systemName: "link")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.white.opacity(0.3))
             }
         }
         .padding(.vertical, 10)

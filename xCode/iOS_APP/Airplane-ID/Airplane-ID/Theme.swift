@@ -111,4 +111,41 @@ enum AircraftLookup {
         guard let code = code else { return nil }
         return types[code]
     }
+
+    // MARK: Aircraft Category Code (FAA aircraft category)
+    // Stored as Int (1-3), displayed in Title Case
+    static let categories: [Int: String] = [
+        1: "Land",
+        2: "Sea",
+        3: "Amphibian"
+    ]
+
+    /// Returns category display name (Title Case) or nil if not found
+    static func categoryName(_ code: Int?) -> String? {
+        guard let code = code else { return nil }
+        return categories[code]
+    }
+
+    // MARK: Engine Type (TYPE-ENG in FAA data)
+    // Stored as Int (0-10), displayed in Title Case
+    static let engineTypes: [Int: String] = [
+        0: "None",
+        1: "Reciprocating",
+        2: "Turbo-prop",
+        3: "Turbo-shaft",
+        4: "Turbo-jet",
+        5: "Turbo-fan",
+        6: "Ramjet",
+        7: "2 Cycle",
+        8: "4 Cycle",
+        9: "Unknown",
+        10: "Electric",
+        11: "Rotary"
+    ]
+
+    /// Returns engine type display name (Title Case) or nil if not found
+    static func engineTypeName(_ code: Int?) -> String? {
+        guard let code = code else { return nil }
+        return engineTypes[code]
+    }
 }
