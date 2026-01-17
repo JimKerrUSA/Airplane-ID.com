@@ -920,7 +920,7 @@ struct DeveloperToolsView: View {
                 //              num_engines(5), aircraft_type(6), aircraft_classification(7),
                 //              latitude(8), longitude(9), capture_date(10), capture_time(11),
                 //              year(12), month(13), day(14), near_airport(15)
-                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, Int?, String?, String?, Int?, Bool?, Bool?)] = []
+                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, Int?, String?, String?, Int?, Double?, Bool?)] = []
 
                 for line in dataLines {
                     let columns = self.parseCSVLine(line)
