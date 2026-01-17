@@ -841,6 +841,7 @@ struct DeveloperToolsView: View {
     private func importFromCSV(count: Int) {
         statusMessage = "Importing \(count) aircraft..."
 
+        // Parse CSV on background thread, then insert on main thread
         DispatchQueue.global(qos: .userInitiated).async {
             guard let csvURL = Bundle.main.url(forResource: "AirplaneID-TestData", withExtension: "csv") else {
                 DispatchQueue.main.async { self.statusMessage = "✗ CSV file not found" }
@@ -856,43 +857,66 @@ struct DeveloperToolsView: View {
                 }
 
                 let dataLines = Array(lines.dropFirst().prefix(count))
-                var importCount = 0
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 dateFormatter.timeZone = TimeZone(identifier: "UTC")
 
+                // Parse CSV into raw data tuples on background thread
+                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, String?, Int?, String?, Int?, Bool?)] = []
+
                 for line in dataLines {
-                    let columns = parseCSVLine(line)
+                    let columns = self.parseCSVLine(line)
                     guard columns.count >= 13 else { continue }
 
                     let captureDate = dateFormatter.date(from: "\(columns[8]) \(columns[9])") ?? Date()
-
-                    let aircraft = CapturedAircraft(
-                        captureDate: captureDate,
-                        gpsLongitude: Double(columns[7]) ?? 0.0,
-                        gpsLatitude: Double(columns[6]) ?? 0.0,
-                        year: Int(columns[10]),
-                        month: Int(columns[11]),
-                        day: Int(columns[12]),
-                        timeUTC: columns[9],
-                        icao: columns[0],
-                        manufacturer: columns[1],
-                        model: columns[2],
-                        engine: columns[4],
-                        numberOfEngines: Int(columns[5]) ?? 1,
-                        registration: columns[3],
-                        rating: Int.random(in: 0...5) == 0 ? nil : Int.random(in: 1...5),
-                        thumbsUp: [nil, true, false].randomElement()!
-                    )
-
-                    self.modelContext.insert(aircraft)
-                    importCount += 1
+                    parsedData.append((
+                        captureDate,
+                        Double(columns[7]) ?? 0.0,  // longitude
+                        Double(columns[6]) ?? 0.0,  // latitude
+                        Int(columns[10]),           // year
+                        Int(columns[11]),           // month
+                        Int(columns[12]),           // day
+                        columns[9],                 // timeUTC
+                        columns[0],                 // icao
+                        columns[1],                 // manufacturer
+                        columns[2],                 // model
+                        columns[4],                 // engine
+                        Int(columns[5]) ?? 1,       // numberOfEngines
+                        columns[3],                 // registration
+                        Int.random(in: 0...5) == 0 ? nil : Int.random(in: 1...5),  // rating
+                        [nil, true, false].randomElement()!  // thumbsUp
+                    ))
                 }
 
-                try self.modelContext.save()
+                // Insert into SwiftData on main thread (thread-safe)
                 DispatchQueue.main.async {
-                    self.statusMessage = "✓ Imported \(importCount) aircraft"
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) { self.statusMessage = nil }
+                    do {
+                        for data in parsedData {
+                            let aircraft = CapturedAircraft(
+                                captureDate: data.0,
+                                gpsLongitude: data.1,
+                                gpsLatitude: data.2,
+                                year: data.3,
+                                month: data.4,
+                                day: data.5,
+                                timeUTC: data.6,
+                                icao: data.7,
+                                manufacturer: data.8,
+                                model: data.9,
+                                engine: data.10,
+                                numberOfEngines: data.11,
+                                registration: data.12,
+                                rating: data.13,
+                                thumbsUp: data.14
+                            )
+                            self.modelContext.insert(aircraft)
+                        }
+                        try self.modelContext.save()
+                        self.statusMessage = "✓ Imported \(parsedData.count) aircraft"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { self.statusMessage = nil }
+                    } catch {
+                        self.statusMessage = "✗ Error saving: \(error.localizedDescription)"
+                    }
                 }
             } catch {
                 DispatchQueue.main.async { self.statusMessage = "✗ Error: \(error.localizedDescription)" }
