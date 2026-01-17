@@ -215,7 +215,7 @@ struct SettingsScrollContent: View {
             Spacer().frame(height: 120) // Space for footer
         }
         // Sheet presentations
-        .sheet(isPresented: $showingAccountSettings) {
+        .fullScreenCover(isPresented: $showingAccountSettings) {
             AccountSettingsView()
         }
         .sheet(isPresented: $showingAppPreferences) {
@@ -373,6 +373,7 @@ struct AccountSettingsView: View {
                         Spacer().frame(height: 40)
                     }
                 }
+                .scrollDismissesKeyboard(.never)
             }
             .navigationTitle("Account Settings")
             .navigationBarTitleDisplayMode(.inline)
@@ -415,7 +416,6 @@ struct AccountSettingsView: View {
             .onAppear {
                 loadUserData()
             }
-            .interactiveDismissDisabled(isEditing)
         }
     }
 
