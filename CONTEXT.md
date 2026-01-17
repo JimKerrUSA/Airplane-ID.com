@@ -110,12 +110,50 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 
 ## Technical Notes
 
-### Colors
-- Background blue: #1D58A4
-- Dark blue (headers): #082A49
-- Orange (icons/accent): #F27C31
-- Yellow (numbers): #FBBD1C
-- Text dark: #082A49
+### Color Management (Theme.swift)
+
+**All colors are centralized in `Theme.swift`.** Never use hardcoded hex values in view files.
+
+**To change a color globally:** Edit the hex value in Theme.swift
+```swift
+// Example: Change the gold accent color
+static let gold = Color(hex: "FBBD1C")  // Edit this hex value
+```
+
+**To add a new color:**
+1. Add a new static property to the appropriate section in `AppColors`
+2. Use semantic naming (e.g., `buttonBackground`, `errorText`)
+3. Use `AppColors.newColorName` in your views
+
+**Color Categories in Theme.swift:**
+
+| Category | Colors | Usage |
+|----------|--------|-------|
+| Primary Brand | `darkBlue`, `primaryBlue`, `gold`, `orange` | Headers, backgrounds, accents, icons |
+| Background | `settingsBackground`, `settingsRow`, `white`, `black` | Page backgrounds, row backgrounds |
+| UI Elements | `linkBlue`, `borderBlue`, `darkGray`, `mediumGray`, `lightGray` | Links, borders, icons |
+| Status | `success`, `error`, `warning`, `info` | Alerts, validation states |
+| Progress Bar | `progressFill`, `progressLegend` | Normal progress, LEGEND level |
+
+**Current Brand Colors (hex values):**
+- Primary Blue: #1D58A4 (main backgrounds)
+- Dark Blue: #082A49 (headers, labels)
+- Gold: #FBBD1C (numbers, highlights)
+- Orange: #F27C31 (icons, airplane indicators)
+- Link Blue: #639BEC (buttons, toggles)
+
+**Usage in Views:**
+```swift
+import SwiftUI
+
+struct MyView: View {
+    var body: some View {
+        Text("Hello")
+            .foregroundStyle(AppColors.gold)      // Use color constant
+            .background(AppColors.primaryBlue)    // Never use Color(hex: "...")
+    }
+}
+```
 
 ### Responsive Scaling System
 Design baseline: iPhone 14 Pro (393 x 852 points)
