@@ -111,7 +111,7 @@ struct HomePage: View {
                         VStack(spacing: 0) {
                             // Header
                             ZStack {
-                                Color(hex: "082A49")
+                                AppColors.darkBlue
                                 Text("Total Aircraft")
                                     .font(.custom("Helvetica-Bold", size: 14))
                                     .foregroundStyle(.white)
@@ -121,15 +121,15 @@ struct HomePage: View {
 
                             // Body
                             ZStack {
-                                Color(hex: "FFFFFF")
+                                AppColors.white
                                 Text(formatNumber(appState.totalAircraftCount))
                                     .font(.system(size: 32, weight: .bold))
-                                    .foregroundStyle(Color(hex: "FBBD1C"))
+                                    .foregroundStyle(AppColors.gold)
                             }
                             .frame(height: 50)
                             .overlay(
                                 RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight])
-                                    .stroke(Color(hex: "124A93"), lineWidth: 1)
+                                    .stroke(AppColors.borderBlue, lineWidth: 1)
                             )
                             .clipShape(RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight]))
                         }
@@ -139,7 +139,7 @@ struct HomePage: View {
                         VStack(spacing: 0) {
                             // Header
                             ZStack {
-                                Color(hex: "082A49")
+                                AppColors.darkBlue
                                 Text("Total Types")
                                     .font(.custom("Helvetica-Bold", size: 14))
                                     .foregroundStyle(.white)
@@ -149,15 +149,15 @@ struct HomePage: View {
 
                             // Body
                             ZStack {
-                                Color(hex: "FFFFFF")
+                                AppColors.white
                                 Text(formatNumber(appState.totalTypes))
                                     .font(.system(size: 32, weight: .bold))
-                                    .foregroundStyle(Color(hex: "FBBD1C"))
+                                    .foregroundStyle(AppColors.gold)
                             }
                             .frame(height: 50)
                             .overlay(
                                 RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight])
-                                    .stroke(Color(hex: "124A93"), lineWidth: 1)
+                                    .stroke(AppColors.borderBlue, lineWidth: 1)
                             )
                             .clipShape(RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight]))
                         }
@@ -168,7 +168,7 @@ struct HomePage: View {
                     VStack(spacing: 0) {
                         // Header
                         ZStack {
-                            Color(hex: "082A49")
+                            AppColors.darkBlue
                             Text(isLegend ? "You Are a LEGEND!" : "Progress to \(nextLevel)")
                                 .font(.custom("Helvetica-Bold", size: 14))
                                 .foregroundStyle(.white)
@@ -178,11 +178,11 @@ struct HomePage: View {
 
                         // Body with progress bar
                         ZStack {
-                            Color(hex: "FFFFFF")
+                            AppColors.white
                             let progressBarWidth = contentWidth * 0.9
                             ZStack(alignment: .leading) {
                                 Rectangle()
-                                    .fill(Color(hex: "B9C6D1"))
+                                    .fill(AppColors.lightGray)
                                     .frame(width: progressBarWidth, height: 18)
                                 Rectangle()
                                     .fill(Color(hex: isLegend ? "28A745" : "2B81C5"))
@@ -190,14 +190,14 @@ struct HomePage: View {
                             }
                             .overlay(
                                 Rectangle()
-                                    .stroke(Color(hex: "000000"), lineWidth: 1)
+                                    .stroke(AppColors.black, lineWidth: 1)
                                     .frame(width: progressBarWidth, height: 18)
                             )
                         }
                         .frame(width: contentWidth, height: 40)
                         .overlay(
                             RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight])
-                                .stroke(Color(hex: "124A93"), lineWidth: 1)
+                                .stroke(AppColors.borderBlue, lineWidth: 1)
                         )
                         .clipShape(RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight]))
                     }
@@ -206,7 +206,7 @@ struct HomePage: View {
                     VStack(spacing: 0) {
                         // Header
                         ZStack {
-                            Color(hex: "082A49")
+                            AppColors.darkBlue
                             Text("Recent Sightings")
                                 .font(.custom("Helvetica-Bold", size: 15))
                                 .foregroundStyle(.white)
@@ -216,16 +216,16 @@ struct HomePage: View {
 
                         // Body
                         ZStack {
-                            Color(hex: "FFFFFF")
+                            AppColors.white
 
                             if recentSightings.isEmpty {
                                 VStack(spacing: 4) {
                                     Image(systemName: "airplane.departure")
                                         .font(.system(size: 28))
-                                        .foregroundStyle(Color(hex: "F27C31").opacity(0.5))
+                                        .foregroundStyle(AppColors.orange.opacity(0.5))
                                     Text("No sightings yet")
                                         .font(.custom("Helvetica", size: 14))
-                                        .foregroundStyle(Color(hex: "082A49").opacity(0.6))
+                                        .foregroundStyle(AppColors.darkBlue.opacity(0.6))
                                 }
                             } else {
                                 VStack(alignment: .leading, spacing: 8) {
@@ -233,15 +233,15 @@ struct HomePage: View {
                                         VStack(alignment: .leading, spacing: 1) {
                                             Text((aircraft.manufacturer ?? "Unknown").uppercased())
                                                 .font(.custom("Helvetica", size: 15))
-                                                .foregroundStyle(Color(hex: "082A49"))
+                                                .foregroundStyle(AppColors.darkBlue)
                                             if let registration = aircraft.registration, !registration.isEmpty {
                                                 Text("\(registration.uppercased()) \(aircraft.model ?? "")")
                                                     .font(.custom("Helvetica", size: 13))
-                                                    .foregroundStyle(Color(hex: "082A49").opacity(0.7))
+                                                    .foregroundStyle(AppColors.darkBlue.opacity(0.7))
                                             } else {
                                                 Text(aircraft.model ?? "")
                                                     .font(.custom("Helvetica", size: 13))
-                                                    .foregroundStyle(Color(hex: "082A49").opacity(0.7))
+                                                    .foregroundStyle(AppColors.darkBlue.opacity(0.7))
                                             }
                                         }
                                     }
@@ -255,7 +255,7 @@ struct HomePage: View {
                         .frame(minHeight: 240)
                         .overlay(
                             RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight])
-                                .stroke(Color(hex: "124A93"), lineWidth: 1)
+                                .stroke(AppColors.borderBlue, lineWidth: 1)
                         )
                         .clipShape(RoundedCorner(radius: 8, corners: [.bottomLeft, .bottomRight]))
                     }
@@ -350,7 +350,7 @@ struct HomePageLandscapeContent: View {
     private func statBox(label1: String, label2: String, label3: String, value: String) -> some View {
         HStack(spacing: 0) {
             ZStack {
-                Color(hex: "082A49")
+                AppColors.darkBlue
                 VStack(alignment: .trailing, spacing: 0) {
                     shadowedText(label1)
                     shadowedText(label2)
@@ -361,18 +361,18 @@ struct HomePageLandscapeContent: View {
             .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
 
             ZStack {
-                Color(hex: "FFFFFF")
+                AppColors.white
                 HStack {
                     Text(value)
                         .font(.system(size: 36, weight: .regular))
-                        .foregroundStyle(Color(hex: "FBBD1C"))
+                        .foregroundStyle(AppColors.gold)
                         .shadow(color: .black, radius: 0, x: -1, y: -1)
                         .shadow(color: .black, radius: 0, x: 1, y: -1)
                         .shadow(color: .black, radius: 0, x: -1, y: 1)
                         .shadow(color: .black, radius: 0, x: 1, y: 1)
                     Image(systemName: "airplane")
                         .font(.system(size: 24))
-                        .foregroundStyle(Color(hex: "F27C31"))
+                        .foregroundStyle(AppColors.orange)
                 }
             }
             .frame(width: 170, height: 103)
@@ -395,7 +395,7 @@ struct HomePageLandscapeContent: View {
     private var latestSightingsColumn: some View {
         VStack(spacing: 0) {
             ZStack {
-                Color(hex: "082A49")
+                AppColors.darkBlue
                 Text("Latest Sightings")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(.white)
@@ -404,15 +404,15 @@ struct HomePageLandscapeContent: View {
             .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
 
             ZStack {
-                Color(hex: "FFFFFF")
+                AppColors.white
                 if latestSightings.isEmpty {
                     VStack(spacing: 4) {
                         Image(systemName: "airplane.departure")
                             .font(.system(size: 30))
-                            .foregroundStyle(Color(hex: "F27C31").opacity(0.5))
+                            .foregroundStyle(AppColors.orange.opacity(0.5))
                         Text("No sightings yet")
                             .font(.system(size: 14))
-                            .foregroundStyle(Color(hex: "082A49").opacity(0.6))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
                     }
                 } else {
                     VStack(alignment: .leading, spacing: 9) {
@@ -429,7 +429,7 @@ struct HomePageLandscapeContent: View {
             .frame(height: 185)
             .overlay(
                 RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight])
-                    .stroke(Color(hex: "124A93"), lineWidth: 1)
+                    .stroke(AppColors.borderBlue, lineWidth: 1)
             )
             .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
         }
@@ -442,20 +442,20 @@ struct HomePageLandscapeContent: View {
         HStack(alignment: .center, spacing: 6) {
             Image(systemName: "airplane")
                 .font(.system(size: 22))
-                .foregroundStyle(Color(hex: "F27C31"))
+                .foregroundStyle(AppColors.orange)
             VStack(alignment: .leading, spacing: 1) {
                 Text((aircraft.manufacturer ?? "Unknown").uppercased())
                     .font(.system(size: 19, weight: .regular))
-                    .foregroundStyle(Color(hex: "082A49"))
+                    .foregroundStyle(AppColors.darkBlue)
                 if let registration = aircraft.registration, !registration.isEmpty {
                     Text("\(registration.uppercased()) \(aircraft.model ?? "")")
                         .font(.system(size: 15, weight: .regular))
-                        .foregroundStyle(Color(hex: "082A49"))
+                        .foregroundStyle(AppColors.darkBlue)
                         .lineLimit(1)
                 } else {
                     Text(aircraft.model ?? "")
                         .font(.system(size: 15, weight: .regular))
-                        .foregroundStyle(Color(hex: "082A49"))
+                        .foregroundStyle(AppColors.darkBlue)
                         .lineLimit(1)
                 }
             }
@@ -466,7 +466,7 @@ struct HomePageLandscapeContent: View {
     private var progressBar: some View {
         HStack(spacing: 0) {
             ZStack {
-                Color(hex: "082A49")
+                AppColors.darkBlue
                 Text(isLegend ? "You Are a LEGEND!" : "Progress to \(nextLevel)")
                     .font(.system(size: 18, weight: .bold))
                     .foregroundStyle(.white)
@@ -475,13 +475,13 @@ struct HomePageLandscapeContent: View {
             .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .bottomLeft]))
 
             ZStack {
-                Color(hex: "FFFFFF")
+                AppColors.white
                 ZStack(alignment: .leading) {
-                    Rectangle().fill(Color(hex: "B9C6D1")).frame(height: 22)
+                    Rectangle().fill(AppColors.lightGray).frame(height: 22)
                     Rectangle().fill(Color(hex: isLegend ? "28A745" : "2B81C5")).frame(width: 310 * levelProgress, height: 22)
                 }
                 .frame(width: 310, height: 22)
-                .overlay(Rectangle().stroke(Color(hex: "000000"), lineWidth: 1))
+                .overlay(Rectangle().stroke(AppColors.black, lineWidth: 1))
             }
             .frame(width: 346, height: 40)
             .clipShape(RoundedCorner(radius: 10, corners: [.topRight, .bottomRight]))

@@ -114,7 +114,7 @@ struct TopMenuView: View {
 
     var body: some View {
         ZStack {
-            Color(hex: "082A49")
+            AppColors.darkBlue
 
             // Status indicator (right side) - pushed down to avoid status bar
             HStack {
@@ -163,7 +163,7 @@ struct BottomMenuView: View {
             ZStack(alignment: .bottom) {
                 // Navigation bar rectangle - positioned behind camera button
                 RoundedRectangle(cornerRadius: 40)
-                    .fill(Color(hex: "082A49"))
+                    .fill(AppColors.darkBlue)
                     .frame(width: menuWidth, height: 50)
                     .overlay(
                         RoundedRectangle(cornerRadius: 40)
@@ -181,11 +181,11 @@ struct BottomMenuView: View {
                         VStack(spacing: 2) {
                             Image(systemName: "house")
                                 .font(.system(size: 22, weight: .regular))
-                                .foregroundStyle(Color(hex: "FFFFFF"))
+                                .foregroundStyle(AppColors.white)
 
                             Text("Home")
                                 .font(.system(size: 9))
-                                .foregroundStyle(Color(hex: "FFFFFF"))
+                                .foregroundStyle(AppColors.white)
                         }
                         .onTapGesture {
                             appState.currentScreen = .home
@@ -197,11 +197,11 @@ struct BottomMenuView: View {
                         VStack(spacing: 2) {
                             Image(systemName: "airplane.departure")
                                 .font(.system(size: 22, weight: .regular))
-                                .foregroundStyle(Color(hex: "FFFFFF"))
+                                .foregroundStyle(AppColors.white)
 
                             Text("Hangar")
                                 .font(.system(size: 9))
-                                .foregroundStyle(Color(hex: "FFFFFF"))
+                                .foregroundStyle(AppColors.white)
                         }
                         .onTapGesture {
                             appState.currentScreen = .hangar
@@ -214,17 +214,17 @@ struct BottomMenuView: View {
                     // Center camera button
                     ZStack {
                         Circle()
-                            .fill(Color(hex: "FFFFFF"))
+                            .fill(AppColors.white)
                             .frame(width: cameraSize, height: cameraSize)
                             .overlay(
                                 Circle()
-                                    .stroke(Color(hex: "313131"), lineWidth: 4)
+                                    .stroke(AppColors.darkGray, lineWidth: 4)
                             )
 
                         // Capture mode icon
                         Image(systemName: appState.captureMode)
                             .font(.system(size: 24, weight: .regular))
-                            .foregroundStyle(Color(hex: "3A3A3C"))
+                            .foregroundStyle(AppColors.mediumGray)
                     }
                     .frame(width: cameraSize)
                     .onTapGesture {
@@ -239,11 +239,11 @@ struct BottomMenuView: View {
                         VStack(spacing: 2) {
                             Image(systemName: "map")
                                 .font(.system(size: 22, weight: .regular))
-                                .foregroundStyle(Color(hex: "FFFFFF"))
+                                .foregroundStyle(AppColors.white)
 
                             Text("Maps")
                                 .font(.system(size: 9))
-                                .foregroundStyle(Color(hex: "FFFFFF"))
+                                .foregroundStyle(AppColors.white)
                         }
                         .onTapGesture {
                             appState.currentScreen = .maps
@@ -255,11 +255,11 @@ struct BottomMenuView: View {
                         VStack(spacing: 2) {
                             Image(systemName: "gearshape")
                                 .font(.system(size: 22, weight: .regular))
-                                .foregroundStyle(Color(hex: "FFFFFF"))
+                                .foregroundStyle(AppColors.white)
 
                             Text("Settings")
                                 .font(.system(size: 9))
-                                .foregroundStyle(Color(hex: "FFFFFF"))
+                                .foregroundStyle(AppColors.white)
                         }
                         .onTapGesture {
                             appState.currentScreen = .settings
@@ -287,7 +287,7 @@ struct TopMenuViewLandscape: View {
 
     var body: some View {
         ZStack {
-            Color(hex: "082A49")
+            AppColors.darkBlue
                 .ignoresSafeArea(edges: .horizontal)
 
             // Status indicator (right side)
@@ -330,7 +330,7 @@ struct BottomMenuViewLandscape: View {
         ZStack(alignment: .center) {
             // Navigation bar rectangle - vertical orientation
             RoundedRectangle(cornerRadius: 50)
-                .fill(Color(hex: "082A49"))
+                .fill(AppColors.darkBlue)
                 .frame(width: 65, height: 385)
                 .overlay(
                     RoundedRectangle(cornerRadius: 50)
@@ -347,11 +347,11 @@ struct BottomMenuViewLandscape: View {
                     VStack(spacing: 4) {
                         Image(systemName: "house")
                             .font(.system(size: 35, weight: .regular))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            .foregroundStyle(AppColors.white)
 
                         Text("Home")
                             .font(.system(size: 12))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            .foregroundStyle(AppColors.white)
                     }
                     .onTapGesture {
                         appState.currentScreen = .home
@@ -363,11 +363,11 @@ struct BottomMenuViewLandscape: View {
                     VStack(spacing: 4) {
                         Image(systemName: "map")
                             .font(.system(size: 35, weight: .regular))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            .foregroundStyle(AppColors.white)
 
                         Text("Maps")
                             .font(.system(size: 12))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            .foregroundStyle(AppColors.white)
                     }
                     .onTapGesture {
                         appState.currentScreen = .maps
@@ -380,17 +380,17 @@ struct BottomMenuViewLandscape: View {
                 // Center camera button
                 ZStack {
                     Circle()
-                        .fill(Color(hex: "FFFFFF"))
+                        .fill(AppColors.white)
                         .frame(width: 100, height: 100)
                         .overlay(
                             Circle()
-                                .stroke(Color(hex: "313131"), lineWidth: 5)
+                                .stroke(AppColors.darkGray, lineWidth: 5)
                         )
 
                     // Capture mode icon
                     Image(systemName: appState.captureMode)
                         .font(.system(size: 35, weight: .regular))
-                        .foregroundStyle(Color(hex: "3A3A3C"))
+                        .foregroundStyle(AppColors.mediumGray)
                 }
                 .frame(width: 100, height: 100)
                 .onTapGesture {
@@ -405,11 +405,11 @@ struct BottomMenuViewLandscape: View {
                     VStack(spacing: 4) {
                         Image(systemName: "airplane.departure")
                             .font(.system(size: 35, weight: .regular))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            .foregroundStyle(AppColors.white)
 
                         Text("Hangar")
                             .font(.system(size: 12))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            .foregroundStyle(AppColors.white)
                     }
                     .onTapGesture {
                         appState.currentScreen = .hangar
@@ -421,11 +421,11 @@ struct BottomMenuViewLandscape: View {
                     VStack(spacing: 4) {
                         Image(systemName: "gearshape")
                             .font(.system(size: 35, weight: .regular))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            .foregroundStyle(AppColors.white)
 
                         Text("Settings")
                             .font(.system(size: 12))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            .foregroundStyle(AppColors.white)
                     }
                     .onTapGesture {
                         appState.currentScreen = .settings
@@ -470,7 +470,7 @@ struct PortraitTemplate<Content: View>: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .background(Color(hex: "1D58A4"))
+            .background(AppColors.primaryBlue)
             .ignoresSafeArea()
 #if os(iOS)
             .navigationBarHidden(true)
@@ -494,7 +494,7 @@ struct LandscapeLeftTemplate<Content: View>: View {
             GeometryReader { geometry in
                 ZStack {
                     // Background color
-                    Color(hex: "1D58A4")
+                    AppColors.primaryBlue
                         .ignoresSafeArea()
 
                     // Main layout with header
@@ -538,7 +538,7 @@ struct LandscapeRightTemplate<Content: View>: View {
             GeometryReader { geometry in
                 ZStack {
                     // Background color
-                    Color(hex: "1D58A4")
+                    AppColors.primaryBlue
                         .ignoresSafeArea()
 
                     // Main layout with header

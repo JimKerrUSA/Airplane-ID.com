@@ -65,7 +65,7 @@ struct SettingsPortraitView: View {
 
                 ZStack(alignment: .bottom) {
                     // Dark background for entire content area
-                    Color(hex: "121516")
+                    AppColors.settingsBackground
                         .ignoresSafeArea()
 
                     SettingsContent(showingAccountSettings: $showingAccountSettings)
@@ -74,7 +74,7 @@ struct SettingsPortraitView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .background(Color(hex: "121516"))
+            .background(AppColors.settingsBackground)
             .ignoresSafeArea()
 #if os(iOS)
             .navigationBarHidden(true)
@@ -92,7 +92,7 @@ struct SettingsLandscapeLeftView: View {
         NavigationStack {
             ZStack {
                 // Dark background for entire screen
-                Color(hex: "121516")
+                AppColors.settingsBackground
                     .ignoresSafeArea()
 
                 // Main layout with header
@@ -128,7 +128,7 @@ struct SettingsLandscapeRightView: View {
         NavigationStack {
             ZStack {
                 // Dark background for entire screen
-                Color(hex: "121516")
+                AppColors.settingsBackground
                     .ignoresSafeArea()
 
                 // Main layout with header
@@ -264,7 +264,7 @@ struct AccountSettingsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "121516").ignoresSafeArea()
+                AppColors.settingsBackground.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 20) {
@@ -274,7 +274,7 @@ struct AccountSettingsView: View {
                                 // Profile header
                                 Image(systemName: "person.circle.fill")
                                     .font(.system(size: 80))
-                                    .foregroundStyle(Color(hex: "639BEC"))
+                                    .foregroundStyle(AppColors.linkBlue)
 
                                 Text(isEditing ? editDisplayName : user.displayName)
                                     .font(.system(size: 28, weight: .bold))
@@ -282,10 +282,10 @@ struct AccountSettingsView: View {
 
                                 Text(user.memberLevel.uppercased())
                                     .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(Color(hex: "FBBD1C"))
+                                    .foregroundStyle(AppColors.gold)
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 4)
-                                    .background(Color(hex: "1D1E21"))
+                                    .background(AppColors.settingsRow)
                                     .cornerRadius(12)
                             }
                             .padding(.top, 20)
@@ -351,10 +351,10 @@ struct AccountSettingsView: View {
                                         Text("Change Password")
                                             .font(.system(size: 16, weight: .semibold))
                                     }
-                                    .foregroundStyle(Color(hex: "639BEC"))
+                                    .foregroundStyle(AppColors.linkBlue)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 14)
-                                    .background(Color(hex: "1D1E21"))
+                                    .background(AppColors.settingsRow)
                                     .cornerRadius(12)
                                 }
                                 .padding(.horizontal, 20)
@@ -364,7 +364,7 @@ struct AccountSettingsView: View {
                             VStack(spacing: 15) {
                                 Image(systemName: "person.crop.circle.badge.questionmark")
                                     .font(.system(size: 60))
-                                    .foregroundStyle(Color(hex: "639BEC"))
+                                    .foregroundStyle(AppColors.linkBlue)
 
                                 Text("No User Profile")
                                     .font(.system(size: 24, weight: .bold))
@@ -394,7 +394,7 @@ struct AccountSettingsView: View {
                                 Image(systemName: "chevron.left")
                                 Text("Back")
                             }
-                            .foregroundStyle(Color(hex: "639BEC"))
+                            .foregroundStyle(AppColors.linkBlue)
                         }
                     }
                 }
@@ -410,14 +410,14 @@ struct AccountSettingsView: View {
                                 Button("Save") {
                                     saveChanges()
                                 }
-                                .foregroundStyle(Color(hex: "639BEC"))
+                                .foregroundStyle(AppColors.linkBlue)
                                 .fontWeight(.semibold)
                             }
                         } else {
                             Button("Edit") {
                                 startEditing()
                             }
-                            .foregroundStyle(Color(hex: "639BEC"))
+                            .foregroundStyle(AppColors.linkBlue)
                         }
                     }
                 }
@@ -482,7 +482,7 @@ struct ProfileDetailRow: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        .background(Color(hex: "1D1E21"))
+        .background(AppColors.settingsRow)
         .cornerRadius(10)
     }
 }
@@ -506,11 +506,11 @@ struct EditableProfileRow: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        .background(Color(hex: "1D1E21"))
+        .background(AppColors.settingsRow)
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color(hex: "639BEC").opacity(0.5), lineWidth: 1)
+                .stroke(AppColors.linkBlue.opacity(0.5), lineWidth: 1)
         )
     }
 }
@@ -527,12 +527,12 @@ struct SecurityToggleRow: View {
                 .foregroundStyle(.white.opacity(0.6))
             Spacer()
             Toggle("", isOn: $isOn)
-                .tint(Color(hex: "639BEC"))
+                .tint(AppColors.linkBlue)
                 .labelsHidden()
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 16)
-        .background(Color(hex: "1D1E21"))
+        .background(AppColors.settingsRow)
         .cornerRadius(10)
     }
 }
@@ -544,12 +544,12 @@ struct AppPreferencesView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "121516").ignoresSafeArea()
+                AppColors.settingsBackground.ignoresSafeArea()
 
                 VStack(spacing: 20) {
                     Image(systemName: "square.3.layers.3d")
                         .font(.system(size: 60))
-                        .foregroundStyle(Color(hex: "639BEC"))
+                        .foregroundStyle(AppColors.linkBlue)
 
                     Text("App Preferences")
                         .font(.system(size: 24, weight: .bold))
@@ -569,7 +569,7 @@ struct AppPreferencesView: View {
                             Image(systemName: "chevron.left")
                             Text("Back")
                         }
-                        .foregroundStyle(Color(hex: "639BEC"))
+                        .foregroundStyle(AppColors.linkBlue)
                     }
                 }
             }
@@ -584,12 +584,12 @@ struct SystemSettingsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "121516").ignoresSafeArea()
+                AppColors.settingsBackground.ignoresSafeArea()
 
                 VStack(spacing: 20) {
                     Image(systemName: "switch.2")
                         .font(.system(size: 60))
-                        .foregroundStyle(Color(hex: "639BEC"))
+                        .foregroundStyle(AppColors.linkBlue)
 
                     Text("System Settings")
                         .font(.system(size: 24, weight: .bold))
@@ -609,7 +609,7 @@ struct SystemSettingsView: View {
                             Image(systemName: "chevron.left")
                             Text("Back")
                         }
-                        .foregroundStyle(Color(hex: "639BEC"))
+                        .foregroundStyle(AppColors.linkBlue)
                     }
                 }
             }
@@ -624,12 +624,12 @@ struct AboutView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "121516").ignoresSafeArea()
+                AppColors.settingsBackground.ignoresSafeArea()
 
                 VStack(spacing: 20) {
                     Image(systemName: "airplane")
                         .font(.system(size: 60))
-                        .foregroundStyle(Color(hex: "F27C31"))
+                        .foregroundStyle(AppColors.orange)
 
                     Text("Airplane-ID")
                         .font(.system(size: 28, weight: .bold))
@@ -654,7 +654,7 @@ struct AboutView: View {
                             Image(systemName: "chevron.left")
                             Text("Back")
                         }
-                        .foregroundStyle(Color(hex: "639BEC"))
+                        .foregroundStyle(AppColors.linkBlue)
                     }
                 }
             }
@@ -674,7 +674,7 @@ struct DeveloperToolsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "121516").ignoresSafeArea()
+                AppColors.settingsBackground.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 20) {
@@ -682,7 +682,7 @@ struct DeveloperToolsView: View {
                         if let message = statusMessage {
                             Text(message)
                                 .font(.system(size: 16, weight: .medium))
-                                .foregroundStyle(message.starts(with: "✓") ? Color(hex: "4CAF50") : Color(hex: "F44336"))
+                                .foregroundStyle(message.starts(with: "✓") ? AppColors.success : AppColors.error)
                                 .padding(.top, 10)
                         }
 
@@ -697,7 +697,7 @@ struct DeveloperToolsView: View {
                                 HStack(spacing: 16) {
                                     Image(systemName: "person.badge.plus")
                                         .font(.system(size: 22))
-                                        .foregroundStyle(Color(hex: "03A9F4"))
+                                        .foregroundStyle(AppColors.info)
                                         .frame(width: 36)
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text("Import User Profile")
@@ -711,7 +711,7 @@ struct DeveloperToolsView: View {
                                 }
                                 .padding(.vertical, 14)
                                 .padding(.horizontal, 14)
-                                .background(Color(hex: "1D1E21"))
+                                .background(AppColors.settingsRow)
                                 .cornerRadius(10)
                             }
                             .padding(.horizontal, 20)
@@ -750,7 +750,7 @@ struct DeveloperToolsView: View {
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Danger Zone")
                                 .font(.system(size: 20, weight: .bold))
-                                .foregroundStyle(Color(hex: "F44336"))
+                                .foregroundStyle(AppColors.error)
                                 .padding(.horizontal, 20)
 
                             VStack(spacing: 12) {
@@ -758,7 +758,7 @@ struct DeveloperToolsView: View {
                                     HStack(spacing: 16) {
                                         Image(systemName: "trash")
                                             .font(.system(size: 22))
-                                            .foregroundStyle(Color(hex: "F44336"))
+                                            .foregroundStyle(AppColors.error)
                                             .frame(width: 36)
                                         VStack(alignment: .leading, spacing: 2) {
                                             Text("Delete All Aircraft")
@@ -772,7 +772,7 @@ struct DeveloperToolsView: View {
                                     }
                                     .padding(.vertical, 14)
                                     .padding(.horizontal, 14)
-                                    .background(Color(hex: "1D1E21"))
+                                    .background(AppColors.settingsRow)
                                     .cornerRadius(10)
                                 }
 
@@ -780,7 +780,7 @@ struct DeveloperToolsView: View {
                                     HStack(spacing: 16) {
                                         Image(systemName: "arrow.counterclockwise")
                                             .font(.system(size: 22))
-                                            .foregroundStyle(Color(hex: "FF5722"))
+                                            .foregroundStyle(AppColors.warning)
                                             .frame(width: 36)
                                         VStack(alignment: .leading, spacing: 2) {
                                             Text("Reset App")
@@ -794,7 +794,7 @@ struct DeveloperToolsView: View {
                                     }
                                     .padding(.vertical, 14)
                                     .padding(.horizontal, 14)
-                                    .background(Color(hex: "1D1E21"))
+                                    .background(AppColors.settingsRow)
                                     .cornerRadius(10)
                                 }
                             }
@@ -814,7 +814,7 @@ struct DeveloperToolsView: View {
                             Image(systemName: "chevron.left")
                             Text("Back")
                         }
-                        .foregroundStyle(Color(hex: "639BEC"))
+                        .foregroundStyle(AppColors.linkBlue)
                     }
                 }
             }
@@ -1010,7 +1010,7 @@ struct DevToolButtonContent: View {
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 14)
-        .background(Color(hex: "1D1E21"))
+        .background(AppColors.settingsRow)
         .cornerRadius(10)
     }
 }
@@ -1025,7 +1025,7 @@ struct SettingsRowContent: View {
         HStack(spacing: 16) {
             Image(systemName: icon)
                 .font(.system(size: 22))
-                .foregroundStyle(Color(hex: "639BEC"))
+                .foregroundStyle(AppColors.linkBlue)
                 .frame(width: 36)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -1047,7 +1047,7 @@ struct SettingsRowContent: View {
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 14)
-        .background(Color(hex: "1D1E21"))
+        .background(AppColors.settingsRow)
         .cornerRadius(10)
     }
 }

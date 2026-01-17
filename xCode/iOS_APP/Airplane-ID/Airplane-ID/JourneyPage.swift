@@ -45,12 +45,12 @@ struct JourneyPage: View {
                     // Person icon
                     Image(systemName: "person.circle.fill")
                         .font(.system(size: 100))
-                        .foregroundStyle(Color(hex: "F27C31"))
+                        .foregroundStyle(AppColors.orange)
 
                     // Current status
                     Text(appState.status)
                         .font(.system(size: 42, weight: .bold))
-                        .foregroundStyle(Color(hex: "FBBD1C"))
+                        .foregroundStyle(AppColors.gold)
 
                     // Aircraft count
                     Text("\(appState.totalAircraftCount) Aircraft Captured")
@@ -94,11 +94,11 @@ struct JourneyPage: View {
                     VStack(spacing: 16) {
                         Image(systemName: "person.circle.fill")
                             .font(.system(size: 80))
-                            .foregroundStyle(Color(hex: "F27C31"))
+                            .foregroundStyle(AppColors.orange)
 
                         Text(appState.status)
                             .font(.system(size: 32, weight: .bold))
-                            .foregroundStyle(Color(hex: "FBBD1C"))
+                            .foregroundStyle(AppColors.gold)
 
                         Text("\(appState.totalAircraftCount) Aircraft")
                             .font(.system(size: 16))
@@ -161,11 +161,11 @@ struct JourneyPage: View {
                     VStack(spacing: 16) {
                         Image(systemName: "person.circle.fill")
                             .font(.system(size: 80))
-                            .foregroundStyle(Color(hex: "F27C31"))
+                            .foregroundStyle(AppColors.orange)
 
                         Text(appState.status)
                             .font(.system(size: 32, weight: .bold))
-                            .foregroundStyle(Color(hex: "FBBD1C"))
+                            .foregroundStyle(AppColors.gold)
 
                         Text("\(appState.totalAircraftCount) Aircraft")
                             .font(.system(size: 16))
@@ -207,11 +207,11 @@ private func previewAppState() -> AppState {
             VStack(spacing: 16) {
                 Image(systemName: "person.circle.fill")
                     .font(.system(size: 80))
-                    .foregroundStyle(Color(hex: "F27C31"))
+                    .foregroundStyle(AppColors.orange)
 
                 Text("SPOTTER")
                     .font(.system(size: 32, weight: .bold))
-                    .foregroundStyle(Color(hex: "FBBD1C"))
+                    .foregroundStyle(AppColors.gold)
 
                 Text("11 Aircraft")
                     .font(.system(size: 16))
@@ -278,11 +278,11 @@ private func previewAppState() -> AppState {
             VStack(spacing: 16) {
                 Image(systemName: "person.circle.fill")
                     .font(.system(size: 80))
-                    .foregroundStyle(Color(hex: "F27C31"))
+                    .foregroundStyle(AppColors.orange)
 
                 Text("SPOTTER")
                     .font(.system(size: 32, weight: .bold))
-                    .foregroundStyle(Color(hex: "FBBD1C"))
+                    .foregroundStyle(AppColors.gold)
 
                 Text("11 Aircraft")
                     .font(.system(size: 16))
