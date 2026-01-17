@@ -10,6 +10,7 @@ import SwiftData
 
 struct HomePage: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.screenScale) private var screenScale
 
     // Query to fetch the most recent aircraft captures
     @Query(
@@ -328,6 +329,7 @@ struct HomePage: View {
                     
                     Spacer()
                 }
+                .scaleEffect(screenScale.scale)
             },
             leftHorizontal: {
                 // Left horizontal version content (footer on LEFT side)
@@ -359,6 +361,7 @@ struct HomePage: View {
 
 struct HomePageLandscapeContent: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.screenScale) private var screenScale
     let latestSightings: [CapturedAircraft]
     let nextLevel: String
     let levelProgress: Double
@@ -394,6 +397,7 @@ struct HomePageLandscapeContent: View {
 
             if footerOnLeft { Spacer() }
         }
+        .scaleEffect(screenScale.scale)
     }
 
     // MARK: - Stat Boxes Column

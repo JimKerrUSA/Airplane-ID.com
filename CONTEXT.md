@@ -118,6 +118,30 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 - Yellow (numbers): #FBBD1C
 - Text dark: #082A49
 
+### Responsive Scaling System
+Design baseline: iPhone 14 Pro (393 x 852 points)
+
+**ScreenScale struct (ContentView.swift):**
+- Calculates scale factor based on actual screen dimensions vs baseline
+- Automatically detects orientation and uses appropriate baseline (swaps width/height for landscape)
+- Uses `min(widthScale, heightScale)` to ensure content fits without clipping
+- Injected via `@Environment(\.screenScale)` from templates
+
+**Usage:**
+```swift
+@Environment(\.screenScale) private var screenScale
+
+// In view body:
+VStack { /* content */ }
+    .scaleEffect(screenScale.scale)
+```
+
+**How it works:**
+- Templates (PortraitTemplate, LandscapeLeftTemplate, LandscapeRightTemplate) calculate ScreenScale from GeometryReader
+- ScreenScale is injected into environment via `.environment(\.screenScale, screenScale)`
+- Content views read the scale and apply `.scaleEffect()` to their root container
+- Scale factor ensures content designed for baseline device fits on smaller screens
+
 ### Recent Sightings Styling
 - Airplane icon: 28pt, color #F27C31
 - Manufacturer: 23pt SF Pro Regular, ALL CAPS
@@ -473,3 +497,17 @@ struct AppConfig {
   - Added @State deviceOrientation with .onAppear and .onReceive observers
   - Updated footer offsets to match main templates (16 for left, 104 for right)
   - Footer now correctly appears on opposite side from camera
+
+- **Fixed Swift 6 concurrency warning:**
+  - RectCorner OptionSet was causing "Main actor-isolated conformance" warnings
+  - Added `nonisolated init(rawValue:)` to satisfy OptionSet protocol requirements
+  - Prevents future build errors when Swift 6 becomes default
+
+- **Implemented responsive scaling system:**
+  - Content was being cut off on iPhone 16 Pro (fixed dimensions exceeded available space)
+  - Created ScreenScale struct with orientation-aware baseline detection
+  - Design baseline: iPhone 14 Pro (393 x 852 points portrait)
+  - ScreenScale automatically swaps baseline for landscape orientation
+  - Templates inject ScreenScale into environment via GeometryReader
+  - HomePage portrait and landscape content use `.scaleEffect(screenScale.scale)`
+  - Content now scales proportionally to fit any screen size
