@@ -231,18 +231,20 @@ struct HomePage: View {
                                 VStack(alignment: .leading, spacing: 8) {
                                     ForEach(recentSightings) { aircraft in
                                         VStack(alignment: .leading, spacing: 1) {
-                                            Text((aircraft.manufacturer ?? "Unknown").uppercased())
-                                                .font(.custom("Helvetica", size: 15))
-                                                .foregroundStyle(AppColors.darkBlue)
+                                            // Line 1: Registration + Model (or just Model if no registration)
                                             if let registration = aircraft.registration, !registration.isEmpty {
                                                 Text("\(registration.uppercased()) \(aircraft.model ?? "")")
-                                                    .font(.custom("Helvetica", size: 13))
-                                                    .foregroundStyle(AppColors.darkBlue.opacity(0.7))
+                                                    .font(.custom("Helvetica-Bold", size: 15))
+                                                    .foregroundStyle(AppColors.darkBlue)
                                             } else {
-                                                Text(aircraft.model ?? "")
-                                                    .font(.custom("Helvetica", size: 13))
-                                                    .foregroundStyle(AppColors.darkBlue.opacity(0.7))
+                                                Text(aircraft.model ?? "Unknown")
+                                                    .font(.custom("Helvetica-Bold", size: 15))
+                                                    .foregroundStyle(AppColors.darkBlue)
                                             }
+                                            // Line 2: Manufacturer
+                                            Text((aircraft.manufacturer ?? "Unknown").uppercased())
+                                                .font(.custom("Helvetica", size: 13))
+                                                .foregroundStyle(AppColors.darkBlue.opacity(0.7))
                                         }
                                     }
                                 }
@@ -444,20 +446,22 @@ struct HomePageLandscapeContent: View {
                 .font(.system(size: 22))
                 .foregroundStyle(AppColors.orange)
             VStack(alignment: .leading, spacing: 1) {
-                Text((aircraft.manufacturer ?? "Unknown").uppercased())
-                    .font(.system(size: 19, weight: .regular))
-                    .foregroundStyle(AppColors.darkBlue)
+                // Line 1: Registration + Model (or just Model if no registration)
                 if let registration = aircraft.registration, !registration.isEmpty {
                     Text("\(registration.uppercased()) \(aircraft.model ?? "")")
-                        .font(.system(size: 15, weight: .regular))
+                        .font(.system(size: 19, weight: .bold))
                         .foregroundStyle(AppColors.darkBlue)
                         .lineLimit(1)
                 } else {
-                    Text(aircraft.model ?? "")
-                        .font(.system(size: 15, weight: .regular))
+                    Text(aircraft.model ?? "Unknown")
+                        .font(.system(size: 19, weight: .bold))
                         .foregroundStyle(AppColors.darkBlue)
                         .lineLimit(1)
                 }
+                // Line 2: Manufacturer
+                Text((aircraft.manufacturer ?? "Unknown").uppercased())
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundStyle(AppColors.darkBlue.opacity(0.7))
             }
         }
     }
