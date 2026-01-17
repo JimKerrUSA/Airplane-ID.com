@@ -279,6 +279,41 @@ struct AppConfig {
 }
 ```
 
+## Database & Performance Architecture
+
+### Data Volume Requirements
+The app must handle large datasets efficiently:
+- **User's Aircraft Collection:** 2,000+ captured aircraft (displayed in Hangar)
+- **Static Reference Data (bundled on device):**
+  - Manufacturer list (93K+ records from FAA)
+  - ICAO Master list (aircraft type codes)
+- **Operations:** Fast lookups, matching captured aircraft to reference data
+
+### Optimization Strategies
+
+**For Hangar Page (2000+ items):**
+- SwiftUI `List` is already virtualized (lazy loading)
+- Use `@Query` with sort descriptors for efficient ordering
+- Consider `fetchLimit` + `fetchOffset` for true pagination if needed
+- When targeting iOS 18+, add `@Index` on frequently queried fields
+
+**For Static Reference Data:**
+- Option A: Bundle as JSON/CSV, load into memory dictionaries at startup
+- Option B: Separate SwiftData models (Manufacturer, ICAOCode) with indexes
+- Use `Dictionary<String, Model>` for O(1) lookups by code/key
+- Cache frequently accessed lookups in memory
+
+**For Aircraft Matching/Identification:**
+- In-memory dictionaries for ICAO → aircraft type lookups
+- Registration → aircraft details matching
+- Consider background pre-loading of reference data on app launch
+
+**SwiftData Best Practices:**
+- All ModelContext operations must be on main thread (or actor-isolated)
+- Use `@Query` with predicates to filter at database level
+- Batch inserts for large imports (current: 2000 at once works fine)
+- When iOS 18+: Add indexes on `captureDate`, `icao`, `registration`, `manufacturer`
+
 ## Authentication & Offline Mode (Future Implementation)
 
 ### Account Creation Flow
