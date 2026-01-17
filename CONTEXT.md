@@ -337,8 +337,8 @@ struct AppConfig {
 10. ~~Gradually migrate hardcoded colors to use AppColors constants~~ ✅ COMPLETED
 
 ### Code Quality Tasks (from code review)
-- [ ] Phase 2A: Fix UIDevice orientation listener cleanup (battery drain)
-- [ ] Phase 2B: Add database indexes to models
+- [x] Phase 2A: Fix UIDevice orientation listener cleanup (battery drain) ✅
+- [x] Phase 2B: Add database indexes to models ✅
 - [ ] Phase 2C: Fix background thread SwiftData access in CSV import
 - [ ] Phase 2D: Add pagination to HomePage query
 
@@ -615,3 +615,15 @@ struct AppConfig {
   - **Managing colors:** Edit `Theme.swift` to change colors globally
   - Color categories: Primary brand, Background, UI elements, Status, Progress bar
   - Commit: 9f78f43 "Replace hardcoded colors with AppColors constants"
+
+- **Phase 2A: Fixed UIDevice orientation listener cleanup:**
+  - Added `.onDisappear` to call `endGeneratingDeviceOrientationNotifications()`
+  - Files fixed: ContentView.swift (OrientationAwarePage), SettingsPage.swift
+  - Prevents battery drain from continuous orientation monitoring
+  - Commit: 5e1f9b7 "Fix UIDevice orientation listener cleanup"
+
+- **Phase 2B: Added database indexes for query performance:**
+  - User model: `memberNumber` (server sync), `email` (login)
+  - CapturedAircraft model: `captureDate` (sorting), `icao` (unique types), `registration` (search)
+  - SwiftData handles index additions as additive schema changes
+  - Commit: d93f6e9 "Add database indexes for query performance"
