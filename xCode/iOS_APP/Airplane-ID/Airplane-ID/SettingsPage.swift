@@ -378,12 +378,14 @@ struct AccountSettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "chevron.left")
-                            Text("Back")
+                    if !isEditing {
+                        Button(action: { dismiss() }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                Text("Back")
+                            }
+                            .foregroundStyle(Color(hex: "639BEC"))
                         }
-                        .foregroundStyle(Color(hex: "639BEC"))
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -413,6 +415,7 @@ struct AccountSettingsView: View {
             .onAppear {
                 loadUserData()
             }
+            .interactiveDismissDisabled(isEditing)
         }
     }
 
