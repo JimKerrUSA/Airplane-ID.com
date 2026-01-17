@@ -111,57 +111,31 @@ struct ContentView: View {
 // MARK: - Top Menu Component
 struct TopMenuView: View {
     @Environment(AppState.self) private var appState
-    
+
     var body: some View {
         ZStack {
             Color(hex: "082A49")
-            
-            // Search bar (centered to screen) - positioned to align bottom with EXPERT text
-            VStack {
-                Spacer()
-                
-                HStack(spacing: 0) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(Color(hex: "000000").opacity(0.5))
-                        .padding(.leading, 12)
-                    
-                    TextField("", text: Binding(
-                        get: { appState.search },
-                        set: { appState.search = $0 }
-                    ))
-                    .padding(.leading, 10)
-                    
-                    Spacer()
-                }
-                .frame(width: 240, height: 50)
-                .background(Color(hex: "FFFFFF"))
-                .cornerRadius(10)
-                .padding(.bottom, 16) // Match bottom padding with status indicator
-            }
-            .frame(maxWidth: .infinity)
-            
-            // Status indicator (top right) - independently positioned
-            HStack(alignment: .top) {
+
+            // Status indicator (right side)
+            HStack {
                 Spacer()
 
-                VStack(spacing: 4) {
+                VStack(spacing: 2) {
                     Image(systemName: "person")
-                        .font(.system(size: 45))
+                        .font(.system(size: 32))
                         .foregroundStyle(.white)
 
                     Text(appState.status)
-                        .font(.custom("Helvetica", size: 12))
+                        .font(.custom("Helvetica", size: 11))
                         .foregroundStyle(.white)
                 }
                 .onTapGesture {
                     appState.currentScreen = .journey
                 }
                 .padding(.trailing, 16)
-                .padding(.top, 52)
             }
         }
-        .frame(height: 140)
+        .frame(height: 80)
         .frame(maxWidth: .infinity)
         .overlay(
             Rectangle()
@@ -179,130 +153,131 @@ struct BottomMenuView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let menuWidth = min(geo.size.width * 0.98, 385) // 98% of screen width, max 385
+            let menuWidth = min(geo.size.width * 0.95, 340) // 95% of screen width, max 340
+            let cameraSize: CGFloat = 70 // Smaller camera button
 
             ZStack(alignment: .bottom) {
-                // Navigation bar rectangle - positioned behind camera button (rendered first = back layer)
-                RoundedRectangle(cornerRadius: 50)
+                // Navigation bar rectangle - positioned behind camera button
+                RoundedRectangle(cornerRadius: 40)
                     .fill(Color(hex: "082A49"))
-                    .frame(width: menuWidth, height: 65)
+                    .frame(width: menuWidth, height: 50)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 50)
+                        RoundedRectangle(cornerRadius: 40)
                             .stroke(Color.gray, lineWidth: 1)
                     )
-                    .offset(y: -35) // Center on the circle
-            
-            // Navigation icons in horizontal layout
-            HStack(spacing: 0) {
-                // Left side icons
-                HStack {
-                    Spacer()
-                    
-                    // Home icon
-                    VStack(spacing: 4) {
-                        Image(systemName: "house")
-                            .font(.system(size: 35, weight: .regular))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                    .offset(y: -cameraSize/2 + 10)
 
-                        Text("Home")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                // Navigation icons in horizontal layout
+                HStack(spacing: 0) {
+                    // Left side icons
+                    HStack {
+                        Spacer()
+
+                        // Home icon
+                        VStack(spacing: 2) {
+                            Image(systemName: "house")
+                                .font(.system(size: 22, weight: .regular))
+                                .foregroundStyle(Color(hex: "FFFFFF"))
+
+                            Text("Home")
+                                .font(.system(size: 9))
+                                .foregroundStyle(Color(hex: "FFFFFF"))
+                        }
+                        .onTapGesture {
+                            appState.currentScreen = .home
+                        }
+
+                        Spacer()
+
+                        // Hangar icon
+                        VStack(spacing: 2) {
+                            Image(systemName: "airplane.departure")
+                                .font(.system(size: 22, weight: .regular))
+                                .foregroundStyle(Color(hex: "FFFFFF"))
+
+                            Text("Hangar")
+                                .font(.system(size: 9))
+                                .foregroundStyle(Color(hex: "FFFFFF"))
+                        }
+                        .onTapGesture {
+                            appState.currentScreen = .hangar
+                        }
+
+                        Spacer()
                     }
+                    .frame(width: (menuWidth - cameraSize) / 2)
+
+                    // Center camera button
+                    ZStack {
+                        Circle()
+                            .fill(Color(hex: "FFFFFF"))
+                            .frame(width: cameraSize, height: cameraSize)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color(hex: "313131"), lineWidth: 4)
+                            )
+
+                        // Capture mode icon
+                        Image(systemName: appState.captureMode)
+                            .font(.system(size: 24, weight: .regular))
+                            .foregroundStyle(Color(hex: "3A3A3C"))
+                    }
+                    .frame(width: cameraSize)
                     .onTapGesture {
-                        appState.currentScreen = .home
+                        appState.currentScreen = .camera
                     }
 
-                    Spacer()
+                    // Right side icons
+                    HStack {
+                        Spacer()
 
-                    // Hangar icon
-                    VStack(spacing: 4) {
-                        Image(systemName: "airplane.departure")
-                            .font(.system(size: 35, weight: .regular))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                        // Maps icon
+                        VStack(spacing: 2) {
+                            Image(systemName: "map")
+                                .font(.system(size: 22, weight: .regular))
+                                .foregroundStyle(Color(hex: "FFFFFF"))
 
-                        Text("Hangar")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
+                            Text("Maps")
+                                .font(.system(size: 9))
+                                .foregroundStyle(Color(hex: "FFFFFF"))
+                        }
+                        .onTapGesture {
+                            appState.currentScreen = .maps
+                        }
+
+                        Spacer()
+
+                        // Settings icon
+                        VStack(spacing: 2) {
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 22, weight: .regular))
+                                .foregroundStyle(Color(hex: "FFFFFF"))
+
+                            Text("Settings")
+                                .font(.system(size: 9))
+                                .foregroundStyle(Color(hex: "FFFFFF"))
+                        }
+                        .onTapGesture {
+                            appState.currentScreen = .settings
+                        }
+
+                        Spacer()
                     }
-                    .onTapGesture {
-                        appState.currentScreen = .hangar
-                    }
-
-                    Spacer()
-                }
-                .frame(width: (menuWidth - 100) / 2) // Half of menu minus camera button
-
-                // Center camera button
-                ZStack {
-                    Circle()
-                        .fill(Color(hex: "FFFFFF"))
-                        .frame(width: 100, height: 100)
-                        .overlay(
-                            Circle()
-                                .stroke(Color(hex: "313131"), lineWidth: 5)
-                        )
-
-                    // Capture mode icon
-                    Image(systemName: appState.captureMode)
-                        .font(.system(size: 35, weight: .regular))
-                        .foregroundStyle(Color(hex: "3A3A3C"))
-                }
-                .frame(width: 100)
-                .onTapGesture {
-                    appState.currentScreen = .camera
-                }
-
-                // Right side icons
-                HStack {
-                    Spacer()
-
-                    // Maps icon
-                    VStack(spacing: 4) {
-                        Image(systemName: "map")
-                            .font(.system(size: 35, weight: .regular))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
-
-                        Text("Maps")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
-                    }
-                    .onTapGesture {
-                        appState.currentScreen = .maps
-                    }
-
-                    Spacer()
-
-                    // Settings icon
-                    VStack(spacing: 4) {
-                        Image(systemName: "gearshape")
-                            .font(.system(size: 35, weight: .regular))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
-
-                        Text("Settings")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color(hex: "FFFFFF"))
-                    }
-                    .onTapGesture {
-                        appState.currentScreen = .settings
-                    }
-
-                    Spacer()
-                }
-                    .frame(width: (menuWidth - 100) / 2) // Half of menu minus camera button
+                    .frame(width: (menuWidth - cameraSize) / 2)
                 }
                 .frame(width: menuWidth)
-                .offset(y: -17.5) // Align with the navigation bar
+                .offset(y: -10) // Align with the navigation bar
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 100) // Total height is camera button height
+            .frame(height: cameraSize + 10)
         }
-        .frame(height: 100) // Total height is camera button height
-        .padding(.bottom, -5) // -5px padding to lower the footer
+        .frame(height: 80)
+        .padding(.bottom, -5)
     }
 }
 
 // MARK: - Top Menu Component - Landscape Version
-/// Landscape version of the top menu - reduced height (83px vs 140px portrait)
+/// Landscape version of the top menu - compact without search bar
 struct TopMenuViewLandscape: View {
     @Environment(AppState.self) private var appState
 
@@ -311,52 +286,26 @@ struct TopMenuViewLandscape: View {
             Color(hex: "082A49")
                 .ignoresSafeArea(edges: .horizontal)
 
-            // Search bar (centered to screen)
-            VStack {
+            // Status indicator (right side)
+            HStack {
                 Spacer()
 
-                HStack(spacing: 0) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(Color(hex: "000000").opacity(0.5))
-                        .padding(.leading, 12)
-
-                    TextField("", text: Binding(
-                        get: { appState.search },
-                        set: { appState.search = $0 }
-                    ))
-                    .padding(.leading, 10)
-
-                    Spacer()
-                }
-                .frame(width: 240, height: 50)
-                .background(Color(hex: "FFFFFF"))
-                .cornerRadius(10)
-                .padding(.bottom, 8)
-            }
-            .frame(maxWidth: .infinity)
-
-            // Status indicator (top right)
-            HStack(alignment: .top) {
-                Spacer()
-
-                VStack(spacing: 4) {
+                VStack(spacing: 2) {
                     Image(systemName: "person")
-                        .font(.system(size: 45))
+                        .font(.system(size: 28))
                         .foregroundStyle(.white)
 
                     Text(appState.status)
-                        .font(.custom("Helvetica", size: 12))
+                        .font(.custom("Helvetica", size: 10))
                         .foregroundStyle(.white)
                 }
                 .onTapGesture {
                     appState.currentScreen = .journey
                 }
                 .padding(.trailing, 86)
-                .padding(.top, 8)
             }
         }
-        .frame(height: 83)
+        .frame(height: 50)
         .frame(maxWidth: .infinity)
         .overlay(
             Rectangle()
