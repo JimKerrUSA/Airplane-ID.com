@@ -338,7 +338,7 @@ struct AppConfig {
 
 ### Code Quality Tasks (from code review)
 - [x] Phase 2A: Fix UIDevice orientation listener cleanup (battery drain) ✅
-- [x] Phase 2B: Add database indexes to models ✅
+- [x] Phase 2B: Add database indexes to models ⚠️ (requires iOS 18+, deferred)
 - [ ] Phase 2C: Fix background thread SwiftData access in CSV import
 - [ ] Phase 2D: Add pagination to HomePage query
 
@@ -622,8 +622,8 @@ struct AppConfig {
   - Prevents battery drain from continuous orientation monitoring
   - Commit: 5e1f9b7 "Fix UIDevice orientation listener cleanup"
 
-- **Phase 2B: Added database indexes for query performance:**
-  - User model: `memberNumber` (server sync), `email` (login)
-  - CapturedAircraft model: `captureDate` (sorting), `icao` (unique types), `registration` (search)
-  - SwiftData handles index additions as additive schema changes
-  - Commit: d93f6e9 "Add database indexes for query performance"
+- **Phase 2B: Database indexes deferred (iOS 18+ requirement):**
+  - SwiftData `@Index` macro requires iOS 18+
+  - Key fields documented in comments for future implementation
+  - When targeting iOS 18+, add: `@Index([\.captureDate])`, `@Index([\.icao])`, etc.
+  - Commit: ae17a44 "Remove @Index attributes (iOS 18+ only)"
