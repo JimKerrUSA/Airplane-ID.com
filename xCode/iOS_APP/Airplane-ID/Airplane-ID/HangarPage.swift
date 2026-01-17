@@ -1603,7 +1603,7 @@ struct AirlineSearchSheet: View {
                 // Search field
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppColors.darkGray)
                     TextField("Search airlines...", text: $searchText)
                         .textFieldStyle(.plain)
                         .autocorrectionDisabled()
@@ -1615,8 +1615,12 @@ struct AirlineSearchSheet: View {
                     }
                 }
                 .padding(12)
-                .background(Color(.systemGray6))
+                .background(Color.white)
                 .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(AppColors.borderBlue, lineWidth: 1)
+                )
                 .padding()
 
                 // Results or instructions
