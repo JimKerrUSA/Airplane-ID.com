@@ -1432,8 +1432,6 @@ struct ICAOPickerRow: View {
     let isEditing: Bool
     let onTap: () -> Void
 
-    @Query private var icaoLookup: [ICAOLookup]
-
     var body: some View {
         HStack {
             Text("ICAO")
@@ -1465,11 +1463,7 @@ struct ICAOPickerRow: View {
     }
 
     private var displayText: String {
-        guard !selectedICAO.isEmpty,
-              let aircraft = icaoLookup.first(where: { $0.icao == selectedICAO }) else {
-            return selectedICAO.isEmpty ? "—" : selectedICAO
-        }
-        return "\(selectedICAO) - \(aircraft.manufacturer) \(aircraft.model)"
+        selectedICAO.isEmpty ? "—" : selectedICAO
     }
 }
 
