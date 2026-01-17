@@ -916,7 +916,8 @@ struct DeveloperToolsView: View {
                 dateFormatter.timeZone = TimeZone(identifier: "UTC")
 
                 // Parse CSV into raw data tuples on background thread
-                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, String?, Int?, String?, Int?, Bool?)] = []
+                // (captureDate, longitude, latitude, year, month, day, icao, manufacturer, model, engineType, engineCount, registration, rating, thumbsUp)
+                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, String?, Int?, String?, Int?, Bool?)] = []
 
                 for line in dataLines {
                     let columns = self.parseCSVLine(line)
@@ -930,12 +931,11 @@ struct DeveloperToolsView: View {
                         Int(columns[10]),           // year
                         Int(columns[11]),           // month
                         Int(columns[12]),           // day
-                        columns[9],                 // timeUTC
                         columns[0],                 // icao
                         columns[1],                 // manufacturer
                         columns[2],                 // model
-                        columns[4],                 // engine
-                        Int(columns[5]) ?? 1,       // numberOfEngines
+                        columns[4],                 // engineType
+                        Int(columns[5]) ?? 1,       // engineCount
                         columns[3],                 // registration
                         Int.random(in: 0...5) == 0 ? nil : Int.random(in: 1...5),  // rating
                         [nil, true, false].randomElement()!  // thumbsUp
@@ -950,18 +950,18 @@ struct DeveloperToolsView: View {
                                 captureDate: data.0,
                                 gpsLongitude: data.1,
                                 gpsLatitude: data.2,
+                                captureTime: data.0,  // Same as captureDate (includes time)
                                 year: data.3,
                                 month: data.4,
                                 day: data.5,
-                                timeUTC: data.6,
-                                icao: data.7,
-                                manufacturer: data.8,
-                                model: data.9,
-                                engine: data.10,
-                                numberOfEngines: data.11,
-                                registration: data.12,
-                                rating: data.13,
-                                thumbsUp: data.14
+                                icao: data.6,
+                                manufacturer: data.7,
+                                model: data.8,
+                                engineType: data.9,
+                                engineCount: data.10,
+                                registration: data.11,
+                                rating: data.12,
+                                thumbsUp: data.13
                             )
                             self.modelContext.insert(aircraft)
                         }

@@ -86,55 +86,114 @@ final class User {
 /// Key fields: captureDate (sorting), icao (unique types), registration (search)
 @Model
 final class CapturedAircraft {
-    var captureDate: Date
-    var gpsLongitude: Double
-    var gpsLatitude: Double
-    var year: Int?
-    var month: Int?
-    var day: Int?
-    var timeUTC: String?
-    var iPhotoReference: String?
-    var icao: String?
-    var manufacturer: String?
-    var model: String?
-    var engine: String?
-    var numberOfEngines: Int?
-    var registration: String?
-    var rating: Int?
-    var thumbsUp: Bool?
+    // Capture metadata
+    var captureDate: Date              // When captured (required)
+    var captureTime: Date?             // Full timestamp of photo upload/capture
+    var gpsLongitude: Double           // Capture location (required)
+    var gpsLatitude: Double            // Capture location (required)
+    var year: Int?                     // Capture year
+    var month: Int?                    // Capture month
+    var day: Int?                      // Capture day
+    var iPhotoReference: String?       // Link to photo in device iPhoto library
+
+    // Aircraft identification
+    var icao: String?                  // ICAO aircraft type code
+    var registration: String?          // N-number / tail number
+    var serialNumber: String?          // Aircraft serial number
+    var manufacturer: String?          // Aircraft manufacturer
+    var model: String?                 // Aircraft model name
+
+    // Aircraft specifications
+    var yearMfg: Int?                  // Year manufactured
+    var aircraftClassification: String? // Aircraft classification
+    var engineType: String?            // Engine type
+    var engineCount: Int?              // Number of engines
+    var seatCount: Int?                // Number of seats
+    var weightClass: String?           // Weight class
+
+    // Registration/certification details
+    var country: String?               // Country of registration
+    var airworthinessDate: Date?       // Airworthiness certificate date
+    var certificateIssueDate: Date?    // Certificate issue date
+    var certificateExpireDate: Date?   // Certificate expiration date
+    var ownerType: String?             // Owner type (individual, corporate, etc.)
+
+    // Registered owner info
+    var registeredOwner: String?       // Owner name
+    var registeredAddress1: String?    // Owner address line 1
+    var registeredAddress2: String?    // Owner address line 2
+    var registeredCity: String?        // Owner city
+    var registeredState: String?       // Owner state
+    var registeredZip: String?         // Owner zip code
+
+    // User interaction (null unless user acts)
+    var rating: Int?                   // User rating 1-5 stars
+    var thumbsUp: Bool?                // User like (true) / dislike (false)
 
     init(
         captureDate: Date,
         gpsLongitude: Double,
         gpsLatitude: Double,
+        captureTime: Date? = nil,
         year: Int? = nil,
         month: Int? = nil,
         day: Int? = nil,
-        timeUTC: String? = nil,
         iPhotoReference: String? = nil,
         icao: String? = nil,
+        registration: String? = nil,
+        serialNumber: String? = nil,
         manufacturer: String? = nil,
         model: String? = nil,
-        engine: String? = nil,
-        numberOfEngines: Int? = nil,
-        registration: String? = nil,
+        yearMfg: Int? = nil,
+        aircraftClassification: String? = nil,
+        engineType: String? = nil,
+        engineCount: Int? = nil,
+        seatCount: Int? = nil,
+        weightClass: String? = nil,
+        country: String? = nil,
+        airworthinessDate: Date? = nil,
+        certificateIssueDate: Date? = nil,
+        certificateExpireDate: Date? = nil,
+        ownerType: String? = nil,
+        registeredOwner: String? = nil,
+        registeredAddress1: String? = nil,
+        registeredAddress2: String? = nil,
+        registeredCity: String? = nil,
+        registeredState: String? = nil,
+        registeredZip: String? = nil,
         rating: Int? = nil,
         thumbsUp: Bool? = nil
     ) {
         self.captureDate = captureDate
         self.gpsLongitude = gpsLongitude
         self.gpsLatitude = gpsLatitude
+        self.captureTime = captureTime
         self.year = year
         self.month = month
         self.day = day
-        self.timeUTC = timeUTC
         self.iPhotoReference = iPhotoReference
         self.icao = icao
+        self.registration = registration
+        self.serialNumber = serialNumber
         self.manufacturer = manufacturer
         self.model = model
-        self.engine = engine
-        self.numberOfEngines = numberOfEngines
-        self.registration = registration
+        self.yearMfg = yearMfg
+        self.aircraftClassification = aircraftClassification
+        self.engineType = engineType
+        self.engineCount = engineCount
+        self.seatCount = seatCount
+        self.weightClass = weightClass
+        self.country = country
+        self.airworthinessDate = airworthinessDate
+        self.certificateIssueDate = certificateIssueDate
+        self.certificateExpireDate = certificateExpireDate
+        self.ownerType = ownerType
+        self.registeredOwner = registeredOwner
+        self.registeredAddress1 = registeredAddress1
+        self.registeredAddress2 = registeredAddress2
+        self.registeredCity = registeredCity
+        self.registeredState = registeredState
+        self.registeredZip = registeredZip
         self.rating = rating
         self.thumbsUp = thumbsUp
     }
