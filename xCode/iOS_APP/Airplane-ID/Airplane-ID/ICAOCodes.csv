@@ -1,0 +1,2758 @@
+icao,manufacturer,model,icaoClass,aircraftCategoryCode,aircraftType,engineCount,engineType
+A002,IRKUT,A-002,Gyrocopter,1,9,1,1
+A1,DOUGLAS,A-1 Skyraider,LandPlane,1,4,1,1
+A10,FAIRCHILD,A-10 Thunderbolt 2,LandPlane,1,5,2,4
+A109,AGUSTAWESTLAND,AW-109 Grand,Helicopter,1,6,2,3
+A119,AGUSTAWESTLAND,AW-119 Koala,Helicopter,1,6,1,3
+A122,AEROTEC,A-122 Uirapuru,LandPlane,1,4,1,1
+A124,ANTONOV,An-124 Ruslan,LandPlane,1,5,4,4
+A129,AGUSTAWESTLAND,AW-129,Helicopter,1,6,2,3
+A139,AGUSTAWESTLAND,AW-139,Helicopter,1,6,2,3
+A140,ANTONOV,An-140,LandPlane,1,5,2,3
+A148,ANTONOV,An-148,LandPlane,1,5,2,4
+A149,AGUSTAWESTLAND,AW-149,Helicopter,1,6,2,3
+A158,ANTONOV,An-158,LandPlane,1,5,2,4
+A16,AVIADESIGN,A-16 Sport Falcon,LandPlane,1,4,1,1
+A169,AGUSTAWESTLAND,AW-169,Helicopter,1,6,2,3
+A178,ANTONOV,An-178,LandPlane,1,5,2,4
+A189,AGUSTAWESTLAND,AW-189,Helicopter,1,6,2,3
+A19,AEROPRACT,A-19,LandPlane,1,4,1,1
+A19N,AIRBUS,A-319NEO,LandPlane,1,5,2,4
+A20,DOUGLAS,A-20 Havoc,LandPlane,1,5,2,1
+A205,OSKBES-MAI,MAI-205,Gyrocopter,1,9,1,1
+A20J,SCHLEICHER,ASW-20J,LandPlane,1,4,1,4
+A20N,AIRBUS,A-320NEO,LandPlane,1,5,2,4
+A21,AEROPRACT,A-21 Solo,LandPlane,1,4,1,1
+A210,AQUILA,A-210,LandPlane,1,4,1,1
+A211,ALFA-M,A-211,LandPlane,1,4,1,1
+A21N,AIRBUS,A-321NEO,LandPlane,1,5,2,4
+A22,SADLER,A-22 Piranha,LandPlane,1,4,1,1
+A223,OSKBES-MAI,MAI-223 Kityonok,LandPlane,1,4,1,1
+A225,ANTONOV,An-225 Mriya,LandPlane,1,5,6,4
+A23,AEROPRACT,A-23 Dragon,LandPlane,1,4,1,1
+A249,LEONARDO,AW-249 Fenice,Helicopter,1,6,2,3
+A25,AEROPRACT,A-25 Breeze,Amphibian,3,4,1,1
+A251,AVIATIK-ALYANS,Aleks-251,Amphibian,3,5,2,1
+A27,AEROPRACT,A-27,LandPlane,1,4,1,1
+A270,AERO,Ae-270 Propjet,LandPlane,1,4,1,3
+A29,AVANTAGE,A-29,LandPlane,1,4,1,1
+A2RT,KAZAN,Ansat 2RT,Helicopter,1,6,2,3
+A3,DOUGLAS,A-3 Skywarrior,LandPlane,1,5,2,4
+A306,AIRBUS,A-300B4-600,LandPlane,1,5,2,4
+A30B,AIRBUS,A-300B4-200,LandPlane,1,5,2,4
+A31,AVANTAGE,A-31 Spectrum,LandPlane,1,4,1,1
+A310,AIRBUS,A-310,LandPlane,1,5,2,4
+A318,AIRBUS,A-318,LandPlane,1,5,2,4
+A319,AIRBUS,A-319,LandPlane,1,5,2,4
+A320,AIRBUS,A-320,LandPlane,1,5,2,4
+A321,AIRBUS,A-321,LandPlane,1,5,2,4
+A32E,SCHLEICHER,ASG-32EL,LandPlane,1,4,1,10
+A32P,SCHLEICHER,ASG-32Mi,LandPlane,1,4,1,1
+A33,AEROPRACT,A-33,LandPlane,1,4,1,1
+A332,AIRBUS,A-330-200,LandPlane,1,5,2,4
+A333,AIRBUS,A-330-300,LandPlane,1,5,2,4
+A337,AIRBUS,A-330-700 Beluga XL,LandPlane,1,5,2,4
+A338,AIRBUS,A-330-800,LandPlane,1,5,2,4
+A339,AIRBUS,A-330-900,LandPlane,1,5,2,4
+A33E,SCHLEICHER,AS-33Me,LandPlane,1,4,1,10
+A33P,SCHLEICHER,AS-33Es,LandPlane,1,4,1,1
+A342,AIRBUS,A-340-200,LandPlane,1,5,4,4
+A343,AIRBUS,A-340-300,LandPlane,1,5,4,4
+A345,AIRBUS,A-340-500,LandPlane,1,5,4,4
+A346,AIRBUS,A-340-600,LandPlane,1,5,4,4
+A34E,SCHLEICHER,AS-34Me,LandPlane,1,4,1,10
+A35,AVANTAGE,A-35 Scanner,LandPlane,1,4,1,1
+A359,AIRBUS,A-350-900 XWB,LandPlane,1,5,2,4
+A35K,AIRBUS,A-350-1000 XWB,LandPlane,1,5,2,4
+A37,CESSNA,A-37 Dragonfly,LandPlane,1,5,2,4
+A388,AIRBUS,A-380-800,LandPlane,1,5,4,4
+A3ST,AIRBUS,A-300ST Beluga,LandPlane,1,5,2,4
+A4,MCDONNELL DOUGLAS,A-4 Skyhawk,LandPlane,1,4,1,4
+A400,AIRBUS,A-400M Atlas,LandPlane,1,5,4,3
+A411,OSKBES-MAI,MAI-411,LandPlane,1,5,2,1
+A5,ICON,A-5,Amphibian,3,4,1,1
+A50,BERIEV,A-50,LandPlane,1,5,4,4
+A500,ADAM,A-500 CarbonAero,LandPlane,1,5,2,1
+A504,AVRO,504 Replica,LandPlane,1,4,1,1
+A6,GRUMMAN,A-6 Intruder,LandPlane,1,5,2,4
+A600,ROTORWAY,A-600 Talon,Helicopter,1,6,1,1
+A660,AYRES,S-2R-T660 Turbo Thrush,LandPlane,1,4,1,3
+A700,ADAM,A-700 AdamJet,LandPlane,1,5,2,4
+A743,ANTONOV,An-74-300,LandPlane,1,5,2,4
+A748,HAWKER SIDDELEY,HS-748 Andover,LandPlane,1,5,2,3
+A890,OSKBES-MAI,MAI-890,LandPlane,1,4,1,1
+A9,AAMSA,A-9 Quail,LandPlane,1,4,1,1
+A900,OSKBES-MAI,MAI-900 Acrobat,LandPlane,1,4,1,1
+A910,OSKBES-MAI,MAI-910 Interfly,LandPlane,1,4,1,1
+AA1,GRUMMAN AMERICAN,AA-1 Lynx,LandPlane,1,4,1,1
+AA37,AEROPRACT,A-37,LandPlane,1,5,2,1
+AA5,GRUMMAN AMERICAN,AA-5 Traveler,LandPlane,1,4,1,1
+AAT3,AERO,AT-3,LandPlane,1,4,1,1
+AAT4,AERO,AT-4,LandPlane,1,4,1,1
+AB11,AERO BOERO,AB-115,LandPlane,1,4,1,1
+AB15,AERO BOERO,AB-150,LandPlane,1,4,1,1
+AB18,AERO BOERO,AB-180,LandPlane,1,4,1,1
+AB95,AERO BOERO,AB-95,LandPlane,1,4,1,1
+AC10,FD-COMPOSITES,ArrowCopter,Gyrocopter,1,9,1,1
+AC11,NORTH AMERICAN ROCKWELL,Commander 112,LandPlane,1,4,1,1
+AC31,AVICOPTER,AC-311,Helicopter,1,6,1,3
+AC33,AVICOPTER,AC-313,Helicopter,1,6,3,3
+AC4,LIGHT WING,AC-4,LandPlane,1,4,1,1
+AC50,AERO (1),Commander 500,LandPlane,1,5,2,1
+AC52,AERO (1),Commander 520,LandPlane,1,5,2,1
+AC56,AERO (1),Commander 560,LandPlane,1,5,2,1
+AC5A,NANJING,AC-500 Aircar,LandPlane,1,4,1,1
+AC5M,AVIASTROITEL,AC-5M,LandPlane,1,4,1,1
+AC68,AERO (1),Commander 680 Super,LandPlane,1,5,2,1
+AC6L,NORTH AMERICAN ROCKWELL,Commander 685,LandPlane,1,5,2,1
+AC72,AERO (1),Commander 720 Alti Cruiser,LandPlane,1,5,2,1
+AC80,AERO COMMANDER,680T Turbo Commander,LandPlane,1,5,2,3
+AC90,NORTH AMERICAN ROCKWELL,Turbo Commander 690,LandPlane,1,5,2,3
+AC95,ROCKWELL,Jetprop Commander 1000,LandPlane,1,5,2,3
+ACAM,LOCKWOOD,Air Cam,LandPlane,1,5,2,1
+ACAR,AUSTER,J-5 Autocar,LandPlane,1,4,1,1
+ACED,POWELL,P-70 Acey Deucy,LandPlane,1,4,1,1
+ACJR,SPENCER,Air Car Junior,Amphibian,3,4,1,1
+ACPL,OPTION AIR,Acapella,LandPlane,1,4,1,1
+ACR2,ACRO SPORT,Acro-Sport 2,LandPlane,1,4,1,1
+ACRD,AVIA (3),Accord,LandPlane,1,5,2,1
+ACRO,ACRO SPORT,Acro-Sport 1,LandPlane,1,4,1,1
+ACSR,VICTA,Aircruiser,LandPlane,1,4,1,1
+AD20,BEIJING KEYUAN,AD-200,LandPlane,1,4,1,1
+ADEL,USTINOV,Adel,Gyrocopter,1,9,1,1
+ADVE,AUSTER,J-5 Adventurer,LandPlane,1,4,1,1
+ADVN,ADVENTURE AIR,Adventurer,Amphibian,3,4,1,1
+AE45,LET,Aero 45,LandPlane,1,5,2,1
+AEA1,AMERICAN EAGLE,A-1,LandPlane,1,4,1,1
+AERK,AERONCA,K Scout,LandPlane,1,4,1,1
+AEST,AEROSTAR (1),600,LandPlane,1,5,2,1
+AFOX,HALLEY,Apollo Fox,LandPlane,1,4,1,1
+AG02,GATARD,AG-02 Poussin,LandPlane,1,4,1,1
+AG1,HALLEY,Apollo AG-1 Gyro,Gyrocopter,1,9,1,1
+AG10,CAIGA,AG-100,LandPlane,1,4,1,1
+AG60,CAIGA,AG-600 Kunlong,Amphibian,3,5,4,3
+AGSH,AERO GARE,Sea Hawker,Amphibian,3,4,1,1
+AI10,IKAR,Ai-10 Ikar,LandPlane,1,4,1,1
+AIGT,AUSTER,J-5F Aiglet Trainer,LandPlane,1,4,1,1
+AIRD,BEAGLE-AUSTER,A-109 Airedale,LandPlane,1,4,1,1
+AIRL,AERONIX,Airelle,LandPlane,1,5,2,1
+AJ27,COMAC,ARJ-21-700,LandPlane,1,5,2,4
+AJET,DASSAULT-DORNIER,Alpha Jet,LandPlane,1,5,2,4
+AK1,AKAFLIEG KARLSRUHE,AK-1,LandPlane,1,4,1,1
+AKOY,LISA,Akoya,Amphibian,3,4,1,1
+AKRO,STEPHENS,Akro,LandPlane,1,4,1,1
+ALBU,AVIATION DEVELOPMENT,Alaskan Bushmaster,LandPlane,1,4,1,1
+ALC1,ALTAIR COELHO,AC-11,LandPlane,1,4,1,1
+ALGR,FANTASY AIR,Allegro,LandPlane,1,4,1,1
+ALH,HINDUSTAN,ALH Dhruv,Helicopter,1,6,2,3
+ALIG,ARION,LS-1 Lightning,LandPlane,1,4,1,1
+ALIZ,BREGUET,1050 Alizé,LandPlane,1,4,1,3
+ALO2,AEROSPATIALE,Alouette 2,Helicopter,1,6,1,3
+ALO3,AEROSPATIALE,Alouette 3,Helicopter,1,6,1,3
+ALPI,AUSTER,J-5R Alpine,LandPlane,1,4,1,1
+ALSL,AIRLONY,Skylane,LandPlane,1,4,1,1
+ALTO,DIRECT FLY,Alto,LandPlane,1,4,1,1
+AM3,AERITALIA-AERMACCHI,AM-3,LandPlane,1,4,1,1
+AMX,AMX,AMX,LandPlane,1,4,1,4
+AN12,ANTONOV,An-12,LandPlane,1,5,4,3
+AN2,ANTONOV,An-2,LandPlane,1,4,1,1
+AN22,ANTONOV,An-22 Antheus,LandPlane,1,5,4,3
+AN24,ANTONOV,An-24,LandPlane,1,5,2,3
+AN26,ANTONOV,An-26,LandPlane,1,5,2,3
+AN28,ANTONOV,An-28,LandPlane,1,5,2,3
+AN3,ANTONOV,An-3,LandPlane,1,4,1,3
+AN30,ANTONOV,An-30,LandPlane,1,5,2,3
+AN32,ANTONOV,An-32,LandPlane,1,5,2,3
+AN38,ANTONOV,An-38,LandPlane,1,5,2,3
+AN70,ANTONOV,An-70,LandPlane,1,5,4,3
+AN72,ANTONOV,An-72,LandPlane,1,5,2,4
+AN8,ANTONOV,An-8,LandPlane,1,5,2,3
+ANGL,KING'S,44 Angel,LandPlane,1,5,2,1
+ANKA,TAI,Anka,LandPlane,1,4,1,1
+ANSN,AVRO,652 Anson,LandPlane,1,5,2,1
+ANST,KAZAN,Ansat,Helicopter,1,6,2,3
+AP20,AEROPRAKT,A-20,LandPlane,1,4,1,1
+AP22,AEROPRAKT,A-22,LandPlane,1,4,1,1
+AP24,AEROPRAKT,A-24 Viking,Amphibian,3,4,1,1
+AP26,AEROPRAKT,A-26 Twin Vista,LandPlane,1,5,2,1
+AP28,AEROPRAKT,A-28 Victor,LandPlane,1,5,2,1
+AP32,AEROPRAKT,A-32 Vixxen,LandPlane,1,4,1,1
+AP36,AEROPRAKT,A-36 Vulcan,LandPlane,1,5,2,1
+APM2,ISSOIRE,APM-20 Lionceau,LandPlane,1,4,1,1
+APM3,ISSOIRE,APM-30 Lion,LandPlane,1,4,1,1
+APM4,ISSOIRE,APM-40 Simba,LandPlane,1,4,1,1
+APUP,AEROPUP,Aeropup,LandPlane,1,4,1,1
+AR1,SILVERLIGHT,AR-1 American Ranger 1,Gyrocopter,1,9,1,1
+AR11,AERONCA,11 Chief,LandPlane,1,4,1,1
+AR15,AERONCA,15 Sedan,LandPlane,1,4,1,1
+AR50,AERONCA,50 Chief,LandPlane,1,4,1,1
+AR5T,AERONCA,50 Tandem,LandPlane,1,4,1,1
+AR65,AERONCA,65 Super Chief,LandPlane,1,4,1,1
+AR6T,AERONCA,60 Tandem,LandPlane,1,4,1,1
+AR79,ARADO,Ar-79,LandPlane,1,4,1,1
+ARC3,AERONCA,3 Collegain,LandPlane,1,4,1,1
+ARCE,SCHEMPP-HIRTH,Arcus E,LandPlane,1,4,1,10
+ARCP,SCHEMPP-HIRTH,Arcus T,LandPlane,1,4,1,1
+ARES,SCALED,Ares,LandPlane,1,4,1,4
+ARKS,ACEAIR,A-200 Aeriks 200,LandPlane,1,4,1,1
+ARON,GENERAL AVIA,F-220 Airone,LandPlane,1,4,1,1
+ARV1,ARV,Super 2,LandPlane,1,4,1,1
+ARVA,IAI,201 Arava,LandPlane,1,5,2,3
+ARWF,ARROW (1),F Sport,LandPlane,1,4,1,1
+AS02,FFA,AS-202-15 Bravo,LandPlane,1,4,1,1
+AS14,SCHLEICHER,ASK-14,LandPlane,1,4,1,1
+AS16,SCHLEICHER,ASK-16,LandPlane,1,4,1,1
+AS20,SCHLEICHER,ASW-20TOP,LandPlane,1,4,1,1
+AS21,SCHLEICHER,ASK-21Mi,LandPlane,1,4,1,1
+AS22,SCHLEICHER,ASW-22M,LandPlane,1,4,1,1
+AS24,SCHLEICHER,ASW-24E,LandPlane,1,4,1,1
+AS25,SCHLEICHER,ASH-25M,LandPlane,1,4,1,1
+AS26,SCHLEICHER,ASH-26E,LandPlane,1,4,1,1
+AS28,SCHLEICHER,ASW-28E,LandPlane,1,4,1,1
+AS29,SCHLEICHER,ASG-29E,LandPlane,1,4,1,1
+AS2T,FFA,AS-202-32TP Turbine Bravo,LandPlane,1,4,1,3
+AS30,SCHLEICHER,ASH-30Mi,LandPlane,1,4,1,1
+AS31,SCHLEICHER,ASH-31Mi,LandPlane,1,4,1,1
+AS32,AEROSPATIALE,AS-532 Cougar,Helicopter,1,6,2,3
+AS3B,AEROSPATIALE,AS-532A2 Cougar Mk2,Helicopter,1,6,2,3
+AS50,AEROSPATIALE,AS-350 Ecureuil,Helicopter,1,6,1,3
+AS55,AEROSPATIALE,AS-355 Ecureuil 2,Helicopter,1,6,2,3
+AS65,AEROSPATIALE,AS-365 Dauphin 2,Helicopter,1,6,2,3
+AS80,STARCK,AS-80 Holiday,LandPlane,1,4,1,1
+ASO4,ASSO AEREI,Asso 4 Whisky,LandPlane,1,4,1,1
+ASO5,ASSO AEREI,Asso 5 Champion,LandPlane,1,4,1,1
+ASOX,ASSO AEREI,Asso 10 Jewel,LandPlane,1,4,1,1
+ASTO,TECNAM,Astore,LandPlane,1,4,1,1
+ASTR,IAI,1125 Astra,LandPlane,1,5,2,4
+AT2P,AIR TRACTOR,AT-250,LandPlane,1,4,1,1
+AT3,AIDC,AT-3 Tzu-Chung,LandPlane,1,5,2,4
+AT3P,AIR TRACTOR,AT-300,LandPlane,1,4,1,1
+AT3T,AIR TRACTOR,AT-302,LandPlane,1,4,1,3
+AT43,ATR,ATR-42-300,LandPlane,1,5,2,3
+AT44,ATR,ATR-42-400,LandPlane,1,5,2,3
+AT45,ATR,ATR-42-500,LandPlane,1,5,2,3
+AT46,ATR,ATR-42-600,LandPlane,1,5,2,3
+AT5P,AIR TRACTOR,AT-501,LandPlane,1,4,1,1
+AT5T,AIR TRACTOR,AT-502,LandPlane,1,4,1,3
+AT6T,AIR TRACTOR,AT-602,LandPlane,1,4,1,3
+AT72,ATR,ATR-72-201,LandPlane,1,5,2,3
+AT73,ATR,ATR-72-211,LandPlane,1,5,2,3
+AT75,ATR,ATR-72-212A (500),LandPlane,1,5,2,3
+AT76,ATR,ATR-72-212A (600),LandPlane,1,5,2,3
+AT8T,AIR TRACTOR,AT-802,LandPlane,1,4,1,3
+ATAC,AIRCRAFT TECHNOLOGIES,Acro 1,LandPlane,1,4,1,1
+ATG1,ATG,ATG-1 Javelin,LandPlane,1,5,2,4
+ATIS,AIRCRAFT TECHNOLOGIES,Atlantis,LandPlane,1,4,1,1
+ATL,ROBIN,ATL,LandPlane,1,4,1,1
+ATLA,DASSAULT,Atlantique 2,LandPlane,1,5,2,3
+ATP,BRITISH AEROSPACE,ATP,LandPlane,1,5,2,3
+AU11,BEAGLE-AUSTER,Auster AOP11,LandPlane,1,4,1,1
+AUJ2,AUSTER,J-2 Arrow,LandPlane,1,4,1,1
+AUJ4,AUSTER,J-4 Archer,LandPlane,1,4,1,1
+AURA,SUNWARD,SA60 Aurora,LandPlane,1,4,1,1
+AUS3,TAYLORCRAFT (2),Auster 3,LandPlane,1,4,1,1
+AUS4,TAYLORCRAFT (2),Auster 4,LandPlane,1,4,1,1
+AUS5,TAYLORCRAFT (2),Auster 5,LandPlane,1,4,1,1
+AUS6,AUSTER,Auster AOP6,LandPlane,1,4,1,1
+AUS7,AUSTER,Auster T7,LandPlane,1,4,1,1
+AUS9,AUSTER,Auster AOP9,LandPlane,1,4,1,1
+AV68,ALPLA,AVO-68 Samburo,LandPlane,1,4,1,1
+AVAM,AVID,Avid Amphibian,Amphibian,3,4,1,1
+AVID,LIGHT AERO,Avid Flyer,LandPlane,1,4,1,1
+AVIN,AVRO,594 Avian,LandPlane,1,4,1,1
+AVK4,AVTEK,400,LandPlane,1,5,2,3
+AVLN,AIRMASTER,Avalon 680,Amphibian,3,4,1,3
+AVTR,AERO ADVENTURE,Aventura 2,Amphibian,3,4,1,1
+B06,BELL,206B JetRanger,Helicopter,1,6,1,3
+B06T,BELL,206LT TwinRanger,Helicopter,1,6,2,3
+B1,ROCKWELL,B-1 Lancer,LandPlane,1,5,4,4
+B103,BERIEV,Be-103 Bekas,Amphibian,3,5,2,1
+B105,MBB,BO-105,Helicopter,1,6,2,3
+B13,AKAFLIEG BERLIN,B-13,LandPlane,1,4,1,1
+B14A,BELLANCA,14 Cruisair,LandPlane,1,4,1,1
+B14B,DOWNER,14 Bellanca 260,LandPlane,1,4,1,1
+B14C,BELLANCA,14 Bellanca 260C,LandPlane,1,4,1,1
+B150,WINNER,B-150,Helicopter,1,6,1,3
+B17,BOEING,B-17 Flying Fortress,LandPlane,1,5,4,1
+B18T,BEECH,18 (turbine),LandPlane,1,5,2,3
+B190,BEECH,1900,LandPlane,1,5,2,3
+B2,NORTHROP GRUMMAN,B-2 Spirit,LandPlane,1,5,4,4
+B209,MBB,BO-209 Monsun,LandPlane,1,4,1,1
+B212,BELL,212,Helicopter,1,6,1,3
+B214,BELL,214B,Helicopter,1,6,1,3
+B222,BELL,222,Helicopter,1,6,1,3
+B23,DOUGLAS,B-23 Dragon,LandPlane,1,5,2,1
+B230,BELL,230,Helicopter,1,6,2,3
+B23E,BRM AERO,Bristell B23 Energic,LandPlane,1,4,1,10
+B24,CONSOLIDATED,B-24 Liberator,LandPlane,1,5,4,1
+B25,NORTH AMERICAN,B-25 Mitchell,LandPlane,1,5,2,1
+B26,DOUGLAS,B-26 Invader,LandPlane,1,5,2,1
+B26M,MARTIN,B-26 Marauder,LandPlane,1,5,2,1
+B29,BOEING,B-29 Superfortress,LandPlane,1,5,4,1
+B305,BRANTLY,305,Helicopter,1,6,1,1
+B350,BEECH,Super King Air 350,LandPlane,1,5,2,3
+B360,YAKOVLEV AIRCRAFT,Bear 360,LandPlane,1,4,1,1
+B36T,BEECH,36 Bonanza (turbine),LandPlane,1,4,1,3
+B37M,BOEING,737 MAX 7,LandPlane,1,5,2,4
+B38M,BOEING,737 MAX 8,LandPlane,1,5,2,4
+B39M,BOEING,737 MAX 9,LandPlane,1,5,2,4
+B3XM,BOEING,737 MAX 10,LandPlane,1,5,2,4
+B407,BELL,407,Helicopter,1,6,1,3
+B412,BELL,412,Helicopter,1,6,2,3
+B427,BELL,427,Helicopter,1,6,2,3
+B429,BELL,429 GlobalRanger,Helicopter,1,6,2,3
+B430,BELL,430,Helicopter,1,6,2,3
+B461,BRITISH AEROSPACE,BAe-146-100,LandPlane,1,5,4,4
+B462,BRITISH AEROSPACE,BAe-146-200,LandPlane,1,5,4,4
+B463,BRITISH AEROSPACE,BAe-146-300,LandPlane,1,5,4,4
+B47G,BELL,47G,Helicopter,1,6,1,1
+B47J,BELL,47J Ranger,Helicopter,1,6,1,1
+B47T,SOLOY,Bell 47,Helicopter,1,6,1,3
+B505,BELL,505 Jet Ranger X,Helicopter,1,6,1,3
+B52,BOEING,B-52 Stratofortress,LandPlane,1,5,8,4
+B525,BELL,525 Relentless,Helicopter,1,6,2,3
+B58T,BEECH,58P Pressurized Baron,LandPlane,1,5,2,1
+B60,BOISAVIA,B-60 Mercurey,LandPlane,1,4,1,1
+B609,BELL-AGUSTA,BA-609,Tiltrotor,1,H,2,3
+B60T,BEECH,60 Royal Turbine Duke,LandPlane,1,5,2,3
+B701,BOEING,707-100,LandPlane,1,5,4,4
+B703,BOEING,707-300,LandPlane,1,5,4,4
+B712,BOEING,717-200,LandPlane,1,5,2,4
+B720,BOEING,720,LandPlane,1,5,4,4
+B721,BOEING,727-100,LandPlane,1,5,3,4
+B722,BOEING,727-200,LandPlane,1,5,3,4
+B732,BOEING,737-200,LandPlane,1,5,2,4
+B733,BOEING,737-300,LandPlane,1,5,2,4
+B734,BOEING,737-400,LandPlane,1,5,2,4
+B735,BOEING,737-500,LandPlane,1,5,2,4
+B736,BOEING,737-600,LandPlane,1,5,2,4
+B737,BOEING,737-700,LandPlane,1,5,2,4
+B738,BOEING,737-800,LandPlane,1,5,2,4
+B739,BOEING,737-900,LandPlane,1,5,2,4
+B741,BOEING,747-100,LandPlane,1,5,4,4
+B742,BOEING,747-200,LandPlane,1,5,4,4
+B743,BOEING,747-300,LandPlane,1,5,4,4
+B744,BOEING,747-400,LandPlane,1,5,4,4
+B748,BOEING,747-8,LandPlane,1,5,4,4
+B74R,BOEING,747SR,LandPlane,1,5,4,4
+B74S,BOEING,747SP,LandPlane,1,5,4,4
+B752,BOEING,757-200,LandPlane,1,5,2,4
+B753,BOEING,757-300,LandPlane,1,5,2,4
+B762,BOEING,767-200,LandPlane,1,5,2,4
+B763,BOEING,767-300,LandPlane,1,5,2,4
+B764,BOEING,767-400,LandPlane,1,5,2,4
+B772,BOEING,777-200ER,LandPlane,1,5,2,4
+B773,BOEING,777-300,LandPlane,1,5,2,4
+B778,BOEING,777-8,LandPlane,1,5,2,4
+B779,BOEING,777-9,LandPlane,1,5,2,4
+B77L,BOEING,777-200LR,LandPlane,1,5,2,4
+B77W,BOEING,777-300ER,LandPlane,1,5,2,4
+B788,BOEING,787-8 Dreamliner,LandPlane,1,5,2,4
+B789,BOEING,787-9 Dreamliner,LandPlane,1,5,2,4
+B78X,BOEING,787-10 Dreamliner,LandPlane,1,5,2,4
+BA11,BAC,111 One-Eleven,LandPlane,1,5,2,4
+BABY,CANADIAN HOME ROTORS,Baby Belle,Helicopter,1,6,1,1
+BAR6,BARR,BarrSix,LandPlane,1,4,1,1
+BARC,BUETHE,Barracuda,LandPlane,1,4,1,1
+BASS,BEAGLE,B-206,LandPlane,1,5,2,1
+BBAT,BRADLEY,BA-100 Aerobat,LandPlane,1,4,1,1
+BBIR,HOVEY,Beta Bird,LandPlane,1,4,1,1
+BCA3,BUHL,CA-3 Sport Airsedan,LandPlane,1,4,1,1
+BCAT,GRUMMAN,F8F Bearcat,LandPlane,1,4,1,1
+BCS1,AIRBUS,A-220-100,LandPlane,1,5,2,4
+BCS3,AIRBUS,A-220-300,LandPlane,1,5,2,4
+BD10,BEDE,BD-10,LandPlane,1,4,1,4
+BD12,BEDE,BD-12,LandPlane,1,4,1,1
+BD17,BEDE,BD-17 Nuggett,LandPlane,1,4,1,1
+BD4,BEDE,BD-4,LandPlane,1,4,1,1
+BD5,BEDE,Micro (BD-5B/D/G),LandPlane,1,4,1,1
+BD5J,BEDE,BD-5J Micro,LandPlane,1,4,1,4
+BD5T,BEDE,BD-5TP Micro,LandPlane,1,4,1,3
+BDOG,SCOTTISH AVIATION,SA-3 Bulldog,LandPlane,1,4,1,1
+BE10,BEECH,100 King Air,LandPlane,1,5,2,3
+BE12,BERIEV,Be-12 Tchaika,Amphibian,3,5,2,3
+BE17,BEECH,17 Staggerwing,LandPlane,1,4,1,1
+BE18,BEECH,18 (piston),LandPlane,1,5,2,1
+BE19,BEECH,19 Musketeer Sport,LandPlane,1,4,1,1
+BE20,BEECHCRAFT,200 King Air 250,LandPlane,1,5,2,3
+BE22,BEECHCRAFT,220 Denali,LandPlane,1,4,1,3
+BE23,BEECH,23 Musketeer,LandPlane,1,4,1,1
+BE24,BEECH,24 Musketeer Super,LandPlane,1,4,1,1
+BE30,RAYTHEON,300 Super King Air,LandPlane,1,5,2,3
+BE32,BERIEV,Be-32,LandPlane,1,5,2,3
+BE33,BEECH,33 Bonanza,LandPlane,1,4,1,1
+BE35,BEECH,35 Bonanza,LandPlane,1,4,1,1
+BE36,BEECH,36 Bonanza 36,LandPlane,1,4,1,1
+BE40,RAYTHEON,Hawker 400XP,LandPlane,1,5,2,4
+BE4W,RAYTHEON,Hawker 400XT,LandPlane,1,5,2,4
+BE50,BEECH,50 Twin Bonanza,LandPlane,1,5,2,1
+BE55,BEECH,55 Baron,LandPlane,1,5,2,1
+BE56,BEECH,56 Turbo Baron,LandPlane,1,5,2,1
+BE58,RAYTHEON,58 Baron,LandPlane,1,5,2,1
+BE60,BEECH,60 Duke,LandPlane,1,5,2,1
+BE65,BEECH,65 Queen Air,LandPlane,1,5,2,1
+BE70,BEECH,70 Queen Air,LandPlane,1,5,2,1
+BE76,BEECH,76 Duchess,LandPlane,1,5,2,1
+BE77,BEECH,77 Skipper,LandPlane,1,4,1,1
+BE80,BEECH,80 Queen Air,LandPlane,1,5,2,1
+BE88,BEECH,88 Queen Air,LandPlane,1,5,2,1
+BE95,BEECH,95 Travel Air,LandPlane,1,5,2,1
+BE99,BEECH,99 Airliner,LandPlane,1,5,2,3
+BE9L,BEECH,90 King Air,LandPlane,1,5,2,3
+BE9T,BEECH,90 (F90) King Air,LandPlane,1,5,2,3
+BEAR,AVIPRO,RB-4 Bearhawk,LandPlane,1,4,1,1
+BELF,SHORT,SC-5 Belfast,LandPlane,1,5,4,3
+BER2,BERIEV,Be-200 Altair,Amphibian,3,5,2,4
+BER4,BERIEV,A-40 Albatross,Amphibian,3,5,2,4
+BETA,ROLLASON,Beta,LandPlane,1,4,1,1
+BEVR,ASAP,Beaver,LandPlane,1,4,1,1
+BF19,PODESVA,Bf-109G-2,LandPlane,1,4,1,1
+BFIT,BRISTOL,F-2B Fighter Replica,LandPlane,1,4,1,1
+BILO,PENA,Bilouis,LandPlane,1,4,1,1
+BIPL,EAA,Biplane,LandPlane,1,4,1,1
+BIRD,TAYLOR (3),TA-2 Bird,LandPlane,1,4,1,1
+BISC,BILSAM,Sky Cruiser,LandPlane,1,4,1,1
+BK17,MBB-KAWASAKI,BK-117,Helicopter,1,6,2,3
+BKUT,BERKUT,Berkut,LandPlane,1,4,1,1
+BL11,BLERIOT,11 Replica,LandPlane,1,4,1,1
+BL17,BELLANCA,17 Viking,LandPlane,1,4,1,1
+BL19,BELLANCA,19 Skyrocket,LandPlane,1,4,1,1
+BL8,BELLANCA,8 Scout,LandPlane,1,4,1,1
+BLBU,AMEUR,Altania,LandPlane,1,4,1,1
+BLCF,BOEING,747-400LCF Dreamlifter,LandPlane,1,5,4,4
+BLEN,BRISTOL,149 Blenheim,LandPlane,1,5,2,1
+BLKS,AIRCRAFT SPRUCE,Baby Lakes,LandPlane,1,4,1,1
+BM6,MARANDA,BM-6 Lark,LandPlane,1,4,1,1
+BMAN,AAK,Bushman,LandPlane,1,4,1,1
+BN2P,BRITTEN-NORMAN,BN-2 Islander,LandPlane,1,5,2,1
+BN2T,BRITTEN-NORMAN,BN-2T Turbine Islander,LandPlane,1,5,2,3
+BO40,BOEING,40,LandPlane,1,4,1,1
+BOLT,STEEN,Skybolt,LandPlane,1,4,1,1
+BOOM,RUTAN,202 Boomerang,LandPlane,1,5,2,1
+BPAT,R & B,Bearhawk Patrol,LandPlane,1,4,1,1
+BPOD,SCALED,367 BiPod,LandPlane,1,5,4,10
+BPUM,BDC AERO,Puma,LandPlane,1,4,1,1
+BR14,BREGUET,14 Replica,LandPlane,1,4,1,1
+BR23,BRM AERO,Bristell B23,LandPlane,1,4,1,1
+BR54,BARNETT,BRC-540,Gyrocopter,1,9,1,1
+BR60,BRUMBY,600,LandPlane,1,4,1,1
+BR61,BRUMBY,610 Evolution,LandPlane,1,4,1,1
+BR8,BRM AERO,Bristell B8,LandPlane,1,4,1,1
+BRAV,TECNAM,P-2004 Bravo,LandPlane,1,4,1,1
+BRB2,BRANTLY,B-2,Helicopter,1,6,1,1
+BREZ,AEROSTYLE,Breezer,LandPlane,1,4,1,1
+BROU,MAX HOLSTE,MH-1521 Broussard,LandPlane,1,4,1,1
+BS60,BEECH-SFERMA,60 Marquis,LandPlane,1,5,2,3
+BSTP,BELL,214ST SuperTransport,Helicopter,1,6,2,3
+BT36,BEECH,B36TC Bonanza,LandPlane,1,4,1,1
+BT7,BOEING,T-7 Red Hawk,LandPlane,1,4,1,4
+BTUB,KIMBREL,Dormoy Bathtub,LandPlane,1,4,1,1
+BU20,AIRCRAFT HYDRO-FORMING,Bushmaster 2000,LandPlane,1,5,3,1
+BU31,BUCKER,Bü-131 Jungmann,LandPlane,1,4,1,1
+BU33,BUCKER,Bü-133 Jungmeister,LandPlane,1,4,1,1
+BU81,BUCKER,Bü-181 Bestmann,LandPlane,1,4,1,1
+BUC,HAWKER SIDDELEY,Buccaneer,LandPlane,1,5,2,4
+BUCA,ADVANCED AVIATION,Buccaneer,Amphibian,3,4,1,1
+BULT,BROKAW,BJ-520 Bullet,LandPlane,1,4,1,1
+BUSH,RAINBOW SKYREACH,BushCat,LandPlane,1,4,1,1
+BW60,BLACKWING,BW-600,LandPlane,1,4,1,1
+BW6T,BLACKWING,BW-635,LandPlane,1,4,1,1
+BX2,BRANDLI,BX-2 Cherry,LandPlane,1,4,1,1
+C02T,CESSNA,402 (turbine),LandPlane,1,5,2,3
+C04T,CESSNA,404 (turbine),LandPlane,1,5,2,3
+C06T,CESSNA,206 (turbine),LandPlane,1,4,1,3
+C07T,CESSNA,207 (turbine),LandPlane,1,4,1,3
+C08T,SOLOY,208 Dual-Pac Caravan,LandPlane,1,1,0,3
+C1,KAWASAKI,C-1,LandPlane,1,5,2,4
+C101,CASA,C-101 Aviojet,LandPlane,1,4,1,4
+C10T,CESSNA,P210 (turbine),LandPlane,1,4,1,3
+C119,FAIRCHILD (1),C-119 Flying Boxcar,LandPlane,1,5,2,1
+C120,CESSNA,120,LandPlane,1,4,1,1
+C123,FAIRCHILD (1),C-123 Provider,LandPlane,1,5,2,1
+C125,NORTHROP,C-125 Raider,LandPlane,1,5,3,1
+C130,LOCKHEED,C-130H Hercules,LandPlane,1,5,4,3
+C135,BOEING,WC-135,LandPlane,1,5,4,4
+C140,CESSNA,140,LandPlane,1,4,1,1
+C141,LOCKHEED,C-141 Starlifter,LandPlane,1,5,4,4
+C14T,CESSNA,414 (turbine),LandPlane,1,5,2,3
+C15,MCDONNELL DOUGLAS,YC-15,LandPlane,1,5,4,4
+C150,CESSNA,A150 Aerobat,LandPlane,1,4,1,1
+C152,CESSNA,A152 Aerobat,LandPlane,1,4,1,1
+C160,TRANSALL,C-160,LandPlane,1,5,2,3
+C162,CESSNA,162 Skycatcher,LandPlane,1,4,1,1
+C17,BOEING,C-17 Globemaster 3,LandPlane,1,5,4,4
+C170,CESSNA,170,LandPlane,1,4,1,1
+C172,CESSNA,172 Skyhawk,LandPlane,1,4,1,1
+C175,CESSNA,175 Skylark,LandPlane,1,4,1,1
+C177,CESSNA,177 Cardinal,LandPlane,1,4,1,1
+C180,CESSNA,180 Skywagon 180,LandPlane,1,4,1,1
+C182,CESSNA,182 Skylane,LandPlane,1,4,1,1
+C185,CESSNA,185 Skywagon,LandPlane,1,4,1,1
+C188,CESSNA,188 AgWagon,LandPlane,1,4,1,1
+C190,CESSNA,190,LandPlane,1,4,1,1
+C195,CESSNA,195,LandPlane,1,4,1,1
+C2,GRUMMAN,C-2 Greyhound,LandPlane,1,5,2,3
+C205,CESSNA,205,LandPlane,1,4,1,1
+C206,CESSNA,206 Stationair,LandPlane,1,4,1,1
+C207,CESSNA,207 Stationair 7,LandPlane,1,4,1,1
+C208,CESSNA,208 Caravan 1,LandPlane,1,4,1,3
+C210,CESSNA,210 Centurion,LandPlane,1,4,1,1
+C212,CASA,C-212 Aviocar,LandPlane,1,5,2,3
+C21T,CESSNA,421 (turbine),LandPlane,1,5,2,3
+C22J,CAPRONI VIZZOLA,C-22J Ventura,LandPlane,1,5,2,4
+C240,CESSNA,T240 Corvalis TTx,LandPlane,1,4,1,1
+C25A,CESSNA,525A Citation CJ2,LandPlane,1,5,2,4
+C25B,CESSNA,525B Citation CJ3,LandPlane,1,5,2,4
+C25C,CESSNA,525C Citation CJ4,LandPlane,1,5,2,4
+C25M,CESSNA,525 Citation M2,LandPlane,1,5,2,4
+C270,CAUDRON,C-270 Luciole,LandPlane,1,4,1,1
+C27J,ALENIA,C-27J Spartan,LandPlane,1,5,2,3
+C295,CASA,C-295 Persuader,LandPlane,1,5,2,3
+C303,CESSNA,T303 Crusader,LandPlane,1,5,2,1
+C306,CEA-UFMG,CEA-306 CB-10 Triathlon,LandPlane,1,4,1,1
+C309,CEA-UFMG,CEA-309 Mehari,LandPlane,1,4,1,1
+C30J,LOCKHEED MARTIN,C-130J Super Hercules,LandPlane,1,5,4,3
+C310,CESSNA,310,LandPlane,1,5,2,1
+C311,CEA-UFMG,CEA-311 Anequim,LandPlane,1,4,1,1
+C320,CESSNA,320 Skyknight,LandPlane,1,5,2,1
+C335,CESSNA,335,LandPlane,1,5,2,1
+C336,CESSNA,336 Skymaster,LandPlane,1,5,2,1
+C337,CESSNA,337 Super Skymaster,LandPlane,1,5,2,1
+C340,CESSNA,340,LandPlane,1,5,2,1
+C365,EKW,C-3605,LandPlane,1,4,1,3
+C402,CESSNA,402 Businessliner,LandPlane,1,5,2,1
+C404,CESSNA,404 Titan,LandPlane,1,5,2,1
+C408,CESSNA,408 SkyCourier,LandPlane,1,5,2,3
+C411,CESSNA,411,LandPlane,1,5,2,1
+C414,CESSNA,414 Chancellor,LandPlane,1,5,2,1
+C42,IKARUS,C-42 Bison,LandPlane,1,4,1,1
+C421,CESSNA,421 Executive Commuter,LandPlane,1,5,2,1
+C425,CESSNA,425 Conquest 1,LandPlane,1,5,2,3
+C441,CESSNA,441 Conquest 2,LandPlane,1,5,2,3
+C46,CURTISS,C-46 Commando,LandPlane,1,5,2,1
+C500,CESSNA,500 Citation 1,LandPlane,1,5,2,4
+C501,CESSNA,501 Citation 1SP,LandPlane,1,5,2,4
+C510,CESSNA,510 Citation Mustang,LandPlane,1,5,2,4
+C525,CESSNA,525 Citation CJ1,LandPlane,1,5,2,4
+C526,CESSNA,526 CitationJet,LandPlane,1,5,2,4
+C550,CESSNA,550 Citation 2,LandPlane,1,5,2,4
+C551,CESSNA,551 Citation 2SP,LandPlane,1,5,2,4
+C55B,CESSNA,550B Citation Bravo,LandPlane,1,5,2,4
+C560,CESSNA,560 Citation 5,LandPlane,1,5,2,4
+C56X,CESSNA,560XL Citation XLS,LandPlane,1,5,2,4
+C5M,LOCKHEED,C-5 Super Galaxy,LandPlane,1,5,4,4
+C650,CESSNA,650 Citation 7,LandPlane,1,5,2,4
+C680,CESSNA,680 Citation Sovereign,LandPlane,1,5,2,4
+C68A,CESSNA,680A Citation Latitude,LandPlane,1,5,2,4
+C700,CESSNA,700 Citation Longitude,LandPlane,1,5,2,4
+C72R,CESSNA,172RG Cutlass RG,LandPlane,1,4,1,1
+C750,CESSNA,750 Citation 10,LandPlane,1,5,2,4
+C77R,CESSNA,177RG Cardinal RG,LandPlane,1,4,1,1
+C82,FAIRCHILD (1),C-82 Packet,LandPlane,1,5,2,1
+C82R,CESSNA,R182 Skylane RG,LandPlane,1,4,1,1
+C82S,CESSNA,T182 Turbo Skylane,LandPlane,1,4,1,1
+C82T,CESSNA,TR182 Turbo Skylane RG,LandPlane,1,4,1,1
+C919,COMAC,C-919,LandPlane,1,5,2,4
+C97,BOEING,C-97 Stratofreighter,LandPlane,1,5,4,1
+CA12,COMP AIR,CA-12 Comp Air 12,LandPlane,1,4,1,3
+CA19,COMMONWEALTH (1),CA-19 Boomerang,LandPlane,1,4,1,1
+CA1P,AEROCOMP,CA-10 Comp Air 10,LandPlane,1,4,1,1
+CA1T,AEROCOMP,CA-10T  Comp Air 10T,LandPlane,1,4,1,3
+CA25,COMMONWEALTH (1),CA-25 Winjeel,LandPlane,1,4,1,1
+CA3,AEROCOMP,CA-3 Comp Air 3,LandPlane,1,4,1,1
+CA4,AEROCOMP,CA-4 Comp Air 4,LandPlane,1,4,1,1
+CA41,CORVUS,CA-41 Racer,LandPlane,1,4,1,1
+CA6,AEROCOMP,CA-6 Comp Air 6,LandPlane,1,4,1,1
+CA61,CVJETKOVIC,CA-61 Mini Ace,LandPlane,1,4,1,1
+CA65,CVJETKOVIC,CA-65 Skyfly,LandPlane,1,4,1,1
+CA7P,AEROCOMP,CA-7P Comp Air 7P,LandPlane,1,4,1,1
+CA7T,AEROCOMP,CA-7T Comp Air 7T,LandPlane,1,4,1,3
+CA8,COMP AIR,CA-8 Comp Air 8,LandPlane,1,4,1,3
+CA9,COMP AIR,CA-9 Comp Air 9,LandPlane,1,4,1,3
+CABI,UNIVERSAL COMPOSITE,Carbon Bird,LandPlane,1,4,1,3
+CABN,PARAMOUNT,Cabinaire,LandPlane,1,4,1,1
+CAD2,CLASS,Bush Caddy R-120,LandPlane,1,4,1,1
+CAD4,CLASS,Bush Caddy L-160,LandPlane,1,4,1,1
+CAJ,AEROCOMP,CA-J Comp Air Jet,LandPlane,1,4,1,4
+CAML,SOPWITH,Camel Replica,LandPlane,1,4,1,1
+CAMP,GREGA,GN-1 Aircamper,LandPlane,1,4,1,1
+CAN4,CAMPANA,AN-4,LandPlane,1,4,1,1
+CAPL,CAPELLA,Capella,LandPlane,1,4,1,1
+CAR,AEROCAR,Aerocar,LandPlane,1,4,1,1
+CARV,AVIATION TRADERS,ATL-98 Carvair,LandPlane,1,5,4,1
+CASS,CASSUTT,Special,LandPlane,1,4,1,1
+CAT,CONSOLIDATED,PBY Catalina,Amphibian,3,5,2,1
+CAT1,CREATIVE FLIGHT,MPA Aerocat SR,LandPlane,1,4,1,1
+CAT2,CREATIVE FLIGHT,MPA Aerocat TR,LandPlane,1,5,2,1
+CAW,CESSNA,AW,LandPlane,1,4,1,1
+CB1,HATZ,CB-1 Biplane,LandPlane,1,4,1,1
+CC11,CUB CRAFTERS,CC-11 Carbon Cub,LandPlane,1,4,1,1
+CC19,CUB CRAFTERS,CC-19 XCub,LandPlane,1,4,1,1
+CD2,CLAUDIUS DORNIER,CD-2 Seastar,Amphibian,3,5,2,3
+CDC6,CESSNA,DC-6,LandPlane,1,4,1,1
+CDUS,ROTORSPORT,Calidus,Gyrocopter,1,9,1,1
+CDW1,CHILTON,DW-1,LandPlane,1,4,1,1
+CE15,CHERNOV,Che-15,SeaPlane,2,4,1,1
+CE22,CHERNOV,Che-22 Corvette,Amphibian,3,5,2,1
+CE23,CHERNOV,Che-23,Amphibian,3,4,1,1
+CE25,CHERNOV,Che-25,Amphibian,3,5,2,1
+CE27,CHERNOV,Che-27,Amphibian,3,5,2,1
+CE43,CERVA,CE-43 Guepard,LandPlane,1,4,1,1
+CEGL,CELAIR,Eagle 300,LandPlane,1,4,1,1
+CELR,MIRAGE,Celerity,LandPlane,1,4,1,1
+CENT,FOUND,100 Centennial,LandPlane,1,4,1,1
+CFRE,COLYAER,Freedom,Amphibian,3,4,1,1
+CG3,CAUDRON,G-3 Replica,LandPlane,1,4,1,1
+CGAN,COLYAER,Gannet,SeaPlane,2,4,1,1
+CH1,AIDC,A-CH-1 Chung-Tsing,LandPlane,1,4,1,3
+CH10,ZENAIR,CH-100 Mono-Zénith,LandPlane,1,4,1,1
+CH12,CICARE,CH-12,Helicopter,1,6,1,1
+CH14,CICARE,CH-14 Aguilucho,Helicopter,1,6,1,3
+CH15,ZENAIR,CH-150 Acro-Zénith,LandPlane,1,4,1,1
+CH18,ZENAIR,CH-180 Super Acro-Zénith,LandPlane,1,4,1,1
+CH20,ZENAIR,CH-200 Zénith,LandPlane,1,4,1,1
+CH25,ZENAIR,CH-250 Zénith,LandPlane,1,4,1,1
+CH2T,ZENAIR,CH-2000 Zénith,LandPlane,1,4,1,1
+CH3,CHRISLEA,CH-3 Super Ace,LandPlane,1,4,1,1
+CH30,ZENAIR,CH-300 Tri-Zénith,LandPlane,1,4,1,1
+CH40,CHAMPION,402 Lancer,LandPlane,1,5,2,1
+CH50,ZENAIR,CH-50 Mini Zénith,LandPlane,1,4,1,1
+CH60,ZENAIR,CH-600 Zodiac,LandPlane,1,4,1,1
+CH62,ZENAIR,CH-620 Gemini,LandPlane,1,5,2,1
+CH64,ZENAIR,CH-640 Zodiac,LandPlane,1,4,1,1
+CH65,AMD,CH-650 Zodiac,LandPlane,1,4,1,1
+CH7,HELI-SPORT,CH-7 Kompress,Helicopter,1,6,1,1
+CH70,ZENAIR,CH-701 Stol,LandPlane,1,4,1,1
+CH75,ZENAIR,CH-750 Cruzer,LandPlane,1,4,1,1
+CH7A,AERONCA,7AC Champion,LandPlane,1,4,1,1
+CH7B,AMERICAN CHAMPION,7GCBC Citabria High Country Explorer,LandPlane,1,4,1,1
+CH80,ZENAIR,CH-801 Stol,LandPlane,1,4,1,1
+CHAN,CADCOR,Chanute,LandPlane,1,4,1,1
+CHCS,ALPAERO,Choucas,LandPlane,1,4,1,1
+CHGO,KOREAN AIR,CHK-91 Chang-Gong 91,LandPlane,1,4,1,1
+CHIC,PODESVA,Chico,LandPlane,1,4,1,1
+CHIF,PAWNEE,Chief,Helicopter,1,6,1,1
+CHIN,ASAP,Chinook,LandPlane,1,4,1,1
+CHIP,LEGER,Super-Chipmunk,LandPlane,1,4,1,1
+CHR1,ELMWOOD,CA-05 Christavia Mk1,LandPlane,1,4,1,1
+CHR4,ELMWOOD,CH-8 Christavia Mk4,LandPlane,1,4,1,1
+CHSY,CHAYAIR,Sycamore,Gyrocopter,1,9,1,1
+CICA,HYDROPLANE,SkyWind,LandPlane,1,5,2,1
+CJ1,CORBY,CJ-1 Starlet,LandPlane,1,4,1,1
+CJ6,NANCHANG,CJ-6,LandPlane,1,4,1,1
+CKUO,AIDC,F-CK-1 Ching-Kuo,LandPlane,1,5,2,4
+CL2P,CANADAIR,CL-215,Amphibian,3,5,2,1
+CL2T,CANADAIR,CL-415,Amphibian,3,5,2,3
+CL30,BOMBARDIER,Challenger 300,LandPlane,1,5,2,4
+CL35,BOMBARDIER,Challenger 350,LandPlane,1,5,2,4
+CL41,CANADAIR,CL-41 Tutor,LandPlane,1,4,1,4
+CL4G,CANADAIR,CL-44-O Guppy,LandPlane,1,5,4,3
+CL60,CANADAIR,Challenger 600,LandPlane,1,5,2,4
+CL8,CARRIOU,CL-8 RSA Club,LandPlane,1,4,1,1
+CLA,CALLAIR,A-2,LandPlane,1,4,1,1
+CLB1,AERO COMMANDER,B-1 Ag Commander,LandPlane,1,4,1,1
+CLBR,FISHER AERO,Celebrity,LandPlane,1,4,1,1
+CLD2,ROTORTEC,Cloud Dancer 2,Gyrocopter,1,9,1,1
+CLDS,REARWIN,Cloudster,LandPlane,1,4,1,1
+CLON,ROTORSPORT,Cavalon,Gyrocopter,1,9,1,1
+CMA3,COLYAER,Martin 3,LandPlane,1,4,1,1
+CMAS,CESSNA,C-165 Airmaster,LandPlane,1,4,1,1
+CMDE,AIR COMMAND,Commander Elite Side-by-Side,Gyrocopter,1,9,1,1
+CMDT,AIR COMMAND,Commander  Elite Tandem,Gyrocopter,1,9,1,1
+CN12,CIRCA,Nieuport 12-7/8,LandPlane,1,4,1,1
+CN35,CASA,CN-235 Persuader,LandPlane,1,5,2,3
+CNBR,ENGLISH ELECTRIC,Canberra,LandPlane,1,5,2,4
+CNDR,GENERAL AVIA,F-20TP Condor,LandPlane,1,5,2,3
+CNGP,CESSNA,NGP,LandPlane,1,4,1,1
+CNUK,FLEET,80 Canuck,LandPlane,1,4,1,1
+CO50,COBALT,Co-50 Valkyrie,LandPlane,1,4,1,1
+COAR,COBRA,Arrow,LandPlane,1,4,1,1
+COBR,DEBORDE-ROLLAND,Cobra,LandPlane,1,4,1,1
+COL3,CESSNA,350 Corvalis,LandPlane,1,4,1,1
+COL4,CESSNA,400 Corvalis TT,LandPlane,1,4,1,1
+COLT,TEXAS AIRCRAFT,TA-01,LandPlane,1,4,1,1
+COMU,HELICOM,H-1 Commuter,Helicopter,1,6,1,1
+CONI,LOCKHEED,C-121 Constellation,LandPlane,1,5,4,1
+COOT,TAYLOR (2),Coot,Amphibian,3,4,1,1
+CORO,CORVUS,CA-21 Phantom,LandPlane,1,4,1,1
+CORR,SIVEL,SD-27 Corriedale,LandPlane,1,4,1,1
+CORS,CHANCE VOUGHT,F4U Corsair,LandPlane,1,4,1,1
+CORV,WOLFSBERG,Corvus,LandPlane,1,5,2,1
+COUG,NESMITH,Cougar,LandPlane,1,4,1,1
+COUR,HELIO,U-10 Super Courier,LandPlane,1,4,1,1
+COY2,RANS,S-6 Coyote 2,LandPlane,1,4,1,1
+COZJ,CO-Z,CozyJet,LandPlane,1,4,1,4
+COZY,AEROCAD,AeroCanard,LandPlane,1,4,1,1
+CP10,MUDRY,CAP-10,LandPlane,1,4,1,1
+CP13,PIEL,Super Emeraude (CP-1310/1315/1330),LandPlane,1,4,1,1
+CP20,MUDRY,CAP-20,LandPlane,1,4,1,1
+CP21,MUDRY,CAP-21,LandPlane,1,4,1,1
+CP22,GILES,G-222,LandPlane,1,4,1,1
+CP23,MUDRY,CAP-230,LandPlane,1,4,1,1
+CP30,PIEL,CP-30 Emeraude,LandPlane,1,4,1,1
+CP32,PIEL,Super Emeraude (CP-320/325/328),LandPlane,1,4,1,1
+CP60,PIEL,CP-60 Diamant,LandPlane,1,4,1,1
+CP65,PORTERFIELD,CP-65 Collegiate,LandPlane,1,4,1,1
+CP75,PIEL,CP-70 Béryl,LandPlane,1,4,1,1
+CP80,PIEL,CP-80 Zéphir,LandPlane,1,4,1,1
+CP90,PIEL,CP-90 Pinocchio 2,LandPlane,1,4,1,1
+CPNA,PENA,Capena,LandPlane,1,4,1,1
+CPUP,CULP,Sopwith Pup,LandPlane,1,4,1,1
+CR10,DYN'AERO,CR-100,LandPlane,1,4,1,1
+CRA1,CRANFIELD,A-1 Eagle,LandPlane,1,4,1,1
+CRAC,PLUMB,CJ-3 Cracker Jack,LandPlane,1,4,1,1
+CRBN,CURTISS,50 Robin,LandPlane,1,4,1,1
+CRER,RANS,S-7 Courier,LandPlane,1,4,1,1
+CRES,PACIFIC AEROSPACE,Cresco,LandPlane,1,4,1,3
+CRIO,MICROLEVE,Corsario,Amphibian,3,4,1,1
+CRJ1,CANADAIR,Regional Jet CRJ-100,LandPlane,1,5,2,4
+CRJ2,CANADAIR,Regional Jet CRJ-200,LandPlane,1,5,2,4
+CRJ7,CANADAIR,Regional Jet CRJ-700,LandPlane,1,5,2,4
+CRJ9,CANADAIR,Regional Jet CRJ-900,LandPlane,1,5,2,4
+CRJX,BOMBARDIER,Regional Jet CRJ-1000,LandPlane,1,5,2,4
+CRUZ,CZAW,SportCruiser,LandPlane,1,4,1,1
+CT4,PACIFIC AEROSPACE,CT-4 Airtrainer,LandPlane,1,4,1,1
+CTAH,RAINBOW SKYREACH,Cheetah,LandPlane,1,4,1,1
+CTLN,FLY SYNTHESIS,Catalina,Amphibian,3,4,1,1
+CUB2,ACES HIGH,Cuby 2,LandPlane,1,4,1,1
+CUCA,CULVER,Cadet,LandPlane,1,4,1,1
+CULP,CULP,Special,LandPlane,1,4,1,1
+CULV,CULVER,V,LandPlane,1,4,1,1
+CULX,FISHER AERO,Culex,LandPlane,1,5,2,1
+CVLP,CONVAIR,C-131 Samaritan,LandPlane,1,5,2,1
+CVLT,CONVAIR,C-131H,LandPlane,1,5,2,3
+CX5,THATCHER,CX-5,LandPlane,1,4,1,1
+CYCL,CARLSON,Skycycle,LandPlane,1,4,1,1
+CYGT,HAWKER,Cygnet Replica,LandPlane,1,4,1,1
+D1,WING,D-1 Derringer,LandPlane,1,5,2,1
+D11,JODEL,D-11,LandPlane,1,4,1,1
+D139,DORNA,D-139 Parandeh Abi,LandPlane,1,4,1,1
+D140,JODEL,D-140 Mousquetaire,LandPlane,1,4,1,1
+D150,JODEL,D-150 Mascaret,LandPlane,1,4,1,1
+D18,JODEL,D-18,LandPlane,1,4,1,1
+D201,D'APUZZO,D-201 Sportwing,LandPlane,1,4,1,1
+D21,FOKKER,D-21 Replica,LandPlane,1,4,1,1
+D228,DORNIER,228,LandPlane,1,5,2,3
+D25,NEW STANDARD,D-25,LandPlane,1,4,1,1
+D250,CENTRE EST,DR-250 Capitaine,LandPlane,1,4,1,1
+D253,CENTRE EST,DR-253 Regent,LandPlane,1,4,1,1
+D28D,DORNIER,Do-28D Skyservant,LandPlane,1,5,2,1
+D28T,DORNIER,Do-28D-6 Turbo Skyservant,LandPlane,1,5,2,3
+D31,DRUINE,D-31 Turbulent,LandPlane,1,4,1,1
+D328,DORNIER,328,LandPlane,1,5,2,3
+D39,AKAFLIEG DARMSTADT,D-39,LandPlane,1,4,1,1
+D4,AUSTER,D-4,LandPlane,1,4,1,1
+D5,AUSTER,D-5,LandPlane,1,4,1,1
+D5TU,DRUINE,D-5 Turbi,LandPlane,1,4,1,1
+D6,AUSTER,D-6,LandPlane,1,4,1,1
+D6CR,DRUINE,D-60 Condor,LandPlane,1,4,1,1
+D7,FOKKER,D-7 Replica,LandPlane,1,4,1,1
+D8,FOKKER,D-8 Replica,LandPlane,1,4,1,1
+DA2,DAVIS,DA-2,LandPlane,1,4,1,1
+DA36,DIAMOND,DA-36 E-Star,LandPlane,1,4,1,10
+DA40,DIAMOND,DA-40 Diamond Star,LandPlane,1,4,1,1
+DA42,DIAMOND,DA-42 Twin Star,LandPlane,1,5,2,1
+DA5,DAVIS,DA-5,LandPlane,1,4,1,1
+DA50,DIAMOND,DA-50 SuperStar,LandPlane,1,4,1,1
+DA62,DIAMOND,DA-62,LandPlane,1,5,2,1
+DAHU,PENA,Dahu,LandPlane,1,4,1,1
+DAKH,FISHER,Dakota Hawk,LandPlane,1,4,1,1
+DAL1,SPEZIO,DAL-1 Tuholer,LandPlane,1,4,1,1
+DAL4,DALLACH,D-4 Fascination,LandPlane,1,4,1,1
+DAL5,DALLACH,D-5 Evolution,LandPlane,1,4,1,1
+DART,PARRISH,Dart,LandPlane,1,4,1,1
+DC10,MCDONNELL DOUGLAS,DC-10,LandPlane,1,5,3,4
+DC2,DOUGLAS,DC-2,LandPlane,1,5,2,1
+DC3,DOUGLAS,DC-3,LandPlane,1,5,2,1
+DC3S,DOUGLAS,Super DC-3,LandPlane,1,5,2,1
+DC3T,BASLER,BT-67 Turbo 67,LandPlane,1,5,2,3
+DC4,DOUGLAS,DC-4,LandPlane,1,5,4,1
+DC6,DOUGLAS,DC-6,LandPlane,1,5,4,1
+DC7,DOUGLAS,DC-7,LandPlane,1,5,4,1
+DC85,MCDONNELL DOUGLAS,DC-8-50,LandPlane,1,5,4,4
+DC86,MCDONNELL DOUGLAS,DC-8-60,LandPlane,1,5,4,4
+DC87,MCDONNELL DOUGLAS,DC-8-70,LandPlane,1,5,4,4
+DC91,MCDONNELL DOUGLAS,DC-9-10,LandPlane,1,5,2,4
+DC92,MCDONNELL DOUGLAS,DC-9-20,LandPlane,1,5,2,4
+DC93,MCDONNELL DOUGLAS,DC-9-30,LandPlane,1,5,2,4
+DC94,MCDONNELL DOUGLAS,DC-9-40,LandPlane,1,5,2,4
+DC95,MCDONNELL DOUGLAS,DC-9-50,LandPlane,1,5,2,4
+DEAG,AMAX,Double Eagle,Gyrocopter,1,9,1,1
+DEFI,RUTAN,40 Defiant,LandPlane,1,5,2,1
+DELF,LYAVIN,Delfin,LandPlane,1,4,1,1
+DFL6,DAMOURE-FABRE,DFL-6 Saphir,LandPlane,1,4,1,1
+DFLY,VIKING (1),Dragonfly,LandPlane,1,4,1,1
+DG15,HOWARD (1),DGA-15,LandPlane,1,4,1,1
+DG1T,DG FLUGZEUGBAU,DG-1000T,LandPlane,1,4,1,1
+DG40,GLASER-DIRKS,DG-400,LandPlane,1,4,1,1
+DG50,GLASER-DIRKS,DG-500M,LandPlane,1,4,1,1
+DG60,GLASER-DIRKS,DG-600M,LandPlane,1,4,1,1
+DG80,DG FLUGZEUGBAU,DG-800,LandPlane,1,4,1,1
+DH2T,DE HAVILLAND CANADA,DHC-2 Mk3 Turbo Beaver,LandPlane,1,4,1,3
+DH3T,DE HAVILLAND CANADA,DHC-3 Turbo Otter,LandPlane,1,4,1,3
+DH4T,DE HAVILLAND CANADA,DHC-4 Turbo Caribou,LandPlane,1,5,2,3
+DH60,DE HAVILLAND,DH-60 Moth,LandPlane,1,4,1,1
+DH80,DE HAVILLAND,DH-80 Puss Moth,LandPlane,1,4,1,1
+DH82,DE HAVILLAND,DH-82 Tiger Moth,LandPlane,1,4,1,1
+DH83,DE HAVILLAND,DH-83 Fox Moth,LandPlane,1,4,1,1
+DH84,DE HAVILLAND,DH-84 Dragon,LandPlane,1,5,2,1
+DH85,DE HAVILLAND,DH-85 Leopard Moth,LandPlane,1,4,1,1
+DH87,DE HAVILLAND,DH-87 Hornet Moth,LandPlane,1,4,1,1
+DH88,DE HAVILLAND,DH-88 Comet Replica,LandPlane,1,5,2,1
+DH89,DE HAVILLAND,DH-89 Dragon Rapide,LandPlane,1,5,2,1
+DH8A,DE HAVILLAND CANADA,DHC-8-100 Dash 8,LandPlane,1,5,2,3
+DH8B,DE HAVILLAND CANADA,DHC-8-200 Dash 8,LandPlane,1,5,2,3
+DH8C,DE HAVILLAND CANADA,DHC-8-300 Dash 8,LandPlane,1,5,2,3
+DH8D,DE HAVILLAND CANADA,DHC-8-400 Dash 8,LandPlane,1,5,2,3
+DH90,DE HAVILLAND,DH-90 Dragonfly,LandPlane,1,5,2,1
+DH94,DE HAVILLAND,DH-94 Moth Minor,LandPlane,1,4,1,1
+DHA3,DE HAVILLAND AUSTRALIA,DHA-3 Drover,LandPlane,1,5,3,1
+DHC1,DE HAVILLAND,DHC-1 Chipmunk,LandPlane,1,4,1,1
+DHC2,DE HAVILLAND CANADA,DHC-2 Mk1 Beaver,LandPlane,1,4,1,1
+DHC3,DE HAVILLAND CANADA,DHC-3 Otter,LandPlane,1,4,1,1
+DHC4,DE HAVILLAND CANADA,DHC-4 Caribou,LandPlane,1,5,2,1
+DHC5,DE HAVILLAND CANADA,DHC-5 Buffalo,LandPlane,1,5,2,3
+DHC6,DE HAVILLAND CANADA,DHC-6 Twin Otter,LandPlane,1,5,2,3
+DHC7,DE HAVILLAND CANADA,DHC-7 Dash 7,LandPlane,1,5,4,3
+DIES,PENNEC-LUCAS,Dieselis,LandPlane,1,4,1,1
+DIJ3,DIJKMAN-DULKES,Dijkhastar 3,LandPlane,1,4,1,1
+DIJ4,DIJKMAN-DULKES,Dijkhastar 4,Amphibian,3,4,1,1
+DIMO,DIAMOND,HK-36 Super Dimona,LandPlane,1,4,1,1
+DINO,GANZAVIA,GAK-22 Dinó,LandPlane,1,4,1,1
+DIPR,COLLINS,Dipper,Amphibian,3,4,1,1
+DISC,SCHEMPP-HIRTH,Discus 2T,LandPlane,1,4,1,1
+DJET,DIAMOND,DJ-1 D-Jet,LandPlane,1,4,1,4
+DJIN,SUD-OUEST,SO-1221 Djinn,Helicopter,1,6,1,3
+DLH2,LANGE,E-1 Antares DLR-H2,LandPlane,1,4,1,10
+DNGO,AERORIC,Dingo,Amphibian,3,4,1,3
+DO27,DORNIER,Do-27,LandPlane,1,4,1,1
+DO28,DORNIER,Do-28,LandPlane,1,5,2,1
+DOCX,KOVACH-ELMENDORF,ES-3 Doc's RX,LandPlane,1,4,1,1
+DON,UNIKOMTRANSO,Don,LandPlane,1,4,1,1
+DOVE,DE HAVILLAND,DH-104 Dove,LandPlane,1,5,2,1
+DR1,FOKKER,Dr-1 Replica,LandPlane,1,4,1,1
+DR10,CENTRE EST,DR-1050 Ambassadeur,LandPlane,1,4,1,1
+DR22,CENTRE EST,DR-220 2+2,LandPlane,1,4,1,1
+DR30,ROBIN,DR-300,LandPlane,1,4,1,1
+DR40,ROBIN,DR-400 2+2,LandPlane,1,4,1,1
+DRAG,DRAGON FLY,Dragon Fly,Helicopter,1,6,1,1
+DRIF,AUSTFLIGHT,Drifter,LandPlane,1,4,1,1
+DRTG,DART,G,LandPlane,1,4,1,1
+DSA1,SMITH (1),DSA-1 Miniplane,LandPlane,1,4,1,1
+DSK,KILLINGSWORTH,DSK-1 Hawk,LandPlane,1,4,1,1
+DSLK,DRIGGS,Skylark,LandPlane,1,4,1,1
+DT45,DIAMOND,DART-450,LandPlane,1,4,1,3
+DTA1,VERHEES,D-1 Delta,LandPlane,1,4,1,1
+DTA2,VERHEES,D-2 Delta,LandPlane,1,4,1,1
+DUB2,DUBNA,2 Osa,LandPlane,1,4,1,1
+DUCE,BAKENG,Duce,LandPlane,1,4,1,1
+DUOD,SCHEMPP-HIRTH,Duo Discus T,LandPlane,1,4,1,1
+DUR5,DURAND,Mk5,LandPlane,1,4,1,1
+DV1,DOVA,DV-1 Skylark,LandPlane,1,4,1,1
+DV2,DOVA,DV-2 Infinity,LandPlane,1,4,1,1
+DV20,DIAMOND,DV-20 Katana,LandPlane,1,4,1,1
+DW1,EAGLE,DW-1 Eagle,LandPlane,1,4,1,1
+DWD2,DEWOITINE,D-26,LandPlane,1,4,1,1
+DYH2,DYNALI,H-2,Helicopter,1,6,1,1
+DYH3,DYNALI,H-3 EasyFlyer,Helicopter,1,6,1,1
+E110,EMBRAER,EMB-110 Bandeirante,LandPlane,1,5,2,3
+E120,EMBRAER,EMB-120 Brasilia,LandPlane,1,5,2,3
+E121,EMBRAER,EMB-121 Xingu,LandPlane,1,5,2,3
+E135,EMBRAER,ERJ-135,LandPlane,1,5,2,4
+E145,EMBRAER,ERJ-145EP,LandPlane,1,5,2,4
+E170,EMBRAER,ERJ-170-100,LandPlane,1,5,2,4
+E190,EMBRAER,ERJ-190-100,LandPlane,1,5,2,4
+E195,EMBRAER,ERJ-190-200,LandPlane,1,5,2,4
+E2,GRUMMAN,E-2 Hawkeye,LandPlane,1,5,2,3
+E200,EXTRA,EA-200,LandPlane,1,4,1,1
+E230,EXTRA,EA-230,LandPlane,1,4,1,1
+E275,EMBRAER,ERJ-190-500,LandPlane,1,5,2,4
+E290,EMBRAER,ERJ-190-300,LandPlane,1,5,2,4
+E295,EMBRAER,ERJ-190-400,LandPlane,1,5,2,4
+E29E,BINDER (2),EB-29DE,LandPlane,1,4,1,10
+E2CB,TAYLOR (1),E-2 Cub,LandPlane,1,4,1,1
+E300,EXTRA,EA-300,LandPlane,1,4,1,1
+E314,EMBRAER,EMB-314 Super Tucano,LandPlane,1,4,1,3
+E350,CESSNA,E350,LandPlane,1,4,1,3
+E35L,EMBRAER,EMB-135BJ Legacy,LandPlane,1,5,2,4
+E390,EMBRAER,EMB-390,LandPlane,1,5,2,4
+E3CF,BOEING,E-3A (CFM56) Sentry,LandPlane,1,5,4,4
+E3TF,BOEING,E-3A (TF33) Sentry,LandPlane,1,5,4,4
+E400,EXTRA,EA-400,LandPlane,1,4,1,1
+E45X,EMBRAER,EMB-145XR,LandPlane,1,5,2,4
+E500,EXTRA,EA-500,LandPlane,1,4,1,3
+E50P,EMBRAER,EMB-500 Phenom 100,LandPlane,1,5,2,4
+E530,CESSNA,E530 Scorpion,LandPlane,1,5,2,4
+E545,EMBRAER,EMB-545 Praetor 500,LandPlane,1,5,2,4
+E550,EMBRAER,EMB-550 Praetor 600,LandPlane,1,5,2,4
+E55P,EMBRAER,EMB-505 Phenom 300,LandPlane,1,5,2,4
+E6,BOEING,E-6 Mercury,LandPlane,1,5,4,4
+E737,BOEING,737-700 Wedgetail,LandPlane,1,5,2,4
+E75L,EMBRAER,ERJ-170-200 (long wing),LandPlane,1,5,2,4
+E75S,EMBRAER,ERJ-170-200 (short wing),LandPlane,1,5,2,4
+E767,BOEING,E-767,LandPlane,1,5,2,4
+E7BH,E-7 GROUP,E-7 Bush Hog,LandPlane,1,4,1,1
+E8,NORTHROP GRUMMAN,E-8 Joint Stars,LandPlane,1,5,4,4
+EA40,ECLIPSE,Eclipse 400,LandPlane,1,4,1,4
+EA50,ECLIPSE,Eclipse 500,LandPlane,1,5,2,4
+EAEA,GROSSO,Easy Eagle,LandPlane,1,4,1,1
+EAGL,CHRISTEN,Eagle,LandPlane,1,4,1,1
+EAGT,AMEAGLE,American Eaglet,LandPlane,1,4,1,1
+EAGX,EAGLE AIRCRAFT,Eagle 150,LandPlane,1,4,1,1
+EB29,BINDER (2),EB-29,LandPlane,1,4,1,1
+EBOY,FMA,20 El Boyero,LandPlane,1,4,1,1
+EC20,AIRBUS HELICOPTERS,EC-120 Colibri,Helicopter,1,6,1,3
+EC25,AIRBUS HELICOPTERS,EC-225 Super Puma Mk2+,Helicopter,1,6,2,3
+EC30,AIRBUS HELICOPTERS,EC-130,Helicopter,1,6,1,3
+EC35,AIRBUS HELICOPTERS,EC-135,Helicopter,1,6,2,3
+EC45,AIRBUS HELICOPTERS-KAWASAKI,EC-145,Helicopter,1,6,2,3
+EC55,AIRBUS HELICOPTERS,EC-155,Helicopter,1,6,2,3
+EC6,CROSES,EC-6 Criquet,LandPlane,1,4,1,1
+EC75,AIRBUS HELICOPTERS-HARBIN,EC-175,Helicopter,1,6,2,3
+ECHO,TECNAM,P-92 Echo,LandPlane,1,4,1,1
+EDGE,ZIVKO,Edge 540,LandPlane,1,4,1,1
+EDGT,ZIVKO,Edge 540 T,LandPlane,1,4,1,1
+EF2,BYE AEROSPACE,eFlyer 2,LandPlane,1,4,1,10
+EFAN,AIRBUS,E-Fan,LandPlane,1,5,2,10
+EFOX,AEROPRO,Eurofox,LandPlane,1,4,1,1
+EFUS,MAGNUS,MG-11 eFusion,LandPlane,1,4,1,10
+EGL3,ROTORWAY,Eagle 300T,Helicopter,1,6,1,3
+EGRT,GROB,D-500 Egrett 2,LandPlane,1,4,1,3
+EH10,AGUSTAWESTLAND,AW-101,Helicopter,1,6,3,3
+EL10,ELA AVIACION,ELA-10 Eclipse,Gyrocopter,1,9,1,1
+EL20,ELITAR,IE-202,LandPlane,1,4,1,1
+ELA7,ELA AVIACION,ELA-07,Gyrocopter,1,9,1,1
+ELF,PARNALL,Elf,LandPlane,1,4,1,1
+ELIT,EPIC AIRCRAFT,Epic Elite,LandPlane,1,5,2,4
+ELPS,EXPLORER (1),Ellipse,LandPlane,1,4,1,1
+ELSP,A2 CZ,Ellipse Spirit,LandPlane,1,4,1,1
+ELST,PUTZER,Elster,LandPlane,1,4,1,1
+ELTO,CONTINENTAL COPTERS,El Tomcat,Helicopter,1,6,1,1
+ELTR,ELITAR,IE-101 Elitar,LandPlane,1,4,1,1
+EM10,MARGANSKI,EM-10 Bielik,LandPlane,1,4,1,4
+EM11,MARGANSKI,EM-11 Orka,LandPlane,1,5,2,1
+EN28,ENSTROM,280 Shark,Helicopter,1,6,1,1
+EN48,ENSTROM,480,Helicopter,1,6,1,3
+EP9,LANCASHIRE,EP-9 Prospector,LandPlane,1,4,1,1
+EPER,EPERVIER (1),Epervier,LandPlane,1,4,1,1
+EPIC,EPIC AIRCRAFT,E1000,LandPlane,1,4,1,3
+EPX1,EPERVIER (2),X-1,LandPlane,1,4,1,1
+ERAC,DICKEY,E-Racer,LandPlane,1,4,1,1
+ERCO,ERCO,415 Ercoupe,LandPlane,1,4,1,1
+ES11,ALPI,AH-130 Syton,Helicopter,1,6,1,3
+ES13,EARLY BIRD,Spad 13 80%,LandPlane,1,4,1,1
+ESCA,EPIC AIRCRAFT,Epic Escape,LandPlane,1,4,1,3
+ESCP,JUST,Escapade,LandPlane,1,4,1,1
+ESQL,MOURA,Esqualo,LandPlane,1,4,1,1
+ETA,ETA AIRCRAFT,Eta,LandPlane,1,4,1,1
+ETAR,DASSAULT,Super Etendard,LandPlane,1,4,1,4
+EUFI,EUROFIGHTER,Eurofighter 2000,LandPlane,1,5,2,4
+EUPA,EUROPA,Europa,LandPlane,1,4,1,1
+EURT,FFT,Eurotrainer 2000,LandPlane,1,4,1,1
+EV55,EVEKTOR,EV-55 Outback,LandPlane,1,5,2,1
+EV97,EVEKTOR,EV-97 EuroStar,LandPlane,1,4,1,1
+EVAN,EVANGEL,4500 Evangel,LandPlane,1,5,2,1
+EVIC,EPIC AIRCRAFT,Epic Victory,LandPlane,1,4,1,4
+EVOP,LANCAIR,Evolution Piston,LandPlane,1,4,1,1
+EVOT,LANCAIR,Evolution Turbine,LandPlane,1,4,1,3
+EVSS,EVEKTOR,SportStar,LandPlane,1,4,1,1
+EX5T,AEA,Explorer 500T,LandPlane,1,4,1,3
+EXEC,ROTORWAY,Exec,Helicopter,1,6,1,1
+EXEJ,ROTORWAY,JetExec,Helicopter,1,6,1,3
+EXNG,EXTRA,NG,LandPlane,1,4,1,1
+EXPL,MCDONNELL DOUGLAS,MD-900 Explorer,Helicopter,1,6,2,3
+EXPR,EXPRESS,Express 2000RG,LandPlane,1,4,1,1
+EZFL,BLUE YONDER,E-Z Flyer,LandPlane,1,4,1,1
+EZFT,BLUE YONDER,Twin E-Z Flyer,LandPlane,1,5,2,1
+EZHV,BLUE YONDER,E-Z Harvard,LandPlane,1,4,1,1
+EZIK,ISTRA,Ezhik,LandPlane,1,4,1,1
+EZKC,BLUE YONDER,E-Z King Cobra,LandPlane,1,4,1,1
+F1,MITSUBISHI,F-1,LandPlane,1,5,2,4
+F100,FOKKER,100,LandPlane,1,5,2,4
+F104,LOCKHEED,F-104 Starfighter,LandPlane,1,4,1,4
+F106,CONVAIR,QF-106 Delta Dart,LandPlane,1,4,1,4
+F111,GENERAL DYNAMICS,F-111 Aardvark,LandPlane,1,5,2,4
+F117,LOCKHEED,F-117 Nighthawk,LandPlane,1,5,2,4
+F13,JUNKERS,F-13 Replica,LandPlane,1,4,1,1
+F14,GRUMMAN,F-14 Tomcat,LandPlane,1,5,2,4
+F15,MCDONNELL DOUGLAS,F-15 Eagle,LandPlane,1,5,2,4
+F156,FIESELER,Fi-156 Storch,LandPlane,1,4,1,1
+F16,GENERAL DYNAMICS,F-16 Fighting Falcon,LandPlane,1,4,1,4
+F18H,MCDONNELL DOUGLAS,FA-18C Hornet,LandPlane,1,5,2,4
+F18S,MCDONNELL DOUGLAS,FA-18E Super Hornet,LandPlane,1,5,2,4
+F1FV,AVION,F-1 Favorit,LandPlane,1,4,1,1
+F2,MITSUBISHI,F-2,LandPlane,1,4,1,4
+F22,LOCKHEED MARTIN,F-22 Raptor,LandPlane,1,5,2,4
+F260,SIAI-MARCHETTI,SF-260,LandPlane,1,4,1,1
+F26T,SIAI-MARCHETTI,SF-260T,LandPlane,1,4,1,3
+F27,FOKKER,F-27 Friendship,LandPlane,1,5,2,3
+F28,FOKKER,F-28 Fellowship,LandPlane,1,5,2,4
+F2TH,DASSAULT,Falcon 2000,LandPlane,1,5,2,4
+F30,GOLDEN CAR,F-30 Brio,LandPlane,1,4,1,1
+F35,LOCKHEED MARTIN,F-35C Lightning 2,LandPlane,1,4,1,4
+F3F,GRUMMAN,F3F Replica,LandPlane,1,4,1,1
+F4,MCDONNELL DOUGLAS,F-4 Phantom 2,LandPlane,1,5,2,4
+F402,FALCON AIR,Falcon 402,LandPlane,1,4,1,3
+F406,CESSNA,F406 Caravan 2,LandPlane,1,5,2,3
+F41E,AEROSAMARA,F-41 El'brus,LandPlane,1,5,2,1
+F421,FALCON AIR,Falcon 421,LandPlane,1,4,1,3
+F5,NORTHROP,F-5 Freedom Fighter,LandPlane,1,5,2,4
+F50,FOKKER,50,LandPlane,1,5,2,3
+F5SA,IRIAF,S-100 Saeghe,LandPlane,1,5,2,4
+F60,FOKKER,60,LandPlane,1,5,2,3
+F600,VULCANAIR,SF-600 Canguro,LandPlane,1,5,2,3
+F70,FOKKER,70,LandPlane,1,5,2,4
+F8,CHANCE VOUGHT,F8U Crusader,LandPlane,1,4,1,4
+F86,NORTH AMERICAN,F-86 Sabre,LandPlane,1,4,1,4
+F8L,SEQUOIA,F-8L Falco,LandPlane,1,4,1,1
+F900,DASSAULT,Falcon 900,LandPlane,1,5,3,4
+F9F,GRUMMAN,F9F Panther,LandPlane,1,4,1,4
+FA01,FLÄMING AIR,FA-01 Saphir,LandPlane,1,4,1,1
+FA02,FLÄMING AIR,FA-02 Smaragd VLA,LandPlane,1,4,1,1
+FA03,FLÄMING AIR,FA-03 Smaragd TMG,LandPlane,1,4,1,1
+FA04,FLÄMING AIR,FA-04 Peregrine,LandPlane,1,4,1,1
+FA10,DASSAULT,Falcon 10,LandPlane,1,5,2,4
+FA11,FAIRCHILD (2),F-11 Husky,LandPlane,1,4,1,1
+FA20,DASSAULT,Falcon 20,LandPlane,1,5,2,4
+FA24,FAIRCHILD (1),F-24 Argus,LandPlane,1,4,1,1
+FA50,DASSAULT,Falcon 50,LandPlane,1,5,3,4
+FA62,FAIRCHILD (1),PT-19 Cornell,LandPlane,1,4,1,1
+FA6X,DASSAULT,Falcon 6X,LandPlane,1,5,2,4
+FA7X,DASSAULT,Falcon 7X,LandPlane,1,5,3,4
+FA8X,DASSAULT,Falcon 8X,LandPlane,1,5,3,4
+FAET,ATEC,321 Faeta,LandPlane,1,4,1,1
+FALC,AMERICAN AIRCRAFT,Falcon XP,LandPlane,1,4,1,1
+FALM,MILES,M-3 Falcon Major,LandPlane,1,4,1,1
+FANL,RHEIN,FL-1 Fanliner,LandPlane,1,4,1,1
+FANT,RHEIN,Fantrainer,LandPlane,1,4,1,3
+FB1A,BOWERS,Fly Baby 1A,LandPlane,1,4,1,1
+FB1B,BOWERS,Fly Baby 1B,LandPlane,1,4,1,1
+FB5,EURO-FLY,FB-5 Star Light,LandPlane,1,4,1,1
+FBA2,FOUND,FBA-2 Bush Hawk,LandPlane,1,4,1,1
+FBIR,FREEWING,Freebird Mk5,LandPlane,1,4,1,1
+FC1,CHENGDU,FC-1 Xiaolong,LandPlane,1,4,1,4
+FD2E,FLIGHT DESIGN,F-2e,LandPlane,1,4,1,10
+FDCT,FLIGHT DESIGN,CT,LandPlane,1,4,1,1
+FDF2,FLIGHT DESIGN,F-2,LandPlane,1,4,1,1
+FDMC,FLIGHT DESIGN,MC,LandPlane,1,4,1,1
+FE51,FIGHTER ESCORT WINGS,P-51,LandPlane,1,4,1,1
+FEST,AEROSTAR (2),R40S Festival,LandPlane,1,4,1,1
+FFLY,FAIREY,Firefly,LandPlane,1,4,1,1
+FG01,FARIGOUX,FG-01 Origan,LandPlane,1,4,1,1
+FGT,MIDWEST AEROSPORT,Formula GT,LandPlane,1,4,1,1
+FH11,FAIRCHILD HILLER,FH-1100,Helicopter,1,6,1,3
+FIBO,STARFIRE,Firebolt Convertible,LandPlane,1,4,1,1
+FIKD,FIKE,D,LandPlane,1,4,1,1
+FIKE,FIKE,E,LandPlane,1,4,1,1
+FINC,FLEET,16 Finch,LandPlane,1,4,1,1
+FJ10,AEROSTAR (1),FJ-100,LandPlane,1,5,2,4
+FJR3,FAJR,F-3,LandPlane,1,4,1,1
+FK12,B & F TECHNIK,FK-12 Comet,LandPlane,1,4,1,1
+FK14,B & F TECHNIK,FK-14 Polaris,LandPlane,1,4,1,1
+FK9,B & F TECHNIK,FK-9,LandPlane,1,4,1,1
+FL3,AVIA (1),L-3 Aviastarlet,LandPlane,1,4,1,1
+FL53,METEOR,FL-53,LandPlane,1,4,1,1
+FL54,METEOR,FL-54,LandPlane,1,4,1,1
+FL55,METEOR,FL-55,LandPlane,1,4,1,1
+FLAM,DASSAULT,MD-311 Flamant,LandPlane,1,5,2,1
+FLCO,SELEX ES,Falco,LandPlane,1,4,1,1
+FLE2,FLEET,2,LandPlane,1,4,1,1
+FLE7,FLEET,7 Fawn,LandPlane,1,4,1,1
+FLIZ,FLITZER,Z-1 Flitzer,LandPlane,1,4,1,1
+FLSH,EURO-FLY,Flash,LandPlane,1,4,1,1
+FLSS,KOLB,Flyer SS,LandPlane,1,4,1,1
+FM25,FLYING MACHINES,FM-250 Vampire,LandPlane,1,4,1,1
+FMGO,AAK,Flamingo,LandPlane,1,4,1,1
+FN33,SIAI-MARCHETTI,FN-333 Riviera,Amphibian,3,4,1,1
+FNKB,AKRON,Funk B,LandPlane,1,4,1,1
+FOOF,STEWART (2),JD-2 Foo Fighter,LandPlane,1,4,1,1
+FORT,FLEET,60 Fort,LandPlane,1,4,1,1
+FOUG,FOUGA,CM-170R Magister,LandPlane,1,5,2,4
+FOX,DENNEY,Kitfox,LandPlane,1,4,1,1
+FOXT,TEAM TANGO,Foxtrot-4,LandPlane,1,4,1,1
+FRBD,NORTHROP GRUMMAN,Firebird,LandPlane,1,4,1,1
+FREE,CABRINHA,RC-412 Free Spirit,LandPlane,1,4,1,1
+FREL,AEROSPATIALE,SA-321 Super Frelon,Helicopter,1,6,3,3
+FRNT,SKY RAIDER,Frontier,LandPlane,1,4,1,1
+FRON,FRONTIER,Frontier MD-2,LandPlane,1,4,1,1
+FS51,FALCONAR,SAL P-51D Mustang,LandPlane,1,4,1,1
+FT30,NAI,FT-300,LandPlane,1,4,1,1
+FU24,FLETCHER,FU-24,LandPlane,1,4,1,1
+FURY,HAWKER,Sea Fury,LandPlane,1,4,1,1
+FUSI,MAGNUS,MG-11 Fusion,LandPlane,1,4,1,1
+FW02,FLYWHALE,FW-02 Flywhale,Amphibian,3,4,1,1
+FW19,FOUR WINDS,192,LandPlane,1,4,1,1
+FW21,FOUR WINDS,FX-210,LandPlane,1,4,1,1
+FW44,FOCKE-WULF,Fw-44 Stieglitz,LandPlane,1,4,1,1
+FW90,FOCKE-WULF,Fw-190 Replica,LandPlane,1,4,1,1
+FWSB,FLEETWINGS,F-4 Sea Bird,Amphibian,3,4,1,1
+FX1,INNOVAVIATION,FX-1,LandPlane,1,4,1,1
+G1,G1 AVIATION,G-1 Gélinotte,LandPlane,1,4,1,1
+G103,GROB,G-103C Twin 3SL,LandPlane,1,4,1,1
+G109,GROB,G-109 Ranger,LandPlane,1,4,1,1
+G115,GROB,G-115,LandPlane,1,4,1,1
+G120,GROB,G-120 Snunit,LandPlane,1,4,1,1
+G12T,GROB,G-120TP,LandPlane,1,4,1,3
+G140,GROB,G-140TP,LandPlane,1,4,1,3
+G150,GULFSTREAM AEROSPACE,Gulfstream G150,LandPlane,1,5,2,4
+G159,GRUMMAN,G-159 Gulfstream 1,LandPlane,1,5,2,3
+G15T,GROB,G-115T Acro,LandPlane,1,4,1,1
+G160,GROB,G-160 Ranger,LandPlane,1,4,1,3
+G164,GRUMMAN,G-164 Ag-Cat,LandPlane,1,4,1,1
+G180,GENERAL AIRCRAFT,G1-80 Skyfarer,LandPlane,1,4,1,1
+G200,GILES,G-200,LandPlane,1,4,1,1
+G202,GILES,G-202,LandPlane,1,4,1,1
+G21,GRUMMAN,G-21A Goose,Amphibian,3,5,2,1
+G21M,MCKINNON,G-21C Goose,Amphibian,3,5,4,1
+G21T,MCKINNON,G-21E Turbo Goose,Amphibian,3,5,2,3
+G222,ALENIA,G-222,LandPlane,1,5,2,3
+G250,GULFSTREAM AEROSPACE,Gulfstream G250,LandPlane,1,5,2,4
+G280,GULFSTREAM AEROSPACE,Gulfstream G280,LandPlane,1,5,2,4
+G2CA,GUIMBAL,G-2 Cabri,Helicopter,1,6,1,1
+G2GL,SOKO,G-2 Galeb,LandPlane,1,4,1,4
+G2T1,GREAT LAKES,2T-1 Sport,LandPlane,1,4,1,1
+G3,REMOS,G-3 Mirage,LandPlane,1,4,1,1
+G300,GILES,G-300,LandPlane,1,4,1,1
+G44,GRUMMAN,G-44 Widgeon,Amphibian,3,5,2,1
+G46,FIAT,G-46,LandPlane,1,4,1,1
+G4SG,SOKO,G-4 Super Galeb,LandPlane,1,4,1,4
+G59,FIAT,G-59,LandPlane,1,4,1,1
+G64T,GRUMMAN,G-164 Turbo Ag-Cat,LandPlane,1,4,1,3
+G70,GROPPO,G-70,LandPlane,1,4,1,1
+G73,GRUMMAN,G-73 Mallard,Amphibian,3,5,2,1
+G73T,GRUMMAN,G-73T Turbo Mallard,Amphibian,3,5,2,3
+G800,GRINVALDS,G-801 Orion,LandPlane,1,4,1,1
+G850,GROB,G-850 Strato 2C,LandPlane,1,5,2,1
+G96,GRUMMAN,G-96 Trader,LandPlane,1,5,2,1
+G97,SAI (2),G-97 Spotter,LandPlane,1,4,1,1
+GA10,GIPPSAERO,GA-10,LandPlane,1,4,1,3
+GA20,GIPPSLAND,GA-200 Fatman,LandPlane,1,4,1,1
+GA5C,GULFSTREAM AEROSPACE,G-7 Gulfstream G500,LandPlane,1,5,2,4
+GA6C,GULFSTREAM AEROSPACE,G-7 Gulfstream G600,LandPlane,1,5,2,4
+GA7,GRUMMAN AMERICAN,GA-7 Cougar,LandPlane,1,5,2,1
+GA7C,GULFSTREAM AEROSPACE,G-8 Gulfstream G700,LandPlane,1,5,2,4
+GA8,GIPPSLAND,GA-8 Airvan,LandPlane,1,4,1,1
+GA8C,GULFSTREAM,G800,LandPlane,1,5,2,4
+GABR,BLACKSHAPE,Bk-160 Gabriel,LandPlane,1,4,1,1
+GALX,GULFSTREAM AEROSPACE,Gulfstream G200,LandPlane,1,5,2,4
+GANT,FAIREY,Gannet,LandPlane,1,1,0,3
+GAUN,GLOSTER,Gauntlet,LandPlane,1,4,1,1
+GAVI,GAVILAN,EL-1 Gavilan 358,LandPlane,1,4,1,1
+GAZL,AEROSPATIALE,SA-342 Gazelle,Helicopter,1,6,1,3
+GB1,GAME COMPOSITES,GB-1 GameBird,LandPlane,1,4,1,1
+GBSP,BEETS,GB Special,LandPlane,1,4,1,1
+GC1,GLOBE,GC-1 Swift,LandPlane,1,4,1,1
+GDUK,ELLISON-MAHON,Gweduck,Amphibian,3,5,2,1
+GEMI,MILES,M-65 Gemini,LandPlane,1,5,2,1
+GENI,IFB,E-Genius,LandPlane,1,4,1,10
+GEPE,AERO SERVICES,Guêpe,LandPlane,1,4,1,1
+GF20,GROB,GF-200,LandPlane,1,4,1,1
+GFLY,SCALED,311 Global Flyer,LandPlane,1,4,1,4
+GL5T,BOMBARDIER,Global 5000,LandPlane,1,5,2,4
+GL7T,BOMBARDIER,Global 7000,LandPlane,1,5,2,4
+GLAD,GLOSTER,Gladiator,LandPlane,1,4,1,1
+GLAS,STODDARD-HAMILTON,Glasair,LandPlane,1,4,1,1
+GLEX,BOMBARDIER,Global Express,LandPlane,1,5,2,4
+GLF2,GRUMMAN,Gulfstream 2,LandPlane,1,5,2,4
+GLF3,GULFSTREAM AEROSPACE,Gulfstream 3,LandPlane,1,5,2,4
+GLF4,GULFSTREAM AEROSPACE,Gulfstream 4,LandPlane,1,5,2,4
+GLF5,GULFSTREAM AEROSPACE,Gulfstream 5,LandPlane,1,5,2,4
+GLF6,GULFSTREAM AEROSPACE,Gulfstream G650,LandPlane,1,5,2,4
+GLSP,NEW GLASTAR,Sportsman 2+2,LandPlane,1,4,1,1
+GLST,STODDARD-HAMILTON,SH-4 GlaStar,LandPlane,1,4,1,1
+GM01,YALO,GM-01 Gniady,LandPlane,1,4,1,1
+GM17,INTRACOM,GM-17  Viper,LandPlane,1,4,1,3
+GMGC,IBIS (2),Grand Magic,LandPlane,1,4,1,1
+GNAT,FOLLAND,Fo-144 Gnat,LandPlane,1,4,1,4
+GOBU,BUTTERFLY,Golden Butterfly,Gyrocopter,1,9,1,1
+GOLF,TECNAM,P-96 Golf,LandPlane,1,4,1,1
+GOOS,QUIKKIT,Glass Goose,Amphibian,3,4,1,1
+GOTR,GOAIR,GT-1 Trainer,LandPlane,1,4,1,1
+GP1,JIHLAVAN,Skyleader GP One,LandPlane,1,4,1,1
+GP3,PEREIRA,GP-3 Osprey 2,Amphibian,3,4,1,1
+GP4,PEREIRA,GP-4,LandPlane,1,4,1,1
+GPRO,GENEVATION,GenPro,LandPlane,1,4,1,1
+GR51,CAMERON,P-51G Grand 51,LandPlane,1,4,1,3
+GRAF,LUNDY,Graflite,LandPlane,1,4,1,1
+GRFN,GRIFFON AERO,Griffon,LandPlane,1,4,1,1
+GRIF,CANADA AIR RV,Griffin,LandPlane,1,4,1,1
+GRIZ,AEROTEK (3),Turbo Grizzly,LandPlane,1,4,1,3
+GSIS,SLIPSTREAM,Ultra Sport,LandPlane,1,4,1,1
+GSPN,GROB,G-180 SPn Utility Jet,LandPlane,1,5,2,4
+GUEP,AERO SERVICES,Guepard,LandPlane,1,4,1,1
+GURI,AEROMOT,AMT-600 Guri,LandPlane,1,4,1,1
+GX,STEMME,Remos GX,LandPlane,1,4,1,1
+GY10,GARDAN,GY-100 Bagheera,LandPlane,1,4,1,1
+GY20,CAB,GY-20 Minicab,LandPlane,1,4,1,1
+GY30,CAB,GY-30 Supercab,LandPlane,1,4,1,1
+GY80,SOCATA,GY-80 Horizon,LandPlane,1,4,1,1
+H111,HEINKEL,He-111,LandPlane,1,5,2,1
+H12T,HILLER,UH-12E3T,Helicopter,1,6,1,3
+H160,AIRBUS HELICOPTERS,H-160,Helicopter,1,6,2,3
+H2,KAMAN,SH-2 Seasprite,Helicopter,1,6,2,3
+H202,HB-AIRCRAFT,HB-202 Fledger,LandPlane,1,4,1,1
+H204,HB-FLUGTECHNIK,HB-204 Tornado,LandPlane,1,4,1,1
+H207,HB-FLUGTECHNIK,HB-207 Alfa,LandPlane,1,4,1,1
+H21,VERTOL,CH-21 Work horse,Helicopter,1,6,1,1
+H25A,HAWKER SIDDELEY,HS-125-1,LandPlane,1,5,2,4
+H25B,RAYTHEON,Hawker 850,LandPlane,1,5,2,4
+H25C,RAYTHEON,Hawker 1000,LandPlane,1,5,2,4
+H269,HUGHES,269 Sky Knight,Helicopter,1,6,1,1
+H40,HOFFMANN,H-40,LandPlane,1,4,1,1
+H43A,KAMAN,H-43A,Helicopter,1,6,1,1
+H43B,KAMAN,H-43B Huskie,Helicopter,1,6,1,3
+H46,BOEING VERTOL,CH-46 Sea Knight,Helicopter,1,6,2,3
+H47,BOEING VERTOL,CH-47 Chinook,Helicopter,1,6,2,3
+H500,HUGHES,500,Helicopter,1,6,1,3
+H53,SIKORSKY,CH-53D Sea Stallion,Helicopter,1,6,2,3
+H53S,SIKORSKY,CH-53E Super Stallion,Helicopter,1,6,3,3
+H60,SIKORSKY,MH-60 Black Hawk,Helicopter,1,6,2,3
+H64,MCDONNELL DOUGLAS,AH-64 Apache,Helicopter,1,6,2,3
+HA2,HOLLMANN,HA-2 Sportster,Gyrocopter,1,9,1,1
+HA31,HINDUSTAN,HA-31 Basant,LandPlane,1,4,1,1
+HA4T,RAYTHEON,Hawker 4000,LandPlane,1,5,2,4
+HAHU,SINDLINGER,HH-1 Hawker Hurricane,LandPlane,1,4,1,1
+HAR,MCDONNELL DOUGLAS,AV-8 Harrier,LandPlane,1,4,1,4
+HAW3,GROEN,H2X Hawk 3,Gyrocopter,1,9,1,1
+HAWK,BAE SYSTEMS,Hawk,LandPlane,1,4,1,4
+HB21,BRDITSCHKA,HB-21 Hobbylifter,LandPlane,1,4,1,1
+HB23,BRDITSCHKA,HB-23 Hobbyliner,LandPlane,1,4,1,1
+HB3,BRDITSCHKA,HB-3,LandPlane,1,4,1,1
+HCAT,GRUMMAN,F6F Hellcat,LandPlane,1,4,1,1
+HD34,HUREL-DUBOIS,HD-34,LandPlane,1,5,2,1
+HDJT,HONDA,HA-420 HondaJet,LandPlane,1,5,2,4
+HEAD,STEWART (2),JD-1 Headwind,LandPlane,1,4,1,1
+HERN,DE HAVILLAND,DH-114 Heron,LandPlane,1,5,4,1
+HF20,HFB,HFB-320 Hansa,LandPlane,1,5,2,4
+HI27,HIRTH,Hi-27 Acrostar,LandPlane,1,4,1,1
+HIGH,JUST,Highlander,LandPlane,1,4,1,1
+HIND,HAWKER,Hind,LandPlane,1,4,1,1
+HL2,LAMBACH,HL-2 Replica,LandPlane,1,4,1,1
+HLD4,HALBERSTADT,D-4 Replica,LandPlane,1,4,1,1
+HM38,FALCONAR,HM-380 Ladybug,LandPlane,1,4,1,1
+HN70,NICOLLIER,HN-700 Menestrel 2,LandPlane,1,4,1,1
+HORN,WALLERKOWSKI,Hornisse,LandPlane,1,4,1,1
+HORZ,FISHER AERO,Horizon,LandPlane,1,4,1,1
+HPTR,IDEA,Hydropteron,Amphibian,3,4,1,1
+HPZL,HISTORICAL AIRCRAFT,PZL P-11C,LandPlane,1,4,1,1
+HR10,ROBIN,HR-100 President,LandPlane,1,4,1,1
+HR20,ROBIN,HR-200 Acrobin,LandPlane,1,4,1,1
+HRM9,ELBIT,Hermes 900,LandPlane,1,4,1,1
+HRNT,AAK,Hornet,LandPlane,1,4,1,1
+HROC,HARMON (2),Rocket,LandPlane,1,4,1,1
+HRON,IAI,Heron,LandPlane,1,4,1,1
+HRYA,HISTORICAL AIRCRAFT,Ryan Trainer,LandPlane,1,4,1,1
+HSMT,ROTORSMART,HeliSmart,Helicopter,1,6,1,1
+HT16,HINDUSTAN,HJT-16 Kiran,LandPlane,1,4,1,4
+HT2,HINDUSTAN,HT-2,LandPlane,1,4,1,1
+HT32,HINDUSTAN,HPT-32 Deepak,LandPlane,1,4,1,1
+HT34,HINDUSTAN,HTT-34,LandPlane,1,4,1,3
+HT36,HINDUSTAN,HJT-36 Sitara,LandPlane,1,4,1,4
+HT40,HINDUSTAN,HTT-40,LandPlane,1,4,1,3
+HU1,SHENYANG SAILPLANE,HU-1 Seagull,LandPlane,1,4,1,1
+HU2,SHENYANG SAILPLANE,HU-2 Petrel,LandPlane,1,4,1,1
+HUCO,BELL,AH-1S HueyCobra,Helicopter,1,6,1,3
+HUML,HUMMEL,Hummel Bird,LandPlane,1,4,1,1
+HUMM,AEROTEK (2),Hummingbird,LandPlane,1,4,1,1
+HUNT,HAWKER,Hunter,LandPlane,1,4,1,4
+HURI,HAWKER,Hurricane,LandPlane,1,4,1,1
+HURK,TAI,TT-32 Hürku?,LandPlane,1,4,1,3
+HUSK,AVIAT,A-1 Husky,LandPlane,1,4,1,1
+HW4P,GROEN,Hawk 4,Gyrocopter,1,9,1,1
+HW4T,GROEN,Jet Hawk 4T,Gyrocopter,1,9,1,3
+HX2,HELOWERKS,HX-2 Wasp,Helicopter,1,6,1,3
+HYPR,P&M AVIATION,HypR,LandPlane,1,4,1,1
+I103,ILYUSHIN,Il-103,LandPlane,1,4,1,1
+I114,ILYUSHIN,Il-114,LandPlane,1,5,2,3
+I115,AISA,I-115,LandPlane,1,4,1,1
+I11B,AISA,I-11B Peque,LandPlane,1,4,1,1
+I153,POLIKARPOV,I-153,LandPlane,1,4,1,1
+I15B,POLIKARPOV,I-15bis,LandPlane,1,4,1,1
+I16,POLIKARPOV,I-16,LandPlane,1,4,1,1
+I22,PZL-MIELEC,I-22 Iryda,LandPlane,1,4,1,4
+I23,PZL-SWIDNIK,I-23 Manager,LandPlane,1,4,1,1
+I3,INTERAVIA,I-3,LandPlane,1,4,1,1
+I66,IANNOTTA,I-66 San Francisco,LandPlane,1,4,1,1
+IA46,DINFIA,IA-46 Ranquel,LandPlane,1,4,1,1
+IA50,DINFIA,IA-50 Guarani 2,LandPlane,1,5,2,3
+IA51,DINFIA,IA-51 Tehuelche,LandPlane,1,4,1,1
+IA58,FMA,IA-58 Pucará,LandPlane,1,5,2,3
+IA63,FMA,IA-63 Pampa,LandPlane,1,4,1,4
+IFUR,ISAACS,Fury,LandPlane,1,4,1,1
+IL14,ILYUSHIN,Il-14,LandPlane,1,5,2,1
+IL18,ILYUSHIN,Il-18 Bizon,LandPlane,1,5,4,3
+IL28,ILYUSHIN,Il-28,LandPlane,1,5,2,4
+IL38,ILYUSHIN,Il-38,LandPlane,1,5,4,3
+IL62,ILYUSHIN,Il-62,LandPlane,1,5,4,4
+IL76,ILYUSHIN,Il-76,LandPlane,1,5,4,4
+IL86,ILYUSHIN,Il-86,LandPlane,1,5,4,4
+IL96,ILYUSHIN,Il-96,LandPlane,1,5,4,4
+IMPU,IMPULSE,Impulse,LandPlane,1,4,1,1
+INCQ,INPAER,Conquest,LandPlane,1,4,1,1
+INEC,INPAER,Excel,LandPlane,1,4,1,1
+INEX,INPAER,Explorer,LandPlane,1,4,1,1
+ION,ION,Ion,LandPlane,1,4,1,1
+IP06,IPE,IPE-06 Curucaca,LandPlane,1,4,1,1
+IP10,IPE,IPE-010,LandPlane,1,4,1,1
+IP26,IPAI,IPAI-26 Tuca,LandPlane,1,4,1,1
+IP6A,IPE,IPE-06A,LandPlane,1,4,1,1
+IPAN,EMBRAER,EMB-202 Ipanema,LandPlane,1,4,1,1
+IR21,ICA,IAR-821,LandPlane,1,4,1,1
+IR22,ICA,IAR-822,LandPlane,1,4,1,1
+IR23,ICA,IAR-823,LandPlane,1,4,1,1
+IR24,ICA,IAR-824,LandPlane,1,4,1,1
+IR25,ICA,IAR-825TP Triumf,LandPlane,1,4,1,3
+IR27,ICA,IAR-827 Dacic,LandPlane,1,4,1,1
+IR28,ICA,IAR-28MA,LandPlane,1,4,1,1
+IR31,ICA,IAR-831 Pelican,LandPlane,1,4,1,1
+IR46,IAR,IAR-46 Katty,LandPlane,1,4,1,1
+IR99,AVIOANE,IAR-99 Soim,LandPlane,1,4,1,4
+IS2,INSTYTUT LOTNICTWA,IS-2,Helicopter,1,6,1,1
+IS28,IAR,IS-28M2,LandPlane,1,4,1,1
+ISAT,AEROJAMES,01 Isatis,LandPlane,1,4,1,1
+ISPT,ISAACS,Spitfire,LandPlane,1,4,1,1
+J1,AUSTER,J-1 Aiglet,LandPlane,1,4,1,1
+J10,CHENGDU,J-10,LandPlane,1,4,1,4
+J177,AERODYNOS,JA-177 Evolution,LandPlane,1,4,1,1
+J2,PIPER,J-2 Cub,LandPlane,1,4,1,1
+J20,CHENGDU,J-20,LandPlane,1,5,2,4
+J3,PIPER,J-3 Cub,LandPlane,1,4,1,1
+J300,SAUPER,J-300 Joker,LandPlane,1,4,1,1
+J328,FAIRCHILD DORNIER,328JET,LandPlane,1,5,2,4
+J4,PIPER,J-4 Cub Coupe,LandPlane,1,4,1,1
+J400,JIHLAVAN JA-400 Skyleader 400,,LandPlane,1,4,1,1
+J40E,ZALL JIHLAVAN,JA-400 Skyleader 400 Electric,LandPlane,1,4,1,10
+J5,PIPER,J-5 Cub Cruiser,LandPlane,1,4,1,1
+J600,JIHLAVAN,JA-600 Skyleader 600,LandPlane,1,4,1,1
+J8A,SHENYANG,J-8A,LandPlane,1,5,2,4
+J8B,SHENYANG,J-8B,LandPlane,1,5,2,4
+JAB2,JABIRU,Jabiru J160,LandPlane,1,4,1,1
+JAB4,JABIRU,Jabiru J400,LandPlane,1,4,1,1
+JABI,JABIRU,Jabiru J120,LandPlane,1,4,1,1
+JACE,ACRO SPORT,Junior Ace,LandPlane,1,4,1,1
+JAG2,JAG HELICOPTER,JAG,Helicopter,1,6,1,3
+JAGR,SEPECAT,Jaguar,LandPlane,1,5,2,4
+JAJ5,JANOWSKI,J-5 Marco,LandPlane,1,4,1,1
+JAJ6,J & AS,J-6 Fregata,LandPlane,1,4,1,1
+JANU,SCHEMPP-HIRTH,Janus BM,LandPlane,1,4,1,1
+JARO,JACKAROO,Thruxton Jackaroo,LandPlane,1,4,1,1
+JAST,SOKO,J-21 Jastreb,LandPlane,1,4,1,4
+JB1,INDEPENDENT,X-JB-1 SeaDragon,Amphibian,3,4,1,1
+JB15,OBERLERCHNER,JOB-15,LandPlane,1,4,1,1
+JC01,COUPE,JC-01,LandPlane,1,4,1,1
+JC02,COUPE,JC-02,LandPlane,1,4,1,1
+JCOM,AERO COMMANDER,1121 Jet Commander,LandPlane,1,5,2,4
+JCRU,AASI,Jetcruzer,LandPlane,1,4,1,3
+JD2,DYKE,JD-2 Delta,LandPlane,1,4,1,1
+JDOE,AMERICAN HOMEBUILTS,John Doe,LandPlane,1,4,1,1
+JE2,EICH,JE-2 Gyroplane,Gyrocopter,1,9,1,1
+JFOX,EUROALA,Jet Fox,LandPlane,1,4,1,1
+JH7,XIAN,JH-7,LandPlane,1,5,2,4
+JK05,EKOLOT,JK-05 Beetle,LandPlane,1,4,1,1
+JL9,GUIZHOU,JL-9 Shanying,LandPlane,1,4,1,4
+JN76,CAUDRON,JN-760 Cyclone Replica,LandPlane,1,4,1,1
+JPM1,MARIE,JPM-01 Medoc,LandPlane,1,4,1,1
+JPRO,BAC,145 Jet Provost,LandPlane,1,4,1,4
+JRC1,CHALARD,JRC-01 Julcar,LandPlane,1,4,1,1
+JRO,DTA,J-RO,Gyrocopter,1,9,1,1
+JS1,JETSTREAM,Jetstream 1,LandPlane,1,5,2,3
+JS20,JETSTREAM,Jetstream 200,LandPlane,1,5,2,3
+JS3,CENTURY,Jetstream 3,LandPlane,1,5,2,3
+JS31,BRITISH AEROSPACE,Jetstream 31,LandPlane,1,5,2,3
+JS32,BRITISH AEROSPACE,Jetstream Super 31,LandPlane,1,5,2,3
+JS3E,JONKER,JS-3 Rapture (jet),LandPlane,1,4,1,4
+JS3J,JONKER,JS-3 Rapture (electric),LandPlane,1,4,1,10
+JS41,BRITISH AEROSPACE,Jetstream 41,LandPlane,1,5,2,3
+JSQA,PROMAVIA,F-1300 Jet Squalus,LandPlane,1,4,1,4
+JSX,SONEX,JSX SubSonex,LandPlane,1,4,1,4
+JT2,TAYLOR (4),JT-2 Titch,LandPlane,1,4,1,1
+JU52,JUNKERS,Ju-52/3m,LandPlane,1,5,3,1
+JUNR,BOLKOW,BO-208 Junior,LandPlane,1,4,1,1
+JUPI,LAMMER GEYER,Jupiter,LandPlane,1,4,1,1
+K100,DAHER,Kodiak 100,LandPlane,1,4,1,3
+K126,KAMOV,Ka-126,Helicopter,1,6,1,3
+K209,FAMA,K-209 KISS,Helicopter,1,6,1,3
+K226,KAMOV,Ka-226 Sergei,Helicopter,1,6,2,3
+K250,KESTREL (1),K-250,LandPlane,1,4,1,1
+K35E,BOEING,KC-135E Stratotanker,LandPlane,1,5,4,4
+K35R,BOEING,KC-135R Stratotanker,LandPlane,1,5,4,4
+K50,KOREA AEROSPACE,A-50 Golden Eagle,LandPlane,1,4,1,4
+K51,KOVACS,K-51 Peregrino,LandPlane,1,4,1,1
+K8,HONGDU,K-8 Karakorum,LandPlane,1,4,1,4
+KA25,KAMOV,Ka-25,Helicopter,1,6,2,3
+KA26,KAMOV,Ka-26,Helicopter,1,6,2,1
+KA27,KAMOV,Ka-27,Helicopter,1,6,2,3
+KA50,KAMOV,Ka-50 Werewolf,Helicopter,1,6,2,3
+KA52,KAMOV,Ka-52 Alligator,Helicopter,1,6,2,3
+KA62,KAMOV,Ka-60 Kasatka,Helicopter,1,6,2,3
+KAFI,KARI,Firefly,LandPlane,1,4,1,1
+KAK1,KIEGER,AK-1,LandPlane,1,4,1,1
+KAK3,KIEGER,AK-3,LandPlane,1,4,1,1
+KAT3,KHRUNICHEV,AT-3,LandPlane,1,4,1,3
+KATB,KARI,Twinbee,LandPlane,1,5,2,1
+KATR,AEROSAMARA,Katran,LandPlane,1,4,1,1
+KC2,KAWASAKI,C-2,LandPlane,1,5,2,4
+KE3,BOEING,KE-3,LandPlane,1,5,4,4
+KELA,KELEHER,Lark,LandPlane,1,4,1,1
+KELD,KELLY,D,LandPlane,1,4,1,1
+KERO,REARWIN,2000 Ken-Royce,LandPlane,1,4,1,1
+KEST,FARNBOROUGH,F-1 Kestrel,LandPlane,1,4,1,3
+KFAB,KITPLANES FOR AFRICA,Bushbaby,LandPlane,1,4,1,1
+KFAS,KITPLANES FOR AFRICA,Safari,LandPlane,1,4,1,1
+KFIR,IAI,Kfir,LandPlane,1,4,1,4
+KFIS,ANDERSON,EA-1 Kingfisher,Amphibian,3,4,1,1
+KH4,KAWASAKI,KH-4,Helicopter,1,6,1,1
+KIS2,TRI-R,KIS TR-1,LandPlane,1,4,1,1
+KIS4,TRI-R,KIS TR-4 Cruiser,LandPlane,1,4,1,1
+KITH,BOURDON,Kitty Hawk,LandPlane,1,4,1,1
+KITI,MITCHELL-PROCTER,Kittiwake,LandPlane,1,4,1,1
+KIWI,VALENTIN,Kiwi,LandPlane,1,4,1,1
+KK60,KARI-KEEN,60 Coupe,LandPlane,1,4,1,1
+KL07,KLEMM,Kl-107,LandPlane,1,4,1,1
+KL10,FLIGHT DESIGN-VESSEL,KLA-100,LandPlane,1,4,1,1
+KL25,KLEMM,L-25,LandPlane,1,4,1,1
+KL35,KLEMM,Kl-35,LandPlane,1,4,1,1
+KLBR,KOLB,King Colbra,LandPlane,1,4,1,1
+KM2,FUJI,KM-2,LandPlane,1,4,1,1
+KMAX,KAMAN,K-1200 K-Max,Helicopter,1,6,1,3
+KNTW,PAYNE,Knight Twister,LandPlane,1,4,1,1
+KOLL,KOLB,Laser,LandPlane,1,4,1,1
+KP2,JIHLAVAN,KP-2 Rapid 200,LandPlane,1,4,1,1
+KP5,JIHLAVAN,KP-5 Rapid 500,LandPlane,1,4,1,1
+KR1,RAND,KR-1,LandPlane,1,4,1,1
+KR2,RAND,KR-2,LandPlane,1,4,1,1
+KR21,FAIRCHILD (1),KR-21,LandPlane,1,4,1,1
+KR30,EKOLOT,KR-030 Topaz,LandPlane,1,4,1,1
+KR31,KREIDER-REISNER,C-2 Challenger,LandPlane,1,4,1,1
+KR34,KREIDER-REISNER,C-4 Challenger,LandPlane,1,4,1,1
+KRAG,SOKO,P-2 Kraguj,LandPlane,1,4,1,1
+KRAH,ROCK,Krähe,LandPlane,1,4,1,1
+KRIC,FLSZ,DK-1 Der Kricket,LandPlane,1,4,1,1
+KSTK,PHOENIX-AVIACOR,M-12 Kasatik,LandPlane,1,5,2,1
+KT1,DAEWOO,KT-1 Woong-Bee,LandPlane,1,4,1,3
+KTOO,ANGLIN,J-6 Karatoo,LandPlane,1,4,1,1
+KZ2,SAI (1),KZ-2 Kupe,LandPlane,1,4,1,1
+KZ3,SAI (1),KZ-3,LandPlane,1,4,1,1
+KZ4,SAI (1),KZ-4,LandPlane,1,5,2,1
+KZ7,SAI (1),KZ-7 Laerke,LandPlane,1,4,1,1
+KZ8,SAI (1),KZ-8,LandPlane,1,4,1,1
+L10,LOCKHEED,L-10 Electra,LandPlane,1,5,2,1
+L101,LOCKHEED,L-1011 TriStar,LandPlane,1,5,3,4
+L11,LUSCOMBE,11A Sedan,LandPlane,1,4,1,1
+L11E,LUSCOMBE,11E Spartan 185,LandPlane,1,4,1,1
+L12,LOCKHEED,L-12 Electra Junior,LandPlane,1,5,2,1
+L13,LONGREN,L-13 Centaur,LandPlane,1,4,1,1
+L13M,LET,L-13 Blanik (single-engine conversions),LandPlane,1,4,1,1
+L13S,AEROTECHNIK,L-13S Vivat,LandPlane,1,4,1,1
+L14,LOCKHEED,L-14 Hudson,LandPlane,1,5,2,1
+L15,HONGDU,L-15 Lieying,LandPlane,1,5,2,4
+L159,AERO (2),L-159  Albatros 2,LandPlane,1,4,1,4
+L18,LOCKHEED,L-18 Lodestar,LandPlane,1,5,2,1
+L181,ASSOCIATED AIR,Liberty 181,LandPlane,1,4,1,1
+L188,LOCKHEED,L-188 Electra,LandPlane,1,5,4,3
+L200,LET,L-200 Morava,LandPlane,1,5,2,1
+L29,AERO (2),L-29 Delfin,LandPlane,1,4,1,4
+L29A,LOCKHEED,L-1329 Jetstar 6,LandPlane,1,5,4,4
+L29B,LOCKHEED,L-1329 Jetstar 2,LandPlane,1,5,4,4
+L37,LOCKHEED,Ventura,LandPlane,1,5,2,1
+L380,LEDERLIN,380 Ladybug,LandPlane,1,4,1,1
+L39,AERO (2),L-39 Albatros,LandPlane,1,4,1,4
+L4,CHAIKA,L-4,Amphibian,3,5,2,1
+L40,ORLICAN,L-40 Meta Sokol,LandPlane,1,4,1,1
+L410,LET,L-410 Turbolet,LandPlane,1,5,2,3
+L5,STINSON,L-5 Sentinel,LandPlane,1,4,1,1
+L59,AERO (2),L-59,LandPlane,1,4,1,4
+L6,AEROVOLGA,L-6,Amphibian,3,5,2,1
+L60,AERO (2),L-60 Brigadyr,LandPlane,1,4,1,1
+L610,LET,L-610,LandPlane,1,5,2,3
+L70,VALMET,L-70 Vinka,LandPlane,1,4,1,1
+L8,LUSCOMBE,8,LandPlane,1,4,1,1
+L90,AERMACCHI,M-290TP Redigo,LandPlane,1,4,1,3
+LA25,LAKE,LA-250 Renegade,Amphibian,3,4,1,1
+LA4,LAKE,LA-4 Buccaneer,Amphibian,3,4,1,1
+LA60,AERMACCHI,AL-60,LandPlane,1,4,1,1
+LA6T,AERMACCHI,AL-60 Turbine Grizzly,LandPlane,1,4,1,3
+LA8,AEROVOLGA,LA-8 Flagman,Amphibian,3,5,2,1
+LACO,LAVEN,LACO-125,LandPlane,1,4,1,1
+LAE1,LANGE,E-1 Antares 20E,LandPlane,1,4,1,10
+LAKR,LASER,Akro Z,LandPlane,1,4,1,1
+LAKX,AEROPLASTIKA,LAK-X,LandPlane,1,4,1,1
+LAMA,AEROSPATIALE,SA-315 Lama,Helicopter,1,6,1,3
+LANC,AVRO,Lancaster,LandPlane,1,5,4,1
+LAR1,FLARIS,LAR-1,LandPlane,1,4,1,4
+LARK,NORTH AMERICAN ROCKWELL,100 Lark Commander,LandPlane,1,4,1,1
+LAST,UTVA,N-63 Lasta,LandPlane,1,4,1,1
+LBUG,REFLEX,Lightning Bug,LandPlane,1,4,1,1
+LCA,ADA,LCA Tejas,LandPlane,1,4,1,4
+LCB,LAIRD,LC-B Commercial,LandPlane,1,4,1,1
+LCH,HINDUSTAN,LCH,Helicopter,1,6,2,3
+LCR,LAIRD,LC-R Speedwing,LandPlane,1,4,1,1
+LEG2,LANCAIR,Legacy,LandPlane,1,4,1,1
+LEGD,PERFORMANCE,Legend,LandPlane,1,4,1,1
+LEOP,CHICHESTER-MILES,Leopard,LandPlane,1,5,2,4
+LESP,LANCAIR,Lancair ES-P,LandPlane,1,4,1,1
+LEVI,TAPANEE,Levitation 4,LandPlane,1,4,1,1
+LGEZ,RUTAN,61 Long-EZ,LandPlane,1,4,1,1
+LGND,AEROPILOT,Legend,LandPlane,1,4,1,1
+LH10,LH AVIATION,LH-10 Ellipse,LandPlane,1,4,1,1
+LIBE,LIBERTY (1),Bellaire,LandPlane,1,4,1,1
+LION,GRIFFON,Lionheart,LandPlane,1,4,1,1
+LJ23,LEAR JET,23,LandPlane,1,5,2,4
+LJ24,LEAR JET,24,LandPlane,1,5,2,4
+LJ25,LEAR JET,25,LandPlane,1,5,2,4
+LJ28,GATES LEARJET,28,LandPlane,1,5,2,4
+LJ31,LEARJET,31,LandPlane,1,5,2,4
+LJ35,LEARJET,35,LandPlane,1,5,2,4
+LJ40,LEARJET,40,LandPlane,1,5,2,4
+LJ45,LEARJET,45,LandPlane,1,5,2,4
+LJ55,LEARJET,55,LandPlane,1,5,2,4
+LJ60,LEARJET,60,LandPlane,1,5,2,4
+LJ70,LEARJET,70,LandPlane,1,5,2,4
+LJ75,LEARJET,75,LandPlane,1,5,2,4
+LJ85,LEARJET,85,LandPlane,1,5,2,4
+LK17,LAK,LAK-17AT,LandPlane,1,4,1,1
+LK19,LAK,LAK-19T,LandPlane,1,4,1,1
+LK20,LAK,LAK-20M,LandPlane,1,4,1,1
+LM5,LOMBARDI,LM-5 Aviastar,LandPlane,1,4,1,1
+LM5X,LIGHT MINIATURE,LM-5 Super Cub,LandPlane,1,4,1,1
+LM7,LOMBARDI,LM-7,LandPlane,1,4,1,1
+LMK1,CATA,LMK-1 Oryx,LandPlane,1,4,1,1
+LN27,FALCOMPOSITE,LN-27 Furio,LandPlane,1,4,1,1
+LN3,FLYGFABRIKEN,LN-3 Seagull,Amphibian,3,4,1,1
+LNC2,LANCAIR,Lancair 200,LandPlane,1,4,1,1
+LNC4,LANCAIR,Lancair 4,LandPlane,1,4,1,1
+LNCE,LANCAIR,Lancair ES,LandPlane,1,4,1,1
+LNP4,LANCAIR,Lancair PropJet 4,LandPlane,1,4,1,3
+LNT4,LANCAIR,Sentry 4T,LandPlane,1,4,1,3
+LOCA,AEROLAB,LoCamp,LandPlane,1,4,1,1
+LOVE,LOVING-WAYNE,WR-1 Love,LandPlane,1,4,1,1
+LP1,LOPRESTI,LP-1 Fury,LandPlane,1,4,1,1
+LR2T,LOAD RANGER,2000,Helicopter,1,6,1,3
+LS10,DG FLUGZEUGBAU,LS-10ST,LandPlane,1,4,1,1
+LS2,HAT,LS-2,LandPlane,1,4,1,1
+LS8,ROLLADEN-SCHNEIDER,LS-8T,LandPlane,1,4,1,1
+LS9,ROLLADEN-SCHNEIDER,LS-9,LandPlane,1,4,1,1
+LSTR,CUSTOM FLIGHT,Lite Star,LandPlane,1,4,1,1
+LTNG,ENGLISH ELECTRIC,Lightning,LandPlane,1,5,2,4
+LUL5,LUCAS,L-5,LandPlane,1,4,1,1
+LUL6,LUCAS,L-6,LandPlane,1,4,1,1
+LUL7,LUCAS,L-7,LandPlane,1,4,1,1
+LUL8,LUCAS,L-8,LandPlane,1,4,1,1
+LV51,LAVIASA,LAV-51 Master,LandPlane,1,4,1,1
+LW20,HOWARD HUGHES,Australian LightWing Speed SP-2000,LandPlane,1,4,1,1
+LW40,HOWARD HUGHES,Australian LightWing Speed SP-4000,LandPlane,1,4,1,1
+LWIN,HOWARD HUGHES,Australian LightWing   GR-912,LandPlane,1,4,1,1
+LX32,LILIENTHAL,X-32 Bekas,LandPlane,1,4,1,1
+LX34,LILIENTHAL,X-34 Bekas,LandPlane,1,4,1,1
+LXR,ELIXIR,Elixir,LandPlane,1,4,1,1
+LYNX,LEONARDO,AW-159 Wildcat,Helicopter,1,6,2,3
+LYSA,WESTLAND,Lysander,LandPlane,1,4,1,1
+M10,MOONEY,M-10 Cadet,LandPlane,1,4,1,1
+M101,MYASISHCHEV,M-101 Expedition,LandPlane,1,4,1,3
+M106,LAMBERT,M-106 Mission,LandPlane,1,4,1,1
+M108,LAMBERT,M-108 Mission,LandPlane,1,4,1,1
+M10F,MOONEY,M-10T,LandPlane,1,4,1,1
+M10R,MOONEY,M-10J,LandPlane,1,4,1,1
+M110,MONOCOUPE,110 Special,LandPlane,1,4,1,1
+M15,PZL-MIELEC,M-15 Belphegor,LandPlane,1,4,1,4
+M17,MYASISHCHEV,M-17 Stratosfera,LandPlane,1,4,1,4
+M18,PZL-MIELEC,M-18 Dromader,LandPlane,1,4,1,1
+M18T,PZL-MIELEC,M-18 Turbine Dromader,LandPlane,1,4,1,3
+M2,KUBICEK,M-2 Scout,LandPlane,1,4,1,1
+M200,MEYERS,200,LandPlane,1,4,1,1
+M20P,MOONEY,M-20,LandPlane,1,4,1,1
+M20T,MOONEY,M-20M Bravo,LandPlane,1,4,1,1
+M21,PZL-MIELEC,M-21 Dromader Mini,LandPlane,1,4,1,1
+M212,LAMBERT,M-212 Mission,LandPlane,1,4,1,1
+M22,MOONEY,M-22 Mustang,LandPlane,1,4,1,1
+M24,PZL-MIELEC,M-24 Dromader Super,LandPlane,1,4,1,1
+M26,PZL-MIELEC,M-26 Iskierka,LandPlane,1,4,1,1
+M28,PZL-MIELEC,M-28 Skytruck,LandPlane,1,5,2,3
+M2HK,MILES,M-2 Hawk Major,LandPlane,1,4,1,1
+M308,MACCHI,MB-308,LandPlane,1,4,1,1
+M326,AERMACCHI,MB-326,LandPlane,1,4,1,4
+M339,AERMACCHI,MB-339,LandPlane,1,4,1,4
+M345,SIAI-MARCHETTI,M-345,LandPlane,1,4,1,4
+M346,AERMACCHI,M-346 Master,LandPlane,1,4,1,4
+M360,AIRCRAFT TECHNOLOGIES,Meyer-360,LandPlane,1,4,1,1
+M36J,MATRA,M-360 Jupiter,LandPlane,1,5,2,1
+M4,MAULE,M-4 Astro Rocket,LandPlane,1,4,1,1
+M404,MARTIN,404,LandPlane,1,5,2,1
+M5,MAULE,M-5 Lunar Rocket,LandPlane,1,4,1,1
+M55,MYASISHCHEV,M-55 Geophysica,LandPlane,1,5,2,4
+M6,MAULE,M-6 Super Rocket,LandPlane,1,4,1,1
+M600,PIPER,PA-46-600TP M600,LandPlane,1,4,1,3
+M7,MAULE,MX-7-180 Star Rocket,LandPlane,1,4,1,1
+M74,TEXAS HELICOPTER,M-74 Wasp,Helicopter,1,6,1,1
+M7T,MAULE,MX-7-420 Star Craft,LandPlane,1,4,1,3
+M8,MAULE,M-8,LandPlane,1,4,1,1
+M9,MAULE,M-9,LandPlane,1,4,1,1
+MA1,EMAIR,MA-1 Paymaster,LandPlane,1,4,1,1
+MA5,MARQUART,MA-5 Charger,LandPlane,1,4,1,1
+MA60,XIAN,MA-60,LandPlane,1,5,2,3
+MA6H,XIAN,MA-60H,LandPlane,1,5,2,3
+MAGC,EAGLE AVIATION,EA-100,LandPlane,1,4,1,1
+MAGI,MILES,M-14 Magister,LandPlane,1,4,1,1
+MAGN,AVID,Magnum,LandPlane,1,4,1,1
+MAJR,LUTON,LA-5 Major,LandPlane,1,4,1,1
+MAKO,LANCAIR,Mako,LandPlane,1,4,1,1
+MAMB,MELBOURNE,MA-2 Mamba,LandPlane,1,4,1,1
+MAME,BLUE YONDER,Merlin,LandPlane,1,4,1,1
+MARS,MARTIN,170 Mars,SeaPlane,2,5,4,1
+MAVR,AEA,Maverick,LandPlane,1,4,1,1
+MC01,MONTAER,MC-01,LandPlane,1,4,1,1
+MC10,COLOMBAN,MC-10 Cricri,LandPlane,1,5,2,1
+MC23,IRKUT,MC-21-300,LandPlane,1,5,2,4
+MC45,MEYERS,MAC-145,LandPlane,1,4,1,1
+MC90,MONOCOUPE,90,LandPlane,1,4,1,1
+MCOU,CHRIS TENA,Mini Coupe,LandPlane,1,4,1,1
+MCOY,MONTANA,Coyote,LandPlane,1,4,1,1
+MCR1,DYN'AERO,MCR-01,LandPlane,1,4,1,1
+MCR4,DYN'AERO,MCR-4,LandPlane,1,4,1,1
+MCRR,DYN'AERO,MCR-R180,LandPlane,1,4,1,1
+MCUL,KIMBALL,McCullocoupe,LandPlane,1,4,1,1
+MD11,MCDONNELL DOUGLAS,MD-11,LandPlane,1,5,3,4
+MD3,DATWYLER,MD-3 Swiss Trainer,LandPlane,1,4,1,1
+MD3R,FLYITALIA,MD-3 Rider,LandPlane,1,4,1,1
+MD52,MCDONNELL DOUGLAS,MD-520N,Helicopter,1,6,1,3
+MD60,MCDONNELL DOUGLAS,MD-600N,Helicopter,1,6,1,3
+MD81,MCDONNELL DOUGLAS,MD-81,LandPlane,1,5,2,4
+MD82,MCDONNELL DOUGLAS,MD-82,LandPlane,1,5,2,4
+MD83,MCDONNELL DOUGLAS,MD-83,LandPlane,1,5,2,4
+MD87,MCDONNELL DOUGLAS,MD-87,LandPlane,1,5,2,4
+MD88,MCDONNELL DOUGLAS,MD-88,LandPlane,1,5,2,4
+MD90,MCDONNELL DOUGLAS,MD-90,LandPlane,1,5,2,4
+ME08,MESSERSCHMITT,Bf-108 Taifun,LandPlane,1,4,1,1
+ME09,MESSERSCHMITT,Bf-109,LandPlane,1,4,1,1
+ME62,MESSERSCHMITT,Me-262 Replica,LandPlane,1,5,2,4
+MEAD,MEAD,Adventure,LandPlane,1,4,1,1
+MEL2,GARRISON,Melmoth 2,LandPlane,1,4,1,1
+MERK,AVIATON,Merkury,LandPlane,1,5,2,1
+MESS,MILES,M-38 Messenger,LandPlane,1,4,1,1
+METR,GLOSTER,Meteor,LandPlane,1,5,2,4
+MEXP,MERLIN,Explorer,LandPlane,1,4,1,1
+MF10,MALMO,MFI-10 Vipan,LandPlane,1,4,1,1
+MF17,SAAB,MFI-17 Supporter,LandPlane,1,4,1,1
+MG15,MIKOYAN,MiG-15,LandPlane,1,4,1,4
+MG17,MIKOYAN,MiG-17,LandPlane,1,4,1,4
+MG19,MIKOYAN,MiG-19,LandPlane,1,5,2,4
+MG21,MIKOYAN,MiG-21,LandPlane,1,4,1,4
+MG23,MIKOYAN,MiG-23,LandPlane,1,4,1,4
+MG29,MIKOYAN,MiG-29,LandPlane,1,5,2,4
+MG31,MIKOYAN,MiG-31,LandPlane,1,5,2,4
+MG44,MIKOYAN,MiG 1-44,LandPlane,1,5,2,4
+MGAT,MIKOYAN,MiG-AT,LandPlane,1,4,1,4
+MGIC,KAISER,Magic,LandPlane,1,4,1,1
+MGNM,AVIATION ENTERPRISES,Magnum,LandPlane,1,4,1,1
+MH20,MITSUBISHI,MH-2000,Helicopter,1,6,2,3
+MH46,AEROSETTE,MH-46 Eclipse,LandPlane,1,4,1,1
+MI10,MIL,Mi-10,Helicopter,1,6,2,3
+MI14,MIL,Mi-14,Helicopter,1,6,2,3
+MI2,MIL,Mi-2,Helicopter,1,6,2,3
+MI24,MIL,Mi-24,Helicopter,1,6,2,3
+MI26,MIL,Mi-26,Helicopter,1,6,2,3
+MI28,MIL,Mi-28,Helicopter,1,6,2,3
+MI34,MIL,Mi-34,Helicopter,1,6,1,1
+MI38,MIL,Mi-38,Helicopter,1,6,2,3
+MI4,MIL,Mi-4,Helicopter,1,6,1,1
+MI6,MIL,Mi-6,Helicopter,1,6,2,3
+MI8,MIL,Mi-8,Helicopter,1,6,2,3
+MIDR,ACBA,Midour 2,LandPlane,1,4,1,1
+MIMP,AEROCAR,Mini-Imp,LandPlane,1,4,1,1
+MIMU,MUSTANG,MM-1 Midget Mustang,LandPlane,1,4,1,1
+MIR2,DASSAULT,Mirage 2000,LandPlane,1,4,1,4
+MIRA,DASSAULT,Mirage 5,LandPlane,1,4,1,4
+MITE,MOONEY,M-18 Mite,LandPlane,1,4,1,1
+MJ10,JURCA,MJ-10 Spit,LandPlane,1,4,1,1
+MJ12,JURCA,MJ-12 P-40,LandPlane,1,4,1,1
+MJ1H,JURCA,MJ-100 Spitfire Replica,LandPlane,1,4,1,1
+MJ2,JURCA,MJ-2 Tempête,LandPlane,1,4,1,1
+MJ3,JURCA,MJ-3 Dart,LandPlane,1,4,1,1
+MJ4,JURCA,MJ-4 Shadow,LandPlane,1,4,1,1
+MJ5,JURCA,MJ-5 Sirocco,LandPlane,1,4,1,1
+MJ53,JURCA,MJ-53 Autan,LandPlane,1,4,1,1
+MJ55,JURCA,MJ-55 Biso,LandPlane,1,4,1,1
+MJ7,JURCA,MJ-7 Gnatsum,LandPlane,1,4,1,1
+MJ77,JURCA,MJ-77 Gnatsum,LandPlane,1,4,1,1
+MJ8,JURCA,MJ-8 1-Nine-0,LandPlane,1,4,1,1
+MJ80,JURCA,MJ-80 Focke-Wulf Fw-190 Replica,LandPlane,1,4,1,1
+MJ9,JURCA,MJ-9,LandPlane,1,4,1,1
+MJ90,JURCA,MJ-90 Messerschmitt Bf-109 Replica,LandPlane,1,4,1,1
+MLER,ALANNE,Moottori-Lerche,LandPlane,1,4,1,1
+MM14,MAGNI,M-14 Scout,Gyrocopter,1,9,1,1
+MM16,MAGNI,M-16 Tandem Trainer,Gyrocopter,1,9,1,1
+MM19,MAGNI,M-19 Shark,Gyrocopter,1,9,1,1
+MM21,MAGNI,M-21,Gyrocopter,1,9,1,1
+MM22,MAGNI,M-22 Voyager,Gyrocopter,1,9,1,1
+MM24,MAGNI,M-24 Orion,Gyrocopter,1,9,1,1
+MMAC,MCCARLEY,Mini-Mac,LandPlane,1,4,1,1
+MMAX,MAD MAX AERO,Mad Max,Gyrocopter,1,9,1,1
+MMUT,MARA WING,L-1 Malamut,LandPlane,1,4,1,1
+MNEX,NORMAN,Nordic 8 Mini Explorer,LandPlane,1,4,1,1
+MOCU,CULP,MonoCulp,LandPlane,1,4,1,1
+MOGO,KINETIC,Mountain Goat,LandPlane,1,4,1,1
+MOL1,MOLNIYA,1,LandPlane,1,4,1,1
+MONA,MILES,M-17 Monarch,LandPlane,1,4,1,1
+MONI,MONNETT,Moni,LandPlane,1,4,1,1
+MOR2,VARGA,2150 Kachina,LandPlane,1,4,1,1
+MOSP,MONG,Sport,LandPlane,1,4,1,1
+MOSQ,DE HAVILLAND,DH-98 Mosquito,LandPlane,1,5,2,1
+MOTO,HUMBERT,Moto Du Ciel,LandPlane,1,4,1,1
+MP02,AERO-KROS,MP-02 Czajka,LandPlane,1,4,1,1
+MP20,PLAN,MP-205 Busard,LandPlane,1,4,1,1
+MR25,MURPHY,SR-2500 Super Rebel,LandPlane,1,4,1,1
+MR35,MURPHY,SR-3500 Moose,LandPlane,1,4,1,1
+MR3T,MURPHY,SR-3500 T-Moose,LandPlane,1,4,1,3
+MRAI,MONNETT,Monerai P,LandPlane,1,4,1,1
+MRAM,HARMON (1),1-2 Mister America,LandPlane,1,4,1,1
+MRF1,DASSAULT,Mirage F1,LandPlane,1,4,1,4
+MRJ7,MITSUBISHI,MRJ-70,LandPlane,1,5,2,4
+MRJ9,MITSUBISHI,MRJ-90,LandPlane,1,5,2,4
+MRMD,CZAW,Mermaid,Amphibian,3,4,1,1
+MRTN,MIRAGE,Marathon,LandPlane,1,4,1,1
+MS1,MYSKY,MS-1,LandPlane,1,4,1,1
+MS18,SOCATA,MS-200FG Morane,LandPlane,1,4,1,1
+MS23,MORANE-SAULNIER,MS-230,LandPlane,1,4,1,1
+MS25,SOCATA,MS-200RG Morane,LandPlane,1,4,1,1
+MS30,SOCATA,MS-300 Epsilon 2,LandPlane,1,4,1,1
+MS31,MORANE-SAULNIER,MS-315,LandPlane,1,4,1,1
+MS73,MORANE-SAULNIER,MS-733 Alcyon,LandPlane,1,4,1,1
+MS76,MORANE-SAULNIER,MS-760 Paris,LandPlane,1,5,2,4
+MSAI,MORANE-SAULNIER,AI,LandPlane,1,4,1,1
+MSQ2,BACKCOUNTRY,Mackey SQ-2,LandPlane,1,4,1,1
+MT,ROTORSPORT,MT-03,Gyrocopter,1,9,1,1
+MU2,MITSUBISHI,MU-2,LandPlane,1,5,2,3
+MU23,AKAFLIEG MUNCHEN,Mü-23 Saurier,LandPlane,1,4,1,1
+MU30,MITSUBISHI,MU-300 Diamond,LandPlane,1,5,2,4
+MUS2,BUSHBY,M-2 Mustang 2,LandPlane,1,4,1,1
+MVN1,MVEN,1 Fermer,LandPlane,1,4,1,1
+MVRK,PHOENIX (2),Maverick,LandPlane,1,4,1,1
+MX10,AEROTEC (2),MXP-100 Aventura,LandPlane,1,4,1,1
+MX1T,AEROANDINA,MXP-1000 Tayrona,LandPlane,1,4,1,1
+MX2,MXR,MX-2,LandPlane,1,4,1,1
+MX58,AEROANDINA,MXP-158 Embera,LandPlane,1,4,1,1
+MX65,AEROTEC (2),MXP-650 Amigo,LandPlane,1,4,1,1
+MX80,AEROTEC (2),MXP-800 Fantasy,LandPlane,1,4,1,1
+MXS,MXR,MXS,LandPlane,1,4,1,1
+MY12,MYLIUS,MY-102 Tornado,LandPlane,1,4,1,1
+MY13,MYLIUS,MY-103 Mistral,LandPlane,1,4,1,1
+MYA4,MYASISHCHEV,M-4,LandPlane,1,5,4,4
+MYS4,DASSAULT,MD-454A Mystère 4A,LandPlane,1,4,1,4
+N110,NORD,1100 Noralpha,LandPlane,1,4,1,1
+N120,NORD,1200 Norecrin,LandPlane,1,4,1,1
+N250,NUSANTARA,N-250,LandPlane,1,5,2,3
+N260,NORD,260 Super Broussard,LandPlane,1,5,2,3
+N262,AEROSPATIALE,N-262,LandPlane,1,5,2,3
+N3,NOSTALGAIR,N-3 Citabriette,LandPlane,1,4,1,1
+N320,NORD,3202,LandPlane,1,4,1,1
+N340,NORD,3400,LandPlane,1,4,1,1
+N3N,NAVAL AIRCRAFT FACTORY,N3N,LandPlane,1,4,1,1
+N5,HONGDU,N-5,LandPlane,1,4,1,1
+NA40,UNIS,NA-40 Bongo,Helicopter,1,6,2,3
+NAL2,NAL,NALLA-2 Hansa,LandPlane,1,4,1,1
+NAVI,RYAN,Navion,LandPlane,1,4,1,1
+NC85,NORD,NC-854,LandPlane,1,4,1,1
+ND1T,NDN,NDN-1T Turbo Firecracker,LandPlane,1,4,1,3
+NDAC,NORMAND DUBE,Aerocruiser,LandPlane,1,4,1,1
+NDAT,NORMAND DUBE,Aerocruiser Turbo 450,LandPlane,1,4,1,1
+NDIC,NORMAN,Nordic 2,LandPlane,1,4,1,1
+NG4,BRM AERO,NG-4,LandPlane,1,4,1,1
+NG5,BRM AERO,Bristell NG-5,LandPlane,1,4,1,1
+NH90,NHI,NH-90,Helicopter,1,6,2,3
+NHCO,NEW HORIZONS,01 Colibri,LandPlane,1,4,1,1
+NI28,NIEUPORT,28 Replica,LandPlane,1,4,1,1
+NIBB,AVIAMILANO,F-14 Nibbio,LandPlane,1,4,1,1
+NIMB,SCHEMPP-HIRTH,Nimbus 4T,LandPlane,1,4,1,1
+NIPR,TIPSY,T-66 Nipper,LandPlane,1,4,1,1
+NM5,NAL,NM-5,LandPlane,1,4,1,1
+NMCU,ENAER,ECH-02 Namcu,LandPlane,1,4,1,1
+NNJA,BEST OFF,Nynja,LandPlane,1,4,1,1
+NOMA,GAF,N-2 Nomad,LandPlane,1,5,2,3
+NORA,NORD,2501 Noratlas,LandPlane,1,5,2,1
+NORS,NOORDUYN,C-64 Norseman,LandPlane,1,4,1,1
+NPOR,REDFERN,Nieuport 17,LandPlane,1,4,1,1
+NSTR,CUSTOM FLIGHT,North Star,LandPlane,1,4,1,1
+NT10,NUWACO,T-10,LandPlane,1,4,1,1
+NXT,NEMESIS,NXT,LandPlane,1,4,1,1
+NXTE,ELECTROFLIGHT,NXTE,LandPlane,1,4,1,10
+O1,CESSNA,O-1 Bird Dog,LandPlane,1,4,1,1
+O3,LOCKHEED,YO-3,LandPlane,1,4,1,1
+OH1,KAWASAKI,OH-1,Helicopter,1,6,2,3
+OKHO,AERO-ASTRA,Okhotnik,Gyrocopter,1,9,1,1
+OM1,MORRISEY,OM-1 Bravo,LandPlane,1,4,1,1
+OMAG,O'NEILL,Magnum,LandPlane,1,4,1,1
+OMGA,ISAE,Omega 2,LandPlane,1,4,1,1
+OMLA,OMAC,Laser 300,LandPlane,1,4,1,3
+ONE,GOGETAIR,G-600,LandPlane,1,4,1,1
+ONEX,SONEX,Onex,LandPlane,1,4,1,1
+OPCA,EDGLEY,EA-7 Optica,LandPlane,1,4,1,1
+OR10,ORION,10,Amphibian,3,4,1,1
+OR12,ORION,SK-12,Amphibian,3,5,2,1
+OSCR,PARTENAVIA,P-64 Oscar,LandPlane,1,4,1,1
+OUDE,OLYMPIC ULTRALIGHTS,Desert Eagle 2,LandPlane,1,4,1,1
+OVOD,VITEK,Ovod,LandPlane,1,4,1,1
+OZZI,BUCHANAN,BAC-204 Ozzie Mozzie,LandPlane,1,4,1,1
+P06T,TECNAM,P-2006T,LandPlane,1,5,2,1
+P1,KAWASAKI,P-1,LandPlane,1,5,4,4
+P100,POTTIER,P-100,LandPlane,1,4,1,1
+P130,POTTIER,P-130 Bleu Citron,LandPlane,1,4,1,1
+P136,PIAGGIO,P-136,Amphibian,3,5,2,1
+P148,PIAGGIO,P-148,LandPlane,1,4,1,1
+P149,PIAGGIO,P-149,LandPlane,1,4,1,1
+P180,PIAGGIO,P-180 Avanti,LandPlane,1,5,2,3
+P18T,SMITH AVIATION,PA-18T Super Cub,LandPlane,1,4,1,3
+P19,AVIAMILANO,P-19 Scricciolo,LandPlane,1,4,1,1
+P1HH,PIAGGIO,P-1HH Hammerhead,LandPlane,1,5,2,3
+P2,LOCKHEED,P-2 Neptune,LandPlane,1,5,2,1
+P208,TECNAM,P-2008,LandPlane,1,4,1,1
+P210,CESSNA,P210 Pressurized Centurion,LandPlane,1,4,1,1
+P212,TECNAM,P-2012 Traveller,LandPlane,1,5,2,1
+P220,POTTIER,P-220 Koala,LandPlane,1,4,1,1
+P230,POTTIER,P-230 Panda,LandPlane,1,4,1,1
+P27,GRYF,P-27 Skyster,LandPlane,1,4,1,1
+P270,POTTIER,P-270 Amster,LandPlane,1,4,1,1
+P28A,PIPER,Cherokee (PA-28-140/150/160/180),LandPlane,1,4,1,1
+P28B,PIPER,Cherokee (PA-28-235),LandPlane,1,4,1,1
+P28R,PIPER,PA-28R-180 Cherokee Arrow,LandPlane,1,4,1,1
+P28S,PIPER,PA-28R-201T Turbo Arrow,LandPlane,1,4,1,1
+P28T,PIPER,PA-28RT-201 Arrow 4,LandPlane,1,4,1,1
+P28U,PIPER,PA-28RT-201T Turbo Arrow 4,LandPlane,1,4,1,1
+P3,LOCKHEED,P-3 Orion,LandPlane,1,5,4,3
+P32R,PIPER,PA-32R-300 Lance,LandPlane,1,4,1,1
+P32T,PIPER,PA-32RT-300 Lance 2,LandPlane,1,4,1,1
+P337,CESSNA,P337 Pressurized Skymaster,LandPlane,1,5,2,1
+P36,CURTISS,P-36 Hawk,LandPlane,1,4,1,1
+P38,LOCKHEED,P-38 Lightning,LandPlane,1,5,2,1
+P39,BELL,P-39 Airacobra,LandPlane,1,4,1,1
+P40,CURTISS,P-40 Kittyhawk,LandPlane,1,4,1,1
+P46T,PIPER,PA-46-500TP Malibu Meridian,LandPlane,1,4,1,3
+P47,REPUBLIC,P-47 Thunderbolt,LandPlane,1,4,1,1
+P4Y,CONVAIR,P4Y Privateer,LandPlane,1,5,4,1
+P50,POTTIER,P-50 Bouvreuil,LandPlane,1,4,1,1
+P51,NORTH AMERICAN,P-51 Mustang,LandPlane,1,4,1,1
+P57,PARTENAVIA,P-57 Fachiro 2,LandPlane,1,4,1,1
+P60,POTTIER,P-60 Minacro,LandPlane,1,4,1,1
+P61,NORTHROP,P-61 Black Widow,LandPlane,1,5,2,1
+P63,BELL,P-63 Kingcobra,LandPlane,1,4,1,1
+P66P,PIAGGIO,P-166A,LandPlane,1,5,2,1
+P66T,PIAGGIO,P-166DL3,LandPlane,1,5,2,3
+P68,PARTENAVIA,P-68 Victor,LandPlane,1,5,2,1
+P68T,PARTENAVIA,AP-68TP-300 Spartacus,LandPlane,1,5,2,3
+P70,POTTIER,P-70,LandPlane,1,4,1,1
+P750,PACIFIC AEROSPACE,P-750 XStol,LandPlane,1,4,1,3
+P8,BOEING,P-8 Poseidon,LandPlane,1,5,2,4
+P80,POTTIER,P-80,LandPlane,1,4,1,1
+P82,NORTH AMERICAN,P-82 Twin Mustang,LandPlane,1,5,2,1
+PA11,PIPER,PA-11 Cub Special,LandPlane,1,4,1,1
+PA12,PIPER,PA-12 Super Cruiser,LandPlane,1,4,1,1
+PA14,PIPER,PA-14 Family Cruiser,LandPlane,1,4,1,1
+PA15,PIPER,PA-15 Vagabond,LandPlane,1,4,1,1
+PA16,PIPER,PA-16 Clipper,LandPlane,1,4,1,1
+PA17,PIPER,PA-17 Vagabond,LandPlane,1,4,1,1
+PA18,PIPER,PA-18 Super Cub,LandPlane,1,4,1,1
+PA20,PIPER,PA-20 Pacer,LandPlane,1,4,1,1
+PA22,PIPER,PA-22 Tri-Pacer,LandPlane,1,4,1,1
+PA23,PIPER,PA-23-150 Apache,LandPlane,1,5,2,1
+PA24,PIPER,PA-24 Comanche,LandPlane,1,4,1,1
+PA25,PIPER,PA-25 Pawnee,LandPlane,1,4,1,1
+PA27,PIPER,PA-23-235 Aztec,LandPlane,1,5,2,1
+PA30,PIPER,PA-30 Twin Comanche,LandPlane,1,5,2,1
+PA31,PIPER,PA-31-300 Navajo,LandPlane,1,5,2,1
+PA32,PIPER,PA-32 Saratoga,LandPlane,1,4,1,1
+PA34,PIPER,PA-34 Seneca,LandPlane,1,5,2,1
+PA36,PIPER,PA-36 Pawnee Brave,LandPlane,1,4,1,1
+PA38,PIPER,PA-38 Tomahawk,LandPlane,1,4,1,1
+PA39,PIPER,PA-39 Twin Comanche CR,LandPlane,1,5,2,1
+PA44,PIPER,PA-44 Seminole,LandPlane,1,5,2,1
+PA46,PIPER,PA-46-310P Malibu,LandPlane,1,4,1,1
+PA47,PIPER,PA-47 Piper Jet,LandPlane,1,4,1,4
+PACE,BELLANCA,CH-300 Pacemaker,LandPlane,1,4,1,1
+PAGO,SAUPER,ADV-01 Papango,LandPlane,1,4,1,1
+PANT,ROTEC,Panther 2,LandPlane,1,4,1,1
+PAR1,PARADISE,P-1,LandPlane,1,4,1,1
+PAR4,PARADISE,P-4,LandPlane,1,4,1,1
+PARL,ST. CROIX,Pietenpol Aerial,LandPlane,1,4,1,1
+PAT2,ATAC,Patriot 2,LandPlane,1,4,1,1
+PAT4,PIPER,PA-31T3-500 T-1040,LandPlane,1,5,2,3
+PAUL,PAULISTA,CAP-4 Paulistinha,LandPlane,1,4,1,1
+PAV4,CARTER,PAV-4,Gyrocopter,1,9,1,1
+PAY1,PIPER,PA-31T1-500 Cheyenne 1,LandPlane,1,5,2,3
+PAY2,PIPER,PA-31T-620 Cheyenne 2,LandPlane,1,5,2,3
+PAY3,PIPER,PA-42-720 Cheyenne 3,LandPlane,1,5,2,3
+PAY4,PIPER,PA-42-1000 Cheyenne 400,LandPlane,1,5,2,3
+PC12,PILATUS,PC-12,LandPlane,1,4,1,3
+PC21,PILATUS,PC-21,LandPlane,1,4,1,3
+PC24,PILATUS,PC-24,LandPlane,1,5,2,4
+PC6P,PILATUS,PC-6 Porter,LandPlane,1,4,1,1
+PC6T,PILATUS,PC-6C Turbo-Porter,LandPlane,1,4,1,3
+PC7,PILATUS,PC-7 Astra,LandPlane,1,4,1,3
+PC9,PILATUS,PC-9,LandPlane,1,4,1,3
+PCA2,PITCAIRN-CIERVA,PCA-2,Gyrocopter,1,9,1,1
+PDIG,VSTOL,SST-2000 Pairadigm,LandPlane,1,5,2,1
+PECR,PRO-COMPOSITES,Personal Cruiser,LandPlane,1,4,1,1
+PEGA,GENERAL AVIA,F-20 Pegaso,LandPlane,1,5,2,1
+PEGZ,PEGASE AERO,Pegazair,LandPlane,1,4,1,1
+PELI,ULTRAVIA,Pelican,LandPlane,1,4,1,1
+PEMB,PERCIVAL,P-66 Pembroke,LandPlane,1,5,2,1
+PETL,AERO ITBA,Petrel,LandPlane,1,4,1,1
+PETR,EDRA,Super Petrel,Amphibian,3,4,1,1
+PGEE,HOLCOMB,Perigee,LandPlane,1,4,1,1
+PGK1,WESTERN,PGK-1 Hirondelle,LandPlane,1,4,1,1
+PHIL,VTOL AIRCRAFT,Phillicopter,Helicopter,1,6,1,1
+PHIX,PHENIX,Phenix,Gyrocopter,1,9,1,1
+PHNX,FREEDOM,Phoenix,LandPlane,1,4,1,1
+PIAE,PIPISTREL,Alpha Electro,LandPlane,1,4,1,10
+PIAT,PIPISTREL,Alpha Trainer,LandPlane,1,4,1,1
+PICO,PROCAER,F-15 Picchio,LandPlane,1,4,1,1
+PILL,ENAER,T-35A Pillán,LandPlane,1,4,1,1
+PINO,GENERAL AVIA,F-22 Pinguino,LandPlane,1,4,1,1
+PIPA,PIPISTREL,Panthera,LandPlane,1,4,1,1
+PISI,PIPISTREL,Sinus,LandPlane,1,4,1,1
+PIT4,PIPISTREL,Taurus Electro G4,LandPlane,1,4,1,10
+PITA,PIPISTREL,Taurus 503,LandPlane,1,4,1,1
+PITE,PIPISTREL,Taurus Electro,LandPlane,1,4,1,10
+PIVE,PIPISTREL,Velis Electro,LandPlane,1,4,1,10
+PIVI,PIPISTREL,Virus (piston),LandPlane,1,4,1,1
+PK11,PIK,PIK-11 Tumppu,LandPlane,1,4,1,1
+PK15,PIK,PIK-15 Hinu,LandPlane,1,4,1,1
+PK18,PIK,PIK-18 Sytky,LandPlane,1,4,1,1
+PK19,PIK,PIK-19 Muhinu,LandPlane,1,4,1,1
+PK20,PIK,PIK-20E,LandPlane,1,4,1,1
+PK21,PIK,PIK-21 Super Sytky,LandPlane,1,4,1,1
+PK23,PIK,PIK-23 Suhinu,LandPlane,1,4,1,1
+PK25,PIK,PIK-25 Varttimarkka,LandPlane,1,4,1,1
+PKAN,UETZ,U-3M Pelikan,LandPlane,1,4,1,1
+PL1,PAZMANY,PL-1 Laminar,LandPlane,1,4,1,1
+PL12,TRANSAVIA,PL-12 Airtruk,LandPlane,1,4,1,1
+PL2,PAZMANY,PL-2,LandPlane,1,4,1,1
+PL4,PAZMANY,PL-4,LandPlane,1,4,1,1
+PL9,PAZMANY,PL-9 Stork,LandPlane,1,4,1,1
+PLUS,TAYLORCRAFT (2),Plus C,LandPlane,1,4,1,1
+PNR2,ALPI,Pioneer 200,LandPlane,1,4,1,1
+PNR3,ALPI,Pioneer 300,LandPlane,1,4,1,1
+PNR4,ALPI,Pioneer 400,LandPlane,1,4,1,1
+PNTH,SPORT PERFORMANCE,Panther,LandPlane,1,4,1,1
+PO2,POLIKARPOV,Po-2,LandPlane,1,4,1,1
+PO60,POTEZ,60 Sauterelle,LandPlane,1,4,1,1
+POLI,ALVAREZ,Polliwagen,LandPlane,1,4,1,1
+PONY,REDA,Pony,Amphibian,3,4,1,1
+PP2,PILATUS,P-2,LandPlane,1,4,1,1
+PP3,PILATUS,P-3,LandPlane,1,4,1,1
+PPRO,PERCIVAL,P-56 Provost,LandPlane,1,4,1,1
+PRBP,HOWARD HUGHES,Pocket Rocket PR-Bipe,LandPlane,1,4,1,1
+PRBR,HOWARD HUGHES,Pocket Rocket PR-Breeze,LandPlane,1,4,1,1
+PRCE,PERCIVAL,P-57 Sea Prince,LandPlane,1,5,2,1
+PREN,PERCIVAL,P-40 Prentice,LandPlane,1,4,1,1
+PRET,GM&T,GM&T Pretty Flight,LandPlane,1,4,1,1
+PREX,PRIVATE EXPLORER,Private Explorer,LandPlane,1,4,1,1
+PRIM,BLACKSHAPE,Bk-100 Prime,LandPlane,1,4,1,1
+PRM1,HAWKER BEECHCRAFT,390 Premier 1,LandPlane,1,5,2,4
+PROC,PERCIVAL,P-28 Proctor,LandPlane,1,4,1,1
+PROT,CZAW,Parrot,LandPlane,1,4,1,1
+PROW,PROWLER,Jaguar,LandPlane,1,4,1,1
+PRPR,HOWARD HUGHES,Pocket Rocket PR-582,LandPlane,1,4,1,1
+PRTS,SCALED,281 Proteus,LandPlane,1,5,2,4
+PRXT,PRIVATE EXPLORER,T-Explorer,LandPlane,1,4,1,3
+PSTM,PODESVA,Stearman,LandPlane,1,4,1,1
+PSW4,PZL-SWIDNIK,SW-4,Helicopter,1,6,1,3
+PT21,POTTIER,P-210 Coati,LandPlane,1,4,1,1
+PT22,RYAN,PT-22 Recruit,LandPlane,1,4,1,1
+PT70,POTTIER,P-170,LandPlane,1,4,1,1
+PT80,POTTIER,P-180,LandPlane,1,4,1,1
+PTMS,PITTS,S-12 Macho Stinker,LandPlane,1,4,1,1
+PTS1,PITTS,S-1 Special,LandPlane,1,4,1,1
+PTS2,PITTS,S-2 Special,LandPlane,1,4,1,1
+PTSS,PITTS,S-1-11 Super Stinker,LandPlane,1,4,1,1
+PUL6,PULSAR,Super Pulsar 600,LandPlane,1,4,1,1
+PULR,P&M AVIATION,PulsR,LandPlane,1,4,1,1
+PULS,AERO DESIGNS,Pulsar,LandPlane,1,4,1,1
+PUMA,AEROSPATIALE,SA-330 Puma,Helicopter,1,6,2,3
+PUP,BEAGLE,B-121 Pup,LandPlane,1,4,1,1
+PURS,RANS,S-11 Pursuit,LandPlane,1,4,1,1
+PUSH,PRESCOTT,Pusher,LandPlane,1,4,1,1
+PW4,POLITECHNIKA WARSZAWSKA,PW-4,LandPlane,1,4,1,1
+PZ01,PZL-OKECIE,PZL-101 Gawron,LandPlane,1,4,1,1
+PZ02,PZL-OKECIE,PZL-102 Kos,LandPlane,1,4,1,1
+PZ04,PZL-OKECIE,PZL-104 Wilga 35,LandPlane,1,4,1,1
+PZ05,PZL-OKECIE,PZL-105 Flaming,LandPlane,1,4,1,1
+PZ06,PZL-OKECIE,PZL-106A Kruk,LandPlane,1,4,1,1
+PZ12,PZL-OKECIE,PZL-112 Junior,LandPlane,1,4,1,1
+PZ26,PZL-OKECIE,PZL-126 Mrówka,LandPlane,1,4,1,1
+PZ3T,PZL-OKECIE,PZL-130 Orlik,LandPlane,1,4,1,3
+PZ4M,PZL-OKECIE,PZL-104M Wilga 2000,LandPlane,1,4,1,1
+PZ6T,PZL-OKECIE,PZL-106AT Turbo Kruk,LandPlane,1,4,1,3
+Q01,REINER STEMME,Q-01,LandPlane,1,4,1,1
+Q1,GENERAL ATOMICS,MQ-1 Predator,LandPlane,1,4,1,1
+Q25,BOEING,MQ-25 Stingray,LandPlane,1,4,1,4
+Q4,NORTHROP GRUMMAN,RQ-4 Global Hawk,LandPlane,1,4,1,4
+Q5,NANCHANG,Q-5,LandPlane,1,5,2,4
+Q9,GENERAL ATOMICS,MQ-9 Reaper,LandPlane,1,4,1,3
+QAIL,AEROSPORT,Quail,LandPlane,1,4,1,1
+QALT,FMP,Qualt,LandPlane,1,4,1,1
+QEST,OMNI-WELD,Questor,LandPlane,1,4,1,1
+QIC2,QUICKIE,Quickie Q2,LandPlane,1,4,1,1
+QINT,SCHEMPP-HIRTH,Quintus,LandPlane,1,4,1,1
+QR01,QUERCY,CQR-01,LandPlane,1,4,1,1
+QUAS,AEROALCOOL,Quasar Lite,LandPlane,1,4,1,1
+QUIC,QUICKIE,Quickie,LandPlane,1,4,1,1
+R100,ROBIN,R-1180 Aiglon,LandPlane,1,4,1,1
+R109,RIHN,DR-109 Rhino,LandPlane,1,4,1,1
+R11,RUPERT,R-11,LandPlane,1,4,1,1
+R135,BOEING,RC-135,LandPlane,1,5,4,4
+R185,JOHNSON,Rocket 185,LandPlane,1,4,1,1
+R2,SAU,R-02 Robert,SeaPlane,2,4,1,1
+R200,ROBIN,R-2100 Super Club,LandPlane,1,4,1,1
+R22,ROBINSON,R-22,Helicopter,1,6,1,1
+R300,ROBIN,R-300,LandPlane,1,4,1,1
+R4,SIKORSKY,R-4 Hoverfly,Helicopter,1,6,1,1
+R44,ROBINSON,R-44 Raven,Helicopter,1,6,1,1
+R66,ROBINSON,R-66,Helicopter,1,6,1,3
+R721,BOEING,727-100RE Super 27,LandPlane,1,5,3,4
+R722,BOEING,727-200RE Super 27,LandPlane,1,5,3,4
+R90F,RUSCHMEYER,R-90-230FG,LandPlane,1,4,1,1
+R90R,RUSCHMEYER,R-90-230RG,LandPlane,1,4,1,1
+R90T,RUSCHMEYER,R-90-420AT,LandPlane,1,4,1,3
+RA14,ADAM (1),RA-14 Loisirs,LandPlane,1,4,1,1
+RA17,ADAM (1),RA-17,LandPlane,1,4,1,1
+RAF2,ROTARY AIR FORCE,RAF-2000,Gyrocopter,1,9,1,1
+RAID,SKY RAIDER,Super Sky Raider,LandPlane,1,4,1,1
+RAIL,AEROSPORT,Rail,LandPlane,1,4,1,1
+RALL,MORANE-SAULNIER,MS-880 Rallye Club,LandPlane,1,4,1,1
+RANG,NAVION,Rangemaster,LandPlane,1,4,1,1
+RARO,NEW CENTURY,Radial Rocket,LandPlane,1,4,1,1
+RAV3,RAVIN,Ravin 300,LandPlane,1,4,1,1
+RAV5,RAVIN,Ravin 500,LandPlane,1,4,1,1
+RAZM,SAINT GERMAIN,Raz-Mut,LandPlane,1,4,1,1
+RBEL,MURPHY,Rebel,LandPlane,1,4,1,1
+RC3,REPUBLIC,RC-3 Seabee,Amphibian,3,4,1,1
+RC70,ROCKWELL,Commander 700,LandPlane,1,5,2,1
+RCAL,MURPHY,Radical,LandPlane,1,4,1,1
+RD03,DURUBLE,RD-03 Edelweiss,LandPlane,1,4,1,1
+RD20,DENIZE,RD-20 Raid Driver,LandPlane,1,4,1,1
+RDH2,REDFERN,DH-2,LandPlane,1,4,1,1
+RELI,STINSON,AT-19 Reliant,LandPlane,1,4,1,1
+RENE,MURPHY,Renegade,LandPlane,1,4,1,1
+REV6,GROEN,Revcon 6G,Gyrocopter,1,9,1,3
+RF10,FOURNIER,RF-10,LandPlane,1,4,1,1
+RF3,FOURNIER,RF-3,LandPlane,1,4,1,1
+RF4,FOURNIER,RF-4,LandPlane,1,4,1,1
+RF47,FOURNIER,RF-47,LandPlane,1,4,1,1
+RF5,FOURNIER,RF-5,LandPlane,1,4,1,1
+RF6,FOURNIER,RF-6,LandPlane,1,4,1,1
+RF9,FOURNIER,RF-9,LandPlane,1,4,1,1
+RFAL,DASSAULT,Rafale,LandPlane,1,5,2,4
+RGNT,NEIVA,C-42 Regente,LandPlane,1,4,1,1
+RISN,SWISS EXCELLENCE,Risen,LandPlane,1,4,1,1
+RJ03,JUNQUA,RJ-03 Ibis,LandPlane,1,4,1,1
+RJ1H,BRITISH AEROSPACE,RJ-100,LandPlane,1,5,4,4
+RJ70,BRITISH AEROSPACE,RJ-70,LandPlane,1,5,4,4
+RJ85,BRITISH AEROSPACE,RJ-85,LandPlane,1,5,4,4
+RK5,KALINAUSKAS,RK-5,LandPlane,1,4,1,1
+RLU1,RLU,RLU-1 Breezy,LandPlane,1,4,1,1
+RMOU,HILLBERG,EH1-01 Rotormouse,Helicopter,1,6,1,3
+RNGR,DAC,RangeR,LandPlane,1,4,1,1
+ROAR,VELOCITY,Rocket Racer,LandPlane,1,4,1,9
+RODS,RIHN,DR-107 One Design,LandPlane,1,4,1,1
+ROND,AMBROSINI,F-4 Rondone,LandPlane,1,4,1,1
+ROSE,MAUPIN,Windrose,LandPlane,1,4,1,1
+RP1,MITSUBISHI,RP-1,Helicopter,1,6,2,3
+RPUP,LITTLE WING,LW-4 Roto-Pup,Gyrocopter,1,9,1,1
+RS12,RANS,S-12 Airaile,LandPlane,1,4,1,1
+RS18,SPORTAVIA-PUTZER,RS-180 Sportsman,LandPlane,1,4,1,1
+RS20,RANS,S-20 Raven,LandPlane,1,4,1,1
+RS21,RANS,S-21 Outbound,LandPlane,1,4,1,1
+RTA4,RTAF,RTAF-4 Chandra,LandPlane,1,4,1,1
+RUBI,SCINTEX,ML-250 Rubis,LandPlane,1,4,1,1
+RV10,VAN'S,RV-10,LandPlane,1,4,1,1
+RV12,VAN'S,RV-12,LandPlane,1,4,1,1
+RV14,VAN'S,RV-14,LandPlane,1,4,1,1
+RV3,VAN'S,RV-3,LandPlane,1,4,1,1
+RV4,VAN'S,RV-4,LandPlane,1,4,1,1
+RV4T,VAN'S,RV-4T,LandPlane,1,4,1,3
+RV6,VAN'S,RV-6,LandPlane,1,4,1,1
+RV7,VAN'S,RV-7,LandPlane,1,4,1,1
+RV8,VAN'S,RV-8,LandPlane,1,4,1,1
+RV9,VAN'S,RV-9,LandPlane,1,4,1,1
+RVAL,DENEL,AH-2 Rooivalk,Helicopter,1,6,2,3
+RW19,RAGWING,RW-19 Stork,LandPlane,1,4,1,1
+RW20,RAGWING,RW-20 Stork,LandPlane,1,4,1,1
+RW22,RAGWING,RW-22 Tiger Moth,LandPlane,1,4,1,1
+RW26,RAGWING,RW-26 Special 2,LandPlane,1,4,1,1
+RW3,RHEIN-WEST-FLUG,RW-3 Multoplane,LandPlane,1,4,1,1
+RYSA,TECHNOAVIA,Rysachok,LandPlane,1,5,2,3
+RYST,RYAN,ST-A,LandPlane,1,4,1,1
+S05F,SIAI-MARCHETTI,S-205-18F,LandPlane,1,4,1,1
+S05R,SIAI-MARCHETTI,S-205-18R,LandPlane,1,4,1,1
+S1,INTERSTATE,S-1 Cadet,LandPlane,1,4,1,1
+S10,STINSON,10 Voyager,LandPlane,1,4,1,1
+S107,SPRATT,107,SeaPlane,2,4,1,1
+S108,STINSON,108 Station Wagon,LandPlane,1,4,1,1
+S10S,STEMME,S-10 Chrysalis,LandPlane,1,4,1,1
+S11,FOKKER,S-11 Instructor,LandPlane,1,4,1,1
+S12,SPENCER,S-12 Air Car,Amphibian,3,4,1,1
+S122,SKYLINE,SL-122  Pchelka,LandPlane,1,5,2,1
+S12S,STEMME,S-12 Twin Voyager,LandPlane,1,4,1,1
+S15S,STEMME,S-15,LandPlane,1,4,1,1
+S15U,STEMME,S-15 Patroller,LandPlane,1,4,1,1
+S200,SIPA,S-200 Minijet,LandPlane,1,4,1,4
+S202,SGAU,S-202,Amphibian,3,5,2,1
+S208,SIAI-MARCHETTI,S-208,LandPlane,1,4,1,1
+S21,MACDONALD,S-21,LandPlane,1,4,1,1
+S210,SUD-AVIATION,SE-210 Caravelle,LandPlane,1,5,2,4
+S211,SIAI-MARCHETTI,S-211,LandPlane,1,4,1,4
+S223,MBB,223 Flamingo,LandPlane,1,4,1,1
+S22T,CIRRUS,SR-22 Turbo,LandPlane,1,4,1,1
+S274,IRGC,Shahed 274,Helicopter,1,6,1,3
+S278,HESA,Shahed 278,Helicopter,1,6,1,3
+S285,HESA,Shahed 285,Helicopter,1,6,1,3
+S2P,GRUMMAN,S-2 Tracker,LandPlane,1,5,2,1
+S2T,GRUMMAN,S-2 Turbo Tracker,LandPlane,1,5,2,3
+S3,LOCKHEED,S-3 Viking,LandPlane,1,5,2,4
+S330,SIKORSKY,S-333,Helicopter,1,6,1,3
+S355,SCALED,355 Firebird,LandPlane,1,4,1,1
+S360,AEROSPATIALE,SA-360 Dauphin,Helicopter,1,6,1,3
+S37,SUKHOI,S-37 Berkut,LandPlane,1,5,2,4
+S38,SIKORSKY,S-38 Replica,Amphibian,3,5,2,1
+S39,SIKORSKY,S-39,Amphibian,3,4,1,1
+S4,ARCTIC,S-4 Privateer,LandPlane,1,4,1,1
+S400,SGAU,S-400 Kapitan,SeaPlane,2,5,2,1
+S434,SIKORSKY,S-434,Helicopter,1,6,1,3
+S45,PARTENAIR,S-45 Mystere,LandPlane,1,4,1,1
+S450,AERO-EAST-EUROPE,SILA-450,LandPlane,1,4,1,1
+S51,SIKORSKY,S-51,Helicopter,1,6,1,1
+S51D,STEWART (1),S-51D,LandPlane,1,4,1,1
+S52,SIKORSKY,S-52,Helicopter,1,6,1,1
+S55P,SIKORSKY,S-55,Helicopter,1,6,1,1
+S55T,SIKORSKY,S-55T,Helicopter,1,6,1,3
+S58P,SIKORSKY,S-58,Helicopter,1,6,1,1
+S58T,SIKORSKY,S-58T,Helicopter,1,6,1,3
+S6,STEMME,S-6,LandPlane,1,4,1,1
+S601,AEROSPATIALE,SN-601 Corvette,LandPlane,1,5,2,4
+S61,SIKORSKY,S-61A,Helicopter,1,6,2,3
+S61R,SIKORSKY,S-61R,Helicopter,1,6,2,3
+S62,SIKORSKY,S-62,Helicopter,1,6,1,3
+S64,SIKORSKY,S-64 Skycrane,Helicopter,1,6,2,3
+S65C,AEROSPATIALE,SA-365C Dauphin 2,Helicopter,1,6,2,3
+S76,SIKORSKY,S-76,Helicopter,1,6,2,3
+S900,SIPA,S-901,LandPlane,1,4,1,1
+S92,SIKORSKY,S-92 Helibus,Helicopter,1,6,2,3
+S97,SIKORSKY,S-97 Raider,Helicopter,1,6,1,3
+SA02,K & S,SA-102.5 Cavalier,LandPlane,1,4,1,1
+SA03,K & S,SA-103 Cavalier,LandPlane,1,4,1,1
+SA04,K & S,SA-104 Cavalier,LandPlane,1,4,1,1
+SA05,K & S,SA-105 Super Cavalier,LandPlane,1,4,1,1
+SA10,STOLP,SA-100 Starduster,LandPlane,1,4,1,1
+SA11,STITS,SA-11 Playmate,LandPlane,1,4,1,1
+SA2,ICP,SA-2 Rampage,LandPlane,1,4,1,1
+SA20,BERIEV,SA-20,Amphibian,3,4,1,1
+SA3,STITS,SA-3 Playboy,LandPlane,1,4,1,1
+SA30,STOLP,SA-300 Starduster Too,LandPlane,1,4,1,1
+SA37,SCHWEIZER,SA-2-37 Condor,LandPlane,1,4,1,1
+SA38,SCHWEIZER,SA-2-38A Twin Condor,LandPlane,1,5,2,1
+SA50,STOLP,SA-500 Starlet,LandPlane,1,4,1,1
+SA6,STITS,SA-6 Flut-R-Bug,LandPlane,1,4,1,1
+SA6E,SREYA,SA-6 Envoy,LandPlane,1,4,1,3
+SA7,STITS,SA-7 Sky-Coupe,LandPlane,1,4,1,1
+SA70,STOLP,SA-700 Acroduster,LandPlane,1,4,1,1
+SA75,STOLP,SA-750 Acroduster Too,LandPlane,1,4,1,1
+SA8T,SCHWEIZER,SA-2-38B Twin Condor,LandPlane,1,5,2,3
+SAB2,ARNET PEREYRA,Sabre 2,LandPlane,1,4,1,1
+SABA,PARAVAR PARS,Saba,LandPlane,1,4,1,1
+SACE,POBER,Super Ace,LandPlane,1,4,1,1
+SACR,SMITH (3),Acro Advanced,LandPlane,1,4,1,1
+SAFF,HALSTED,Saffire,LandPlane,1,4,1,1
+SAH1,TRAGO MILLS,SAH-1,LandPlane,1,4,1,1
+SAKO,RANS,S-10 Sakota,LandPlane,1,4,1,1
+SALB,SKYGEAR,Albatross,LandPlane,1,4,1,1
+SAM,SAM AIRCRAFT,Sam,LandPlane,1,4,1,1
+SAND,SHORT,S-25 Sandringham,SeaPlane,2,5,4,1
+SAPH,PIEL,CP-1320 Saphir,LandPlane,1,4,1,1
+SASH,SHARK AIRCRAFT,Shark,LandPlane,1,5,2,1
+SASP,SUPERMARINE AIRCRAFT,Spitfire Mk25,LandPlane,1,4,1,1
+SASY,PROTECH,PT-2 Sassy,LandPlane,1,4,1,1
+SATA,HISPANO,HA-200 Saeta,LandPlane,1,5,2,4
+SAVA,SADLER,Vampire,LandPlane,1,4,1,1
+SAVG,ZLIN AVIATION,Savage,LandPlane,1,4,1,1
+SB05,SAAB,105,LandPlane,1,5,2,4
+SB20,SAAB,2000,LandPlane,1,5,2,3
+SB29,SAAB,29,LandPlane,1,4,1,4
+SB32,SAAB,32 Lansen,LandPlane,1,4,1,4
+SB35,SAAB,35 Draken,LandPlane,1,4,1,4
+SB37,SAAB,37 Viggen,LandPlane,1,4,1,4
+SB39,SAAB,39 Gripen,LandPlane,1,4,1,4
+SB7,SEABIRD,SB-7 Seeker,LandPlane,1,4,1,1
+SB91,SAAB,91 Safir,LandPlane,1,4,1,1
+SBD,DOUGLAS,SBD Dauntless,LandPlane,1,4,1,1
+SBLS,SLIPSTREAM,SkyBlaster,LandPlane,1,5,2,1
+SBM3,E & K,SBM-03 Kos,LandPlane,1,4,1,1
+SBOY,INTERPLANE,Skyboy,LandPlane,1,4,1,1
+SBR1,NORTH AMERICAN,Sabreliner,LandPlane,1,5,2,4
+SBR2,ROCKWELL,Sabre 80,LandPlane,1,5,2,4
+SC01,GYROFLUG,SC-01 Speed Canard,LandPlane,1,4,1,1
+SC7,SHORT,SC-7 Skyvan,LandPlane,1,5,2,3
+SCAM,AEROSPORT,Scamp,LandPlane,1,4,1,1
+SCEP,SLIPSTREAM,Scepter,LandPlane,1,4,1,1
+SCII,SPORT COPTER,SportCopter 2,Gyrocopter,1,9,1,1
+SCOM,AIRDALE,Comet,LandPlane,1,4,1,1
+SCOR,ROTORWAY,Scorpion,Helicopter,1,6,1,1
+SCOU,WESTLAND,Scout,Helicopter,1,6,1,3
+SCRO,AKAFLIEG MUNCHEN,Mü-30 Schlacro,LandPlane,1,4,1,1
+SCTR,FLAGLOR,Scooter,LandPlane,1,4,1,1
+SCUB,AERO KUHLMANN,Scub,LandPlane,1,4,1,1
+SCW1,SCWAL,101,LandPlane,1,4,1,1
+SD26,SKYDANCER,SD-260,LandPlane,1,4,1,1
+SD4,TOMARK,SD-4 Viper,LandPlane,1,4,1,1
+SDUS,STOLP,Super Starduster,LandPlane,1,4,1,1
+SE5A,RAF,SE-5A Replica,LandPlane,1,4,1,1
+SE5R,REPLICA PLANS,SE-5A Replica,LandPlane,1,4,1,1
+SEAT,SEAWIND,Turbine Seawind,Amphibian,3,4,1,3
+SEAW,SEAWIND,Seawind,Amphibian,3,4,1,1
+SERA,SERVOPLANT,Aerocraft,LandPlane,1,4,1,1
+SF2,VIKING (1),SF-2 Cygnet,LandPlane,1,4,1,1
+SF23,SCHEIBE,SF-23 Sperling,LandPlane,1,4,1,1
+SF24,SCHEIBE,SF-24 Motorspatz,LandPlane,1,4,1,1
+SF25,SCHEIBE,SF-25 Falke,LandPlane,1,4,1,1
+SF27,SCHEIBE,SF-27M,LandPlane,1,4,1,1
+SF28,SCHEIBE,SF-28 Tandem Falke,LandPlane,1,4,1,1
+SF31,SPORTAVIA-PUTZER,SFS-31 Milan,LandPlane,1,4,1,1
+SF32,SCHEIBE,SF-32,LandPlane,1,4,1,1
+SF34,SAAB,340,LandPlane,1,5,2,3
+SF35,SCHEIBE,SF-35,LandPlane,1,4,1,1
+SF36,SCHEIBE,SF-36,LandPlane,1,4,1,1
+SF41,SCHEIBE,SF-41,LandPlane,1,4,1,1
+SF50,CIRRUS,SF-50 Vision,LandPlane,1,4,1,4
+SG37,SCHWEIZER,SGM-2-37,LandPlane,1,4,1,1
+SG70,GLASS,SG-70 STOLGlass,LandPlane,1,4,1,1
+SG92,TECHNOAVIA,SMG-92 Turbo Finist,LandPlane,1,4,1,3
+SGRA,SG AVIATION,Rally,LandPlane,1,4,1,1
+SGUP,AERO SPACELINES,377SGT Super Guppy,LandPlane,1,5,4,3
+SH09,KOPTER,SH-09,Helicopter,1,6,1,3
+SH33,SHORT,330,LandPlane,1,5,2,3
+SH36,SHORT,360,LandPlane,1,5,2,3
+SH4,SILVERCRAFT,SH-4,Helicopter,1,6,1,1
+SH5,HARBIN,SH-5,SeaPlane,2,5,4,3
+SHAC,AVRO,696 Shackleton,LandPlane,1,5,4,1
+SHAK,FREEDOM MASTER,FM-2 Air Shark,Amphibian,3,4,1,1
+SHAW,HAWKER,Sea Hawk,LandPlane,1,4,1,4
+SHEA,SEAFLIGHT,Shearwater,Amphibian,3,4,1,1
+SHEK,RANS,S-16 Shekari,LandPlane,1,4,1,1
+SHER,SHERPA,C-400,LandPlane,1,4,1,1
+SHOE,MERCURY,Shoestring,LandPlane,1,4,1,1
+SHOP,SALVAY-STARK,Skyhopper,LandPlane,1,4,1,1
+SHOR,HIGHER CLASS,Super Hornet,LandPlane,1,4,1,1
+SHRK,SHARK AERO,Shark,LandPlane,1,4,1,1
+SHRT,SHERPA,Sherpa K-650T,LandPlane,1,4,1,3
+SIDE,SMYTH,Sidewinder,LandPlane,1,4,1,1
+SIGM,ELITAR,Sigma,LandPlane,1,4,1,1
+SILH,SILHOUETTE,SA-60 Silhouette,LandPlane,1,4,1,1
+SIR2,RHEIN,Sirius 2,LandPlane,1,4,1,1
+SIRA,TECNAM,P-2002 Sierra,LandPlane,1,4,1,1
+SJ30,SINO SWEARINGEN,SJ-30,LandPlane,1,5,2,4
+SK10,SKYETON,K-10 Swift,LandPlane,1,4,1,1
+SK70,STARKRAFT,SK-700,LandPlane,1,5,2,1
+SKAR,III,Sky Arrow,LandPlane,1,4,1,1
+SKIF,AEROLITES,AeroSkiff,Amphibian,3,4,1,1
+SKIM,COLONIAL,C-1 Skimmer,Amphibian,3,4,1,1
+SKRA,BEST OFF,Sky Ranger,LandPlane,1,4,1,1
+SKYC,OMA SUD,Skycar,LandPlane,1,5,2,1
+SKYO,SKYOTE AEROMARINE,Skyote,LandPlane,1,4,1,1
+SKYR,REARWIN,Skyranger,LandPlane,1,4,1,1
+SL1,STAR-LITE,SL-1 Star-Lite,LandPlane,1,4,1,1
+SL39,MAPO,SL-39,LandPlane,1,4,1,1
+SL90,AVIOTECHNICA,SL-90 Leshii,LandPlane,1,4,1,1
+SLCH,SCALED,351 Stratolaunch,LandPlane,1,5,6,4
+SLG2,SLING AIRCRAFT,Sling 2,LandPlane,1,4,1,1
+SLG4,AIRPLANE FACTORY,Sling 4,LandPlane,1,4,1,1
+SLH4,SLING AIRCRAFT,Sling 4 High Wing,LandPlane,1,4,1,1
+SLK3,SLICK,360,LandPlane,1,4,1,1
+SLK5,SLICK,540,LandPlane,1,4,1,1
+SM01,STERN-MALLICK,SM-01 Vega,LandPlane,1,4,1,1
+SM19,SIAI-MARCHETTI,SM-1019,LandPlane,1,4,1,3
+SM20,TECHNOAVIA,SM-2000,LandPlane,1,4,1,3
+SM60,STINSON,SM-6000 Tri-Motor,LandPlane,1,5,3,1
+SM92,TECHNOAVIA,SMG-92 Turbo Finist,LandPlane,1,4,1,1
+SMAX,AIRMAX,M-22 SeaMax,Amphibian,3,4,1,1
+SMB2,DASSAULT,Super Mystère B2,LandPlane,1,4,1,4
+SNAD,CALUMET,636 Snobird Adventurer,Gyrocopter,1,9,1,1
+SNAP,DALLAIR,FR-01 Snap,LandPlane,1,4,1,1
+SNGY,CIAC,Synergy,LandPlane,1,4,1,1
+SNOS,VSR,SR-1 Snoshoo,LandPlane,1,4,1,1
+SNS2,SORRELL,SNS-2 Guppy,LandPlane,1,4,1,1
+SNS7,SORRELL,SNS-7 Hiperbipe,LandPlane,1,4,1,1
+SNS9,SORRELL,SNS-9 EXP-2,LandPlane,1,4,1,1
+SNTA,AIRSPORT,Sonata,LandPlane,1,4,1,1
+SOK2,SOKO,2,LandPlane,1,4,1,1
+SOKL,MRAZ,M-1 Sokol,LandPlane,1,4,1,1
+SOL1,SOLAR IMPULSE,1,LandPlane,1,5,4,10
+SOL2,SOLAR IMPULSE,2,LandPlane,1,5,4,10
+SOLI,RUTAN,77 Solitaire,LandPlane,1,4,1,1
+SONG,AIRSPORT,Song,LandPlane,1,4,1,1
+SONX,SONEX,Sonex,LandPlane,1,4,1,1
+SORA,ACS,ACS-100 Sora,LandPlane,1,4,1,1
+SP20,MICCO,SP-20,LandPlane,1,4,1,1
+SP33,SPECTRUM,S-33 Independence,LandPlane,1,5,2,4
+SP55,TECHNOAVIA,SP-55,LandPlane,1,4,1,1
+SP6E,SAUSER,P-6E Replica,LandPlane,1,4,1,1
+SP7,SPARTAN,7 Executive,LandPlane,1,4,1,1
+SP91,TECHNOAVIA,SP-91 Slava,LandPlane,1,4,1,1
+SP95,TECHNOAVIA,SP-95,LandPlane,1,4,1,1
+SPA2,STARK-TREFETHEN,Sport-Aire 2,LandPlane,1,4,1,1
+SPAR,III,Speed Arrow,LandPlane,1,4,1,1
+SPC2,SPECTER,Specter 2,LandPlane,1,4,1,1
+SPDR,REARWIN,6000 Speedster,LandPlane,1,4,1,1
+SPEL,LOEHLE,Spitfire Elite,LandPlane,1,4,1,1
+SPGY,AIRCRAFT DESIGNS,Sportster Gyro,Gyrocopter,1,9,1,1
+SPHA,AMERICAN AUTOGYRO,SparrowHawk,Gyrocopter,1,9,1,1
+SPIR,QUESTAIR,Spirit,LandPlane,1,4,1,1
+SPIT,SUPERMARINE,Spitfire,LandPlane,1,4,1,1
+SPOR,AMAX,Sport 1700,LandPlane,1,4,1,1
+SPR2,CARLSON,Sparrow 2,LandPlane,1,4,1,1
+SPRT,PRACTAVIA,Sprite,LandPlane,1,4,1,1
+SPST,REARWIN,Sportster,LandPlane,1,4,1,1
+SPUP,SOPWITH,Pup,LandPlane,1,4,1,1
+SQ2T,GLASSIC,SQ-2000,LandPlane,1,4,1,1
+SQES,SLIPSTREAM,SkyQuest,LandPlane,1,5,2,1
+SR01,EURODISPLAY,SR-01 Magic,LandPlane,1,4,1,1
+SR20,CIRRUS,SR-20,LandPlane,1,4,1,1
+SR22,CIRRUS,SR-22,LandPlane,1,4,1,1
+SRAC,SPORT RACER,Sport Racer,LandPlane,1,4,1,1
+SRAI,GREAT PLAINS,Sonerai,LandPlane,1,4,1,1
+SRAS,D'APUZZO,D-260 Senior Aero Sport,LandPlane,1,4,1,1
+SRAY,DORNIER,S-Ray 007,Amphibian,3,4,1,1
+SREY,PROGRESSIVE AERODYNE,SeaRey,Amphibian,3,4,1,1
+SS2,SCALED,339 Space Ship Two,LandPlane,1,4,1,9
+SS2P,AYRES,Thrush,LandPlane,1,4,1,1
+SS2T,AYRES,Turbo Thrush (S-2R-G/T except T660),LandPlane,1,4,1,3
+SSAB,NORTH AMERICAN,F-100 Super Sabre,LandPlane,1,4,1,4
+SSC,BUTTERFLY,Super Sky Cycle,Gyrocopter,1,9,1,1
+SSTL,JUST,JA30 SuperSTOL,LandPlane,1,4,1,1
+SSTM,SG AVIATION,Sea Storm,Amphibian,3,4,1,1
+ST1,PHILLIPS,ST-1 Speedtwin,LandPlane,1,5,2,1
+ST10,SOCATA,ST-10 Provence,LandPlane,1,4,1,1
+ST3,STEARMAN,C-3,LandPlane,1,4,1,1
+ST30,STAUDACHER,S-300,LandPlane,1,4,1,1
+ST4,STEARMAN,4 Junior Speedmail,LandPlane,1,4,1,1
+ST6,STEARMAN,6 Cloudboy,LandPlane,1,4,1,1
+ST60,STAUDACHER,S-600,LandPlane,1,4,1,1
+ST75,STEARMAN,75 Kaydet,LandPlane,1,4,1,1
+ST87,STERN,ST-87 Europlane,LandPlane,1,4,1,1
+STAL,AIRCRAFT DESIGNS,Stallion,LandPlane,1,4,1,1
+STAR,RAYTHEON,2000 Starship,LandPlane,1,5,2,3
+STAT,AIRCRAFT DESIGNS,Turbine Stallion,LandPlane,1,4,1,3
+STCH,FLY SYNTHESIS,Storch,LandPlane,1,4,1,1
+STFF,STATLER,Firefly,LandPlane,1,4,1,1
+STIL,TERZI,T-9 Stiletto,LandPlane,1,4,1,1
+STLN,HELIO,AU-24 Stallion,LandPlane,1,4,1,3
+STOR,STORCH AVIATION,SS-4 Storch,LandPlane,1,4,1,1
+STR2,STROJNIK,S-2,LandPlane,1,4,1,1
+STRA,STRIPLIN,Sky Ranger,LandPlane,1,4,1,1
+STRE,TL ULTRALIGHT,Stream,LandPlane,1,4,1,1
+STRI,SOPWITH,Triplane Replica,LandPlane,1,4,1,1
+STRK,BRITISH AEROSPACE,BAC-167 Strikemaster,LandPlane,1,4,1,4
+STRM,SG AVIATION,Storm,LandPlane,1,4,1,1
+STST,CFM,SA-2 Star Streak,LandPlane,1,4,1,1
+SU17,SUKHOI,Su-17,LandPlane,1,4,1,4
+SU24,SUKHOI,Su-24,LandPlane,1,5,2,4
+SU25,SUKHOI,Su-25,LandPlane,1,5,2,4
+SU26,SUKHOI,Su-26,LandPlane,1,4,1,1
+SU27,SUKHOI,Su-27,LandPlane,1,5,2,4
+SU29,SUKHOI,Su-29,LandPlane,1,4,1,1
+SU31,SUKHOI,Su-31,LandPlane,1,4,1,1
+SU38,SUKHOI,Su-38,LandPlane,1,4,1,1
+SU57,SUKHOI,Su-57,LandPlane,1,5,2,4
+SU7,SUKHOI,Su-7,LandPlane,1,4,1,4
+SU80,SUKHOI,Su-80,LandPlane,1,5,2,3
+SU95,SUKHOI,Superjet 100-95,LandPlane,1,5,2,4
+SUBA,FUJI,FA-200 Aero Subaru,LandPlane,1,4,1,1
+SUCO,BELL,AH-1Z SuperCobra,Helicopter,1,6,2,3
+SUNB,VERILITE,100 Sunbird,LandPlane,1,4,1,1
+SUNV,FOKKER,Super Universal,LandPlane,1,4,1,1
+SURN,KOREA AEROSPACE,Surion,Helicopter,1,6,2,3
+SURU,IPT,IPT-16 Surubim,LandPlane,1,4,1,1
+SUSO,VSTOL,SS-2000 Super Solution,LandPlane,1,4,1,1
+SV4,STAMPE,SV-4,LandPlane,1,4,1,1
+SVNH,ICP,MXP-740 Savannah,LandPlane,1,4,1,1
+SW18,SKYWOOD,SW-18 Teddy,LandPlane,1,4,1,1
+SW2,SWEARINGEN,Merlin 2,LandPlane,1,5,2,3
+SW3,SWEARINGEN,Merlin 3,LandPlane,1,5,2,3
+SW4,SWEARINGEN,Merlin 4,LandPlane,1,5,2,3
+SWAK,ANGLIN,Space Walker 1,LandPlane,1,4,1,1
+SWAT,BHARAT,LT-1 Swati,LandPlane,1,4,1,1
+SWIF,SUPERMARINE,Swift,LandPlane,1,4,1,4
+SWIN,S-WING,S-Wing,LandPlane,1,4,1,1
+SWOR,FAIREY,Swordfish,LandPlane,1,4,1,1
+SX30,SWEARINGEN,SX-300,LandPlane,1,4,1,1
+SYCA,BRISTOL,171 Sycamore,Helicopter,1,6,1,1
+SYMP,SYMPHONY,SA-160 Symphony,LandPlane,1,4,1,1
+SYNC,FLY SYNTHESIS,Syncro,LandPlane,1,4,1,1
+SZ45,SZD,SZD-45 Ogar,LandPlane,1,4,1,1
+SZ9M,SZD,Bocian M-2000,LandPlane,1,4,1,1
+T1,FUJI,T-1,LandPlane,1,4,1,4
+T10,TMM-AVIA,T-10 Avia-Tor,LandPlane,1,4,1,1
+T101,AEROPROGRESS,T-101 Grach,LandPlane,1,4,1,3
+T134,TUPOLEV,Tu-134,LandPlane,1,5,2,4
+T154,TUPOLEV,Tu-154,LandPlane,1,5,3,4
+T160,TUPOLEV,Tu-160,LandPlane,1,5,4,4
+T18,THORP,T-18 Tiger,LandPlane,1,4,1,1
+T19,THK,T-19 Speedfire,LandPlane,1,4,1,1
+T2,NORTH AMERICAN,T-2 Buckeye,LandPlane,1,5,2,4
+T204,TUPOLEV,Tu-204,LandPlane,1,5,2,4
+T206,CESSNA,T206 Turbo Stationair,LandPlane,1,4,1,1
+T210,CESSNA,T210 Turbo Centurion,LandPlane,1,4,1,1
+T211,THORP,T-211,LandPlane,1,4,1,1
+T22M,TUPOLEV,Tu-22M,LandPlane,1,5,2,4
+T250,BELLANCA,T-250 Aries,LandPlane,1,4,1,1
+T28,NORTH AMERICAN,T-28 Trojan,LandPlane,1,4,1,1
+T30,TERZI,T-30 Katana,LandPlane,1,4,1,1
+T33,LOCKHEED,T-33 Shooting Star,LandPlane,1,4,1,4
+T334,TUPOLEV,Tu-334,LandPlane,1,5,2,4
+T34P,BEECH,T-34A Mentor,LandPlane,1,4,1,1
+T34T,BEECH,T-34C Turbo Mentor,LandPlane,1,4,1,3
+T35,TEMCO,T-35 Buckaroo,LandPlane,1,4,1,1
+T37,CESSNA,T-37,LandPlane,1,5,2,4
+T38,NORTHROP,T-38 Talon,LandPlane,1,5,2,4
+T4,KAWASAKI,T-4,LandPlane,1,5,2,4
+T40,TURNER,T-40,LandPlane,1,4,1,1
+T411,KHRUNICHEV,T-411 Aist,LandPlane,1,4,1,1
+T415,KHRUNICHEV,T-415 Snegir,LandPlane,1,4,1,1
+T419,KHRUNICHEV,AT-419 Strekoza,LandPlane,1,4,1,1
+T5,FUJI,T-5,LandPlane,1,4,1,3
+T50,CESSNA,T-50 Bobcat,LandPlane,1,5,2,1
+T51,TITAN,T-51 Mustang,LandPlane,1,4,1,1
+T6,NORTH AMERICAN,AT-6 Texan,LandPlane,1,4,1,1
+T7,FUJI,T-7,LandPlane,1,4,1,3
+TA15,TAYLORCRAFT (1),15 Tourist,LandPlane,1,4,1,1
+TA16,THURSTON,TA-16 Seafire,Amphibian,3,4,1,1
+TA20,TAYLORCRAFT (1),20 Ranchwagon,LandPlane,1,4,1,1
+TAA1,TOYOTA,TAA-1,LandPlane,1,4,1,1
+TAGO,TEAM TANGO,Tango-2,LandPlane,1,4,1,1
+TAIL,WITTMAN,W-8 Tailwind,LandPlane,1,4,1,1
+TAMP,SOCATA,TB-9 Tampico,LandPlane,1,4,1,1
+TARO,ANAHUAC,Tauro,LandPlane,1,4,1,1
+TARR,PELEGRIN,Tarragon,LandPlane,1,4,1,1
+TAYA,TAYLORCRAFT (1),A,LandPlane,1,4,1,1
+TAYB,TAYLORCRAFT (1),BC,LandPlane,1,4,1,1
+TAYD,TAYLORCRAFT (1),DC,LandPlane,1,4,1,1
+TB05,AMC,Texas Bullet 205,LandPlane,1,4,1,1
+TB20,SOCATA,TB-20 Trinidad,LandPlane,1,4,1,1
+TB21,SOCATA,TB-21 Trinidad TC,LandPlane,1,4,1,1
+TB30,SOCATA,TB-30 Epsilon,LandPlane,1,4,1,1
+TB31,SOCATA,TB-31 Omega,LandPlane,1,4,1,3
+TBEE,UNITED CONSULTANT,UC-1 Twin Bee,Amphibian,3,5,2,1
+TBM,GRUMMAN,Avenger,LandPlane,1,4,1,1
+TBM7,SOCATA,TBM-700A,LandPlane,1,4,1,3
+TBM8,SOCATA,TBM-850,LandPlane,1,4,1,3
+TBM9,SOCATA,TBM-900,LandPlane,1,4,1,3
+TBR3,GOLDEN CIRCLE,T-Bird 3,LandPlane,1,4,1,1
+TC2,AERO MIRAGE,TC-2,LandPlane,1,4,1,1
+TCAT,GRUMMAN,F7F Tigercat,LandPlane,1,5,2,1
+TCOU,HELIO,H-500 Twin Courier,LandPlane,1,5,2,1
+TD1,TAIWAN DANCER,TD-1,LandPlane,1,4,1,1
+TD2,TURBINE DESIGN,TD-2 Tempest,LandPlane,1,4,1,3
+TD3,TAIWAN DANCER,TD-3 Alluvion Legend,LandPlane,1,4,1,1
+TEAL,THURSTON,TSC-1 Teal,Amphibian,3,4,1,1
+TERM,SMITH (2),Termite,LandPlane,1,4,1,1
+TERR,FOXCON,Terrier,LandPlane,1,4,1,1
+TEX2,BEECHCRAFT,T-6 Texan 2,LandPlane,1,4,1,3
+TEXA,FLY SYNTHESIS,Texan,LandPlane,1,4,1,1
+TF19,TAYLORCRAFT (1),F-19 Sportsman,LandPlane,1,4,1,1
+TF21,TAYLORCRAFT (1),F-21,LandPlane,1,4,1,1
+TF22,TAYLORCRAFT (1),F-22 Tri-Classic,LandPlane,1,4,1,1
+TFK2,TECHNOFLUG,TFK-2 Carat,LandPlane,1,4,1,1
+TFOC,THUNDER WINGS,Focke-Wulf Fw-190,LandPlane,1,4,1,1
+TFUN,VALENTIN,Taifun,LandPlane,1,4,1,1
+TGRS,LANCAIR,Tigress,LandPlane,1,4,1,1
+TIAD,TRIKE ICAROS,Adventure,LandPlane,1,4,1,1
+TIGR,EUROCOPTER,EC-665 Tigre,Helicopter,1,6,2,3
+TIJU,TIPSY,Junior,LandPlane,1,4,1,1
+TIPB,TIPSY,B,LandPlane,1,4,1,1
+TJET,MAVERICK,TJ-1500 TwinJet,LandPlane,1,5,2,4
+TL20,TL ULTRALIGHT,TL-2000  Sting,LandPlane,1,4,1,1
+TL30,TL ULTRALIGHT,TL-3000 Sirius,LandPlane,1,4,1,1
+TLEG,PERFORMANCE,Turbine Legend,LandPlane,1,4,1,3
+TM5,TM AIRCRAFT,TM-5,LandPlane,1,4,1,1
+TMOT,FISHER,R-80 Tiger Moth,LandPlane,1,4,1,1
+TMUS,PAPA 51,Thunder Mustang,LandPlane,1,4,1,1
+TNAV,CAMAIR,480 Twin Navion,LandPlane,1,5,2,1
+TNDR,DREAM,Tundra,LandPlane,1,4,1,1
+TOBA,SOCATA,TB-10 Tobago,LandPlane,1,4,1,1
+TOOT,MEYER,Little Toot,LandPlane,1,4,1,1
+TOR,PANAVIA,Tornado,LandPlane,1,5,2,4
+TOUR,AESL,Airtourer,LandPlane,1,4,1,1
+TOXO,CAG (1),Toxo,LandPlane,1,4,1,1
+TP40,THUNDER WINGS,Curtiss P-40,LandPlane,1,4,1,1
+TPIL,ENAER,T-35DT Turbo Pillán,LandPlane,1,4,1,3
+TPIN,SCOTTISH AVIATION,Twin Pioneer,LandPlane,1,5,2,1
+TR1,TRIDENT,TR-1 Trigull,Amphibian,3,4,1,1
+TR20,FEUGRAY,TR-200,LandPlane,1,4,1,1
+TR26,FEUGRAY,TR-260 Sirius,LandPlane,1,4,1,1
+TR55,3XTRIM,550 Trener,LandPlane,1,4,1,1
+TRAL,GROPPO,Trail,LandPlane,1,4,1,1
+TRAP,CAPELLA,T-Raptor,LandPlane,1,4,1,1
+TRBA,PODESVA,Trener Baby,LandPlane,1,4,1,1
+TRDO,TITAN,Tornado SS,LandPlane,1,4,1,1
+TRF1,TEAM ROCKET,F-1,LandPlane,1,4,1,1
+TRIM,FORD,Tri-Motor,LandPlane,1,5,3,1
+TRIS,BRITTEN-NORMAN,BN-2A Mk3 Trislander,LandPlane,1,5,3,1
+TRMA,STINSON,A Tri-Motor,LandPlane,1,5,3,1
+TRWN,PACIFIC AIRMOTIVE,Tradewind,LandPlane,1,5,2,1
+TS11,PZL-MIELEC,TS-11 Iskra,LandPlane,1,4,1,4
+TS14,TEST,TST-14 Bonus,LandPlane,1,4,1,1
+TS1J,JONKER,JS-1TJ Revelation,LandPlane,1,4,1,4
+TS8,PZL-MIELEC,TS-8 Bies,LandPlane,1,4,1,1
+TSPT,THUNDER WINGS,Supermarine Spitfire,LandPlane,1,4,1,1
+TSTN,TERRAFUGIA,Transition,LandPlane,1,4,1,1
+TSTR,FARRINGTON,Twinstar,Gyrocopter,1,9,1,1
+TTRS,HUMBERT,Tetras,LandPlane,1,4,1,1
+TTWO,PARKER,Teenie Two,LandPlane,1,4,1,1
+TU16,TUPOLEV,Tu-16,LandPlane,1,5,2,4
+TU22,TUPOLEV,Tu-22,LandPlane,1,5,2,4
+TU95,TUPOLEV,Tu-95,LandPlane,1,5,4,3
+TUCA,EMBRAER,EMB-312 Tucano,LandPlane,1,4,1,3
+TUL3,PODESVA,TUL-03 Amigo,LandPlane,1,4,1,1
+TUTR,AVRO,621 Tutor,LandPlane,1,4,1,1
+TVL4,TRAVEL AIR,4000,LandPlane,1,4,1,1
+TVLB,TRAVEL AIR,2000,LandPlane,1,4,1,1
+TWEN,TECNAM,P-2010 Twenty-Ten,LandPlane,1,4,1,1
+TWIR,DYN'AERO,Twin-R,LandPlane,1,5,2,1
+TWSP,TIME WARP,Spitfire,LandPlane,1,4,1,1
+TWST,SILENCE,Twister,LandPlane,1,4,1,1
+TZRV,IRIAF,JT-2-2 Tazarve,LandPlane,1,4,1,4
+U15,PHOENIX AIR,U-15 Phoenix,LandPlane,1,4,1,1
+U16,GRUMMAN,HU-16 Albatross,Amphibian,3,5,2,1
+U2,LOCKHEED,U-2,LandPlane,1,4,1,4
+U21,BEECH,U-21G Ute,LandPlane,1,5,2,3
+U22,BEECH,QU-22,LandPlane,1,4,1,1
+UBAT,AUSTRALITE,Ultrabat,LandPlane,1,4,1,1
+UF10,URBAN,UFM-10 Samba,LandPlane,1,4,1,1
+UF13,URBAN,UFM-13 Lambada,LandPlane,1,4,1,1
+UFHT,UFO,HeliThruster,Gyrocopter,1,9,1,1
+UH1,BELL,UH-1A Iroquois,Helicopter,1,6,1,3
+UH12,HILLER,UH-12B,Helicopter,1,6,1,1
+UH1Y,BELL,UH-1Y,Helicopter,1,6,2,3
+UL10,ULTIMATE,10 Albertan,LandPlane,1,4,1,1
+UL20,ULTIMATE,20,LandPlane,1,4,1,1
+UL2F,AEROS,UL-2000 Flamingo,LandPlane,1,4,1,1
+UL45,3XTRIM,450 Ultra,LandPlane,1,4,1,1
+ULPA,ULLMANN,Panther,LandPlane,1,4,1,1
+ULTS,AMERICAN SPORTSCOPTER,Ultrasport 496,Helicopter,1,6,1,1
+UM18,UMBAUGH,18,Gyrocopter,1,9,1,1
+UNIV,NEIVA,N-621 Universal,LandPlane,1,4,1,1
+URRA,IBIS (2),Urraco,LandPlane,1,4,1,1
+US2,SHINMAYWA,US-2,Amphibian,3,5,4,3
+UT60,UTVA,60,LandPlane,1,4,1,1
+UT65,UTVA,65 Privrednik,LandPlane,1,4,1,1
+UT66,UTVA,66,LandPlane,1,4,1,1
+UT75,UTVA,75,LandPlane,1,4,1,1
+UU12,UDET,U-12 Flamingo Replica,LandPlane,1,4,1,1
+V1,GRUMMAN,OV-1 Mohawk,LandPlane,1,5,2,3
+V10,NORTH AMERICAN ROCKWELL,OV-10 Bronco,LandPlane,1,5,2,3
+V22,BELL-BOEING,V-22 Osprey,Tiltrotor,1,H,2,3
+V221,MSW,Votec 221,LandPlane,1,4,1,1
+V252,MSW,Votec 252,LandPlane,1,4,1,1
+V280,BELL,V-280 Valor,Tiltrotor,1,H,2,3
+V322,MSW,Votec 322,LandPlane,1,4,1,1
+V351,MSW,Votec 351,LandPlane,1,4,1,1
+V452,MSW,Votec 452,LandPlane,1,4,1,3
+V500,REVOLUTION,Voyager-500,Helicopter,1,6,1,1
+V8SP,BEACHNER,V-8 Special,LandPlane,1,4,1,1
+VALI,VULTEE,BT-13 Valiant,LandPlane,1,4,1,1
+VAMP,DE HAVILLAND,DH-100 Vampire,LandPlane,1,4,1,4
+VANT,VISIONAIRE,VA-10 Vantage,LandPlane,1,4,1,4
+VAUT,SUD,SO-4050 Vautour,LandPlane,1,5,2,4
+VC10,VICKERS,VC-10,LandPlane,1,5,4,4
+VELO,VELOCITY,Velocity SE,LandPlane,1,4,1,1
+VELT,VELOCITY,Velocity V-Twin,LandPlane,1,5,2,1
+VENT,SCHEMPP-HIRTH,Ventus 3T,LandPlane,1,4,1,1
+VEZE,RUTAN,33 VariEze,LandPlane,1,4,1,1
+VF2,FRY,VF-2 Esprit,LandPlane,1,4,1,1
+VF35,LOCKHEED MARTIN,F-35B Lightning 2,LandPlane,1,4,1,4
+VF60,VULCANAIR,VF-600 Mission,LandPlane,1,4,1,3
+VG3T,AVIAKIT,Vega 3000,LandPlane,1,4,1,1
+VGUL,PERCIVAL,K-1 Vega Gull,LandPlane,1,4,1,1
+VIMA,VALTION,Viima,LandPlane,1,4,1,1
+VIPJ,VIPER,ViperJet,LandPlane,1,4,1,4
+VIPR,PAXMAN'S,Viper,LandPlane,1,4,1,1
+VISC,VICKERS,Viscount,LandPlane,1,5,4,2
+VISI,PRO-COMPOSITES,Vision,LandPlane,1,4,1,1
+VIVA,COMPOSIT AIRPLANES,Viva,LandPlane,1,4,1,1
+VIX,SKYSTAR,Kitfox Vixen,LandPlane,1,4,1,1
+VIXN,AMAX,Vixen,LandPlane,1,4,1,1
+VJ22,VOLMER,VJ-22 Sportsman,Amphibian,3,4,1,1
+VK3P,CIRRUS,VK-30 Cirrus (piston),LandPlane,1,4,1,1
+VK3T,CIRRUS,VK-30 Cirrus (turbine),LandPlane,1,4,1,3
+VL3,JMB AIRCRAFT,VL-3 Evolution,LandPlane,1,4,1,1
+VM1,VOL MEDITERRANI,VM-1 Esqual,LandPlane,1,4,1,1
+VNOM,DE HAVILLAND,DH-112 Venom,LandPlane,1,4,1,4
+VNTE,SCHEMPP-HIRTH,Ventus 3F,LandPlane,1,4,1,10
+VNTR,ICP,Ventura,LandPlane,1,4,1,1
+VO10,AERO COMMANDER,Commander 100,LandPlane,1,4,1,1
+VOL2,VOLANTE,Volante Two,LandPlane,1,4,1,1
+VP2,EVANS,VP-2 Volksplane,LandPlane,1,4,1,1
+VR20,EGVOYAGER,VR-202,LandPlane,1,4,1,1
+VR7,VASHON,Ranger R7,LandPlane,1,4,1,1
+VSON,AMERICAN AFFORDABLE,Vision,LandPlane,1,4,1,1
+VTOR,VULCANAIR,AP-68TP-600 Viator,LandPlane,1,5,2,3
+VTRA,RANS,S-19 Venterra,LandPlane,1,4,1,1
+VTUR,QUESTAIR,M-20 Venture,LandPlane,1,4,1,1
+VUT1,EVEKTOR,VUT-100 Cobra,LandPlane,1,4,1,1
+VVIG,RUTAN,27 VariViggen,LandPlane,1,4,1,1
+VW10,AIRCONCEPT,VoWi-10 Airbuggy,LandPlane,1,4,1,1
+VWIT,AIRCRAFT SPRUCE,V-Witt,LandPlane,1,4,1,1
+W11,WOLF,W-11 Boredom Fighter,LandPlane,1,4,1,1
+W135,BOEING,WC-135R,LandPlane,1,5,4,4
+W201,WEATHERLY,201,LandPlane,1,4,1,1
+W3,PZL-SWIDNIK,W-3 Anakonda,Helicopter,1,6,2,3
+W5BC,WITTMAN,W-5 Buttercup,LandPlane,1,4,1,1
+W62T,WEATHERLY,620TP,LandPlane,1,4,1,3
+WA40,WASSMER,WA-40 Super 4,LandPlane,1,4,1,1
+WA41,WASSMER,WA-41 Baladou,LandPlane,1,4,1,1
+WA42,WASSMER,WA-421 Prestige,LandPlane,1,4,1,1
+WA50,WASSMER,WA-51 Pacific,LandPlane,1,4,1,1
+WA80,WASSMER,WA-80 Piranha,LandPlane,1,4,1,1
+WAC9,WACO,9,LandPlane,1,4,1,1
+WACA,WACO,PBA,LandPlane,1,4,1,1
+WACC,WACO,C,LandPlane,1,4,1,1
+WACD,WACO,D,LandPlane,1,4,1,1
+WACE,WACO,E (ARE/HRE/SRE) Aristocrat,LandPlane,1,4,1,1
+WACF,WACO,F,LandPlane,1,4,1,1
+WACG,WACO,G,LandPlane,1,4,1,1
+WACM,WACO,JWM,LandPlane,1,4,1,1
+WACN,WACO,AVN,LandPlane,1,4,1,1
+WACO,WACO,O,LandPlane,1,4,1,1
+WACT,WACO,RPT,LandPlane,1,4,1,1
+WAIX,SONEX,Waiex,LandPlane,1,4,1,1
+WASP,WESTLAND,Wasp,Helicopter,1,6,1,3
+WB57,MARTIN,WB-57,LandPlane,1,5,2,4
+WBOO,DEAN-WILSON,DW-200 Whitney Boomerang,LandPlane,1,4,1,1
+WCAT,GRUMMAN,F4F Wildcat,LandPlane,1,4,1,1
+WDEX,RADAB,Windex,LandPlane,1,4,1,1
+WESX,WESTLAND,WS-58 Wessex,Helicopter,1,6,2,3
+WF4U,WAR,Vought F4U Corsair,LandPlane,1,4,1,1
+WFOC,WAR,Focke-Wulf 190,LandPlane,1,4,1,1
+WFUR,WAR,Hawker Sea Fury,LandPlane,1,4,1,1
+WG30,WESTLAND,WG-30,Helicopter,1,6,2,3
+WH1,WENDT,WH-1 Traveler,LandPlane,1,4,1,1
+WH4,HALL,WH-4 Harpoon,LandPlane,1,4,1,3
+WHAT,WHATLEY,Special,LandPlane,1,4,1,1
+WHIL,WHITE LIGHTNING,WLAC-1 White Lightning,LandPlane,1,4,1,1
+WHIS,GROVE,GR-2 Whisper,LandPlane,1,4,1,1
+WHIT,MILES,M-11 Whitney Straight,LandPlane,1,4,1,1
+WHK2,SCALED,348 White Knight Two,LandPlane,1,5,4,4
+WICH,JAVELIN,Wichawk,LandPlane,1,4,1,1
+WILT,ULTRALEICHTBAU,WT-01 Wild Thing,LandPlane,1,4,1,1
+WIND,WATSON,GW-1 Windwagon,LandPlane,1,4,1,1
+WINE,WINDECKER,Eagle,LandPlane,1,4,1,1
+WIRR,COMMONWEALTH (1),CA-16 Wirraway,LandPlane,1,4,1,1
+WISP,WHISPER,Whisper,LandPlane,1,4,1,1
+WLBY,FLY SYNTHESIS,Wallaby,LandPlane,1,4,1,1
+WM2,MILLER (2),WM-2,LandPlane,1,4,1,1
+WOPU,AEROSPORT,Woody Pusher,LandPlane,1,4,1,1
+WP40,WAR,Curtiss P-40 Kittyhawk,LandPlane,1,4,1,1
+WP47,WAR,Republic P-47 Thunderbolt,LandPlane,1,4,1,1
+WS22,SPRING,WS-202 Sprint,LandPlane,1,4,1,1
+WSP,AAK,Wasp,LandPlane,1,4,1,1
+WT10,AEROSPOOL,WT-10 Advantic,LandPlane,1,4,1,1
+WT9,AEROSPOOL,WT-9 Dynamic,LandPlane,1,4,1,1
+WUSH,WÜST,Shark,Amphibian,3,4,1,1
+WW1,WHITE,WW-1 Der Jäger D-9,LandPlane,1,4,1,1
+WW23,IAI,1123 Westwind,LandPlane,1,5,2,4
+WW24,IAI,1124 Westwind 2,LandPlane,1,5,2,4
+WZ10,CHANGHE,WZ-10,Helicopter,1,6,2,3
+WZER,WAR,Mitsubishi Zero,LandPlane,1,4,1,1
+X2,SIKORSKY,X-2,Helicopter,1,6,1,3
+X3,EUROCOPTER,X-3,Helicopter,1,6,2,3
+X4,ROBIN,X-4,LandPlane,1,4,1,1
+X47B,NORTHROP GRUMMAN,X-47B,LandPlane,1,4,1,4
+X49,PIASECKI,X-49 SpeedHawk,Helicopter,1,6,2,3
+XA41,XTREMEAIR,XA-41,LandPlane,1,4,1,1
+XA42,XTREMEAIR,XA-42,LandPlane,1,4,1,1
+XA85,RAJ HAMSA,XA-85 X-Air LS,LandPlane,1,4,1,1
+XAIR,RAJ HAMSA,X-AIR Falcon,LandPlane,1,4,1,1
+XB1,BOOM,XB-1,LandPlane,1,5,3,4
+XL2,LIBERTY (2),XL-2,LandPlane,1,4,1,1
+XNON,ABS AEROLIGHT,Xenon,Gyrocopter,1,9,1,1
+XNOS,SONEX,Xenos,LandPlane,1,4,1,1
+XV15,BELL,XV-15,Tiltrotor,1,H,2,3
+Y11,HARBIN,Y-11,LandPlane,1,5,2,1
+Y112,YAKOVLEV,Yak-112,LandPlane,1,4,1,1
+Y12,HARBIN,Y-12E Harbinger,LandPlane,1,5,2,3
+Y12F,HARBIN,Y-12F Aircar,LandPlane,1,5,2,3
+Y130,YAKOVLEV,Yak-130,LandPlane,1,5,2,4
+Y18T,YAKOVLEV,Yak-18T,LandPlane,1,4,1,1
+Y20,XIAN,Y-20 Kunpeng,LandPlane,1,5,4,4
+YA1,YEOMAN,YA-1 Cropmaster,LandPlane,1,4,1,1
+YAK3,YAKOVLEV,Yak-3,LandPlane,1,4,1,1
+YAK9,YAKOVLEV,Yak-9,LandPlane,1,4,1,1
+YALE,NORTH AMERICAN,BT-9 Yale,LandPlane,1,4,1,1
+YARR,ARROW (2),Yarrow Arrow,LandPlane,1,4,1,1
+YAST,SGAU,Yastreb,LandPlane,1,4,1,1
+YC12,CHASLE,YC-12 Tourbillon,LandPlane,1,4,1,1
+YK11,YAKOVLEV,Yak-11,LandPlane,1,4,1,1
+YK12,YAKOVLEV,Yak-12,LandPlane,1,4,1,1
+YK18,YAKOVLEV,Yak-18,LandPlane,1,4,1,1
+YK28,YAKOVLEV,Yak-28,LandPlane,1,5,2,4
+YK30,YAKOVLEV,Yak-30,LandPlane,1,4,1,4
+YK38,YAKOVLEV,Yak-38,LandPlane,1,5,3,4
+YK40,YAKOVLEV,Yak-40,LandPlane,1,5,3,4
+YK42,YAKOVLEV,Yak-42,LandPlane,1,5,3,4
+YK50,YAKOVLEV,Yak-50,LandPlane,1,4,1,1
+YK52,YAKOVLEV,Yak-52,LandPlane,1,4,1,1
+YK53,YAKOVLEV,Yak-53,LandPlane,1,4,1,1
+YK54,YAKOVLEV,Yak-54,LandPlane,1,4,1,1
+YK55,YAKOVLEV,Yak-55,LandPlane,1,4,1,1
+YK58,YAKOVLEV,Yak-58,LandPlane,1,4,1,1
+YL15,BOEING,YL-15 Scout,LandPlane,1,4,1,1
+YNHL,AVIAIMPEX,KT-112 Yanhol,Helicopter,1,6,2,1
+YS11,NAMC,YS-11,LandPlane,1,5,2,3
+YUKN,MURPHY,Yukon,LandPlane,1,4,1,1
+YUNO,SHUYA,Yunona,LandPlane,1,4,1,1
+YURO,SOKO-CNIAR,J-22 Orao,LandPlane,1,5,2,4
+Z22,ZLIN,Z-22 Junak,LandPlane,1,4,1,1
+Z26,ZLIN,Z-26 Trener,LandPlane,1,4,1,1
+Z37P,LET,Z-37 Cmelák,LandPlane,1,4,1,1
+Z37T,MORAVAN,Z-37T Agro Turbo,LandPlane,1,4,1,3
+Z42,ZLIN,Z-42,LandPlane,1,4,1,1
+Z43,ZLIN,Z-43,LandPlane,1,4,1,1
+Z50,ZLIN,Z-50,LandPlane,1,4,1,1
+ZA6,AEROKOPTER,ZA-6 Sanka,Helicopter,1,6,1,1
+ZEP2,ARNET PEREYRA,Zephyr 2,LandPlane,1,4,1,1
+ZEPH,ATEC,122 Zephyr,LandPlane,1,4,1,1
+ZERO,MITSUBISHI,A6M Zero,LandPlane,1,4,1,1
+ZIA,APPLEBAY,Zia,LandPlane,1,4,1,1
+ZIU,TAI,ZIU,LandPlane,1,4,1,1
+ZULU,BUL,Zùlù,LandPlane,1,4,1,1
+ZZZZ-AR5,TEKEVER,AR-5,LandPlane,1,5,2,1
+ZZZZ-BACE,CORBEN,Baby Ace D,LandPlane,1,4,1,1
+ZZZZ-BAY2,BAYKAR,Bayraktar TB2,LandPlane,1,4,1,1
+ZZZZ-CX4,THATCHER LIGHT AIRCRAFT,CX4,LandPlane,1,4,1,1
+ZZZZ-CX7,THATCHER LIGHT AIRCRAFT,CX7,LandPlane,1,4,1,1
+ZZZZ-DUCK,GRUMMAN,J2F Duck,LandPlane,1,4,1,1
+ZZZZ-E260,EXTRA,EA-260,LandPlane,1,4,1,1
+ZZZZ-EUFIT,EUROFIGHTER,Eurofighter (T) 2000,LandPlane,1,5,2,4
+ZZZZ-F16D,GENERAL DYNAMICS,F-16D Fighting Falcon,LandPlane,1,4,1,4
+ZZZZ-F18E,MCDONNELL DOUGLAS,FA-18E Super Hornet,LandPlane,1,5,2,4
+ZZZZ-F18F,MCDONNELL DOUGLAS,FA-18F Super Hornet,LandPlane,1,5,2,4
+ZZZZ-JAS4,JOBY AERO INC.,JAS4-2,LandPlane,1,5,6,10
+ZZZZ-JT1,TAYLOR,JT-1 Monoplane,LandPlane,1,4,1,1
+ZZZZ-KJ500,SHAANXI,KJ-500,LandPlane,1,5,4,2
+ZZZZ-KZO,RHEINMTALL,KZO,LandPlane,1,4,1,1
+ZZZZ-LARK,HELTON,Lark 95,LandPlane,1,4,1,1
+ZZZZ-MC30,COLOMBAN,MC-30 Luciole,LandPlane,1,4,1,1
+ZZZZ-NFEX,NF-AIRCRAFT,Explorer,LandPlane,1,4,1,1
+ZZZZ-PENC,UAV FACTORY,Penguin C,LandPlane,1,4,1,1
+ZZZZ-RQ21,BOEING INSITU,RQ-21 Blackjack,LandPlane,1,4,1,1
+ZZZZ-RQ7,AAI,RQ-7 Shadow,LandPlane,1,4,1,1
+ZZZZ-RQ8C,NORTHROP GRUMMAN,MQ-8C Fire Scout,Helicopter,1,6,1,3
+ZZZZ-S100,SCHIEBEL,S-100 Camcopter,Helicopter,1,6,1,1
+ZZZZ-S401,SCALED,SC.401,LandPlane,1,4,1,4
+ZZZZ-S750,AERO-EAST-EUROPE,S750,LandPlane,1,4,1,1
+ZZZZ-SG26,SCHWEIZER,SGS 1-26,LandPlane,1,1,0,0
+ZZZZ-SMS1,SPACEK,Minisport SD-1,LandPlane,1,4,1,1
+ZZZZ-SPJT,Mitsubishi,SpaceJet,LandPlane,1,4,1,4
+ZZZZ-SR10,CIRRUS,SR-10,LandPlane,1,4,1,1
+ZZZZ-TT1,TEMCO,TT-1 Pinto,LandPlane,1,4,1,4
+ZZZZ-VELX,VELOX,Revolution II,LandPlane,1,4,1,1
+ZZZZ-YUN9,SHAANXI,Y-9,LandPlane,1,5,4,3
+`JUN1`,KAMINSKAS,RK-1 Jungster 1,LandPlane,1,4,1,1
+`JUN2`,KAMINSKAS,RK-2 Jungster 2,LandPlane,1,4,1,1

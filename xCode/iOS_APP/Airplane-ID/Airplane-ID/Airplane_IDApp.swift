@@ -39,15 +39,18 @@ struct MainView: View {
         }
     }
 
-    /// Loads bundled reference data (airline codes) on first launch
+    /// Loads bundled reference data on first launch
     private func loadReferenceDataIfNeeded() async {
-        // Check if airline data already exists
+        await loadAirlineCodesIfNeeded()
+        await loadICAOCodesIfNeeded()
+    }
+
+    /// Load airline codes from bundled CSV if table is empty
+    private func loadAirlineCodesIfNeeded() async {
         let descriptor = FetchDescriptor<AirlineLookup>()
         let existingCount = (try? modelContext.fetchCount(descriptor)) ?? 0
+        guard existingCount == 0 else { return }
 
-        guard existingCount == 0 else { return }  // Already populated
-
-        // Load from bundled CSV
         guard let csvURL = Bundle.main.url(forResource: "AirlineCodes", withExtension: "csv") else {
             print("AirlineCodes.csv not found in bundle")
             return
@@ -58,7 +61,6 @@ struct MainView: View {
             let lines = csvContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
             guard lines.count > 1 else { return }
 
-            // Parse CSV (skip header)
             // Columns: airlineCode(0), iata(1), airlineName(2)
             for line in lines.dropFirst() {
                 let columns = parseCSVLine(line)
@@ -82,6 +84,58 @@ struct MainView: View {
             print("Loaded \(lines.count - 1) airline codes from bundle")
         } catch {
             print("Error loading airline codes: \(error)")
+        }
+    }
+
+    /// Load ICAO aircraft type codes from bundled CSV if table is empty
+    private func loadICAOCodesIfNeeded() async {
+        let descriptor = FetchDescriptor<ICAOLookup>()
+        let existingCount = (try? modelContext.fetchCount(descriptor)) ?? 0
+        guard existingCount == 0 else { return }
+
+        guard let csvURL = Bundle.main.url(forResource: "ICAOCodes", withExtension: "csv") else {
+            print("ICAOCodes.csv not found in bundle")
+            return
+        }
+
+        do {
+            let csvContent = try String(contentsOf: csvURL, encoding: .utf8)
+            let lines = csvContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
+            guard lines.count > 1 else { return }
+
+            // Columns: icao(0), manufacturer(1), model(2), icaoClass(3), aircraftCategoryCode(4), aircraftType(5), engineCount(6), engineType(7)
+            for line in lines.dropFirst() {
+                let columns = parseCSVLine(line)
+                guard columns.count >= 8 else { continue }
+
+                let icao = columns[0].trimmingCharacters(in: .whitespaces)
+                let manufacturer = columns[1].trimmingCharacters(in: .whitespaces)
+                let model = columns[2].trimmingCharacters(in: .whitespaces)
+                let icaoClass = columns[3].trimmingCharacters(in: .whitespaces)
+                let aircraftCategoryCode = Int(columns[4].trimmingCharacters(in: .whitespaces)) ?? 1
+                let aircraftType = columns[5].trimmingCharacters(in: .whitespaces)
+                let engineCount = Int(columns[6].trimmingCharacters(in: .whitespaces)) ?? 0
+                let engineType = Int(columns[7].trimmingCharacters(in: .whitespaces)) ?? 9
+
+                guard !icao.isEmpty && !manufacturer.isEmpty else { continue }
+
+                let aircraft = ICAOLookup(
+                    icao: icao,
+                    manufacturer: manufacturer,
+                    model: model,
+                    icaoClass: icaoClass,
+                    aircraftCategoryCode: aircraftCategoryCode,
+                    aircraftType: aircraftType,
+                    engineCount: engineCount,
+                    engineType: engineType
+                )
+                modelContext.insert(aircraft)
+            }
+
+            try modelContext.save()
+            print("Loaded \(lines.count - 1) ICAO aircraft types from bundle")
+        } catch {
+            print("Error loading ICAO codes: \(error)")
         }
     }
 
@@ -111,6 +165,7 @@ struct Airplane_IDApp: App {
             CapturedAircraft.self,
             User.self,
             AirlineLookup.self,
+            ICAOLookup.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

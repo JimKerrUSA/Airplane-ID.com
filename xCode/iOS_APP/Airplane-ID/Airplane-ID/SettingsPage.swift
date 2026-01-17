@@ -774,37 +774,6 @@ struct DeveloperToolsView: View {
                             .padding(.horizontal, 20)
                         }
 
-                        // Reference Data Section
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text("Reference Data")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 20)
-
-                            Button(action: { importAirlineCodesFromCSV() }) {
-                                HStack(spacing: 16) {
-                                    Image(systemName: "airplane.circle")
-                                        .font(.system(size: 22))
-                                        .foregroundStyle(Color(hex: "FF9800"))
-                                        .frame(width: 36)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("Import Airline Codes")
-                                            .font(.system(size: 16, weight: .semibold))
-                                            .foregroundStyle(.white)
-                                        Text("Load 5,316 airlines from CSV")
-                                            .font(.system(size: 13))
-                                            .foregroundStyle(.white.opacity(0.6))
-                                    }
-                                    Spacer()
-                                }
-                                .padding(.vertical, 14)
-                                .padding(.horizontal, 14)
-                                .background(AppColors.settingsRow)
-                                .cornerRadius(10)
-                            }
-                            .padding(.horizontal, 20)
-                        }
-
                         // Import Aircraft Section
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Import Aircraft")
@@ -1082,72 +1051,6 @@ struct DeveloperToolsView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) { statusMessage = nil }
         } catch {
             statusMessage = "✗ Error: \(error.localizedDescription)"
-        }
-    }
-
-    private func importAirlineCodesFromCSV() {
-        statusMessage = "Importing airline codes..."
-
-        // Parse CSV on background thread, then insert on main thread
-        DispatchQueue.global(qos: .userInitiated).async {
-            guard let csvURL = Bundle.main.url(forResource: "AirlineCodes", withExtension: "csv") else {
-                DispatchQueue.main.async { self.statusMessage = "✗ AirlineCodes.csv not found in bundle" }
-                return
-            }
-
-            do {
-                let csvContent = try String(contentsOf: csvURL, encoding: .utf8)
-                let lines = csvContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
-                guard lines.count > 1 else {
-                    DispatchQueue.main.async { self.statusMessage = "✗ CSV file is empty" }
-                    return
-                }
-
-                // Skip header, parse data lines
-                // CSV columns: airlineCode(0), iata(1), airlineName(2)
-                var parsedData: [(String, String?, String)] = []
-
-                for line in lines.dropFirst() {
-                    let columns = self.parseCSVLine(line)
-                    guard columns.count >= 3 else { continue }
-
-                    let airlineCode = columns[0].trimmingCharacters(in: .whitespaces)
-                    let iata = columns[1].trimmingCharacters(in: .whitespaces)
-                    let airlineName = columns[2].trimmingCharacters(in: .whitespaces)
-
-                    guard !airlineCode.isEmpty && !airlineName.isEmpty else { continue }
-
-                    parsedData.append((
-                        airlineCode,
-                        iata.isEmpty ? nil : iata,
-                        airlineName
-                    ))
-                }
-
-                // Insert into SwiftData on main thread (thread-safe)
-                DispatchQueue.main.async {
-                    do {
-                        // Clear existing airline codes first
-                        try self.modelContext.delete(model: AirlineLookup.self)
-
-                        for data in parsedData {
-                            let airline = AirlineLookup(
-                                airlineCode: data.0,
-                                iata: data.1,
-                                airlineName: data.2
-                            )
-                            self.modelContext.insert(airline)
-                        }
-                        try self.modelContext.save()
-                        self.statusMessage = "✓ Imported \(parsedData.count) airline codes"
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { self.statusMessage = nil }
-                    } catch {
-                        self.statusMessage = "✗ Error saving: \(error.localizedDescription)"
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async { self.statusMessage = "✗ Error: \(error.localizedDescription)" }
-            }
         }
     }
 

@@ -233,3 +233,40 @@ final class AirlineLookup {
         self.airlineName = airlineName
     }
 }
+
+// MARK: - ICAOLookup Model
+/// Reference table for ICAO aircraft type codes
+/// Data source: ICAO Doc 8643 (via PlaneFinder ICAOList.csv)
+/// Provides manufacturer, model, and specs for ~2,757 aircraft types
+/// Fields mapped to FAA codes for consistency with FAA data imports
+@Model
+final class ICAOLookup {
+    @Attribute(.unique) var icao: String   // ICAO type designator (e.g., "A320", "B738", "C172")
+    var manufacturer: String                // Aircraft manufacturer (e.g., "AIRBUS", "BOEING")
+    var model: String                       // Aircraft model (e.g., "A-320", "737-800")
+    var icaoClass: String                   // Original ICAO class: LandPlane, Helicopter, Amphibian, Gyrocopter, SeaPlane, Tiltrotor
+    var aircraftCategoryCode: Int           // FAA category: 1=Land, 2=Sea, 3=Amphibian
+    var aircraftType: String                // FAA TYPE-ACFT: "1"=Glider, "4"=FW Single, "5"=FW Multi, "6"=Rotorcraft, "9"=Gyroplane, "H"=Hybrid
+    var engineCount: Int                    // Number of engines
+    var engineType: Int                     // FAA TYPE-ENG: 0=None, 1=Recip, 2=Turbo-prop, 3=Turbo-shaft, 4=Turbo-jet, 9=Unknown, 10=Electric
+
+    init(
+        icao: String,
+        manufacturer: String,
+        model: String,
+        icaoClass: String,
+        aircraftCategoryCode: Int,
+        aircraftType: String,
+        engineCount: Int,
+        engineType: Int
+    ) {
+        self.icao = icao
+        self.manufacturer = manufacturer
+        self.model = model
+        self.icaoClass = icaoClass
+        self.aircraftCategoryCode = aircraftCategoryCode
+        self.aircraftType = aircraftType
+        self.engineCount = engineCount
+        self.engineType = engineType
+    }
+}

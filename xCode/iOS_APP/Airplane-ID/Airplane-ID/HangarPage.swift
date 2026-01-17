@@ -407,6 +407,7 @@ struct HangarFilterSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable var filterState: HangarFilterState
     let allAircraft: [CapturedAircraft]
+    @State private var showingICAOSearch = false
 
     // MARK: - Bi-directional Filter Logic
     // Each dropdown shows options from aircraft matching ALL OTHER active filters (excluding itself)
@@ -544,12 +545,25 @@ struct HangarFilterSheet: View {
                         }
                     }
 
-                    Picker("ICAO Type", selection: $filterState.selectedICAO) {
-                        Text("Any ICAO").tag(nil as String?)
-                        ForEach(availableICAOs, id: \.self) { icao in
-                            Text(icao).tag(icao as String?)
+                    // ICAO Type - opens search sheet
+                    Button(action: { showingICAOSearch = true }) {
+                        HStack {
+                            Text("ICAO Type")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            if let icao = filterState.selectedICAO {
+                                Text(icao)
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text("Any ICAO")
+                                    .foregroundStyle(.secondary)
+                            }
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 13))
+                                .foregroundStyle(.tertiary)
                         }
                     }
+                    .buttonStyle(.plain)
 
                     // Always show Airline picker (even if empty, for when data is added)
                     Picker("Airline", selection: $filterState.selectedAirlineCode) {
@@ -645,6 +659,9 @@ struct HangarFilterSheet: View {
                     .tint(filterState.hasActiveFilters ? Color(hex: "28A745") : nil)
                     .buttonStyle(.borderedProminent)
                 }
+            }
+            .sheet(isPresented: $showingICAOSearch) {
+                ICAOSearchSheet(selectedICAO: $filterState.selectedICAO)
             }
         }
     }
@@ -1261,6 +1278,138 @@ struct AirlinePickerRow: View {
             return "—"
         }
         return airline.airlineName
+    }
+}
+
+// MARK: - ICAO Search Sheet
+/// Searchable sheet for selecting an ICAO aircraft type from the lookup table
+/// Users can search by ICAO code, manufacturer name, or model
+struct ICAOSearchSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedICAO: String?
+
+    @Query(sort: \ICAOLookup.manufacturer) private var allAircraft: [ICAOLookup]
+    @State private var searchText = ""
+
+    private var filteredAircraft: [ICAOLookup] {
+        if searchText.isEmpty {
+            return []  // Don't show all 2700+ aircraft when search is empty
+        }
+        let search = searchText.lowercased()
+        return allAircraft.filter { aircraft in
+            aircraft.icao.lowercased().contains(search) ||
+            aircraft.manufacturer.lowercased().contains(search) ||
+            aircraft.model.lowercased().contains(search)
+        }
+        .prefix(50)  // Limit results for performance
+        .map { $0 }
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Search field
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                    TextField("Search aircraft types...", text: $searchText)
+                        .textFieldStyle(.plain)
+                        .autocorrectionDisabled()
+                    if !searchText.isEmpty {
+                        Button(action: { searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(12)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding()
+
+                // Results or instructions
+                if searchText.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "airplane")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.secondary)
+                        Text("Start typing to search aircraft")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
+                        Text("Search by ICAO code, manufacturer, or model")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.tertiary)
+                        Text("Example: \"Cessna 172\" or \"B738\"")
+                            .font(.system(size: 13))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(maxHeight: .infinity)
+                } else if filteredAircraft.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.secondary)
+                        Text("No aircraft found")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxHeight: .infinity)
+                } else {
+                    List(filteredAircraft, id: \.icao) { aircraft in
+                        Button(action: {
+                            selectedICAO = aircraft.icao
+                            dismiss()
+                        }) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("\(aircraft.manufacturer) \(aircraft.model)")
+                                        .font(.system(size: 16))
+                                        .foregroundStyle(.primary)
+                                    HStack(spacing: 8) {
+                                        Text(aircraft.icao)
+                                            .font(.system(size: 12, weight: .bold))
+                                            .foregroundStyle(.blue)
+                                        Text(aircraft.icaoClass)
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(.secondary)
+                                        Text("\(aircraft.engineCount) engine\(aircraft.engineCount == 1 ? "" : "s")")
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(.tertiary)
+                                    }
+                                }
+                                Spacer()
+                                if selectedICAO == aircraft.icao {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(.blue)
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .listStyle(.plain)
+                }
+
+                Spacer(minLength: 0)
+            }
+            .navigationTitle("Select Aircraft Type")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if selectedICAO != nil {
+                        Button("Clear") {
+                            selectedICAO = nil
+                            dismiss()
+                        }
+                        .foregroundStyle(AppColors.orange)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+        }
     }
 }
 
