@@ -727,23 +727,25 @@ struct AircraftDetailView: View {
                                 .padding(.top, 8)
                         }
 
-                        // Aircraft Specifications Section
-                        detailSection(title: "Aircraft Specifications") {
-                            DetailRow(label: "ICAO", value: aircraft.icao)
-                            if let iata = aircraft.iata, !iata.isEmpty {
-                                DetailRow(label: "IATA Airline", value: iata)
-                            }
-                            if let reg = aircraft.registration, !reg.isEmpty {
-                                DetailRow(label: "Registration", value: reg)
-                            }
-                            if let classification = AircraftLookup.classificationName(aircraft.aircraftClassification) {
-                                DetailRow(label: "Classification", value: classification)
-                            }
-                            if let serial = aircraft.serialNumber, !serial.isEmpty {
-                                DetailRow(label: "Serial Number", value: serial)
-                            }
-                            if let yearMfg = aircraft.yearMfg {
-                                DetailRow(label: "Year Manufactured", value: String(yearMfg))
+                        // Aircraft Identification Section (editable fields)
+                        detailSection(title: "Aircraft Identification") {
+                            EditableDetailRow(label: "Manufacturer", value: $editManufacturer, isEditing: isEditing)
+                            EditableDetailRow(label: "Model", value: $editModel, isEditing: isEditing)
+                            EditableDetailRow(label: "ICAO", value: $editICAO, isEditing: isEditing, placeholder: "e.g. B738")
+                            EditableDetailRow(label: "IATA Airline", value: $editIATA, isEditing: isEditing, placeholder: "e.g. UA")
+                            EditableDetailRow(label: "Registration", value: $editRegistration, isEditing: isEditing, placeholder: "e.g. N12345")
+                            EditableDetailRow(label: "Serial Number", value: $editSerialNumber, isEditing: isEditing)
+                        }
+
+                        // Aircraft Specifications Section (read-only from FAA data)
+                        if hasSpecificationsData {
+                            detailSection(title: "Aircraft Specifications") {
+                                if let classification = AircraftLookup.classificationName(aircraft.aircraftClassification) {
+                                    DetailRow(label: "Classification", value: classification)
+                                }
+                                if let yearMfg = aircraft.yearMfg {
+                                    DetailRow(label: "Year Manufactured", value: String(yearMfg))
+                                }
                             }
                         }
 
@@ -848,7 +850,20 @@ struct AircraftDetailView: View {
                 )
                 .presentationDetents([.height(280)])
             }
+            .onAppear {
+                populateEditValues()
+            }
         }
+    }
+
+    // MARK: - Populate Edit Values
+    private func populateEditValues() {
+        editManufacturer = aircraft.manufacturer
+        editModel = aircraft.model
+        editICAO = aircraft.icao
+        editIATA = aircraft.iata ?? ""
+        editRegistration = aircraft.registration ?? ""
+        editSerialNumber = aircraft.serialNumber ?? ""
     }
 
     // MARK: - Star Rating Overlay
@@ -909,6 +924,11 @@ struct AircraftDetailView: View {
         aircraft.weightClass != nil
     }
 
+    private var hasSpecificationsData: Bool {
+        aircraft.aircraftClassification != nil ||
+        aircraft.yearMfg != nil
+    }
+
     private var hasRegistrationInfo: Bool {
         aircraft.registeredOwner != nil ||
         aircraft.ownerType != nil ||
@@ -960,16 +980,12 @@ struct AircraftDetailView: View {
     // MARK: - Edit Mode Functions
 
     private func startEditing() {
-        editManufacturer = aircraft.manufacturer
-        editModel = aircraft.model
-        editRegistration = aircraft.registration ?? ""
-        editICAO = aircraft.icao
-        editIATA = aircraft.iata ?? ""
-        editSerialNumber = aircraft.serialNumber ?? ""
+        populateEditValues()
         isEditing = true
     }
 
     private func cancelEditing() {
+        populateEditValues()  // Revert to original values
         isEditing = false
     }
 
@@ -1008,6 +1024,44 @@ struct DetailRow: View {
     }
 }
 
+// MARK: - Editable Detail Row Component
+struct EditableDetailRow: View {
+    let label: String
+    @Binding var value: String
+    let isEditing: Bool
+    var placeholder: String = ""
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                TextField(placeholder.isEmpty ? label : placeholder, text: $value)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.trailing)
+                    .textFieldStyle(.plain)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background(AppColors.darkBlue.opacity(0.3))
+                    .cornerRadius(6)
+                    .frame(maxWidth: 200)
+            } else {
+                Text(value.isEmpty ? "—" : value)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(value.isEmpty ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+}
+
 // MARK: - Star Rating Display
 /// Displays star rating with filled, half-filled, and empty stars
 struct StarRatingDisplay: View {
@@ -1015,7 +1069,7 @@ struct StarRatingDisplay: View {
     let starSize: CGFloat
     let showBackground: Bool
 
-    init(rating: Double, starSize: CGFloat = 17, showBackground: Bool = false) {
+    init(rating: Double, starSize: CGFloat = 16, showBackground: Bool = false) {
         self.rating = rating
         self.starSize = starSize
         self.showBackground = showBackground
