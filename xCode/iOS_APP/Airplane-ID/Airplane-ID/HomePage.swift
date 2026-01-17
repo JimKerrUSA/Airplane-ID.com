@@ -329,7 +329,8 @@ struct HomePage: View {
                     
                     Spacer()
                 }
-                .scaleEffect(screenScale.scale)
+                // Note: scaleEffect removed - using fixed dimensions that fit iPhone 14 Pro (393x852)
+                // If content doesn't fit, we need to adjust individual dimensions, not scale
             },
             leftHorizontal: {
                 // Left horizontal version content (footer on LEFT side)
@@ -397,7 +398,7 @@ struct HomePageLandscapeContent: View {
 
             if footerOnLeft { Spacer() }
         }
-        .scaleEffect(screenScale.scale)
+        // Note: scaleEffect removed - fixed dimensions should work for most devices
     }
 
     // MARK: - Stat Boxes Column

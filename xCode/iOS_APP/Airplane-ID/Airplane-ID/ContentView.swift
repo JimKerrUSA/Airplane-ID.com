@@ -53,7 +53,8 @@ struct ScreenScale {
     var heightScale: CGFloat { height / baselineHeight }
 
     // Use the smaller scale to ensure content fits without clipping
-    var scale: CGFloat { min(widthScale, heightScale) }
+    // Cap at 1.0 - only scale DOWN, never scale UP (which would cause clipping)
+    var scale: CGFloat { min(1.0, min(widthScale, heightScale)) }
 
     // Helper to scale a dimension
     func scaled(_ value: CGFloat) -> CGFloat { value * scale }
