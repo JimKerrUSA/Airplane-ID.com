@@ -726,6 +726,7 @@ struct ManufacturerSearchSheet: View {
                         .foregroundStyle(AppColors.darkGray)
                     TextField("Search manufacturers...", text: $searchText)
                         .textFieldStyle(.plain)
+                        .foregroundStyle(AppColors.darkGray)
                         .autocorrectionDisabled()
                     if !searchText.isEmpty {
                         Button(action: { searchText = "" }) {
@@ -1512,6 +1513,7 @@ struct ICAOSearchSheet: View {
                         .foregroundStyle(AppColors.darkGray)
                     TextField("Search aircraft types...", text: $searchText)
                         .textFieldStyle(.plain)
+                        .foregroundStyle(AppColors.darkGray)
                         .autocorrectionDisabled()
                     if !searchText.isEmpty {
                         Button(action: { searchText = "" }) {
@@ -1656,6 +1658,7 @@ struct ICAOEditSearchSheet: View {
                         .foregroundStyle(AppColors.darkGray)
                     TextField("Search aircraft types...", text: $searchText)
                         .textFieldStyle(.plain)
+                        .foregroundStyle(AppColors.darkGray)
                         .autocorrectionDisabled()
                     if !searchText.isEmpty {
                         Button(action: { searchText = "" }) {
@@ -1794,6 +1797,7 @@ struct AirlineSearchSheet: View {
                         .foregroundStyle(AppColors.darkGray)
                     TextField("Search airlines...", text: $searchText)
                         .textFieldStyle(.plain)
+                        .foregroundStyle(AppColors.darkGray)
                         .autocorrectionDisabled()
                     if !searchText.isEmpty {
                         Button(action: { searchText = "" }) {
