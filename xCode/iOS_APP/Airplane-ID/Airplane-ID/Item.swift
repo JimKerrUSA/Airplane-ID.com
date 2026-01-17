@@ -12,7 +12,7 @@ import SwiftData
 /// Represents the app user with account and preferences
 @Model
 final class User {
-    var memberNumber: String  // Primary key for server sync
+    var memberNumber: String = ""  // Primary key for server sync
     var name: String
     var email: String
     var phone: String?
