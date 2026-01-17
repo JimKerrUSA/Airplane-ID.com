@@ -339,8 +339,8 @@ struct AppConfig {
 ### Code Quality Tasks (from code review)
 - [x] Phase 2A: Fix UIDevice orientation listener cleanup (battery drain) ✅
 - [x] Phase 2B: Add database indexes to models ⚠️ (requires iOS 18+, deferred)
-- [ ] Phase 2C: Fix background thread SwiftData access in CSV import
-- [ ] Phase 2D: Add pagination to HomePage query
+- [x] Phase 2C: Fix background thread SwiftData access in CSV import ✅
+- [ ] Phase 2D: Add pagination to HomePage query (low priority)
 
 ## Session Log
 
@@ -627,3 +627,10 @@ struct AppConfig {
   - Key fields documented in comments for future implementation
   - When targeting iOS 18+, add: `@Index([\.captureDate])`, `@Index([\.icao])`, etc.
   - Commit: ae17a44 "Remove @Index attributes (iOS 18+ only)"
+
+- **Phase 2C: Fixed SwiftData thread safety in CSV import:**
+  - Problem: `modelContext.insert()` and `modelContext.save()` called from background thread
+  - SwiftData ModelContext is NOT thread-safe
+  - Fix: Parse CSV on background thread, dispatch to main thread for SwiftData operations
+  - Pattern: Collect raw data in tuples, then create/insert @Model objects on main thread
+  - Commit: eba6aad "Fix background thread SwiftData access in CSV import"
