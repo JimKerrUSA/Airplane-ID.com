@@ -250,9 +250,9 @@ Levels are based on total aircraft captured (database record count).
 | home | house | Footer | HomePage | HOME |
 | maps | map | Footer | PlaceholderPage | MAPS |
 | camera | camera | Footer (center) | PlaceholderPage | CAMERA |
-| hangar | airplane.departure | Footer | PlaceholderPage | YOUR HANGAR |
+| hangar | airplane.departure | Footer | PlaceholderPage | HANGAR |
 | settings | gearshape | Footer | SettingsPage | SETTINGS |
-| journey | person | Header (left) | JourneyPage | JOURNEY STATS |
+| journey | person | Header (left) | JourneyPage | STATUS |
 
 **Implementation:**
 - `NavigationDestination` enum in ContentView.swift

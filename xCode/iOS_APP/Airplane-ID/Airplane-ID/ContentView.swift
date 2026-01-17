@@ -99,9 +99,9 @@ class AppState {
             .home: "HOME",
             .maps: "MAPS",
             .camera: "CAMERA",
-            .hangar: "YOUR HANGAR",
+            .hangar: "HANGAR",
             .settings: "SETTINGS",
-            .journey: "JOURNEY STATS"
+            .journey: "STATUS"
         ]
         return titles[currentScreen] ?? currentScreen.rawValue.uppercased()
     }
