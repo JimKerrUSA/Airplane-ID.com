@@ -1128,3 +1128,10 @@ The app must handle large datasets efficiently:
 - `HangarPage.swift` - Added `ICAOSearchSheet`, updated `HangarFilterSheet`
 
 **Schema change:** ICAOLookup model updated with FAA-compatible fields - requires app reinstall
+
+3. **Enhanced keyword-based search:**
+   - Search now splits input by spaces and treats each word as an AND filter
+   - "Cessna 172" finds aircraft matching both "cessna" AND "172"
+   - Applied to both `ICAOSearchSheet` and `AirlineSearchSheet`
+   - Implementation: Split on spaces, filter with `allSatisfy` on keywords
+   - Commit: 45336c3
