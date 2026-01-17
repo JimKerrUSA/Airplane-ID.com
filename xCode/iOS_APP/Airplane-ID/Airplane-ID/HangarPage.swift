@@ -819,6 +819,7 @@ struct AircraftDetailView: View {
     @State private var editICAO = ""
     @State private var editAirlineCode: String? = nil
     @State private var showingAirlineSearch = false
+    @State private var showingICAOSearch = false
 
     var body: some View {
         NavigationStack {
@@ -882,7 +883,11 @@ struct AircraftDetailView: View {
                         detailSection(title: "Aircraft Identification") {
                             EditableDetailRow(label: "Manufacturer", value: $editManufacturer, isEditing: isEditing)
                             EditableDetailRow(label: "Model", value: $editModel, isEditing: isEditing)
-                            EditableDetailRow(label: "ICAO", value: $editICAO, isEditing: isEditing, placeholder: "e.g. B738")
+                            ICAOPickerRow(
+                                selectedICAO: $editICAO,
+                                isEditing: isEditing,
+                                onTap: { showingICAOSearch = true }
+                            )
                             // Registration only shown if has data or editing
                             if !editRegistration.isEmpty || isEditing {
                                 EditableDetailRow(label: "Registration", value: $editRegistration, isEditing: isEditing, placeholder: "e.g. N12345")
@@ -1051,6 +1056,12 @@ struct AircraftDetailView: View {
             .sheet(isPresented: $showingAirlineSearch) {
                 AirlineSearchSheet(
                     selectedAirlineCode: $editAirlineCode
+                )
+                .presentationDetents([.large])
+            }
+            .sheet(isPresented: $showingICAOSearch) {
+                ICAOEditSearchSheet(
+                    selectedICAO: $editICAO
                 )
                 .presentationDetents([.large])
             }
@@ -1414,6 +1425,54 @@ struct AirlinePickerRow: View {
     }
 }
 
+// MARK: - ICAO Picker Row
+/// Row that displays selected ICAO and opens search when tapped (for edit form)
+struct ICAOPickerRow: View {
+    @Binding var selectedICAO: String
+    let isEditing: Bool
+    let onTap: () -> Void
+
+    @Query private var icaoLookup: [ICAOLookup]
+
+    var body: some View {
+        HStack {
+            Text("ICAO")
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                Button(action: onTap) {
+                    HStack(spacing: 4) {
+                        Text(displayText)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(selectedICAO.isEmpty ? .white.opacity(0.3) : .white)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            } else {
+                Text(displayText)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(selectedICAO.isEmpty ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var displayText: String {
+        guard !selectedICAO.isEmpty,
+              let aircraft = icaoLookup.first(where: { $0.icao == selectedICAO }) else {
+            return selectedICAO.isEmpty ? "—" : selectedICAO
+        }
+        return "\(selectedICAO) - \(aircraft.manufacturer) \(aircraft.model)"
+    }
+}
+
 // MARK: - ICAO Search Sheet
 /// Searchable sheet for selecting an ICAO aircraft type from the lookup table
 /// Users can search by ICAO code, manufacturer name, or model
@@ -1552,6 +1611,141 @@ struct ICAOSearchSheet: View {
                         .foregroundStyle(AppColors.orange)
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - ICAO Edit Search Sheet
+/// Searchable sheet for selecting an ICAO type in edit mode (takes String binding, not optional)
+struct ICAOEditSearchSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedICAO: String
+
+    @Query(sort: \ICAOLookup.manufacturer) private var allAircraft: [ICAOLookup]
+    @State private var searchText = ""
+
+    private var filteredAircraft: [ICAOLookup] {
+        if searchText.isEmpty {
+            return []  // Don't show all 2700+ aircraft when search is empty
+        }
+
+        // Split search into keywords - each word is an AND filter
+        let keywords = searchText.lowercased()
+            .split(separator: " ")
+            .map { String($0) }
+            .filter { !$0.isEmpty }
+
+        guard !keywords.isEmpty else { return [] }
+
+        return allAircraft.filter { aircraft in
+            let searchableText = "\(aircraft.icao) \(aircraft.manufacturer) \(aircraft.model)".lowercased()
+            return keywords.allSatisfy { keyword in
+                searchableText.contains(keyword)
+            }
+        }
+        .prefix(50)
+        .map { $0 }
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Search field
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(AppColors.darkGray)
+                    TextField("Search aircraft types...", text: $searchText)
+                        .textFieldStyle(.plain)
+                        .autocorrectionDisabled()
+                    if !searchText.isEmpty {
+                        Button(action: { searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(12)
+                .background(Color.white)
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(AppColors.borderBlue, lineWidth: 1)
+                )
+                .padding()
+
+                // Results or instructions
+                if searchText.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "airplane")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.secondary)
+                        Text("Start typing to search aircraft")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
+                        Text("Search by ICAO code, manufacturer, or model")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.tertiary)
+                        Text("Example: \"Cessna 172\" or \"B738\"")
+                            .font(.system(size: 13))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(maxHeight: .infinity)
+                } else if filteredAircraft.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.secondary)
+                        Text("No aircraft found")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxHeight: .infinity)
+                } else {
+                    List(filteredAircraft, id: \.icao) { aircraft in
+                        Button(action: {
+                            selectedICAO = aircraft.icao
+                            dismiss()
+                        }) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("\(aircraft.manufacturer) \(aircraft.model)")
+                                        .font(.system(size: 16))
+                                        .foregroundStyle(.primary)
+                                    HStack(spacing: 8) {
+                                        Text(aircraft.icao)
+                                            .font(.system(size: 12, weight: .bold))
+                                            .foregroundStyle(.blue)
+                                        Text(aircraft.icaoClass)
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(.secondary)
+                                        Text("\(aircraft.engineCount) engine\(aircraft.engineCount == 1 ? "" : "s")")
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(.tertiary)
+                                    }
+                                }
+                                Spacer()
+                                if selectedICAO == aircraft.icao {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(.blue)
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .listStyle(.plain)
+                }
+
+                Spacer(minLength: 0)
+            }
+            .navigationTitle("Select Aircraft Type")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Cancel") {
                         dismiss()
