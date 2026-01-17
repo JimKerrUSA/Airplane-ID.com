@@ -408,6 +408,7 @@ struct HangarFilterSheet: View {
     @Bindable var filterState: HangarFilterState
     let allAircraft: [CapturedAircraft]
     @State private var showingICAOSearch = false
+    @State private var showingManufacturerSearch = false
 
     // MARK: - Bi-directional Filter Logic
     // Each dropdown shows options from aircraft matching ALL OTHER active filters (excluding itself)
@@ -538,12 +539,25 @@ struct HangarFilterSheet: View {
 
                 // Aircraft Filters
                 Section("Aircraft") {
-                    Picker("Manufacturer", selection: $filterState.selectedManufacturer) {
-                        Text("Any Manufacturer").tag(nil as String?)
-                        ForEach(availableManufacturers, id: \.self) { mfr in
-                            Text(mfr).tag(mfr as String?)
+                    // Manufacturer - opens search sheet
+                    Button(action: { showingManufacturerSearch = true }) {
+                        HStack {
+                            Text("Manufacturer")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            if let mfr = filterState.selectedManufacturer {
+                                Text(mfr)
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text("Any Manufacturer")
+                                    .foregroundStyle(.secondary)
+                            }
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 13))
+                                .foregroundStyle(.tertiary)
                         }
                     }
+                    .buttonStyle(.plain)
 
                     // ICAO Type - opens search sheet
                     Button(action: { showingICAOSearch = true }) {
@@ -662,6 +676,121 @@ struct HangarFilterSheet: View {
             }
             .sheet(isPresented: $showingICAOSearch) {
                 ICAOSearchSheet(selectedICAO: $filterState.selectedICAO)
+            }
+            .sheet(isPresented: $showingManufacturerSearch) {
+                ManufacturerSearchSheet(
+                    selectedManufacturer: $filterState.selectedManufacturer,
+                    availableManufacturers: availableManufacturers
+                )
+            }
+        }
+    }
+}
+
+// MARK: - Manufacturer Search Sheet
+/// Searchable sheet for selecting a manufacturer from the user's aircraft collection
+struct ManufacturerSearchSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedManufacturer: String?
+    let availableManufacturers: [String]
+    @State private var searchText = ""
+
+    private var filteredManufacturers: [String] {
+        if searchText.isEmpty {
+            // Show all available manufacturers when not searching
+            return availableManufacturers
+        }
+
+        // Split search into keywords - each word is an AND filter
+        let keywords = searchText.lowercased()
+            .split(separator: " ")
+            .map { String($0) }
+            .filter { !$0.isEmpty }
+
+        guard !keywords.isEmpty else { return availableManufacturers }
+
+        return availableManufacturers.filter { manufacturer in
+            let searchableText = manufacturer.lowercased()
+            return keywords.allSatisfy { keyword in
+                searchableText.contains(keyword)
+            }
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Search field
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                    TextField("Search manufacturers...", text: $searchText)
+                        .textFieldStyle(.plain)
+                        .autocorrectionDisabled()
+                    if !searchText.isEmpty {
+                        Button(action: { searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(12)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding()
+
+                // Results
+                if filteredManufacturers.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.secondary)
+                        Text("No manufacturers found")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxHeight: .infinity)
+                } else {
+                    List(filteredManufacturers, id: \.self) { manufacturer in
+                        Button(action: {
+                            selectedManufacturer = manufacturer
+                            dismiss()
+                        }) {
+                            HStack {
+                                Text(manufacturer)
+                                    .font(.system(size: 16))
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                if selectedManufacturer == manufacturer {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(.blue)
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .listStyle(.plain)
+                }
+
+                Spacer(minLength: 0)
+            }
+            .navigationTitle("Select Manufacturer")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if selectedManufacturer != nil {
+                        Button("Clear") {
+                            selectedManufacturer = nil
+                            dismiss()
+                        }
+                        .foregroundStyle(AppColors.orange)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
             }
         }
     }
