@@ -678,7 +678,7 @@ struct AircraftDetailView: View {
                 ScrollView {
                     VStack(spacing: 0) {
                         // Photo placeholder with rating overlay
-                        ZStack(alignment: .bottom) {
+                        ZStack(alignment: .bottomLeading) {
                             // Photo background
                             Rectangle()
                                 .fill(AppColors.darkBlue.opacity(0.3))
@@ -692,10 +692,12 @@ struct AircraftDetailView: View {
                                     .font(.custom("Helvetica", size: 14))
                                     .foregroundStyle(.white.opacity(0.5))
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                            // Star rating overlay at bottom
+                            // Star rating overlay at bottom-left
                             starRatingOverlay
-                                .padding(.bottom, 12)
+                                .padding(.leading, 2)
+                                .padding(.bottom, 2)
                         }
                         .frame(height: 220)
 
@@ -1011,24 +1013,26 @@ struct DetailRow: View {
 struct StarRatingDisplay: View {
     let rating: Double
     let starSize: CGFloat
+    let showBackground: Bool
 
-    init(rating: Double, starSize: CGFloat = 20) {
+    init(rating: Double, starSize: CGFloat = 17, showBackground: Bool = false) {
         self.rating = rating
         self.starSize = starSize
+        self.showBackground = showBackground
     }
 
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 2) {
             ForEach(1...5, id: \.self) { index in
                 starImage(for: index)
                     .font(.system(size: starSize))
                     .foregroundStyle(.yellow)
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 6)
-        .background(Color.black.opacity(0.4))
-        .cornerRadius(12)
+        .padding(.horizontal, showBackground ? 12 : 0)
+        .padding(.vertical, showBackground ? 6 : 0)
+        .background(showBackground ? Color.black.opacity(0.4) : Color.clear)
+        .cornerRadius(showBackground ? 12 : 0)
     }
 
     private func starImage(for index: Int) -> Image {
