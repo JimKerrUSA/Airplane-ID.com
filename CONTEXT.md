@@ -194,7 +194,8 @@ VStack { /* content */ }
 - iPhotoReference (String?) - link to photo in device iPhoto library
 
 **Aircraft identification:**
-- icao, registration, serialNumber, manufacturer, model (String?)
+- icao, iata, registration, serialNumber, manufacturer, model (String?)
+- iata = airline code (AA, UA, etc.) - airliners only
 
 **Aircraft specifications:**
 - yearMfg (Int?), aircraftClassification, engineType, weightClass (String?)
