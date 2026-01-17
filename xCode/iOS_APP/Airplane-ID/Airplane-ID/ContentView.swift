@@ -669,6 +669,10 @@ extension View {
 struct RectCorner: OptionSet, Sendable {
     let rawValue: Int
 
+    nonisolated init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
     static let topLeft = RectCorner(rawValue: 1 << 0)
     static let topRight = RectCorner(rawValue: 1 << 1)
     static let bottomLeft = RectCorner(rawValue: 1 << 2)
