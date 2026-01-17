@@ -66,10 +66,33 @@ Purpose: iOS app for identifying and tracking aircraft sightings
 
 ## Recent Decisions
 
-### Avoid UIKit
-- Problem: Needed to detect landscape left vs right orientation
-- Solution: DO NOT use UIKit - causes build errors every time
-- Why: UIKit imports in #if os(iOS) blocks cause schema build failures
+### UIKit for Orientation Detection (Working Solution)
+- **Problem:** Safe area insets proved unreliable for detecting landscape left vs right
+- **Solution:** Use `UIDevice.current.orientation` with NotificationCenter
+- **Key insight:** Direct `import UIKit` works fine - previous build errors were from `#if os(iOS)` conditional blocks
+- **Implementation pattern:**
+  ```swift
+  import UIKit
+
+  struct MyView: View {
+      @State private var deviceOrientation: UIDeviceOrientation = UIDevice.current.orientation
+
+      var body: some View {
+          // ... view content ...
+          .onAppear {
+              UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+              deviceOrientation = UIDevice.current.orientation
+          }
+          .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+              deviceOrientation = UIDevice.current.orientation
+          }
+      }
+  }
+  ```
+- **IMPORTANT - UIDeviceOrientation naming is counterintuitive:**
+  - `.landscapeRight` = device rotated so camera is on RIGHT side (user perceives as "Landscape Left")
+  - `.landscapeLeft` = device rotated so camera is on LEFT side (user perceives as "Landscape Right")
+  - Must swap template selection accordingly
 
 ### Separate Previews for Templates
 - Problem: Both landscape orientations were using same template, couldn't adjust independently
@@ -431,3 +454,22 @@ struct AppConfig {
   - Created AirplaneID-icon.png and configured in AppIcon.appiconset
   - Icon appears on iPhone home screen
   - Xcode auto-generates all required sizes from 1024x1024 source
+
+- **Fixed landscape orientation detection (UIDevice approach):**
+  - Safe area inset detection proved unreliable for landscape left/right detection
+  - Switched to `UIDevice.current.orientation` with NotificationCenter observer
+  - Added `import UIKit` to both ContentView.swift and SettingsPage.swift
+  - **Key discovery:** UIDeviceOrientation naming is counterintuitive:
+    - `.landscapeRight` = device rotated so camera is on RIGHT (user's "Landscape Left")
+    - `.landscapeLeft` = device rotated so camera is on LEFT (user's "Landscape Right")
+  - Template selection swapped accordingly to place footer opposite camera
+  - Final footer positioning:
+    - LandscapeLeftTemplate: offset(x: 16)
+    - LandscapeRightTemplate: offset(x: 104)
+  - Applied to OrientationAwarePage (ContentView.swift) and SettingsPage
+
+- **Settings page orientation fix:**
+  - Updated SettingsPage.swift to use UIDevice-based detection (matching other pages)
+  - Added @State deviceOrientation with .onAppear and .onReceive observers
+  - Updated footer offsets to match main templates (16 for left, 104 for right)
+  - Footer now correctly appears on opposite side from camera

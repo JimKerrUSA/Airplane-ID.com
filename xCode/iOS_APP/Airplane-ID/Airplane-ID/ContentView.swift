@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 // MARK: - Navigation Destinations
 enum NavigationDestination: String, CaseIterable {
@@ -493,10 +494,10 @@ struct LandscapeLeftTemplate<Content: View>: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
 
-                    // Left side navigation bar - vertically centered on left edge, ignoring safe area
+                    // Left side navigation bar - adjusted positioning
                     BottomMenuViewLandscape()
                         .position(x: 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
-                        .offset(x: 20)
+                        .offset(x: 16)
                         .ignoresSafeArea()
                 }
             }
@@ -537,10 +538,10 @@ struct LandscapeRightTemplate<Content: View>: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
 
-                    // Right side navigation bar - vertically centered on right edge
+                    // Right side navigation bar - push to right edge
                     BottomMenuViewLandscape()
                         .position(x: geometry.size.width - 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
-                        .offset(x: 100)
+                        .offset(x: 104)
                         .ignoresSafeArea()
                 }
             }
@@ -555,8 +556,7 @@ struct LandscapeRightTemplate<Content: View>: View {
 /// Automatically switches between portrait, left horizontal, and right horizontal templates
 /// based on device orientation. Use this wrapper for all pages to support all three orientations seamlessly.
 struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightContent: View>: View {
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @State private var deviceOrientation: UIDeviceOrientation = UIDevice.current.orientation
 
     let portraitContent: PortraitContent
     let leftHorizontalContent: LeftContent
@@ -580,22 +580,34 @@ struct OrientationAwarePage<PortraitContent: View, LeftContent: View, RightConte
                     portraitContent
                 }
             } else {
-                // Landscape orientation - detect left vs right using safe area insets
-                // When device top is on RIGHT (landscape left), safeAreaInsets.leading > trailing
-                // When device top is on LEFT (landscape right), safeAreaInsets.trailing > leading
-                let safeArea = geometry.safeAreaInsets
-                if safeArea.leading > safeArea.trailing {
-                    // Landscape Left - footer on LEFT side (device top on RIGHT)
+                // Landscape - use UIDevice orientation to determine left vs right
+                // Note: UIDeviceOrientation naming is counterintuitive
+                if deviceOrientation == .landscapeRight {
+                    // .landscapeRight = device top on LEFT = camera LEFT = footer on RIGHT...
+                    // BUT user reports opposite, so: footer on LEFT
                     LandscapeLeftTemplate {
                         leftHorizontalContent
                     }
-                } else {
-                    // Landscape Right - footer on RIGHT side (device top on LEFT)
+                } else if deviceOrientation == .landscapeLeft {
+                    // .landscapeLeft = device top on RIGHT = camera RIGHT = footer on LEFT...
+                    // BUT user reports opposite, so: footer on RIGHT
                     LandscapeRightTemplate {
                         rightHorizontalContent
                     }
+                } else {
+                    // Fallback for other orientations - default to left
+                    LandscapeLeftTemplate {
+                        leftHorizontalContent
+                    }
                 }
             }
+        }
+        .onAppear {
+            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+            deviceOrientation = UIDevice.current.orientation
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+            deviceOrientation = UIDevice.current.orientation
         }
     }
 }

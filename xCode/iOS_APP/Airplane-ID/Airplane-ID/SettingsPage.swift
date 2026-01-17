@@ -7,31 +7,45 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 // MARK: - Settings Page
 /// Settings page with dark background (#121516)
 /// Custom orientation handling to ensure dark background covers entire screen including footer area
+/// Uses UIDevice.current.orientation for reliable landscape left/right detection
 struct SettingsPage: View {
     @Environment(AppState.self) private var appState
+    @State private var deviceOrientation: UIDeviceOrientation = UIDevice.current.orientation
 
     var body: some View {
         GeometryReader { geometry in
             let isLandscape = geometry.size.width > geometry.size.height
-            let safeArea = geometry.safeAreaInsets
-            let isLandscapeRight = safeArea.leading > safeArea.trailing
 
             if isLandscape {
-                if isLandscapeRight {
-                    // Landscape Right - footer on right
+                // Note: UIDeviceOrientation naming is counterintuitive
+                // .landscapeRight means the device is rotated so camera is on the right (user's "Landscape Left")
+                // .landscapeLeft means the device is rotated so camera is on the left (user's "Landscape Right")
+                if deviceOrientation == .landscapeRight {
+                    // Camera on right - footer on left
+                    SettingsLandscapeLeftView(geometry: geometry)
+                } else if deviceOrientation == .landscapeLeft {
+                    // Camera on left - footer on right
                     SettingsLandscapeRightView(geometry: geometry)
                 } else {
-                    // Landscape Left - footer on left
+                    // Default to left view
                     SettingsLandscapeLeftView(geometry: geometry)
                 }
             } else {
                 // Portrait
                 SettingsPortraitView()
             }
+        }
+        .onAppear {
+            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+            deviceOrientation = UIDevice.current.orientation
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+            deviceOrientation = UIDevice.current.orientation
         }
     }
 }
@@ -88,7 +102,7 @@ struct SettingsLandscapeLeftView: View {
                 // Left side navigation bar
                 BottomMenuViewLandscape()
                     .position(x: 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
-                    .offset(x: 20)
+                    .offset(x: 16)
                     .ignoresSafeArea()
             }
 #if os(iOS)
@@ -123,7 +137,7 @@ struct SettingsLandscapeRightView: View {
                 // Right side navigation bar
                 BottomMenuViewLandscape()
                     .position(x: geometry.size.width - 50, y: (geometry.size.height + geometry.size.width) / 4 - 82)
-                    .offset(x: 100)
+                    .offset(x: 104)
                     .ignoresSafeArea()
             }
 #if os(iOS)
