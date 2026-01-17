@@ -245,20 +245,28 @@ Levels are based on total aircraft captured (database record count).
 - AppState is updated in `onAppear` and `onChange(of: allAircraft.count)`
 
 ### Navigation System
-| Destination | Icon | Tap Location | Page |
-|-------------|------|--------------|------|
-| home | house | Footer | HomePage |
-| maps | map | Footer | PlaceholderPage |
-| camera | camera | Footer (center) | PlaceholderPage |
-| hangar | airplane.departure | Footer | PlaceholderPage |
-| settings | gearshape | Footer | SettingsPage |
-| journey | person | Header (top right) | JourneyPage |
+| Destination | Icon | Tap Location | Page | Header Title |
+|-------------|------|--------------|------|--------------|
+| home | house | Footer | HomePage | HOME |
+| maps | map | Footer | PlaceholderPage | MAPS |
+| camera | camera | Footer (center) | PlaceholderPage | CAMERA |
+| hangar | airplane.departure | Footer | PlaceholderPage | YOUR HANGAR |
+| settings | gearshape | Footer | SettingsPage | SETTINGS |
+| journey | person | Header (left) | JourneyPage | JOURNEY STATS |
 
 **Implementation:**
 - `NavigationDestination` enum in ContentView.swift
 - `appState.currentScreen` tracks active page
+- `appState.pageDisplayTitle` returns display title for header (computed from dictionary)
 - `MainView` in Airplane_IDApp.swift switches views based on currentScreen
 - All nav buttons have `onTapGesture` handlers
+
+**Header Page Title:**
+- Displayed on right side of header, bottom-aligned with status text under person icon
+- Font: Helvetica 11pt (portrait) / 10pt (landscape), white, ALL CAPS
+- Spacing matches person icon (16px from edge)
+- To add new page: Add entry to `pageDisplayTitle` dictionary in AppState
+- Default: enum rawValue uppercased (e.g., "NEWPAGE") as reminder to update
 
 ### JourneyPage
 User profile/progress page accessed by tapping person icon in header.
@@ -733,3 +741,11 @@ The app must handle large datasets efficiently:
     - Trade-off: 1 harmless warning vs 5 warnings about Swift 6 errors
   - Also removed unnecessary `nonisolated(unsafe)` markers and nil coalescing on non-optional fields
   - Commits: 86df12c, 2205704, 4aab954
+
+- **Header Page Title Display:**
+  - Added page title to right side of header bar (both portrait and landscape)
+  - Shows current page name in ALL CAPS (HOME, YOUR HANGAR, SETTINGS, etc.)
+  - Bottom-aligned with status text under person icon
+  - Implementation: `pageDisplayTitle` computed property in AppState with dictionary lookup
+  - New pages default to enum rawValue uppercased as reminder to add to dictionary
+  - Commit: f472f2b
