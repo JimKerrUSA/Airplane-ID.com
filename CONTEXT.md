@@ -155,6 +155,7 @@ VStack { /* content */ }
 - rating, thumbsUp, iPhotoReference
 
 ### User Model Properties
+- memberNumber (primary key for server sync)
 - name, email, phone
 - passwordHash, passwordRequired, faceIDEnabled
 - displayName, memberDate, homeAirport, memberLevel
@@ -519,3 +520,17 @@ struct AppConfig {
     - Added `sideWidth` with min value of 40 to prevent negative frame crash
   - Settings menu rows: smaller fonts (16pt title, 13pt subtitle) with `.lineLimit(1)` to prevent word wrap
   - Matches DevToolButtonContent styling for consistency
+
+- **Account Settings Page - Editable with Security Toggles:**
+  - Added `memberNumber` field to User model (primary key for server sync)
+  - Account Settings now has Edit/Cancel/Save buttons in toolbar
+  - Editable fields: Display Name, Name, Email, Phone, Home Airport
+  - Member Since remains read-only
+  - Security section now uses toggle switches instead of text:
+    - Password Required toggle (saves immediately to database)
+    - Face ID Enabled toggle (saves immediately to database)
+  - Created new components:
+    - `EditableProfileRow` - Text field with blue border for edit mode
+    - `SecurityToggleRow` - Toggle switch with blue tint
+  - Toggle switches save to database immediately on change
+  - Edit mode changes are saved when "Save" is tapped, reverted on "Cancel"

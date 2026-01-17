@@ -12,6 +12,7 @@ import SwiftData
 /// Represents the app user with account and preferences
 @Model
 final class User {
+    var memberNumber: String  // Primary key for server sync
     var name: String
     var email: String
     var phone: String?
@@ -26,6 +27,7 @@ final class User {
     var syncToken: String?
 
     init(
+        memberNumber: String = "",
         name: String,
         email: String,
         phone: String? = nil,
@@ -39,6 +41,7 @@ final class User {
         lastSyncDate: Date? = nil,
         syncToken: String? = nil
     ) {
+        self.memberNumber = memberNumber
         self.name = name
         self.email = email
         self.phone = phone

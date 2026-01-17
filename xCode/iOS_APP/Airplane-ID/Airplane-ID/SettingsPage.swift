@@ -234,11 +234,21 @@ struct SettingsScrollContent: View {
 }
 
 // MARK: - Account Settings View
-/// Sub-page showing user profile and account management
+/// Sub-page showing user profile and account management with edit functionality
 struct AccountSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query private var users: [User]
+
+    // Edit mode state
+    @State private var isEditing = false
+
+    // Editable field values (loaded from user, saved on Save)
+    @State private var editDisplayName = ""
+    @State private var editName = ""
+    @State private var editEmail = ""
+    @State private var editPhone = ""
+    @State private var editHomeAirport = ""
 
     private var currentUser: User? { users.first }
 
@@ -257,7 +267,7 @@ struct AccountSettingsView: View {
                                     .font(.system(size: 80))
                                     .foregroundStyle(Color(hex: "639BEC"))
 
-                                Text(user.displayName)
+                                Text(isEditing ? editDisplayName : user.displayName)
                                     .font(.system(size: 28, weight: .bold))
                                     .foregroundStyle(.white)
 
@@ -271,18 +281,27 @@ struct AccountSettingsView: View {
                             }
                             .padding(.top, 20)
 
-                            // Profile details
+                            // Profile details - editable or read-only based on isEditing
                             VStack(spacing: 12) {
-                                ProfileDetailRow(label: "Name", value: user.name)
-                                ProfileDetailRow(label: "Email", value: user.email)
-                                ProfileDetailRow(label: "Phone", value: user.phone ?? "Not set")
-                                ProfileDetailRow(label: "Home Airport", value: user.homeAirport ?? "Not set")
+                                if isEditing {
+                                    EditableProfileRow(label: "Display Name", value: $editDisplayName)
+                                    EditableProfileRow(label: "Name", value: $editName)
+                                    EditableProfileRow(label: "Email", value: $editEmail)
+                                    EditableProfileRow(label: "Phone", value: $editPhone)
+                                    EditableProfileRow(label: "Home Airport", value: $editHomeAirport)
+                                } else {
+                                    ProfileDetailRow(label: "Display Name", value: user.displayName)
+                                    ProfileDetailRow(label: "Name", value: user.name)
+                                    ProfileDetailRow(label: "Email", value: user.email)
+                                    ProfileDetailRow(label: "Phone", value: user.phone ?? "Not set")
+                                    ProfileDetailRow(label: "Home Airport", value: user.homeAirport ?? "Not set")
+                                }
                                 ProfileDetailRow(label: "Member Since", value: formatDate(user.memberDate))
                             }
                             .padding(.horizontal, 20)
                             .padding(.top, 20)
 
-                            // Security settings
+                            // Security settings with toggle switches
                             VStack(spacing: 15) {
                                 Text("Security")
                                     .font(.system(size: 20, weight: .bold))
@@ -292,8 +311,26 @@ struct AccountSettingsView: View {
                                     .padding(.top, 20)
 
                                 VStack(spacing: 12) {
-                                    ProfileDetailRow(label: "Password Required", value: user.passwordRequired ? "Yes" : "No")
-                                    ProfileDetailRow(label: "Face ID Enabled", value: user.faceIDEnabled ? "Yes" : "No")
+                                    SecurityToggleRow(
+                                        label: "Password Required",
+                                        isOn: Binding(
+                                            get: { user.passwordRequired },
+                                            set: { newValue in
+                                                user.passwordRequired = newValue
+                                                try? modelContext.save()
+                                            }
+                                        )
+                                    )
+                                    SecurityToggleRow(
+                                        label: "Face ID Enabled",
+                                        isOn: Binding(
+                                            get: { user.faceIDEnabled },
+                                            set: { newValue in
+                                                user.faceIDEnabled = newValue
+                                                try? modelContext.save()
+                                            }
+                                        )
+                                    )
                                 }
                                 .padding(.horizontal, 20)
 
@@ -349,6 +386,32 @@ struct AccountSettingsView: View {
                         .foregroundStyle(Color(hex: "639BEC"))
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if currentUser != nil {
+                        if isEditing {
+                            HStack(spacing: 16) {
+                                Button("Cancel") {
+                                    cancelEditing()
+                                }
+                                .foregroundStyle(.white.opacity(0.6))
+
+                                Button("Save") {
+                                    saveChanges()
+                                }
+                                .foregroundStyle(Color(hex: "639BEC"))
+                                .fontWeight(.semibold)
+                            }
+                        } else {
+                            Button("Edit") {
+                                startEditing()
+                            }
+                            .foregroundStyle(Color(hex: "639BEC"))
+                        }
+                    }
+                }
+            }
+            .onAppear {
+                loadUserData()
             }
         }
     }
@@ -357,6 +420,36 @@ struct AccountSettingsView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter.string(from: date)
+    }
+
+    private func loadUserData() {
+        guard let user = currentUser else { return }
+        editDisplayName = user.displayName
+        editName = user.name
+        editEmail = user.email
+        editPhone = user.phone ?? ""
+        editHomeAirport = user.homeAirport ?? ""
+    }
+
+    private func startEditing() {
+        loadUserData()
+        isEditing = true
+    }
+
+    private func cancelEditing() {
+        loadUserData()
+        isEditing = false
+    }
+
+    private func saveChanges() {
+        guard let user = currentUser else { return }
+        user.displayName = editDisplayName
+        user.name = editName
+        user.email = editEmail
+        user.phone = editPhone.isEmpty ? nil : editPhone
+        user.homeAirport = editHomeAirport.isEmpty ? nil : editHomeAirport
+        try? modelContext.save()
+        isEditing = false
     }
 }
 
@@ -376,6 +469,56 @@ struct ProfileDetailRow: View {
                 .foregroundStyle(.white)
         }
         .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .background(Color(hex: "1D1E21"))
+        .cornerRadius(10)
+    }
+}
+
+// MARK: - Editable Profile Row
+struct EditableProfileRow: View {
+    let label: String
+    @Binding var value: String
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 16))
+                .foregroundStyle(.white.opacity(0.6))
+                .frame(width: 110, alignment: .leading)
+            TextField("", text: $value)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundStyle(.white)
+                .textFieldStyle(.plain)
+                .multilineTextAlignment(.trailing)
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .background(Color(hex: "1D1E21"))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color(hex: "639BEC").opacity(0.5), lineWidth: 1)
+        )
+    }
+}
+
+// MARK: - Security Toggle Row
+struct SecurityToggleRow: View {
+    let label: String
+    @Binding var isOn: Bool
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 16))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            Toggle("", isOn: $isOn)
+                .tint(Color(hex: "639BEC"))
+                .labelsHidden()
+        }
+        .padding(.vertical, 10)
         .padding(.horizontal, 16)
         .background(Color(hex: "1D1E21"))
         .cornerRadius(10)
