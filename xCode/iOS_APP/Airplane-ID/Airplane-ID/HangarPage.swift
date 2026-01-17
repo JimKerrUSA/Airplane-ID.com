@@ -523,14 +523,14 @@ struct HangarFilterSheet: View {
                 // Date Filters
                 Section("Date") {
                     Picker("Year", selection: $filterState.selectedYear) {
-                        Text("Any Year").tag(nil as Int?)
+                        Text("Select Year").tag(nil as Int?)
                         ForEach(availableYears, id: \.self) { year in
                             Text(String(year)).tag(year as Int?)
                         }
                     }
 
                     Picker("Month", selection: $filterState.selectedMonth) {
-                        Text("Any Month").tag(nil as Int?)
+                        Text("Select Month").tag(nil as Int?)
                         ForEach(availableMonths, id: \.self) { month in
                             Text(monthNames[month]).tag(month as Int?)
                         }
@@ -549,7 +549,7 @@ struct HangarFilterSheet: View {
                                 Text(mfr)
                                     .foregroundStyle(.secondary)
                             } else {
-                                Text("Any Manufacturer")
+                                Text("Search MFG")
                                     .foregroundStyle(.secondary)
                             }
                             Image(systemName: "chevron.right")
@@ -569,7 +569,7 @@ struct HangarFilterSheet: View {
                                 Text(icao)
                                     .foregroundStyle(.secondary)
                             } else {
-                                Text("Any ICAO")
+                                Text("Search ICAO")
                                     .foregroundStyle(.secondary)
                             }
                             Image(systemName: "chevron.right")
@@ -581,7 +581,7 @@ struct HangarFilterSheet: View {
 
                     // Always show Airline picker (even if empty, for when data is added)
                     Picker("Airline", selection: $filterState.selectedAirlineCode) {
-                        Text("Any Airline").tag(nil as String?)
+                        Text("Search Airline").tag(nil as String?)
                         ForEach(availableAirlineCodes, id: \.self) { code in
                             Text(code).tag(code as String?)
                         }
@@ -591,7 +591,7 @@ struct HangarFilterSheet: View {
                 // Classification Filters
                 Section("Classification") {
                     Picker("Category", selection: $filterState.selectedClassification) {
-                        Text("Any Category").tag(nil as Int?)
+                        Text("Select Category").tag(nil as Int?)
                         ForEach(availableClassifications, id: \.self) { code in
                             Text(AircraftLookup.classificationName(code) ?? "Unknown")
                                 .tag(code as Int?)
@@ -599,7 +599,7 @@ struct HangarFilterSheet: View {
                     }
 
                     Picker("Type", selection: $filterState.selectedType) {
-                        Text("Any Type").tag(nil as String?)
+                        Text("Select Type").tag(nil as String?)
                         ForEach(availableTypes, id: \.self) { code in
                             Text(AircraftLookup.typeName(code) ?? code)
                                 .tag(code as String?)
@@ -610,21 +610,21 @@ struct HangarFilterSheet: View {
                 // Location Filters
                 Section("Location") {
                     Picker("Country", selection: $filterState.selectedCountry) {
-                        Text("Any Country").tag(nil as String?)
+                        Text("Select Country").tag(nil as String?)
                         ForEach(availableCountries, id: \.self) { country in
                             Text(country).tag(country as String?)
                         }
                     }
 
                     Picker("State", selection: $filterState.selectedState) {
-                        Text("Any State").tag(nil as String?)
+                        Text("Select State").tag(nil as String?)
                         ForEach(availableStates, id: \.self) { state in
                             Text(state).tag(state as String?)
                         }
                     }
 
                     Picker("City", selection: $filterState.selectedCity) {
-                        Text("Any City").tag(nil as String?)
+                        Text("Select City").tag(nil as String?)
                         ForEach(availableCities, id: \.self) { city in
                             Text(city).tag(city as String?)
                         }
