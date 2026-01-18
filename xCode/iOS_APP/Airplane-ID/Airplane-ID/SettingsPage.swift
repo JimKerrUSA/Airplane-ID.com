@@ -710,7 +710,7 @@ enum CapturePreference: String, CaseIterable {
     var displayName: String {
         switch self {
         case .camera: return "Camera"
-        case .upload: return "Photo Upload"
+        case .upload: return "Upload"
         }
     }
 
@@ -781,7 +781,7 @@ struct AppPreferencesView: View {
                         preferencesSection(title: "App Behavior") {
                             // Default Page
                             PreferencePickerRow(
-                                label: "Default Open Page",
+                                label: "Open Page",
                                 selection: $defaultPage,
                                 options: DefaultPagePreference.allCases.map { ($0.rawValue, $0.displayName, "") }
                             )
@@ -1100,10 +1100,10 @@ struct CaptureModePickerRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Default Capture Mode")
+                Text("Capture Mode")
                     .font(.system(size: 15))
                     .foregroundStyle(.white)
-                Text("Long-press center button to toggle")
+                Text("Long-press button to toggle")
                     .font(.system(size: 11))
                     .foregroundStyle(.white.opacity(0.5))
             }
