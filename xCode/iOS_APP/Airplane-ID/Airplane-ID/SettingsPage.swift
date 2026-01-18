@@ -1102,12 +1102,17 @@ struct AboutView: View {
                                 .multilineTextAlignment(.center)
 
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Airplane-ID transforms every flight into a discovery. Use your camera to instantly identify aircraft overhead, build your personal collection of sightings, and become a master planespotter.")
+                                Text("Airplane-ID transforms aircraft sightings into a fun adventure of learning and discovery. Use your camera to instantly identify aircraft, build your personal collection of sightings, and become a master PlaneSpotter.")
                                     .font(.system(size: 15))
                                     .foregroundStyle(.white.opacity(0.8))
                                     .lineSpacing(4)
 
                                 Text("Our advanced Hangar catalog lets you organize, filter, and explore your collection by manufacturer, type, airline, and more—tracking everything from vintage props to modern jets.")
+                                    .font(.system(size: 15))
+                                    .foregroundStyle(.white.opacity(0.8))
+                                    .lineSpacing(4)
+
+                                Text("Not only can you spot planes and log them, you can track them for years to come using our interactive map. Where is that plane now? We let you know. Tap any aircraft to find its current location or explore the world to see where your sightings have taken you.")
                                     .font(.system(size: 15))
                                     .foregroundStyle(.white.opacity(0.8))
                                     .lineSpacing(4)
