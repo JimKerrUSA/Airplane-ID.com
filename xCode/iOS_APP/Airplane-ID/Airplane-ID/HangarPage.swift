@@ -863,54 +863,57 @@ struct AircraftDetailView: View {
 
                 ScrollView {
                     VStack(spacing: 0) {
-                        // Photo area with rating overlay
-                        ZStack(alignment: .bottomLeading) {
-                            // Photo display or placeholder
-                            if let thumbnailData = aircraft.thumbnailData,
-                               let uiImage = UIImage(data: thumbnailData) {
-                                // Show thumbnail image - 100% width, height scales with 16:9 aspect ratio
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .aspectRatio(16/9, contentMode: .fit)
-                                    .frame(maxWidth: .infinity)
-                            } else {
-                                // Show placeholder - 16:9 aspect ratio
-                                Rectangle()
-                                    .fill(AppColors.darkBlue.opacity(0.3))
-                                    .aspectRatio(16/9, contentMode: .fit)
-                                    .overlay {
-                                        VStack(spacing: 12) {
-                                            Image(systemName: isEditing || aircraft.thumbnailData == nil ? "photo.badge.plus" : "photo")
-                                                .font(.system(size: 60))
-                                                .foregroundStyle(.white.opacity(0.5))
-                                            Text(isEditing || aircraft.thumbnailData == nil ? "Add Photo" : "Aircraft Photo")
-                                                .font(.custom("Helvetica", size: 14))
-                                                .foregroundStyle(.white.opacity(0.5))
+                        // Photo area with rating overlay - uses GeometryReader for exact width
+                        GeometryReader { geometry in
+                            ZStack(alignment: .bottomLeading) {
+                                // Photo display or placeholder
+                                if let thumbnailData = aircraft.thumbnailData,
+                                   let uiImage = UIImage(data: thumbnailData) {
+                                    // Show thumbnail image - exact width, height calculated for 16:9
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: geometry.size.width, height: geometry.size.width * 9/16)
+                                        .clipped()
+                                } else {
+                                    // Show placeholder
+                                    Rectangle()
+                                        .fill(AppColors.darkBlue.opacity(0.3))
+                                        .frame(width: geometry.size.width, height: geometry.size.width * 9/16)
+                                        .overlay {
+                                            VStack(spacing: 12) {
+                                                Image(systemName: isEditing || aircraft.thumbnailData == nil ? "photo.badge.plus" : "photo")
+                                                    .font(.system(size: 60))
+                                                    .foregroundStyle(.white.opacity(0.5))
+                                                Text(isEditing || aircraft.thumbnailData == nil ? "Add Photo" : "Aircraft Photo")
+                                                    .font(.custom("Helvetica", size: 14))
+                                                    .foregroundStyle(.white.opacity(0.5))
+                                            }
+                                        }
+                                }
+
+                                // Edit overlay (shown when in edit mode and has photo)
+                                if isEditing && aircraft.thumbnailData != nil {
+                                    VStack {
+                                        Spacer()
+                                        HStack {
+                                            Spacer()
+                                            Image(systemName: "pencil.circle.fill")
+                                                .font(.system(size: 36))
+                                                .foregroundStyle(.white)
+                                                .shadow(radius: 4)
+                                                .padding(12)
                                         }
                                     }
-                            }
-
-                            // Edit overlay (shown when in edit mode and has photo)
-                            if isEditing && aircraft.thumbnailData != nil {
-                                VStack {
-                                    Spacer()
-                                    HStack {
-                                        Spacer()
-                                        Image(systemName: "pencil.circle.fill")
-                                            .font(.system(size: 36))
-                                            .foregroundStyle(.white)
-                                            .shadow(radius: 4)
-                                            .padding(12)
-                                    }
                                 }
-                            }
 
-                            // Star rating overlay at bottom-left
-                            starRatingOverlay
-                                .padding(.leading, 2)
-                                .padding(.bottom, 2)
+                                // Star rating overlay at bottom-left
+                                starRatingOverlay
+                                    .padding(.leading, 2)
+                                    .padding(.bottom, 2)
+                            }
                         }
-                        .frame(maxWidth: .infinity)
+                        .aspectRatio(16/9, contentMode: .fit)
                         .onTapGesture {
                             handlePhotoTap()
                         }
