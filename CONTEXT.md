@@ -1863,3 +1863,65 @@ enum MapIconHelper {
 - Create simplified silhouette versions if detail is lost at small sizes
 - Add icon for glider with longer wingspan silhouette
 - Add more ICAO-specific icons as SVGs become available
+
+### Icon Styling & Clustering (Apple Maps-style)
+
+**Status:** Implemented - Icons match Apple Maps design patterns
+
+**Features Implemented:**
+
+1. **Black Outline Effect**
+   - Multiple shadow layers create black outline around icons
+   - Makes icons "pop" against any map background
+   - Implementation: 5 `.shadow(color: .black, radius: 0.5)` modifiers at different offsets
+
+2. **Increased Icon Size**
+   - Size increased from 32x32 to 34x34 pixels
+   - Better visibility without losing detail
+
+3. **Side-Positioned Labels**
+   - Labels appear to the RIGHT of icons (not below like default Annotation)
+   - Tight padding (4px horizontal, 2px vertical)
+   - White semi-transparent background with rounded corners
+   - Font: 10pt semibold, black text
+   - Shows registration if available, otherwise abbreviated model (first 8 chars)
+
+4. **Zoom-Level Label Visibility**
+   - Labels automatically hide when zoomed out
+   - Threshold: `mapSpan < 0.15` (approximately 10 miles)
+   - Uses `onMapCameraChange` to track zoom level
+   - Prevents overlapping labels in dense areas
+
+5. **Aircraft Clustering**
+   - Groups nearby aircraft when zoomed out
+   - Cluster threshold scales with zoom level: `mapSpan * 0.1`
+   - Cluster annotation: Orange circle (44px) with white aircraft icon and blue count badge
+   - Tapping cluster zooms in 3x to show individual aircraft
+
+**Components:**
+
+| Component | Purpose |
+|-----------|---------|
+| `AircraftMapAnnotation` | Single aircraft with icon + optional label |
+| `ClusterAnnotation` | Grouped aircraft with count badge |
+| `AircraftCluster` | Model for cluster data |
+| `AircraftClusterHelper` | Clustering algorithm |
+
+**Cluster Logic:**
+- Uses simple distance-based clustering (lat/lon comparison)
+- Iteratively groups aircraft within threshold distance
+- Calculates center as average of all member coordinates
+- Re-clusters dynamically as user zooms in/out
+
+**Example Cluster Tap Behavior:**
+```
+User zoomed out → sees cluster "5" at LAX
+Tap cluster → map zooms to (currentSpan / 3)
+Now individual aircraft visible with labels
+```
+
+**Styling Reference (matches Apple Maps):**
+- Icon with black outline/shadow for visibility
+- Label in white rounded rectangle, close to icon
+- Side positioning (HStack) vs below (default)
+- Labels hidden when map density would cause overlap

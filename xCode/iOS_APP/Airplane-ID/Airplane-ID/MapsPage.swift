@@ -155,6 +155,188 @@ enum MapIconHelper {
     }
 }
 
+// MARK: - Aircraft Cluster Model
+/// Represents either a single aircraft or a cluster of multiple aircraft
+struct AircraftCluster: Identifiable {
+    let id = UUID()
+    let aircraft: [CapturedAircraft]
+    let coordinate: CLLocationCoordinate2D
+
+    var isCluster: Bool { aircraft.count > 1 }
+    var count: Int { aircraft.count }
+
+    /// Single aircraft (for non-clustered display)
+    var singleAircraft: CapturedAircraft? {
+        aircraft.count == 1 ? aircraft.first : nil
+    }
+
+    /// Primary aircraft for icon display (uses first aircraft in cluster)
+    var primaryAircraft: CapturedAircraft {
+        aircraft.first!
+    }
+}
+
+// MARK: - Clustering Helper
+/// Clusters nearby aircraft based on map zoom level
+enum AircraftClusterHelper {
+    /// Minimum distance in degrees for aircraft to be clustered together
+    /// Scales with zoom level (larger span = more clustering)
+    static func clusterDistance(for mapSpan: Double) -> Double {
+        // When zoomed out (span ~0.5), cluster within ~0.05 degrees (~3 miles)
+        // When zoomed in (span ~0.05), cluster within ~0.005 degrees (~0.3 miles)
+        return mapSpan * 0.1
+    }
+
+    /// Groups aircraft into clusters based on proximity
+    static func cluster(_ aircraft: [CapturedAircraft], mapSpan: Double) -> [AircraftCluster] {
+        guard !aircraft.isEmpty else { return [] }
+
+        let threshold = clusterDistance(for: mapSpan)
+        var remaining = aircraft
+        var clusters: [AircraftCluster] = []
+
+        while !remaining.isEmpty {
+            let seed = remaining.removeFirst()
+            var clusterMembers = [seed]
+            var centerLat = seed.displayCoordinate.latitude
+            var centerLon = seed.displayCoordinate.longitude
+
+            // Find all aircraft within threshold of this seed
+            var i = 0
+            while i < remaining.count {
+                let candidate = remaining[i]
+                let candidateCoord = candidate.displayCoordinate
+
+                // Simple distance check (works well for small areas)
+                let latDiff = abs(candidateCoord.latitude - centerLat)
+                let lonDiff = abs(candidateCoord.longitude - centerLon)
+
+                if latDiff < threshold && lonDiff < threshold {
+                    clusterMembers.append(candidate)
+                    // Update center as average of all members
+                    centerLat = clusterMembers.map { $0.displayCoordinate.latitude }.reduce(0, +) / Double(clusterMembers.count)
+                    centerLon = clusterMembers.map { $0.displayCoordinate.longitude }.reduce(0, +) / Double(clusterMembers.count)
+                    remaining.remove(at: i)
+                } else {
+                    i += 1
+                }
+            }
+
+            let cluster = AircraftCluster(
+                aircraft: clusterMembers,
+                coordinate: CLLocationCoordinate2D(latitude: centerLat, longitude: centerLon)
+            )
+            clusters.append(cluster)
+        }
+
+        return clusters
+    }
+}
+
+// MARK: - Aircraft Map Annotation View
+/// Custom annotation view with black-outlined icon and side-positioned label
+/// Matches Apple Maps design patterns
+struct AircraftMapAnnotation: View {
+    let aircraft: CapturedAircraft
+    let showLabel: Bool
+    let onTap: () -> Void
+
+    /// Short label for map display (registration or abbreviated model)
+    private var shortLabel: String {
+        if let reg = aircraft.registration, !reg.isEmpty {
+            return reg
+        }
+        // Fallback to abbreviated model (first 8 chars)
+        let model = aircraft.model
+        if model.count > 8 {
+            return String(model.prefix(8))
+        }
+        return model
+    }
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 4) {
+            // Aircraft icon with black outline effect
+            aircraftIcon
+
+            // Label positioned to the side (only when zoomed in)
+            if showLabel {
+                Text(shortLabel)
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 4)
+                    .padding(.vertical, 2)
+                    .background(
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(.white.opacity(0.9))
+                    )
+                    .lineLimit(1)
+            }
+        }
+        .onTapGesture(perform: onTap)
+    }
+
+    /// Aircraft icon with black outline/shadow for visibility
+    private var aircraftIcon: some View {
+        Image(aircraft.mapIconName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 34, height: 34)
+            .foregroundStyle(AppColors.orange)
+            // Black outline effect using multiple shadows
+            .shadow(color: .black, radius: 0.5, x: 0, y: 0)
+            .shadow(color: .black, radius: 0.5, x: 0.5, y: 0)
+            .shadow(color: .black, radius: 0.5, x: -0.5, y: 0)
+            .shadow(color: .black, radius: 0.5, x: 0, y: 0.5)
+            .shadow(color: .black, radius: 0.5, x: 0, y: -0.5)
+    }
+}
+
+// MARK: - Cluster Annotation View
+/// Annotation view for clustered aircraft (shows count badge)
+struct ClusterAnnotation: View {
+    let cluster: AircraftCluster
+    let onTap: () -> Void
+
+    var body: some View {
+        ZStack {
+            // Background circle with aircraft icon
+            Circle()
+                .fill(AppColors.orange)
+                .frame(width: 44, height: 44)
+                .overlay(
+                    Circle()
+                        .stroke(Color.black, lineWidth: 2)
+                )
+                .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+
+            // Aircraft silhouette (use first aircraft's icon)
+            Image(cluster.primaryAircraft.mapIconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 26, height: 26)
+                .foregroundStyle(.white)
+
+            // Count badge
+            Text("\(cluster.count)")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
+                .background(
+                    Capsule()
+                        .fill(AppColors.darkBlue)
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.white, lineWidth: 1)
+                        )
+                )
+                .offset(x: 16, y: -16)
+        }
+        .onTapGesture(perform: onTap)
+    }
+}
+
 // MARK: - Recent Search Model
 /// A search item stored in recent searches history
 struct RecentSearch: Codable, Identifiable, Equatable {
@@ -262,6 +444,13 @@ struct MapsPage: View {
     // Map state
     @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var showingSearchSheet = false
+    @State private var mapSpan: Double = 0.05  // Track zoom level (smaller = more zoomed in)
+
+    /// Whether to show labels based on current zoom level
+    /// Labels hidden when zoomed out far enough that they would overlap
+    private var shouldShowLabels: Bool {
+        mapSpan < 0.15  // Show labels when zoomed in (span < ~10 miles)
+    }
 
     // Search state
     @State private var searchState = MapsSearchState()
@@ -271,6 +460,7 @@ struct MapsPage: View {
 
     // Aircraft detail view state
     @State private var selectedAircraft: CapturedAircraft?
+    @State private var selectedCluster: AircraftCluster?  // For cluster tap handling
 
     // Query aircraft with valid locations
     @Query private var allAircraft: [CapturedAircraft]
@@ -278,6 +468,11 @@ struct MapsPage: View {
     /// Aircraft that have valid GPS coordinates for map display
     private var aircraftWithLocation: [CapturedAircraft] {
         allAircraft.filter { $0.hasValidLocation }
+    }
+
+    /// Clustered aircraft based on current zoom level
+    private var aircraftClusters: [AircraftCluster] {
+        AircraftClusterHelper.cluster(aircraftWithLocation, mapSpan: mapSpan)
     }
 
     /// Filtered aircraft matching search text
@@ -376,26 +571,49 @@ struct MapsPage: View {
             // User location (blue dot)
             UserAnnotation()
 
-            // Aircraft markers (tappable) - using custom SVG icons based on aircraft type
-            ForEach(aircraftWithLocation) { aircraft in
+            // Aircraft annotations - clustered when zoomed out, individual when zoomed in
+            ForEach(aircraftClusters) { cluster in
                 Annotation(
-                    aircraft.mapDisplayLabel,
-                    coordinate: aircraft.displayCoordinate
+                    "",  // Empty title - we handle label in the content view
+                    coordinate: cluster.coordinate
                 ) {
-                    Image(aircraft.mapIconName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 32, height: 32)
-                        .foregroundStyle(AppColors.orange)
-                        .onTapGesture {
-                            selectedAircraft = aircraft
-                        }
+                    if cluster.isCluster {
+                        // Multiple aircraft - show cluster annotation
+                        ClusterAnnotation(
+                            cluster: cluster,
+                            onTap: { handleClusterTap(cluster) }
+                        )
+                    } else if let aircraft = cluster.singleAircraft {
+                        // Single aircraft - show individual annotation
+                        AircraftMapAnnotation(
+                            aircraft: aircraft,
+                            showLabel: shouldShowLabels,
+                            onTap: { selectedAircraft = aircraft }
+                        )
+                    }
                 }
             }
+        }
+        .onMapCameraChange { context in
+            // Track zoom level to control label visibility and clustering
+            mapSpan = context.region.span.latitudeDelta
         }
         .mapControls {
             MapCompass()
             MapScaleView()
+        }
+    }
+
+    /// Handle tap on a cluster - zoom in to show individual aircraft
+    private func handleClusterTap(_ cluster: AircraftCluster) {
+        // Zoom in to show the cluster's aircraft individually
+        // Calculate a span that will split up the cluster
+        let newSpan = mapSpan / 3  // Zoom in by 3x
+        withAnimation {
+            cameraPosition = .region(MKCoordinateRegion(
+                center: cluster.coordinate,
+                span: MKCoordinateSpan(latitudeDelta: newSpan, longitudeDelta: newSpan)
+            ))
         }
     }
 
