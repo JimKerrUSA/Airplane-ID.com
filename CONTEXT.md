@@ -1975,13 +1975,45 @@ case "6":  // Rotorcraft
 - Commercial inspection drones
 - Any rotorcraft with 4+ engines
 
+### Experimental Aircraft Handling
+
+**Problem:** Experimental/homebuilt aircraft often list the builder's name as manufacturer in FAA records, not the kit manufacturer. This breaks manufacturer verification.
+
+**Example:** An RV6 built by John Smith has manufacturer "SMITH JOHN" instead of "VANS AIRCRAFT"
+
+**Solution:** If `aircraftClassification == 4` (EXPERIMENTAL), bypass manufacturer verification entirely.
+
+**Classification Values:**
+| Value | Meaning |
+|-------|---------|
+| 1 | STANDARD |
+| 2 | LIMITED |
+| 3 | RESTRICTED |
+| 4 | EXPERIMENTAL ← Skip mfg verification |
+| 5-9 | Other categories |
+
+**How It Works:**
+```swift
+let isExperimental = aircraftClassification == 4
+MapIconHelper.findICAOIcon(for: icao, manufacturer: manufacturer, isExperimental: isExperimental)
+```
+
+When `isExperimental == true`:
+- Direct ICAO match attempted (no manufacturer check)
+- Prefix matching attempted (no manufacturer check)
+- Falls through to generic if no match
+
+**Why This Matters:**
+- Covers ALL experimental/homebuilt aircraft automatically
+- RVs, Glasairs, Lancairs, Long-EZs, Cozys, etc.
+- One-off homebuilts with unique ICAOs use generic fallback
+- Override dictionary available for special cases
+
 ### Van's RV Aircraft Special Handling
 
-**Problem:** RV homebuilts (RV-6, RV-10, etc.) often list the builder's name as manufacturer in FAA records, not "Van's Aircraft". This breaks manufacturer verification.
+**Problem:** RV homebuilts (RV-6, RV-10, etc.) are so common they get additional special handling beyond the experimental flag.
 
-**Example:** N1067S is an RV6, but manufacturer might be "SMITH JOHN" instead of "VANS AIRCRAFT"
-
-**Solution:** If ICAO starts with "RV", bypass manufacturer check and use RV icons directly
+**Solution:** If ICAO starts with "RV", bypass manufacturer check and use RV icons directly (even if not marked experimental)
 
 **Logic:**
 ```swift
@@ -2024,15 +2056,20 @@ if code.hasPrefix("RV") {
    ├─ Other RV variant → return RV6 as fallback
    └─ NOT an RV → continue
 
-4. Exact ICAO match (with manufacturer verification)
+4. Experimental aircraft (classification == 4)
+   ├─ Exact ICAO match → return icon (NO mfg check)
+   ├─ Prefix match → return icon (NO mfg check)
+   └─ No match → continue to generic
+
+5. Exact ICAO match (with manufacturer verification)
    ├─ FOUND + manufacturer matches → return ICAO icon
    └─ NOT FOUND or mfg mismatch → continue
 
-5. Prefix ICAO match (with manufacturer verification)
+6. Prefix ICAO match (with manufacturer verification)
    ├─ FOUND + manufacturer matches → return matched icon
    └─ NOT FOUND → continue
 
-6. Generic type fallback
+7. Generic type fallback
    ├─ Balloon/Blimp/Parachute → icon-balloon
    ├─ Single-engine FW → icon-single-prop
    ├─ Multi-engine FW + jet → icon-jet

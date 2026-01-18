@@ -53,7 +53,9 @@ extension CapturedAircraft {
         }
 
         // Try ICAO-specific icon with manufacturer verification
-        if let icaoIcon = MapIconHelper.findICAOIcon(for: icao, manufacturer: manufacturer) {
+        // Skip manufacturer check for experimental aircraft (classification 4) - they often list builder's name
+        let isExperimental = aircraftClassification == 4
+        if let icaoIcon = MapIconHelper.findICAOIcon(for: icao, manufacturer: manufacturer, isExperimental: isExperimental) {
             return icaoIcon
         }
 
@@ -269,8 +271,9 @@ enum MapIconHelper {
     /// - Parameters:
     ///   - icao: The aircraft's ICAO code
     ///   - manufacturer: The aircraft's manufacturer (for verification)
-    /// - Returns: Asset path if found and manufacturer matches, nil otherwise
-    static func findICAOIcon(for icao: String, manufacturer: String) -> String? {
+    ///   - isExperimental: If true, skip manufacturer verification (experimental aircraft often list builder's name)
+    /// - Returns: Asset path if found and manufacturer matches (or experimental), nil otherwise
+    static func findICAOIcon(for icao: String, manufacturer: String, isExperimental: Bool = false) -> String? {
         let code = icao.uppercased().trimmingCharacters(in: .whitespaces)
         guard !code.isEmpty else { return nil }
 
@@ -301,9 +304,28 @@ enum MapIconHelper {
             return "MapIcons/icao-RV6"
         }
 
+        // 3. For experimental aircraft, try direct ICAO match without manufacturer verification
+        // Experimental/homebuilt aircraft often list builder's name instead of kit manufacturer
+        if isExperimental {
+            // Try exact match
+            if icaoToManufacturer[code] != nil {
+                return "MapIcons/icao-\(code)"
+            }
+            // Try prefix matching (find best match)
+            var prefix = code
+            while prefix.count >= 2 {
+                prefix = String(prefix.dropLast())
+                if let match = icaoToManufacturer.keys.first(where: { $0.hasPrefix(prefix) }) {
+                    return "MapIcons/icao-\(match)"
+                }
+            }
+            // No match for experimental - fall through to generic
+            return nil
+        }
+
         let normalizedMfg = normalizeManufacturer(manufacturer)
 
-        // 3. Try exact match - verify manufacturer matches
+        // 4. Try exact match - verify manufacturer matches
         if let iconMfg = icaoToManufacturer[code] {
             if iconMfg == normalizedMfg {
                 return "MapIcons/icao-\(code)"
@@ -312,7 +334,7 @@ enum MapIconHelper {
             return nil
         }
 
-        // 4. Try prefix matching with manufacturer verification
+        // 5. Try prefix matching with manufacturer verification
         var prefix = code
         while prefix.count >= 2 {
             prefix = String(prefix.dropLast())
