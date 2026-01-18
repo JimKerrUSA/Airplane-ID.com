@@ -1856,8 +1856,53 @@ enum MapIconHelper {
 **Adding New ICAO Icons:**
 1. Copy SVG to source folder
 2. Run copy script to create imageset
-3. Add ICAO code to `MapIconHelper.availableICAOs` set
+3. Add ICAO code AND manufacturer to `MapIconHelper.icaoToManufacturer` dictionary
 4. Rebuild
+
+### Icon Matching Logic (Updated)
+
+**Problem:** Previous prefix interpolation was too loose - a Boeing 737 might match a Cessna icon because "B7" prefix matched something unrelated.
+
+**Solution:** Manufacturer verification required for all ICAO matching
+
+**Matching Priority:**
+1. **Exact ICAO match** with manufacturer verification
+2. **Prefix match** with manufacturer verification (e.g., M20J → M20T if both are Mooney)
+3. **Airliner detection** → SF Symbol airplane icon
+4. **Generic type fallback** → type-based icons
+
+**Airliner Detection:**
+Aircraft uses SF Symbol (`airplane`) instead of custom icon if:
+- Manufacturer is a major airliner producer (Boeing, Airbus, Embraer, etc.)
+- OR it's a multi-engine jet with 15+ seats
+
+**Airliner Manufacturers:** Boeing, Airbus, Embraer, Bombardier, McDonnell Douglas, Lockheed, ATR, Fokker, Saab, BAE, British Aerospace, Tupolev, Ilyushin, Antonov, Comac, Sukhoi, Mitsubishi
+
+**Icon Return Values:**
+- `"sf.airplane"` - SF Symbol for airliners (special prefix)
+- `"MapIcons/icao-C172"` - Specific ICAO asset
+- `"MapIcons/icon-jet"` - Generic type asset
+
+**Example Matching:**
+| Aircraft | ICAO | Manufacturer | Result |
+|----------|------|--------------|--------|
+| Cessna 172 | C172 | Cessna | `icao-C172` (exact match) |
+| Mooney M20J | M20J | Mooney | `icao-M20T` (prefix match, same mfg) |
+| Boeing 737 | B738 | Boeing | `sf.airplane` (airliner) |
+| Gulfstream G450 | G450 | Gulfstream | `icon-jet` (generic, no match) |
+| Unknown Jet | XXXX | Unknown | `icon-jet` (generic fallback) |
+
+**MapIconHelper Changes:**
+```swift
+// Old: Just ICAO set
+static let availableICAOs: Set<String>
+
+// New: ICAO → Manufacturer mapping
+static let icaoToManufacturer: [String: String]
+static let airlinerManufacturers: Set<String>
+static func isAirlinerManufacturer(_ manufacturer: String) -> Bool
+static func findICAOIcon(for icao: String, manufacturer: String) -> String?
+```
 
 **Future Enhancements:**
 - Create simplified silhouette versions if detail is lost at small sizes

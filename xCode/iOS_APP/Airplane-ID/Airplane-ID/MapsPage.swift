@@ -41,18 +41,44 @@ extension CapturedAircraft {
         return "\(model) \(manufacturer)"
     }
 
-    /// Returns the appropriate map icon name based on ICAO code, aircraft type, and engine type
-    /// Priority: 1) Exact ICAO match, 2) ICAO prefix match, 3) Generic type fallback
+    /// Returns the appropriate map icon name based on ICAO code, manufacturer, and aircraft type
+    /// Priority: 1) Exact ICAO match with manufacturer verification, 2) Generic type fallback
+    /// Special handling: Airliners use SF Symbol (returned as "sf.airplane")
     /// Icons are in Assets.xcassets/MapIcons/
-    /// - Returns: Asset name for the map icon
+    /// - Returns: Asset name for the map icon, or "sf.airplane" for SF Symbol
     var mapIconName: String {
-        // Try ICAO-specific icon first (exact match, then prefix interpolation)
-        if let icaoIcon = MapIconHelper.findICAOIcon(for: icao) {
+        // Check if this is an airliner - use SF Symbol for large commercial jets
+        if isAirliner {
+            return "sf.airplane"  // Special prefix indicates SF Symbol
+        }
+
+        // Try ICAO-specific icon with manufacturer verification
+        if let icaoIcon = MapIconHelper.findICAOIcon(for: icao, manufacturer: manufacturer) {
             return icaoIcon
         }
 
         // Fall back to generic type-based icon
         return genericTypeIcon
+    }
+
+    /// Whether this aircraft is a large airliner that should use the generic jet SF Symbol
+    /// Criteria: Major airliner manufacturer OR multi-engine jet with 15+ seats
+    private var isAirliner: Bool {
+        // Check if manufacturer is a major airliner producer
+        if MapIconHelper.isAirlinerManufacturer(manufacturer) {
+            return true
+        }
+
+        // Check if it's a multi-engine jet with 15+ seats (regional/commercial jet)
+        if aircraftType == "5" {  // Fixed Wing Multi-Engine
+            if engineType == 4 || engineType == 5 {  // Turbo-jet or Turbo-fan
+                if let seats = seatCount, seats >= 15 {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
     /// Generic icon based on aircraft type and engine type (fallback when no ICAO match)
@@ -78,6 +104,7 @@ extension CapturedAircraft {
         case "5":  // Fixed Wing Multi-Engine - check engine type
             // Engine types: 1=Recip, 2=Turbo-prop, 3=Turbo-shaft, 4=Turbo-jet, 5=Turbo-fan
             if engineType == 4 || engineType == 5 {
+                // Small business jet (already filtered out airliners above)
                 return "MapIcons/icon-jet"
             }
             return "MapIcons/icon-twin-prop"
@@ -85,8 +112,8 @@ extension CapturedAircraft {
             return "MapIcons/icon-helicopter"
         case "9":  // Gyroplane - use helicopter
             return "MapIcons/icon-helicopter"
-        case "H":  // Hybrid Lift (tiltrotor) - use jet
-            return "MapIcons/icon-jet"
+        case "H":  // Hybrid Lift (tiltrotor) - use SF Symbol
+            return "sf.airplane"
         default:   // "O" = Other or unknown - use single-prop as default
             return "MapIcons/icon-single-prop"
         }
@@ -94,63 +121,155 @@ extension CapturedAircraft {
 }
 
 // MARK: - Map Icon Helper
-/// Helper for finding ICAO-specific map icons with prefix interpolation
+/// Helper for finding ICAO-specific map icons with manufacturer verification
 enum MapIconHelper {
-    /// Set of available ICAO codes that have custom icons
-    /// These correspond to icao-{CODE}.imageset in Assets.xcassets/MapIcons/
-    static let availableICAOs: Set<String> = [
-        "ACAM", "AS20", "AS50", "AT5T", "BALL",
-        "BE23", "BE35", "BE55", "BE58", "BL17",
-        "C140", "C150", "C172", "C180", "C182", "C185", "C206", "C207", "C208", "C210", "C310", "C421",
-        "CH60", "COZY",
-        "DA40", "DR40",
-        "EC20", "ECHO",
-        "GA7", "GSIS",
-        "HDJT",
-        "J3", "JAB4",
-        "KODI",
-        "M20P", "M20T", "M600",
-        "NG5",
-        "P28A", "P28R", "P46T",
-        "PA11", "PA12", "PA18", "PA22", "PA24", "PA25", "PA27", "PA31", "PA32", "PA34", "PA44", "PA46",
-        "PC12",
-        "R22", "R44", "R66",
-        "qsgt",
-        "RV6", "RV10", "RV12",
-        "SF50", "SIRA", "SR22",
-        "T34P"
+    /// ICAO codes mapped to their manufacturers (normalized to uppercase for matching)
+    /// Only includes general aviation aircraft - NOT airliners
+    static let icaoToManufacturer: [String: String] = [
+        // Aeronca
+        "ACAM": "AERONCA",
+        // American Champion / Bellanca
+        "BL17": "BELLANCA",
+        // Beechcraft
+        "BE23": "BEECH", "BE35": "BEECH", "BE55": "BEECH", "BE58": "BEECH",
+        // Cessna
+        "C140": "CESSNA", "C150": "CESSNA", "C172": "CESSNA", "C180": "CESSNA",
+        "C182": "CESSNA", "C185": "CESSNA", "C206": "CESSNA", "C207": "CESSNA",
+        "C208": "CESSNA", "C210": "CESSNA", "C310": "CESSNA", "C421": "CESSNA",
+        // Cirrus
+        "SR22": "CIRRUS", "SF50": "CIRRUS",
+        // Cozy/Long-EZ (Experimental)
+        "COZY": "COZY",
+        // Diamond
+        "DA40": "DIAMOND",
+        // Eurocopter/Airbus Helicopters
+        "AS20": "EUROCOPTER", "AS50": "EUROCOPTER", "EC20": "EUROCOPTER",
+        // Grumman/American General
+        "GA7": "GRUMMAN",
+        // Honda
+        "HDJT": "HONDA",
+        // Jabiru
+        "JAB4": "JABIRU",
+        // Kodiak (Quest/Daher)
+        "KODI": "KODIAK",
+        // Mooney
+        "M20P": "MOONEY", "M20T": "MOONEY",
+        // Piper
+        "J3": "PIPER", "PA11": "PIPER", "PA12": "PIPER", "PA18": "PIPER",
+        "PA22": "PIPER", "PA24": "PIPER", "PA25": "PIPER", "PA27": "PIPER",
+        "PA31": "PIPER", "PA32": "PIPER", "PA34": "PIPER", "PA44": "PIPER",
+        "PA46": "PIPER", "P28A": "PIPER", "P28R": "PIPER", "P46T": "PIPER",
+        // Piper M600 (turboprop)
+        "M600": "PIPER",
+        // Pilatus
+        "PC12": "PILATUS",
+        // Robin
+        "DR40": "ROBIN",
+        // Robinson
+        "R22": "ROBINSON", "R44": "ROBINSON", "R66": "ROBINSON",
+        // Sikorsky
+        "CH60": "SIKORSKY",
+        // Sling (The Airplane Factory)
+        "SIRA": "SLING",
+        // Socata/Daher
+        "AT5T": "SOCATA",
+        // Van's Aircraft (RV series)
+        "RV6": "VANS", "RV10": "VANS", "RV12": "VANS",
+        // Balloon
+        "BALL": "BALLOON",
+        // Others
+        "ECHO": "ECHO", "GSIS": "GSIS", "NG5": "NG5", "qsgt": "QSGT", "T34P": "BEECH"
     ]
 
-    /// Attempts to find an ICAO-specific icon for the given code
-    /// Uses prefix interpolation: M20J → tries M20J, then M20, then M2, then M
-    /// - Parameter icao: The aircraft's ICAO code
-    /// - Returns: Asset path if found, nil otherwise
-    static func findICAOIcon(for icao: String) -> String? {
+    /// Major airliner manufacturers - these should use the generic jet SF Symbol
+    static let airlinerManufacturers: Set<String> = [
+        "BOEING", "AIRBUS", "EMBRAER", "BOMBARDIER", "MCDONNELL DOUGLAS",
+        "MCDONNELL-DOUGLAS", "LOCKHEED", "ATR", "FOKKER", "SAAB", "BAE",
+        "BRITISH AEROSPACE", "TUPOLEV", "ILYUSHIN", "ANTONOV", "COMAC",
+        "SUKHOI", "MITSUBISHI"
+    ]
+
+    /// Set of available ICAO codes that have custom icons
+    static var availableICAOs: Set<String> {
+        Set(icaoToManufacturer.keys)
+    }
+
+    /// Normalizes manufacturer name for comparison
+    static func normalizeManufacturer(_ manufacturer: String) -> String {
+        let normalized = manufacturer.uppercased()
+            .replacingOccurrences(of: "AIRCRAFT", with: "")
+            .replacingOccurrences(of: "INDUSTRIES", with: "")
+            .replacingOccurrences(of: "CORP", with: "")
+            .replacingOccurrences(of: "INC", with: "")
+            .replacingOccurrences(of: "LLC", with: "")
+            .replacingOccurrences(of: ".", with: "")
+            .replacingOccurrences(of: ",", with: "")
+            .trimmingCharacters(in: .whitespaces)
+
+        // Handle common variations
+        if normalized.contains("CESSNA") { return "CESSNA" }
+        if normalized.contains("PIPER") { return "PIPER" }
+        if normalized.contains("BEECH") || normalized.contains("HAWKER") || normalized.contains("TEXTRON") { return "BEECH" }
+        if normalized.contains("CIRRUS") { return "CIRRUS" }
+        if normalized.contains("MOONEY") { return "MOONEY" }
+        if normalized.contains("DIAMOND") { return "DIAMOND" }
+        if normalized.contains("ROBINSON") { return "ROBINSON" }
+        if normalized.contains("EUROCOPTER") || normalized.contains("AIRBUS HELICOPTERS") { return "EUROCOPTER" }
+        if normalized.contains("PILATUS") { return "PILATUS" }
+        if normalized.contains("VANS") || normalized.contains("VAN'S") { return "VANS" }
+        if normalized.contains("GRUMMAN") { return "GRUMMAN" }
+        if normalized.contains("SIKORSKY") { return "SIKORSKY" }
+        if normalized.contains("SOCATA") || normalized.contains("DAHER") { return "SOCATA" }
+        if normalized.contains("QUEST") || normalized.contains("KODIAK") { return "KODIAK" }
+        if normalized.contains("JABIRU") { return "JABIRU" }
+        if normalized.contains("HONDA") { return "HONDA" }
+
+        return normalized
+    }
+
+    /// Checks if manufacturer is a major airliner producer
+    static func isAirlinerManufacturer(_ manufacturer: String) -> Bool {
+        let normalized = manufacturer.uppercased()
+        return airlinerManufacturers.contains { normalized.contains($0) }
+    }
+
+    /// Attempts to find an ICAO-specific icon that matches both code and manufacturer
+    /// - Parameters:
+    ///   - icao: The aircraft's ICAO code
+    ///   - manufacturer: The aircraft's manufacturer (for verification)
+    /// - Returns: Asset path if found and manufacturer matches, nil otherwise
+    static func findICAOIcon(for icao: String, manufacturer: String) -> String? {
         let code = icao.uppercased().trimmingCharacters(in: .whitespaces)
         guard !code.isEmpty else { return nil }
 
-        // Try exact match first
-        if availableICAOs.contains(code) {
-            return "MapIcons/icao-\(code)"
+        let normalizedMfg = normalizeManufacturer(manufacturer)
+
+        // Try exact match first - verify manufacturer matches
+        if let iconMfg = icaoToManufacturer[code] {
+            if iconMfg == normalizedMfg {
+                return "MapIcons/icao-\(code)"
+            }
+            // Manufacturer doesn't match - don't use this icon
+            return nil
         }
 
-        // Try progressively shorter prefixes (minimum 2 characters)
+        // Try prefix matching with manufacturer verification
         var prefix = code
-        while prefix.count > 1 {
+        while prefix.count >= 2 {
             prefix = String(prefix.dropLast())
 
-            // Find any ICAO that starts with this prefix
-            if let match = availableICAOs.first(where: { $0.hasPrefix(prefix) }) {
-                // Prefer exact prefix match over partial
-                if availableICAOs.contains(prefix) {
-                    return "MapIcons/icao-\(prefix)"
+            // Find ICAO codes that start with this prefix
+            let matches = icaoToManufacturer.filter { $0.key.hasPrefix(prefix) }
+
+            // Check if any match has the same manufacturer
+            for (matchCode, matchMfg) in matches {
+                if matchMfg == normalizedMfg {
+                    return "MapIcons/icao-\(matchCode)"
                 }
-                // Use the first match found
-                return "MapIcons/icao-\(match)"
             }
         }
 
-        // No ICAO match found
+        // No matching ICAO icon found
         return nil
     }
 }
@@ -265,18 +384,38 @@ struct AircraftMapAnnotation: View {
     }
 
     /// Aircraft icon with black outline/shadow for visibility
+    /// Handles both SF Symbols (prefixed with "sf.") and asset images
+    @ViewBuilder
     private var aircraftIcon: some View {
-        Image(aircraft.mapIconName)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 34, height: 34)
-            .foregroundStyle(AppColors.orange)
-            // Black outline effect using multiple shadows
-            .shadow(color: .black, radius: 0.5, x: 0, y: 0)
-            .shadow(color: .black, radius: 0.5, x: 0.5, y: 0)
-            .shadow(color: .black, radius: 0.5, x: -0.5, y: 0)
-            .shadow(color: .black, radius: 0.5, x: 0, y: 0.5)
-            .shadow(color: .black, radius: 0.5, x: 0, y: -0.5)
+        let iconName = aircraft.mapIconName
+
+        if iconName.hasPrefix("sf.") {
+            // SF Symbol (for airliners)
+            let symbolName = String(iconName.dropFirst(3))  // Remove "sf." prefix
+            Image(systemName: symbolName)
+                .font(.system(size: 20, weight: .bold))
+                .foregroundStyle(AppColors.orange)
+                .rotationEffect(.degrees(-45))
+                // Black outline effect using multiple shadows
+                .shadow(color: .black, radius: 0.5, x: 0, y: 0)
+                .shadow(color: .black, radius: 0.5, x: 0.5, y: 0)
+                .shadow(color: .black, radius: 0.5, x: -0.5, y: 0)
+                .shadow(color: .black, radius: 0.5, x: 0, y: 0.5)
+                .shadow(color: .black, radius: 0.5, x: 0, y: -0.5)
+        } else {
+            // Custom asset image
+            Image(iconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 34, height: 34)
+                .foregroundStyle(AppColors.orange)
+                // Black outline effect using multiple shadows
+                .shadow(color: .black, radius: 0.5, x: 0, y: 0)
+                .shadow(color: .black, radius: 0.5, x: 0.5, y: 0)
+                .shadow(color: .black, radius: 0.5, x: -0.5, y: 0)
+                .shadow(color: .black, radius: 0.5, x: 0, y: 0.5)
+                .shadow(color: .black, radius: 0.5, x: 0, y: -0.5)
+        }
     }
 }
 
@@ -299,11 +438,7 @@ struct ClusterAnnotation: View {
                 .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
 
             // Aircraft silhouette (use first aircraft's icon)
-            Image(cluster.primaryAircraft.mapIconName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 26, height: 26)
-                .foregroundStyle(.white)
+            clusterIcon
 
             // Count badge
             Text("\(cluster.count)")
@@ -322,6 +457,28 @@ struct ClusterAnnotation: View {
                 .offset(x: 16, y: -16)
         }
         .onTapGesture(perform: onTap)
+    }
+
+    /// Cluster icon - handles both SF Symbols and asset images
+    @ViewBuilder
+    private var clusterIcon: some View {
+        let iconName = cluster.primaryAircraft.mapIconName
+
+        if iconName.hasPrefix("sf.") {
+            // SF Symbol (for airliners)
+            let symbolName = String(iconName.dropFirst(3))
+            Image(systemName: symbolName)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.white)
+                .rotationEffect(.degrees(-45))
+        } else {
+            // Custom asset image
+            Image(iconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 26, height: 26)
+                .foregroundStyle(.white)
+        }
     }
 }
 
