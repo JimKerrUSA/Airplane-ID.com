@@ -67,6 +67,30 @@ enum AppSpacing {
     static let cornerRadiusLarge: CGFloat = 15
 }
 
+// MARK: - Date Formatting
+/// Shared date formatting utilities to avoid duplicate DateFormatter creation
+enum DateFormatting {
+    /// Format date as medium style (e.g., "Jan 17, 2026")
+    static func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
+    }
+
+    /// Format date and time (e.g., "Jan 17, 2026 at 3:45 PM")
+    static func formatDateTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+
+    /// Format coordinates as string (e.g., "37.7749, -122.4194")
+    static func formatCoordinates(_ lat: Double, _ lon: Double) -> String {
+        String(format: "%.4f, %.4f", lat, lon)
+    }
+}
+
 // MARK: - Aircraft Lookup Tables
 /// FAA aircraft classification and type code lookups
 enum AircraftLookup {

@@ -363,7 +363,7 @@ struct AccountSettingsView: View {
                                     ProfileDetailRow(label: "Phone", value: user.phone ?? "Not set")
                                     ProfileDetailRow(label: "Home Airport", value: user.homeAirport ?? "Not set")
                                 }
-                                ProfileDetailRow(label: "Member Since", value: formatDate(user.memberDate))
+                                ProfileDetailRow(label: "Member Since", value: DateFormatting.formatDate(user.memberDate))
                             }
                             .padding(.horizontal, 20)
                             .padding(.top, 20)
@@ -538,12 +538,6 @@ struct AccountSettingsView: View {
                 loadUserData()
             }
         }
-    }
-
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
     }
 
     private func loadUserData() {

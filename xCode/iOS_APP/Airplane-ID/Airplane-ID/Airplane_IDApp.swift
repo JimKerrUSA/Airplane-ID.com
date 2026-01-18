@@ -66,7 +66,7 @@ struct MainView: View {
 
             // Columns: airlineCode(0), iata(1), airlineName(2)
             for line in lines.dropFirst() {
-                let columns = parseCSVLine(line)
+                let columns = CSVParser.parseLine(line)
                 guard columns.count >= 3 else { continue }
 
                 let airlineCode = columns[0].trimmingCharacters(in: .whitespaces)
@@ -109,7 +109,7 @@ struct MainView: View {
 
             // Columns: icao(0), manufacturer(1), model(2), icaoClass(3), aircraftCategoryCode(4), aircraftType(5), engineCount(6), engineType(7)
             for line in lines.dropFirst() {
-                let columns = parseCSVLine(line)
+                let columns = CSVParser.parseLine(line)
                 guard columns.count >= 8 else { continue }
 
                 let icao = columns[0].trimmingCharacters(in: .whitespaces)
@@ -141,21 +141,6 @@ struct MainView: View {
         } catch {
             print("Error loading ICAO codes: \(error)")
         }
-    }
-
-    private func parseCSVLine(_ line: String) -> [String] {
-        var result: [String] = []
-        var current = ""
-        var inQuotes = false
-        for char in line {
-            if char == "\"" { inQuotes.toggle() }
-            else if char == "," && !inQuotes {
-                result.append(current)
-                current = ""
-            } else { current.append(char) }
-        }
-        result.append(current)
-        return result
     }
 }
 

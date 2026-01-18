@@ -1064,13 +1064,13 @@ struct AircraftDetailView: View {
                         if hasCertificationData || isEditing {
                             detailSection(title: "Certification") {
                                 if aircraft.airworthinessDate != nil || isEditing {
-                                    DetailRow(label: "Airworthiness Date", value: aircraft.airworthinessDate != nil ? formatDate(aircraft.airworthinessDate!) : "—")
+                                    DetailRow(label: "Airworthiness Date", value: aircraft.airworthinessDate != nil ? DateFormatting.formatDate(aircraft.airworthinessDate!) : "—")
                                 }
                                 if aircraft.certificateIssueDate != nil || isEditing {
-                                    DetailRow(label: "Certificate Issued", value: aircraft.certificateIssueDate != nil ? formatDate(aircraft.certificateIssueDate!) : "—")
+                                    DetailRow(label: "Certificate Issued", value: aircraft.certificateIssueDate != nil ? DateFormatting.formatDate(aircraft.certificateIssueDate!) : "—")
                                 }
                                 if aircraft.certificateExpireDate != nil || isEditing {
-                                    DetailRow(label: "Certificate Expires", value: aircraft.certificateExpireDate != nil ? formatDate(aircraft.certificateExpireDate!) : "—")
+                                    DetailRow(label: "Certificate Expires", value: aircraft.certificateExpireDate != nil ? DateFormatting.formatDate(aircraft.certificateExpireDate!) : "—")
                                 }
                             }
                         }
@@ -1095,10 +1095,10 @@ struct AircraftDetailView: View {
                                 .background(AppColors.settingsRow)
                                 .cornerRadius(10)
                             } else {
-                                DetailRow(label: "Date", value: formatDateTime(aircraft.captureTime))
+                                DetailRow(label: "Date", value: DateFormatting.formatDateTime(aircraft.captureTime))
                             }
                             // Location - read-only (GPS data should not be manually edited)
-                            DetailRow(label: "Location", value: formatCoordinates(aircraft.gpsLatitude, aircraft.gpsLongitude))
+                            DetailRow(label: "Location", value: DateFormatting.formatCoordinates(aircraft.gpsLatitude, aircraft.gpsLongitude))
                         }
 
                         Spacer().frame(height: 40)
@@ -1329,25 +1329,6 @@ struct AircraftDetailView: View {
         aircraft.airworthinessDate != nil ||
         aircraft.certificateIssueDate != nil ||
         aircraft.certificateExpireDate != nil
-    }
-
-    // MARK: - Formatting Helpers
-
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
-    }
-
-    private func formatDateTime(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
-
-    private func formatCoordinates(_ lat: Double, _ lon: Double) -> String {
-        String(format: "%.4f, %.4f", lat, lon)
     }
 
     // MARK: - Edit Mode Functions

@@ -1517,8 +1517,25 @@ Comprehensive code review identified 26 issues across security, best practices, 
    - Updated photo save with do-catch and error alert
    - User now sees alert if database save fails instead of silent failure
 
+### Batch 4: Code Deduplication ✅
+
+1. **Consolidated CSV parsing (Airplane_IDApp.swift)**
+   - Removed duplicate `parseCSVLine()` function
+   - Updated to use shared `CSVParser.parseLine()` from SettingsPage.swift
+   - Both airline and ICAO loading now use the shared parser
+
+2. **Consolidated date formatting (Theme.swift)**
+   - Added `DateFormatting` enum with shared utilities:
+     - `formatDate()` - medium date style
+     - `formatDateTime()` - medium date + short time
+     - `formatCoordinates()` - lat/lon formatting
+   - Removed duplicate `formatDate()` from HangarPage.swift
+   - Removed duplicate `formatDate()` from SettingsPage.swift
+   - Removed duplicate `formatDateTime()` from HangarPage.swift
+   - Removed duplicate `formatCoordinates()` from HangarPage.swift
+   - All usages updated to `DateFormatting.formatDate()`, etc.
+
 ### Remaining Batches (Pending)
 
-- **Batch 4:** Code Deduplication
 - **Batch 5:** File Organization
 - **Batch 6:** Polish & Standards
