@@ -340,31 +340,22 @@ struct HangarListItem: View {
     let aircraft: CapturedAircraft
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            // Line 1: [IATA] MANUFACTURER MODEL
+        VStack(alignment: .leading, spacing: 1) {
+            // Line 1: [AIRLINE CODE] MANUFACTURER MODEL
             Text(line1)
-                .font(.custom("Helvetica-Bold", size: 17))
+                .font(.custom("Helvetica-Bold", size: 15))
                 .foregroundStyle(AppColors.darkBlue)
                 .lineLimit(1)
 
-            // Line 2: [CLASSIFICATION] [Type]
+            // Line 2: [REGISTRATION] [Type] (if available)
             if let line2Text = line2 {
                 Text(line2Text)
-                    .font(.custom("Helvetica", size: 14))
+                    .font(.custom("Helvetica", size: 13))
                     .foregroundStyle(AppColors.darkBlue.opacity(0.7))
-                    .lineLimit(1)
-            }
-
-            // Line 3: Registration, City, State, Country
-            if let line3Text = line3 {
-                Text(line3Text)
-                    .font(.custom("Helvetica", size: 12))
-                    .foregroundStyle(AppColors.darkBlue.opacity(0.5))
                     .lineLimit(1)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 4)
     }
 
     // Line 1: [AIRLINE CODE] MANUFACTURER MODEL
@@ -378,32 +369,14 @@ struct HangarListItem: View {
         return parts.joined(separator: " ")
     }
 
-    // Line 2: [CLASSIFICATION] [Type]
+    // Line 2: [REGISTRATION] [Type]
     private var line2: String? {
-        var parts: [String] = []
-        if let classification = AircraftLookup.classificationName(aircraft.aircraftClassification) {
-            parts.append(classification)
-        }
-        if let type = AircraftLookup.typeName(aircraft.aircraftType) {
-            parts.append(type)
-        }
-        return parts.isEmpty ? nil : parts.joined(separator: " ")
-    }
-
-    // Line 3: Registration, City, State, Country
-    private var line3: String? {
         var parts: [String] = []
         if let reg = aircraft.registration, !reg.isEmpty {
             parts.append(reg.uppercased())
         }
-        if let city = aircraft.registeredCity, !city.isEmpty {
-            parts.append(city)
-        }
-        if let state = aircraft.registeredState, !state.isEmpty {
-            parts.append(state)
-        }
-        if let country = aircraft.country, !country.isEmpty {
-            parts.append(country)
+        if let type = AircraftLookup.typeName(aircraft.aircraftType) {
+            parts.append(type)
         }
         return parts.isEmpty ? nil : parts.joined(separator: " ")
     }

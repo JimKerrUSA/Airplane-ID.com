@@ -113,13 +113,13 @@ struct HomePage: View {
         return parts.joined(separator: " ")
     }
 
-    /// Line 2: [CLASSIFICATION] [Type]
-    /// Classification in CAPS, Type in Title Case
+    /// Line 2: [REGISTRATION] [Type]
+    /// Registration in uppercase, Type in Title Case
     /// Returns nil if neither value is available
     func aircraftLine2(_ aircraft: CapturedAircraft) -> String? {
         var parts: [String] = []
-        if let classification = AircraftLookup.classificationName(aircraft.aircraftClassification) {
-            parts.append(classification)
+        if let registration = aircraft.registration, !registration.isEmpty {
+            parts.append(registration.uppercased())
         }
         if let type = AircraftLookup.typeName(aircraft.aircraftType) {
             parts.append(type)
@@ -266,7 +266,7 @@ struct HomePage: View {
                                             Text(aircraftLine1(aircraft))
                                                 .font(.custom("Helvetica-Bold", size: 15))
                                                 .foregroundStyle(AppColors.darkBlue)
-                                            // Line 2: [CLASSIFICATION] [Type] (if available)
+                                            // Line 2: [REGISTRATION] [Type] (if available)
                                             if let line2 = aircraftLine2(aircraft) {
                                                 Text(line2)
                                                     .font(.custom("Helvetica", size: 13))
