@@ -69,26 +69,146 @@ enum AppSpacing {
 }
 
 // MARK: - Date Formatting
-/// Shared date formatting utilities to avoid duplicate DateFormatter creation
+/// Shared date formatting utilities that respect user preferences
+/// Reads settings from AppPreferences via UserDefaults
 enum DateFormatting {
-    /// Format date as medium style (e.g., "Jan 17, 2026")
+    // UserDefaults keys (must match AppPreferences in SettingsPage.swift)
+    private static let timeFormatKey = "appPref_timeFormat"
+    private static let dateFormatKey = "appPref_dateFormat"
+    private static let timeZoneKey = "appPref_timeZone"
+
+    /// Get current time format preference
+    private static var timeFormatPref: String {
+        UserDefaults.standard.string(forKey: timeFormatKey) ?? "system"
+    }
+
+    /// Get current date format preference
+    private static var dateFormatPref: String {
+        UserDefaults.standard.string(forKey: dateFormatKey) ?? "system"
+    }
+
+    /// Get current timezone preference
+    private static var timeZonePref: String {
+        UserDefaults.standard.string(forKey: timeZoneKey) ?? "device"
+    }
+
+    /// Configure formatter with user's timezone preference
+    private static func applyTimeZone(to formatter: DateFormatter) {
+        if timeZonePref == "utc" {
+            formatter.timeZone = TimeZone(identifier: "UTC")
+        } else {
+            formatter.timeZone = TimeZone.current
+        }
+    }
+
+    /// Get date format string based on user preference
+    private static var dateFormatString: String {
+        switch dateFormatPref {
+        case "DMY": return "dd-MM-yyyy"
+        case "MDY": return "MM-dd-yyyy"
+        case "YMD": return "yyyy-MM-dd"
+        default: return "" // System default
+        }
+    }
+
+    /// Get time format string based on user preference
+    private static var timeFormatString: String {
+        switch timeFormatPref {
+        case "12hour": return "h:mm a"
+        case "24hour": return "HH:mm"
+        default: return "" // System default
+        }
+    }
+
+    /// Format date only (e.g., "Jan 17, 2026" or "17-01-2026" based on preference)
     static func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
+        applyTimeZone(to: formatter)
+
+        if dateFormatPref == "system" {
+            formatter.dateStyle = .medium
+        } else {
+            formatter.dateFormat = dateFormatString
+        }
         return formatter.string(from: date)
+    }
+
+    /// Format time only (e.g., "3:45 PM" or "15:45" based on preference)
+    static func formatTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        applyTimeZone(to: formatter)
+
+        if timeFormatPref == "system" {
+            formatter.timeStyle = .short
+        } else {
+            formatter.dateFormat = timeFormatString
+        }
+
+        var result = formatter.string(from: date)
+
+        // Append timezone indicator for UTC
+        if timeZonePref == "utc" {
+            result += " UTC"
+        }
+
+        return result
     }
 
     /// Format date and time (e.g., "Jan 17, 2026 at 3:45 PM")
     static func formatDateTime(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        applyTimeZone(to: formatter)
+
+        // Build format string based on preferences
+        if dateFormatPref == "system" && timeFormatPref == "system" {
+            // Use system styles
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+        } else {
+            // Build custom format
+            var format = ""
+            if dateFormatPref == "system" {
+                // Use medium date style with custom time
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .medium
+                dateFormatter.timeStyle = .none
+                format = dateFormatter.dateFormat ?? "MMM d, yyyy"
+            } else {
+                format = dateFormatString
+            }
+
+            format += " "
+
+            if timeFormatPref == "system" {
+                format += "h:mm a" // Default to 12-hour if only time is system
+            } else {
+                format += timeFormatString
+            }
+
+            formatter.dateFormat = format
+        }
+
+        var result = formatter.string(from: date)
+
+        // Append timezone indicator for UTC
+        if timeZonePref == "utc" {
+            result += " UTC"
+        }
+
+        return result
     }
 
     /// Format coordinates as string (e.g., "37.7749, -122.4194")
     static func formatCoordinates(_ lat: Double, _ lon: Double) -> String {
         String(format: "%.4f, %.4f", lat, lon)
+    }
+
+    /// Format year only (e.g., "2026")
+    static func formatYear(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        applyTimeZone(to: formatter)
+        formatter.dateFormat = "yyyy"
+        return formatter.string(from: date)
     }
 }
 

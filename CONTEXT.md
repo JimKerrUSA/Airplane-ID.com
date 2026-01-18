@@ -2492,3 +2492,30 @@ When changing field types (String? to Int?), must delete app and reinstall to cl
 - `Airplane_IDApp.swift` - Added CountryLookup to schema, country CSV loader
 - `CountryCodes.csv` - New file with country data
 
+### 2026-01-18
+**App Preferences Implementation:**
+- Built complete App Preferences UI in SettingsPage.swift
+  - Time Format: System Default, 12 Hour, 24 Hour
+  - Date Format: System Default, DMY, MDY, YMD
+  - Time Zone: Device, UTC
+  - Default Open Page: Home, Hangar, Maps, Journey, Camera
+- Created preference enums with display names and examples
+- Added AppPreferences class with UserDefaults keys
+- Built PreferencePickerRow reusable component
+
+**DateFormatting Integration:**
+- Updated Theme.swift DateFormatting enum to read from UserDefaults
+- formatDate() now respects date format preference
+- formatTime() now respects time format and timezone preferences
+- formatDateTime() combines both preferences
+- UTC timezone appends " UTC" suffix for clarity
+
+**Default Page Integration:**
+- AppState.init() now reads default page from UserDefaults
+- App opens to user-selected page on launch
+
+### Files Modified
+- `SettingsPage.swift` - AppPreferences class, enums, AppPreferencesView, PreferencePickerRow
+- `Theme.swift` - DateFormatting now reads from UserDefaults preferences
+- `ContentView.swift` - AppState.init() reads default page preference
+

@@ -604,33 +604,181 @@ struct SecurityToggleRow: View {
 }
 
 // MARK: - App Preferences View (Placeholder)
+// MARK: - App Preferences Manager
+/// Stores user preferences using UserDefaults via @AppStorage
+/// Access via AppPreferences.shared or use @AppStorage directly in views
+class AppPreferences {
+    static let shared = AppPreferences()
+
+    // Keys for UserDefaults
+    static let timeFormatKey = "appPref_timeFormat"
+    static let dateFormatKey = "appPref_dateFormat"
+    static let timeZoneKey = "appPref_timeZone"
+    static let defaultPageKey = "appPref_defaultPage"
+
+    private init() {}
+}
+
+// MARK: - Preference Enums
+
+enum TimeFormatPreference: String, CaseIterable {
+    case system = "system"
+    case twelveHour = "12hour"
+    case twentyFourHour = "24hour"
+
+    var displayName: String {
+        switch self {
+        case .system: return "System Default"
+        case .twelveHour: return "12 Hour (AM/PM)"
+        case .twentyFourHour: return "24 Hour"
+        }
+    }
+
+    var example: String {
+        switch self {
+        case .system: return "Uses device setting"
+        case .twelveHour: return "2:30 PM"
+        case .twentyFourHour: return "14:30"
+        }
+    }
+}
+
+enum DateFormatPreference: String, CaseIterable {
+    case system = "system"
+    case dayMonthYear = "DMY"
+    case monthDayYear = "MDY"
+    case yearMonthDay = "YMD"
+
+    var displayName: String {
+        switch self {
+        case .system: return "System Default"
+        case .dayMonthYear: return "Day-Month-Year"
+        case .monthDayYear: return "Month-Day-Year"
+        case .yearMonthDay: return "Year-Month-Day"
+        }
+    }
+
+    var example: String {
+        switch self {
+        case .system: return "Uses device setting"
+        case .dayMonthYear: return "18-01-2026"
+        case .monthDayYear: return "01-18-2026"
+        case .yearMonthDay: return "2026-01-18"
+        }
+    }
+}
+
+enum TimeZonePreference: String, CaseIterable {
+    case device = "device"
+    case utc = "utc"
+
+    var displayName: String {
+        switch self {
+        case .device: return "Device Time Zone"
+        case .utc: return "UTC Time"
+        }
+    }
+
+    var example: String {
+        switch self {
+        case .device: return "Uses local time"
+        case .utc: return "Coordinated Universal Time"
+        }
+    }
+}
+
+enum DefaultPagePreference: String, CaseIterable {
+    case home = "home"
+    case hangar = "hangar"
+    case maps = "maps"
+    case journey = "journey"
+    case camera = "camera"
+
+    var displayName: String {
+        switch self {
+        case .home: return "Home"
+        case .hangar: return "Hangar"
+        case .maps: return "Maps"
+        case .journey: return "Journey"
+        case .camera: return "Camera"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .home: return "house.fill"
+        case .hangar: return "airplane"
+        case .maps: return "map.fill"
+        case .journey: return "trophy.fill"
+        case .camera: return "camera.fill"
+        }
+    }
+}
+
 struct AppPreferencesView: View {
     @Environment(\.dismiss) private var dismiss
+
+    // Preferences stored in UserDefaults
+    @AppStorage(AppPreferences.timeFormatKey) private var timeFormat: String = TimeFormatPreference.system.rawValue
+    @AppStorage(AppPreferences.dateFormatKey) private var dateFormat: String = DateFormatPreference.system.rawValue
+    @AppStorage(AppPreferences.timeZoneKey) private var timeZone: String = TimeZonePreference.device.rawValue
+    @AppStorage(AppPreferences.defaultPageKey) private var defaultPage: String = DefaultPagePreference.home.rawValue
 
     var body: some View {
         NavigationStack {
             ZStack {
                 AppColors.settingsBackground.ignoresSafeArea()
 
-                VStack(spacing: 20) {
-                    Image(systemName: "square.3.layers.3d")
-                        .font(.system(size: 60))
-                        .foregroundStyle(AppColors.linkBlue)
+                ScrollView {
+                    VStack(spacing: 16) {
+                        // Time & Date Section
+                        preferencesSection(title: "Time & Date") {
+                            // Time Format
+                            PreferencePickerRow(
+                                label: "Time Format",
+                                selection: $timeFormat,
+                                options: TimeFormatPreference.allCases.map { ($0.rawValue, $0.displayName, $0.example) }
+                            )
 
-                    Text("App Preferences")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundStyle(.white)
+                            // Date Format
+                            PreferencePickerRow(
+                                label: "Date Format",
+                                selection: $dateFormat,
+                                options: DateFormatPreference.allCases.map { ($0.rawValue, $0.displayName, $0.example) }
+                            )
 
-                    Text("Coming Soon")
-                        .font(.system(size: 16))
-                        .foregroundStyle(.white.opacity(0.6))
+                            // Time Zone
+                            PreferencePickerRow(
+                                label: "Time Zone",
+                                selection: $timeZone,
+                                options: TimeZonePreference.allCases.map { ($0.rawValue, $0.displayName, $0.example) }
+                            )
+                        }
+
+                        // App Behavior Section
+                        preferencesSection(title: "App Behavior") {
+                            // Default Page
+                            PreferencePickerRow(
+                                label: "Default Open Page",
+                                selection: $defaultPage,
+                                options: DefaultPagePreference.allCases.map { ($0.rawValue, $0.displayName, "") }
+                            )
+                        }
+
+                        Spacer().frame(height: 40)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
                 }
             }
             .navigationTitle("App Preferences")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
+                    Button(action: {
+                        Haptics.light()
+                        dismiss()
+                    }) {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
                             Text("Back")
@@ -640,6 +788,71 @@ struct AppPreferencesView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Section Builder
+    @ViewBuilder
+    private func preferencesSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title.uppercased())
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.5))
+                .padding(.leading, 4)
+
+            VStack(spacing: 1) {
+                content()
+            }
+            .background(AppColors.settingsRow)
+            .cornerRadius(10)
+        }
+    }
+}
+
+// MARK: - Preference Picker Row
+/// Generic picker row for preferences with label, current value, and dropdown options
+struct PreferencePickerRow: View {
+    let label: String
+    @Binding var selection: String
+    let options: [(value: String, name: String, example: String)]
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 15))
+                .foregroundStyle(.white)
+            Spacer()
+            Menu {
+                ForEach(options, id: \.value) { option in
+                    Button(action: {
+                        Haptics.selection()
+                        selection = option.value
+                    }) {
+                        HStack {
+                            Text(option.name)
+                            if !option.example.isEmpty {
+                                Text("(\(option.example))")
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+            } label: {
+                HStack(spacing: 4) {
+                    Text(selectedDisplayName)
+                        .font(.system(size: 15))
+                        .foregroundStyle(AppColors.linkBlue)
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 10))
+                        .foregroundStyle(AppColors.linkBlue.opacity(0.7))
+                }
+            }
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+    }
+
+    private var selectedDisplayName: String {
+        options.first(where: { $0.value == selection })?.name ?? "Unknown"
     }
 }
 

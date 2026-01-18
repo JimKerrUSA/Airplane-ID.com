@@ -97,7 +97,22 @@ class AppState {
     var captureMode: String = "camera" // Options: "camera" or "photo.stack"
     var totalAircraftCount: Int = 0 // Updated by HomePage from database
     var totalTypes: Int = 0 // Updated by HomePage from database
-    var currentScreen: NavigationDestination = .home // Track current navigation
+    var currentScreen: NavigationDestination // Track current navigation
+
+    init() {
+        // Read default page preference from UserDefaults
+        let defaultPageKey = "appPref_defaultPage"
+        let savedDefault = UserDefaults.standard.string(forKey: defaultPageKey) ?? "home"
+
+        // Map preference string to NavigationDestination
+        switch savedDefault {
+        case "hangar": currentScreen = .hangar
+        case "maps": currentScreen = .maps
+        case "journey": currentScreen = .journey
+        case "camera": currentScreen = .camera
+        default: currentScreen = .home
+        }
+    }
 
     // Map navigation - set these before navigating to .maps to center on a specific location
     var mapTargetLatitude: Double?
