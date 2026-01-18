@@ -1175,3 +1175,15 @@ The app must handle large datasets efficiently:
    - **New components:** `EditableIntRow`, `LookupDisplayRow`, `ICAOPickerRow`
    - Commit: 4cb0f65
    - **Schema change** - requires app reinstall
+
+9. **Fixed build error from engineType type change:**
+   - SettingsPage.swift test data import was still using String for engineType
+   - Changed tuple type and CSV parsing to use Int? instead of String?
+   - Commit: 91cb0cd
+
+10. **Fixed date/time formatting in edit mode:**
+    - "Date & Time" label was pushed to the left side next to picker (formatting issue)
+    - Restructured to VStack with label on top, DatePicker controls below
+    - Uses `.labelsHidden()` on DatePicker with separate Text label above
+    - Matches layout pattern of other editable fields
+    - Commit: f588732
