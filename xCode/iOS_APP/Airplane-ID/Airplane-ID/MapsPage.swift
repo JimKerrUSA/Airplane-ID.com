@@ -815,6 +815,16 @@ struct MapsPage: View {
         }
         .onAppear {
             locationManager.checkAndRequestAuthorization()
+            // Check if we should navigate to a specific coordinate (from AircraftDetailView)
+            if let targetLat = appState.mapTargetLatitude,
+               let targetLon = appState.mapTargetLongitude {
+                let coordinate = CLLocationCoordinate2D(latitude: targetLat, longitude: targetLon)
+                // Delay slightly to allow map to initialize
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    centerOnCoordinate(coordinate)
+                    appState.clearMapTarget()
+                }
+            }
         }
         .sheet(isPresented: $showingSearchSheet) {
             MapsSearchSheet(

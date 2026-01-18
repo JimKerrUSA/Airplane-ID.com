@@ -99,6 +99,26 @@ class AppState {
     var totalTypes: Int = 0 // Updated by HomePage from database
     var currentScreen: NavigationDestination = .home // Track current navigation
 
+    // Map navigation - set these before navigating to .maps to center on a specific location
+    var mapTargetLatitude: Double?
+    var mapTargetLongitude: Double?
+    var mapTargetAircraftICAO: String? // ICAO code for showing correct aircraft icon
+
+    /// Navigate to Maps page centered on a specific coordinate
+    func navigateToMap(latitude: Double, longitude: Double, aircraftICAO: String? = nil) {
+        mapTargetLatitude = latitude
+        mapTargetLongitude = longitude
+        mapTargetAircraftICAO = aircraftICAO
+        currentScreen = .maps
+    }
+
+    /// Clear map target after navigation
+    func clearMapTarget() {
+        mapTargetLatitude = nil
+        mapTargetLongitude = nil
+        mapTargetAircraftICAO = nil
+    }
+
     /// Display title for the current page shown in header
     /// Add new pages to this dictionary - defaults to enum rawValue uppercased as reminder
     var pageDisplayTitle: String {

@@ -986,11 +986,10 @@ struct AircraftDetailView: View {
                         // Aircraft Specifications Section
                         if hasSpecificationsData || isEditing {
                             detailSection(title: "Aircraft Specifications") {
-                                // Category (Land/Sea/Amphibian) - auto-populated from ICAO
+                                // Category (Land/Sea/Amphibian) - editable
                                 if editAircraftCategoryCode != nil || isEditing {
-                                    LookupDisplayRow(
-                                        label: "Category",
-                                        displayValue: AircraftLookup.categoryName(editAircraftCategoryCode),
+                                    CategoryPickerRow(
+                                        selectedCategory: $editAircraftCategoryCode,
                                         isEditing: isEditing
                                     )
                                 }
@@ -1018,11 +1017,10 @@ struct AircraftDetailView: View {
                                 if editYearMfg != nil || isEditing {
                                     EditableIntRow(label: "Year Manufactured", value: $editYearMfg, isEditing: isEditing, placeholder: "e.g. 1975")
                                 }
-                                // Engine Type - auto-populated from ICAO
+                                // Engine Type - editable
                                 if editEngineType != nil || isEditing {
-                                    LookupDisplayRow(
-                                        label: "Engine Type",
-                                        displayValue: AircraftLookup.engineTypeName(editEngineType),
+                                    EngineTypePickerRow(
+                                        selectedEngineType: $editEngineType,
                                         isEditing: isEditing
                                     )
                                 }
@@ -1078,8 +1076,20 @@ struct AircraftDetailView: View {
                             } else {
                                 DetailRow(label: "Date", value: DateFormatting.formatDateTime(aircraft.captureTime))
                             }
-                            // Location - read-only (GPS data should not be manually edited)
-                            DetailRow(label: "Location", value: DateFormatting.formatCoordinates(aircraft.gpsLatitude, aircraft.gpsLongitude))
+                            // Spotted LOC - original capture location (clickable to view on map)
+                            ClickableCoordinateRow(
+                                label: "Spotted LOC",
+                                latitude: aircraft.gpsLatitude,
+                                longitude: aircraft.gpsLongitude,
+                                aircraftICAO: aircraft.icao
+                            )
+                            // Current LOC - last known position from server (clickable to view on map)
+                            ClickableCoordinateRow(
+                                label: "Current LOC",
+                                latitude: aircraft.gpsLatitudeNow,
+                                longitude: aircraft.gpsLongitudeNow,
+                                aircraftICAO: aircraft.icao
+                            )
                         }
 
                         Spacer().frame(height: 40)
@@ -1811,6 +1821,168 @@ struct ICAOPickerRow: View {
 
     private var displayText: String {
         selectedICAO.isEmpty ? "—" : selectedICAO
+    }
+}
+
+// MARK: - Category Picker Row
+/// Inline picker for aircraft category (Land/Sea/Amphibian)
+struct CategoryPickerRow: View {
+    @Binding var selectedCategory: Int?
+    let isEditing: Bool
+
+    var body: some View {
+        HStack {
+            Text("Category")
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                Menu {
+                    Button("None") {
+                        Haptics.selection()
+                        selectedCategory = nil
+                    }
+                    ForEach(Array(AircraftLookup.categories.keys.sorted()), id: \.self) { code in
+                        Button(AircraftLookup.categories[code] ?? "") {
+                            Haptics.selection()
+                            selectedCategory = code
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(displayText)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(selectedCategory == nil ? .white.opacity(0.3) : .white)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            } else {
+                Text(displayText)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(selectedCategory == nil ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var displayText: String {
+        AircraftLookup.categoryName(selectedCategory) ?? "—"
+    }
+}
+
+// MARK: - Engine Type Picker Row
+/// Inline picker for engine type
+struct EngineTypePickerRow: View {
+    @Binding var selectedEngineType: Int?
+    let isEditing: Bool
+
+    var body: some View {
+        HStack {
+            Text("Engine Type")
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                Menu {
+                    Button("None") {
+                        Haptics.selection()
+                        selectedEngineType = nil
+                    }
+                    ForEach(Array(AircraftLookup.engineTypes.keys.sorted()), id: \.self) { code in
+                        Button(AircraftLookup.engineTypes[code] ?? "") {
+                            Haptics.selection()
+                            selectedEngineType = code
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(displayText)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(selectedEngineType == nil ? .white.opacity(0.3) : .white)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            } else {
+                Text(displayText)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(selectedEngineType == nil ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var displayText: String {
+        AircraftLookup.engineTypeName(selectedEngineType) ?? "—"
+    }
+}
+
+// MARK: - Clickable Coordinate Row
+/// Row that displays coordinates and navigates to Maps when tapped
+struct ClickableCoordinateRow: View {
+    @Environment(AppState.self) private var appState
+    @Environment(\.dismiss) private var dismiss
+
+    let label: String
+    let latitude: Double?
+    let longitude: Double?
+    let aircraftICAO: String?
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if hasValidCoordinate {
+                Button(action: {
+                    Haptics.light()
+                    dismiss() // Close the detail view
+                    appState.navigateToMap(
+                        latitude: latitude!,
+                        longitude: longitude!,
+                        aircraftICAO: aircraftICAO
+                    )
+                }) {
+                    HStack(spacing: 4) {
+                        Text(coordinateText)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(AppColors.linkBlue)
+                        Image(systemName: "map")
+                            .font(.system(size: 12))
+                            .foregroundStyle(AppColors.linkBlue)
+                    }
+                }
+            } else {
+                Text("—")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.3))
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var hasValidCoordinate: Bool {
+        guard let lat = latitude, let lon = longitude else { return false }
+        return lat != 0 || lon != 0
+    }
+
+    private var coordinateText: String {
+        DateFormatting.formatCoordinates(latitude ?? 0, longitude ?? 0)
     }
 }
 
