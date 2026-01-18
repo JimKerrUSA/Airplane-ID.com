@@ -1768,3 +1768,57 @@ appState.currentScreen = .maps
 **Helper function:** `aircraftSearchSecondLine(_:)` in MapsSearchSheet
 - Returns the appropriate second line based on available data
 - Returns nil if no data available for any line
+
+### Custom Aircraft Map Icons (EXPERIMENTAL)
+
+**Status:** Testing - may be removed if icons don't display well at small sizes
+
+**Source SVGs:** `/Volumes/SoftRAID/Dropbox/sites/SkyboundGear.com/SBGMerch/AirplaneArt/Vectorized/Aircraft Vectors ORIGINAL/`
+
+**Assets Location:** `Assets.xcassets/MapIcons/`
+
+| Icon Name | Source SVG | Used For |
+|-----------|-----------|----------|
+| `icon-balloon` | BALL.svg | Balloon, Blimp, Powered Parachute |
+| `icon-single-prop` | C172.svg | Single-engine, Glider, Weight Shift, Default |
+| `icon-twin-prop` | C310.svg | Multi-engine prop (Recip, Turbo-prop) |
+| `icon-helicopter` | R44.svg | Rotorcraft, Gyroplane |
+| `icon-jet` | SF50.svg | Multi-engine jet (Turbo-jet, Turbo-fan), Hybrid Lift |
+
+**Aircraft Type to Icon Mapping** (in `mapIconName` property):
+
+| Aircraft Type Code | Description | Icon |
+|-------------------|-------------|------|
+| "2" | Balloon | icon-balloon |
+| "3" | Blimp/Dirigible | icon-balloon |
+| "8" | Powered Parachute | icon-balloon |
+| "4" | Fixed Wing Single-Engine | icon-single-prop |
+| "1" | Glider | icon-single-prop |
+| "7" | Weight Shift Control | icon-single-prop |
+| "5" + engineType 4/5 | FW Multi-Engine Jet | icon-jet |
+| "5" + other engine | FW Multi-Engine Prop | icon-twin-prop |
+| "6" | Rotorcraft | icon-helicopter |
+| "9" | Gyroplane | icon-helicopter |
+| "H" | Hybrid Lift | icon-jet |
+| "O" or unknown | Other | icon-single-prop |
+
+**Icon Configuration:**
+- Size: 32x32 pixels on map
+- Color: AppColors.orange (template rendering)
+- SVG format with `preserves-vector-representation: true`
+
+**How to Back Out if Needed:**
+1. Delete `Assets.xcassets/MapIcons/` folder
+2. Revert MapsPage.swift annotation back to SF Symbol:
+```swift
+Image(systemName: "airplane")
+    .font(.system(size: 16, weight: .bold))
+    .foregroundStyle(AppColors.orange)
+    .rotationEffect(.degrees(-45))
+```
+3. Remove `mapIconName` property from CapturedAircraft extension
+
+**Future Enhancements (if icons work well):**
+- Add more specific ICAO-matched icons
+- Create simplified silhouette versions if detail is lost at small sizes
+- Add icon for glider with longer wingspan silhouette

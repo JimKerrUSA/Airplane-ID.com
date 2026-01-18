@@ -40,6 +40,45 @@ extension CapturedAircraft {
         }
         return "\(model) \(manufacturer)"
     }
+
+    /// Returns the appropriate map icon name based on aircraft type and engine type
+    /// Icons are in Assets.xcassets/MapIcons/
+    /// - Returns: Asset name for the map icon
+    var mapIconName: String {
+        // Aircraft type codes:
+        // "1" = Glider, "2" = Balloon, "3" = Blimp, "4" = FW Single, "5" = FW Multi
+        // "6" = Rotorcraft, "7" = Weight Shift, "8" = Powered Parachute, "9" = Gyroplane
+        // "H" = Hybrid Lift, "O" = Other
+
+        switch aircraftType {
+        case "2":  // Balloon
+            return "MapIcons/icon-balloon"
+        case "3":  // Blimp - use balloon as closest match
+            return "MapIcons/icon-balloon"
+        case "8":  // Powered Parachute - use balloon (vertical orientation)
+            return "MapIcons/icon-balloon"
+        case "4":  // Fixed Wing Single-Engine
+            return "MapIcons/icon-single-prop"
+        case "1":  // Glider - use single-prop silhouette
+            return "MapIcons/icon-single-prop"
+        case "7":  // Weight Shift Control - use single-prop
+            return "MapIcons/icon-single-prop"
+        case "5":  // Fixed Wing Multi-Engine - check engine type
+            // Engine types: 1=Recip, 2=Turbo-prop, 3=Turbo-shaft, 4=Turbo-jet, 5=Turbo-fan
+            if engineType == 4 || engineType == 5 {
+                return "MapIcons/icon-jet"
+            }
+            return "MapIcons/icon-twin-prop"
+        case "6":  // Rotorcraft
+            return "MapIcons/icon-helicopter"
+        case "9":  // Gyroplane - use helicopter
+            return "MapIcons/icon-helicopter"
+        case "H":  // Hybrid Lift (tiltrotor) - use jet
+            return "MapIcons/icon-jet"
+        default:   // "O" = Other or unknown - use single-prop as default
+            return "MapIcons/icon-single-prop"
+        }
+    }
 }
 
 // MARK: - Recent Search Model
@@ -156,6 +195,9 @@ struct MapsPage: View {
     @State private var isSearching = false
     @State private var searchTask: Task<Void, Never>?
 
+    // Aircraft detail view state
+    @State private var selectedAircraft: CapturedAircraft?
+
     // Query aircraft with valid locations
     @Query private var allAircraft: [CapturedAircraft]
 
@@ -248,6 +290,9 @@ struct MapsPage: View {
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
+        .fullScreenCover(item: $selectedAircraft) { aircraft in
+            AircraftDetailView(aircraft: aircraft)
+        }
     }
 
     // MARK: - Map View
@@ -257,16 +302,20 @@ struct MapsPage: View {
             // User location (blue dot)
             UserAnnotation()
 
-            // Aircraft markers
+            // Aircraft markers (tappable) - using custom SVG icons based on aircraft type
             ForEach(aircraftWithLocation) { aircraft in
                 Annotation(
                     aircraft.mapDisplayLabel,
                     coordinate: aircraft.displayCoordinate
                 ) {
-                    Image(systemName: "airplane")
-                        .font(.system(size: 16, weight: .bold))
+                    Image(aircraft.mapIconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 32, height: 32)
                         .foregroundStyle(AppColors.orange)
-                        .rotationEffect(.degrees(-45))
+                        .onTapGesture {
+                            selectedAircraft = aircraft
+                        }
                 }
             }
         }
