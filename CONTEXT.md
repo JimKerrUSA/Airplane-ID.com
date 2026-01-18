@@ -1316,3 +1316,11 @@ var iPhotoReference: String
 
 3. **Missing import fix:**
    - Added `import Combine` to PhotoServices.swift for ObservableObject support
+
+4. **Album organization feature (commit 68716b8):**
+   - Created "Airplane-ID" album in Photos library
+   - Photos automatically added to album when selected
+   - Album uses references (no photo duplication)
+   - "Open in Photos" button renamed to "View in Photos"
+   - Shows alert: "Locate the original image in the Photos album named Airplane-ID"
+   - iOS doesn't support deep-linking to specific albums, but clear messaging helps users find photos
