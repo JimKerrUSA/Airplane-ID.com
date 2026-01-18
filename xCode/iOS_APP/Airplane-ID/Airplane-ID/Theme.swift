@@ -9,6 +9,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 // MARK: - App Colors
 /// All color constants used throughout the app
@@ -171,5 +172,127 @@ enum AircraftLookup {
     static func engineTypeName(_ code: Int?) -> String? {
         guard let code = code else { return nil }
         return engineTypes[code]
+    }
+}
+
+// MARK: - Haptic Feedback Manager
+/// Centralized haptic feedback for tactile user experience
+/// Usage: Haptics.play(.navigation) or Haptics.navigation()
+enum Haptics {
+
+    // MARK: - Feedback Types
+
+    /// Pre-defined haptic feedback types for consistent UX
+    enum FeedbackType {
+        /// Major navigation buttons (Home, Maps, Camera, Hangar, Settings, Journey)
+        /// Feel: Firm, satisfying tap
+        case navigation
+
+        /// Opening sheets, modals, detail views
+        /// Feel: Light, subtle acknowledgment
+        case light
+
+        /// Toggles, switches, picker changes
+        /// Feel: Crisp selection click
+        case selection
+
+        /// Successfully completed action (capture, save, sync)
+        /// Feel: Positive double-tap pattern
+        case success
+
+        /// Warning or attention needed
+        /// Feel: Attention-getting buzz
+        case warning
+
+        /// Error or failed action
+        /// Feel: Sharp negative feedback
+        case error
+
+        /// Camera shutter / capture moment
+        /// Feel: Satisfying medium impact
+        case capture
+
+        /// Soft feedback for less important interactions
+        /// Feel: Very subtle
+        case soft
+    }
+
+    // MARK: - Feedback Generators (lazy initialized)
+
+    private static let lightImpact = UIImpactFeedbackGenerator(style: .light)
+    private static let mediumImpact = UIImpactFeedbackGenerator(style: .medium)
+    private static let heavyImpact = UIImpactFeedbackGenerator(style: .heavy)
+    private static let softImpact = UIImpactFeedbackGenerator(style: .soft)
+    private static let rigidImpact = UIImpactFeedbackGenerator(style: .rigid)
+    private static let selectionFeedback = UISelectionFeedbackGenerator()
+    private static let notificationFeedback = UINotificationFeedbackGenerator()
+
+    // MARK: - Main Play Function
+
+    /// Play haptic feedback for the given type
+    static func play(_ type: FeedbackType) {
+        switch type {
+        case .navigation:
+            mediumImpact.impactOccurred()
+        case .light:
+            lightImpact.impactOccurred()
+        case .selection:
+            selectionFeedback.selectionChanged()
+        case .success:
+            notificationFeedback.notificationOccurred(.success)
+        case .warning:
+            notificationFeedback.notificationOccurred(.warning)
+        case .error:
+            notificationFeedback.notificationOccurred(.error)
+        case .capture:
+            mediumImpact.impactOccurred()
+        case .soft:
+            softImpact.impactOccurred()
+        }
+    }
+
+    // MARK: - Convenience Functions
+
+    /// Major navigation buttons (Home, Maps, Camera, Hangar, Settings, Journey)
+    static func navigation() { play(.navigation) }
+
+    /// Opening sheets, modals, detail views
+    static func light() { play(.light) }
+
+    /// Toggles, switches, picker changes
+    static func selection() { play(.selection) }
+
+    /// Successfully completed action
+    static func success() { play(.success) }
+
+    /// Warning or attention needed
+    static func warning() { play(.warning) }
+
+    /// Error or failed action
+    static func error() { play(.error) }
+
+    /// Camera shutter / capture moment
+    static func capture() { play(.capture) }
+
+    /// Soft feedback for subtle interactions
+    static func soft() { play(.soft) }
+
+    // MARK: - Prepare Generators (optional optimization)
+
+    /// Call this to pre-warm haptic generators for immediate response
+    /// Useful before time-critical interactions like camera capture
+    static func prepare(_ type: FeedbackType) {
+        switch type {
+        case .navigation, .capture:
+            mediumImpact.prepare()
+        case .light:
+            lightImpact.prepare()
+        case .selection:
+            selectionFeedback.prepare()
+        case .success, .warning, .error:
+            notificationFeedback.prepare()
+        case .soft:
+            softImpact.prepare()
+        }
     }
 }

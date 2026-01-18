@@ -211,7 +211,10 @@ struct HangarPage: View {
                     // Filter bar
                     HStack {
                         // Filter button
-                        Button(action: { showingFilterSheet = true }) {
+                        Button(action: {
+                            Haptics.light()
+                            showingFilterSheet = true
+                        }) {
                             Text("FILTER")
                                 .font(.custom("Helvetica-Bold", size: 14))
                                 .foregroundStyle(.white)
@@ -232,7 +235,10 @@ struct HangarPage: View {
 
                         // Clear filters button (only visible when filters active)
                         if filterState.hasActiveFilters {
-                            Button(action: { filterState.clearAll() }) {
+                            Button(action: {
+                                Haptics.light()
+                                filterState.clearAll()
+                            }) {
                                 Text("CLEAR")
                                     .font(.custom("Helvetica-Bold", size: 14))
                                     .foregroundStyle(.white)
@@ -284,6 +290,7 @@ struct HangarPage: View {
                                                     .padding(.vertical, 6)
                                                     .contentShape(Rectangle())
                                                     .onTapGesture {
+                                                        Haptics.light()
                                                         selectedAircraft = aircraft
                                                     }
                                             }

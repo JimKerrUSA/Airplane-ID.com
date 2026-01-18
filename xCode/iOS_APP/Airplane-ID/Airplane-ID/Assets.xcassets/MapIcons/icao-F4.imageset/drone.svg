@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2026 Passion Highway, Inc.. All Rights Reserved.
+
+  This image is digitally signed and the hash recorded.
+  Unauthorized reproduction, distribution, or use of this
+  image is strictly prohibited and constitutes copyright
+  infringement under 17 U.S.C. Section 106.
+
+  Violators may be subject to civil liability including
+  statutory damages up to $150,000 per work (17 U.S.C. Section 504)
+  and criminal prosecution with fines and imprisonment
+  (17 U.S.C. Section 506).
+
+  Contact: jim@passionhighway.com
+  Asset ID: PHI-AID-DRONE-4947d1f7
+  Hash: e3b0c44298fc1c14
+-->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <metadata>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:dc="http://purl.org/dc/elements/1.1/"
+             xmlns:cc="http://creativecommons.org/ns#">
+      <rdf:Description>
+        <dc:title>drone Aircraft Silhouette</dc:title>
+        <dc:creator>Passion Highway, Inc.</dc:creator>
+        <dc:rights>Copyright (c) 2026 Passion Highway, Inc.. All Rights Reserved. Unauthorized use prohibited under 17 U.S.C. 106, 504, 506.</dc:rights>
+        <dc:publisher>Passion Highway, Inc.</dc:publisher>
+        <dc:identifier>PHI-AID-DRONE-4947d1f7</dc:identifier>
+        <dc:source>Airplane-ID.com</dc:source>
+        <cc:license rdf:resource="https://airplane-id.com/terms"/>
+      </rdf:Description>
+    </rdf:RDF>
+  </metadata>
+
+
   <!-- Quadcopter drone silhouette - DJI Phantom style -->
   <!-- 4 arms with propellers, central body -->
 

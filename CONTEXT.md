@@ -40,10 +40,11 @@ Purpose: iOS app for identifying and tracking aircraft sightings
   - **LandscapeRightTemplate** - Landscape with footer on RIGHT edge
   - OrientationAwarePage - Wrapper that switches templates based on geometry
 - `Item.swift` - Contains CapturedAircraft SwiftData model with UUID index
-- `Theme.swift` - **NEW** Centralized colors, fonts, spacing, and utilities
+- `Theme.swift` - Centralized colors, fonts, spacing, haptics, and utilities
   - AppColors - All app color constants
   - AppFonts - Typography helpers
   - AppSpacing - Layout spacing constants
+  - Haptics - Tactile feedback manager (see below)
   - Color(hex:) extension, RoundedCorner shape, TextShadow modifier
 
 ### Page Files (each with #Preview for Portrait, Landscape Left, Landscape Right)
@@ -1590,6 +1591,94 @@ All 6 batches implemented and tested:
 
 ### 2026-01-18
 
+## SVG to SwiftUI IP Protection - ROLLED BACK
+
+Attempted to convert SVG icons to compiled SwiftUI Shape code, but the shapes rendered incorrectly (smashed/malformed) due to the complexity of the original SVG paths.
+
+**What Was Tried:**
+- Created Python converter (`scripts/svg_to_swiftui.py`) for SVG → SwiftUI Path
+- Generated `AircraftShapes.swift` with 71 shapes
+- Updated map annotations to use Shape instead of Image
+
+**Why It Failed:**
+- SVG paths were too complex for simple conversion
+- Many paths used arc commands and complex curves
+- Resulting shapes didn't preserve the visual fidelity
+
+**Resolution:**
+- Rolled back all changes
+- SVG assets remain in `Assets.xcassets/MapIcons/` (original approach)
+- Map icons continue to use `Image(iconName)` for rendering
+
+---
+
+## SVG Copyright Protection - IMPLEMENTED
+
+Added embedded copyright metadata and legal warnings to all 71 SVG files.
+
+**Implementation:**
+- Created `scripts/add_copyright.py` - Adds copyright to SVG files
+- All 71 MapIcons SVGs now contain:
+  - XML copyright comment with legal warnings
+  - RDF/Dublin Core metadata
+  - Unique Asset ID (e.g., `PHI-AID-C172-a853bd28`)
+  - Content hash for tracking
+
+**Legal References Cited:**
+- 17 U.S.C. § 106 - Exclusive rights of copyright owner
+- 17 U.S.C. § 504 - Statutory damages up to $150,000 per work
+- 17 U.S.C. § 506 - Criminal penalties for willful infringement
+
+**Copyright Owner:** Passion Highway, Inc. (jim@passionhighway.com)
+
+**To add copyright to new SVGs:**
+```bash
+python3 scripts/add_copyright.py <svg_file_or_directory>
+```
+
+---
+
+## Haptic Feedback - IMPLEMENTED
+
+Added tactile haptic feedback throughout the app for a premium, responsive feel.
+
+**Implementation:** `Haptics` enum in Theme.swift
+
+**Usage:**
+```swift
+Haptics.navigation()  // Major nav buttons (Home, Maps, Camera, Hangar, Settings, Journey)
+Haptics.light()       // Opening sheets, modals, list item taps
+Haptics.selection()   // Toggles, pickers, search result selection
+Haptics.success()     // Completed actions (capture, save)
+Haptics.warning()     // Attention needed
+Haptics.error()       // Failed actions
+Haptics.capture()     // Camera shutter
+Haptics.soft()        // Very subtle interactions
+```
+
+**Feedback Types:**
+| Type | UIKit Generator | Feel |
+|------|----------------|------|
+| navigation | Medium Impact | Firm, satisfying tap |
+| light | Light Impact | Subtle acknowledgment |
+| selection | Selection Changed | Crisp click |
+| success | Notification Success | Positive double-tap |
+| warning | Notification Warning | Attention-getting |
+| error | Notification Error | Sharp negative |
+| capture | Medium Impact | Shutter feel |
+| soft | Soft Impact | Very subtle |
+
+**Where Haptics Are Used:**
+- Footer navigation buttons (Home, Maps, Camera, Hangar, Settings)
+- Header person icon (Journey)
+- Map search/location buttons
+- Map annotation taps
+- Hangar list item taps
+- Filter button taps
+- Search result selection
+
+---
+
 ## MapsPage Implementation - COMPLETED
 
 Full Apple Maps integration with aircraft location display and search capabilities.
@@ -1769,13 +1858,79 @@ appState.currentScreen = .maps
 - Returns the appropriate second line based on available data
 - Returns nil if no data available for any line
 
-### Custom Aircraft Map Icons (EXPERIMENTAL)
+### Custom Aircraft Map Icons
 
-**Status:** Testing - may be removed if icons don't display well at small sizes
+**Status:** Production - Using SVG assets in Assets.xcassets
 
 **Source SVGs:** `/Volumes/SoftRAID/Dropbox/sites/SkyboundGear.com/SBGMerch/AirplaneArt/Vectorized/Aircraft Vectors ORIGINAL/`
 
-**Assets Location:** `Assets.xcassets/MapIcons/`
+**Assets Location:** `Assets.xcassets/MapIcons/` (71 imagesets)
+
+---
+
+### SVG Copyright Protection
+
+All SVG artwork is protected with embedded copyright metadata and unique tracking identifiers.
+
+**Copyright Owner:** Passion Highway, Inc.
+**Contact:** jim@passionhighway.com
+**Asset ID Prefix:** PHI-AID (Passion Highway Inc - Airplane ID)
+
+**Standard Copyright Notice (embedded in all SVGs):**
+```
+Copyright (c) 2026 Passion Highway, Inc. All Rights Reserved.
+
+This image is digitally signed and the hash recorded.
+Unauthorized reproduction, distribution, or use of this
+image is strictly prohibited and constitutes copyright
+infringement under 17 U.S.C. Section 106.
+
+Violators may be subject to civil liability including
+statutory damages up to $150,000 per work (17 U.S.C. Section 504)
+and criminal prosecution with fines and imprisonment
+(17 U.S.C. Section 506).
+
+Contact: jim@passionhighway.com
+Asset ID: PHI-AID-[NAME]-[HASH]
+Hash: [content hash]
+```
+
+**Legal References:**
+- 17 U.S.C. § 106 - Exclusive rights (reproduction, distribution, display)
+- 17 U.S.C. § 504 - Statutory damages up to $150,000 per work
+- 17 U.S.C. § 506 - Criminal penalties for willful infringement
+
+**How to Add Copyright to New SVG Files:**
+```bash
+cd /Users/jkerr/dev/projects/Airplane-ID.com/xCode/iOS_APP/Airplane-ID
+python3 scripts/add_copyright.py <svg_file_or_directory>
+```
+
+**Examples:**
+```bash
+# Single file
+python3 scripts/add_copyright.py Airplane-ID/Assets.xcassets/MapIcons/icao-NEW.imageset/NEW.svg
+
+# All files in directory
+python3 scripts/add_copyright.py Airplane-ID/Assets.xcassets/MapIcons/
+```
+
+**What the Script Does:**
+1. Adds XML declaration and copyright comment at top of file
+2. Embeds RDF/Dublin Core metadata with rights information
+3. Generates unique Asset ID: `PHI-AID-[NAME]-[8-char hash]`
+4. Generates content hash from SVG path data (fingerprint)
+5. Skips files that already have copyright (idempotent)
+
+**Metadata Elements Added:**
+- `dc:title` - Descriptive title from filename
+- `dc:creator` - Passion Highway, Inc.
+- `dc:rights` - Full copyright statement with legal references
+- `dc:identifier` - Unique asset ID for tracking
+- `dc:source` - Airplane-ID.com
+- `cc:license` - Link to terms of use
+
+---
 
 | Icon Name | Source SVG | Used For |
 |-----------|-----------|----------|
@@ -1807,15 +1962,15 @@ appState.currentScreen = .maps
 - Color: AppColors.orange (template rendering)
 - SVG format with `preserves-vector-representation: true`
 
-**How to Back Out if Needed:**
-1. Delete `Assets.xcassets/MapIcons/` folder
-2. Revert MapsPage.swift annotation back to SF Symbol:
+**How to Back Out to SF Symbols (if custom icons cause issues):**
+1. In MapsPage.swift, change `Image(iconName)` to SF Symbol:
 ```swift
 Image(systemName: "airplane")
     .font(.system(size: 16, weight: .bold))
     .foregroundStyle(AppColors.orange)
     .rotationEffect(.degrees(-45))
 ```
+2. Remove `Assets.xcassets/MapIcons/` folder
 3. Remove `mapIconName` property from CapturedAircraft extension
 
 ### ICAO-Specific Icons with Prefix Interpolation

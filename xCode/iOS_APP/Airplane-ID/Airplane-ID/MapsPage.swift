@@ -771,7 +771,10 @@ struct MapsPage: View {
                         Spacer()
                         VStack(spacing: 12) {
                             // Return to location button
-                            Button(action: centerOnUserLocation) {
+                            Button(action: {
+                                Haptics.light()
+                                centerOnUserLocation()
+                            }) {
                                 Image(systemName: "location.fill")
                                     .font(.system(size: 18, weight: .semibold))
                                     .foregroundStyle(AppColors.primaryBlue)
@@ -782,7 +785,10 @@ struct MapsPage: View {
                             }
 
                             // Search button
-                            Button(action: { showingSearchSheet = true }) {
+                            Button(action: {
+                                Haptics.light()
+                                showingSearchSheet = true
+                            }) {
                                 Image(systemName: "magnifyingglass")
                                     .font(.system(size: 18, weight: .semibold))
                                     .foregroundStyle(.white)
@@ -840,14 +846,20 @@ struct MapsPage: View {
                         // Multiple aircraft - show cluster annotation
                         ClusterAnnotation(
                             cluster: cluster,
-                            onTap: { handleClusterTap(cluster) }
+                            onTap: {
+                                Haptics.light()
+                                handleClusterTap(cluster)
+                            }
                         )
                     } else if let aircraft = cluster.singleAircraft {
                         // Single aircraft - show individual annotation
                         AircraftMapAnnotation(
                             aircraft: aircraft,
                             showLabel: shouldShowLabels,
-                            onTap: { selectedAircraft = aircraft }
+                            onTap: {
+                                Haptics.light()
+                                selectedAircraft = aircraft
+                            }
                         )
                     }
                 }
@@ -938,6 +950,7 @@ struct MapsPage: View {
     }
 
     private func handleLocationSelected(_ mapItem: MKMapItem) {
+        Haptics.selection()
         let displayName = mapItem.name ?? searchState.searchText
         searchState.addRecentSearch(displayName, type: .location)
         centerOnCoordinate(mapItem.location.coordinate)
@@ -945,6 +958,7 @@ struct MapsPage: View {
     }
 
     private func handleAircraftSelected(_ aircraft: CapturedAircraft) {
+        Haptics.selection()
         searchState.addRecentSearch(aircraft.mapDisplayLabel, type: .aircraft)
         centerOnCoordinate(aircraft.displayCoordinate)
         showingSearchSheet = false

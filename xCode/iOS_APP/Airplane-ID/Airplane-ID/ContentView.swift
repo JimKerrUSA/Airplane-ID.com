@@ -150,6 +150,7 @@ struct TopMenuView: View {
                         .foregroundStyle(.white)
                 }
                 .onTapGesture {
+                    Haptics.navigation()
                     appState.currentScreen = .journey
                 }
                 .padding(.leading, 16)
@@ -216,6 +217,7 @@ struct BottomMenuView: View {
                                 .foregroundStyle(AppColors.white)
                         }
                         .onTapGesture {
+                            Haptics.navigation()
                             appState.currentScreen = .home
                         }
 
@@ -232,6 +234,7 @@ struct BottomMenuView: View {
                                 .foregroundStyle(AppColors.white)
                         }
                         .onTapGesture {
+                            Haptics.navigation()
                             appState.currentScreen = .hangar
                         }
 
@@ -256,6 +259,7 @@ struct BottomMenuView: View {
                     }
                     .frame(width: cameraSize)
                     .onTapGesture {
+                        Haptics.navigation()
                         appState.currentScreen = .camera
                     }
 
@@ -274,6 +278,7 @@ struct BottomMenuView: View {
                                 .foregroundStyle(AppColors.white)
                         }
                         .onTapGesture {
+                            Haptics.navigation()
                             appState.currentScreen = .maps
                         }
 
@@ -290,6 +295,7 @@ struct BottomMenuView: View {
                                 .foregroundStyle(AppColors.white)
                         }
                         .onTapGesture {
+                            Haptics.navigation()
                             appState.currentScreen = .settings
                         }
 
@@ -331,6 +337,7 @@ struct TopMenuViewLandscape: View {
                         .foregroundStyle(.white)
                 }
                 .onTapGesture {
+                    Haptics.navigation()
                     appState.currentScreen = .journey
                 }
                 .padding(.leading, 16)
@@ -389,6 +396,7 @@ struct BottomMenuViewLandscape: View {
                             .foregroundStyle(AppColors.white)
                     }
                     .onTapGesture {
+                        Haptics.navigation()
                         appState.currentScreen = .home
                     }
 
@@ -405,6 +413,7 @@ struct BottomMenuViewLandscape: View {
                             .foregroundStyle(AppColors.white)
                     }
                     .onTapGesture {
+                        Haptics.navigation()
                         appState.currentScreen = .maps
                     }
 
@@ -429,6 +438,7 @@ struct BottomMenuViewLandscape: View {
                 }
                 .frame(width: 100, height: 100)
                 .onTapGesture {
+                    Haptics.navigation()
                     appState.currentScreen = .camera
                 }
 
@@ -447,6 +457,7 @@ struct BottomMenuViewLandscape: View {
                             .foregroundStyle(AppColors.white)
                     }
                     .onTapGesture {
+                        Haptics.navigation()
                         appState.currentScreen = .hangar
                     }
 
@@ -463,6 +474,7 @@ struct BottomMenuViewLandscape: View {
                             .foregroundStyle(AppColors.white)
                     }
                     .onTapGesture {
+                        Haptics.navigation()
                         appState.currentScreen = .settings
                     }
 
