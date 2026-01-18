@@ -89,15 +89,95 @@ class PhotoLibraryManager: ObservableObject {
         }
     }
 
-    /// Open photo in Photos app
-    func openInPhotos(localIdentifier: String) {
-        guard fetchAsset(localIdentifier: localIdentifier) != nil else { return }
-
-        // Use the photos-redirect URL scheme to open specific asset
-        // This requires fetching the asset's URL which isn't directly available,
-        // so we'll open the Photos app generally
+    /// Open Photos app
+    func openPhotosApp() {
         if let url = URL(string: "photos-redirect://") {
             UIApplication.shared.open(url)
+        }
+    }
+
+    // MARK: - Album Management
+
+    static let albumName = "Airplane-ID"
+
+    /// Fetch our app's album if it exists
+    func fetchAppAlbum() -> PHAssetCollection? {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.predicate = NSPredicate(format: "title = %@", Self.albumName)
+        let collections = PHAssetCollection.fetchAssetCollections(
+            with: .album,
+            subtype: .any,
+            options: fetchOptions
+        )
+        return collections.firstObject
+    }
+
+    /// Create the Airplane-ID album
+    func createAppAlbum() async -> PHAssetCollection? {
+        // Check if it already exists
+        if let existing = fetchAppAlbum() {
+            return existing
+        }
+
+        var placeholder: PHObjectPlaceholder?
+
+        do {
+            try await PHPhotoLibrary.shared().performChanges {
+                let request = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: Self.albumName)
+                placeholder = request.placeholderForCreatedAssetCollection
+            }
+
+            guard let placeholder = placeholder else { return nil }
+
+            let fetchResult = PHAssetCollection.fetchAssetCollections(
+                withLocalIdentifiers: [placeholder.localIdentifier],
+                options: nil
+            )
+            return fetchResult.firstObject
+        } catch {
+            print("Error creating album: \(error)")
+            return nil
+        }
+    }
+
+    /// Get or create the Airplane-ID album
+    func getOrCreateAppAlbum() async -> PHAssetCollection? {
+        if let existing = fetchAppAlbum() {
+            return existing
+        }
+        return await createAppAlbum()
+    }
+
+    /// Add a photo to the Airplane-ID album
+    func addPhotoToAppAlbum(localIdentifier: String) async -> Bool {
+        guard let asset = fetchAsset(localIdentifier: localIdentifier) else {
+            print("Asset not found: \(localIdentifier)")
+            return false
+        }
+
+        guard let album = await getOrCreateAppAlbum() else {
+            print("Could not get or create album")
+            return false
+        }
+
+        // Check if photo is already in album
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.predicate = NSPredicate(format: "localIdentifier = %@", localIdentifier)
+        let existingAssets = PHAsset.fetchAssets(in: album, options: fetchOptions)
+        if existingAssets.count > 0 {
+            // Already in album
+            return true
+        }
+
+        do {
+            try await PHPhotoLibrary.shared().performChanges {
+                guard let addRequest = PHAssetCollectionChangeRequest(for: album) else { return }
+                addRequest.addAssets([asset] as NSFastEnumeration)
+            }
+            return true
+        } catch {
+            print("Error adding photo to album: \(error)")
+            return false
         }
     }
 
@@ -276,6 +356,7 @@ struct FullScreenPhotoViewer: View {
     @State private var lastScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
     @State private var lastOffset: CGSize = .zero
+    @State private var showingOpenInPhotosAlert = false
 
     private let minScale: CGFloat = 1.0
     private let maxScale: CGFloat = 5.0
@@ -377,10 +458,10 @@ struct FullScreenPhotoViewer: View {
 
                         Spacer()
 
-                        Button(action: { PhotoLibraryManager.shared.openInPhotos(localIdentifier: localIdentifier) }) {
+                        Button(action: { showingOpenInPhotosAlert = true }) {
                             HStack(spacing: 6) {
                                 Image(systemName: "photo.on.rectangle")
-                                Text("Open in Photos")
+                                Text("View in Photos")
                             }
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.white)
@@ -408,6 +489,14 @@ struct FullScreenPhotoViewer: View {
                     }
                 }
         )
+        .alert("View in Photos", isPresented: $showingOpenInPhotosAlert) {
+            Button("Open Photos") {
+                PhotoLibraryManager.shared.openPhotosApp()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Locate the original image in the Photos album named \"\(PhotoLibraryManager.albumName)\"")
+        }
     }
 
     private func loadFullSizeImage() async {

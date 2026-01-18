@@ -1391,13 +1391,18 @@ struct AircraftDetailView: View {
         }
     }
 
-    /// Save photo to aircraft model
+    /// Save photo to aircraft model and add to Airplane-ID album
     private func savePhoto(image: UIImage, identifier: String) {
         // Generate thumbnail
         if let thumbnailData = ThumbnailGenerator.generateThumbnail(from: image) {
             aircraft.thumbnailData = thumbnailData
             aircraft.iPhotoReference = identifier
             try? modelContext.save()
+
+            // Add photo to Airplane-ID album in background
+            Task {
+                _ = await PhotoLibraryManager.shared.addPhotoToAppAlbum(localIdentifier: identifier)
+            }
         }
     }
 
