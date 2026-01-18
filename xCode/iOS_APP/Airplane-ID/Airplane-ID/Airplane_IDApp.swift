@@ -25,6 +25,8 @@ struct MainView: View {
                 MapsPage()
             case .camera:
                 CameraPage()
+            case .upload:
+                UploadPage()
             case .hangar:
                 HangarPage()
             case .settings:
@@ -236,6 +238,33 @@ struct Airplane_IDApp: App {
                    photoManager.authorizationStatus == .restricted {
                     PhotoPermissionView()
                         .transition(.opacity)
+                }
+
+                // Capture mode change toast overlay
+                if appState.showCaptureModeToast {
+                    VStack {
+                        Spacer()
+
+                        HStack(spacing: 12) {
+                            Image(systemName: appState.captureModeIcon)
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundStyle(.white)
+
+                            Text(appState.captureToastMessage)
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(.white)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 14)
+                        .background(
+                            Capsule()
+                                .fill(AppColors.darkBlue.opacity(0.95))
+                                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
+                        )
+                        .padding(.bottom, 120) // Above the footer
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .animation(.spring(duration: 0.3), value: appState.showCaptureModeToast)
                 }
             }
             .task {

@@ -14,6 +14,7 @@ enum NavigationDestination: String, CaseIterable {
     case home = "Home"
     case maps = "Maps"
     case camera = "Camera"
+    case upload = "Upload"
     case hangar = "Hangar"
     case settings = "Settings"
     case journey = "Journey"
@@ -44,6 +45,9 @@ struct AppConfig {
     static let eulaURL = "https://airplane-id.com/eula.html"
     static let supportURL = "https://airplane-id.com/support.html"
     static let websiteURL = "https://airplane-id.com"
+
+    /// UserDefaults key for capture mode preference
+    static let captureModeKey = "appPref_captureMode"
 
     /// Developer tools are automatically enabled in DEBUG builds only.
     /// In Release builds (App Store), this is always false.
@@ -117,15 +121,23 @@ extension EnvironmentValues {
 class AppState {
     var status: String = "NEWBIE" // Updated by HomePage based on aircraft count
     var search: String = ""
-    var captureMode: String = "camera" // Options: "camera" or "photo.stack"
+    var captureMode: String // "camera" or "upload" - persisted to UserDefaults
     var totalAircraftCount: Int = 0 // Updated by HomePage from database
     var totalTypes: Int = 0 // Updated by HomePage from database
     var currentScreen: NavigationDestination // Track current navigation
+
+    // Toast message for mode change feedback
+    var showCaptureModeToast: Bool = false
+    var captureToastMessage: String = ""
 
     init() {
         // Read default page preference from UserDefaults
         let defaultPageKey = "appPref_defaultPage"
         let savedDefault = UserDefaults.standard.string(forKey: defaultPageKey) ?? "home"
+
+        // Read capture mode preference from UserDefaults
+        let savedCaptureMode = UserDefaults.standard.string(forKey: AppConfig.captureModeKey) ?? "camera"
+        self.captureMode = savedCaptureMode
 
         // Map preference string to NavigationDestination
         switch savedDefault {
@@ -135,6 +147,43 @@ class AppState {
         case "camera": currentScreen = .camera
         default: currentScreen = .home
         }
+    }
+
+    /// The SF Symbol name for the current capture mode
+    var captureModeIcon: String {
+        captureMode == "upload" ? "photo.badge.plus" : "camera"
+    }
+
+    /// The navigation destination for the current capture mode
+    var captureModeDestination: NavigationDestination {
+        captureMode == "upload" ? .upload : .camera
+    }
+
+    /// Toggle between camera and upload mode, persist to UserDefaults
+    func toggleCaptureMode() {
+        if captureMode == "camera" {
+            captureMode = "upload"
+            captureToastMessage = "Switched to Upload Mode"
+        } else {
+            captureMode = "camera"
+            captureToastMessage = "Switched to Camera Mode"
+        }
+        // Persist to UserDefaults
+        UserDefaults.standard.set(captureMode, forKey: AppConfig.captureModeKey)
+
+        // Show toast
+        showCaptureModeToast = true
+
+        // Hide toast after delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.showCaptureModeToast = false
+        }
+    }
+
+    /// Set capture mode explicitly (used by preferences)
+    func setCaptureMode(_ mode: String) {
+        captureMode = mode
+        UserDefaults.standard.set(mode, forKey: AppConfig.captureModeKey)
     }
 
     // Map navigation - set these before navigating to .maps to center on a specific location
@@ -300,7 +349,7 @@ struct BottomMenuView: View {
                     }
                     .frame(width: sideWidth)
 
-                    // Center camera button
+                    // Center capture button (Camera or Upload based on mode)
                     ZStack {
                         Circle()
                             .fill(AppColors.white)
@@ -310,15 +359,20 @@ struct BottomMenuView: View {
                                     .stroke(AppColors.darkGray, lineWidth: 4)
                             )
 
-                        // Capture mode icon
-                        Image(systemName: appState.captureMode)
+                        // Capture mode icon (dynamic based on preference)
+                        Image(systemName: appState.captureModeIcon)
                             .font(.system(size: 24, weight: .regular))
                             .foregroundStyle(AppColors.mediumGray)
                     }
                     .frame(width: cameraSize)
                     .onTapGesture {
                         Haptics.navigation()
-                        appState.currentScreen = .camera
+                        appState.currentScreen = appState.captureModeDestination
+                    }
+                    .onLongPressGesture(minimumDuration: 0.5) {
+                        // Strong haptic feedback for mode change
+                        Haptics.success()
+                        appState.toggleCaptureMode()
                     }
 
                     // Right side icons
@@ -479,7 +533,7 @@ struct BottomMenuViewLandscape: View {
                 }
                 .frame(height: 142.5)
 
-                // Center camera button
+                // Center capture button (Camera or Upload based on mode)
                 ZStack {
                     Circle()
                         .fill(AppColors.white)
@@ -489,15 +543,20 @@ struct BottomMenuViewLandscape: View {
                                 .stroke(AppColors.darkGray, lineWidth: 5)
                         )
 
-                    // Capture mode icon
-                    Image(systemName: appState.captureMode)
+                    // Capture mode icon (dynamic based on preference)
+                    Image(systemName: appState.captureModeIcon)
                         .font(.system(size: 35, weight: .regular))
                         .foregroundStyle(AppColors.mediumGray)
                 }
                 .frame(width: 100, height: 100)
                 .onTapGesture {
                     Haptics.navigation()
-                    appState.currentScreen = .camera
+                    appState.currentScreen = appState.captureModeDestination
+                }
+                .onLongPressGesture(minimumDuration: 0.5) {
+                    // Strong haptic feedback for mode change
+                    Haptics.success()
+                    appState.toggleCaptureMode()
                 }
 
                 // Bottom section

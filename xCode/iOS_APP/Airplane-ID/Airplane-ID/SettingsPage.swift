@@ -703,15 +703,43 @@ enum DefaultPagePreference: String, CaseIterable {
     }
 }
 
+enum CapturePreference: String, CaseIterable {
+    case camera = "camera"
+    case upload = "upload"
+
+    var displayName: String {
+        switch self {
+        case .camera: return "Camera"
+        case .upload: return "Photo Upload"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .camera: return "Take new photos"
+        case .upload: return "Select from library"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .camera: return "camera"
+        case .upload: return "photo.badge.plus"
+        }
+    }
+}
+
 struct AppPreferencesView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(AppState.self) private var appState
 
     // Preferences stored in UserDefaults
     @AppStorage(AppPreferences.timeFormatKey) private var timeFormat: String = TimeFormatPreference.system.rawValue
     @AppStorage(AppPreferences.dateFormatKey) private var dateFormat: String = DateFormatPreference.system.rawValue
     @AppStorage(AppPreferences.timeZoneKey) private var timeZone: String = TimeZonePreference.device.rawValue
     @AppStorage(AppPreferences.defaultPageKey) private var defaultPage: String = DefaultPagePreference.home.rawValue
+    @AppStorage(AppConfig.captureModeKey) private var captureMode: String = CapturePreference.camera.rawValue
 
     // Data management confirmation dialogs
     @State private var showingDeleteConfirmation = false
@@ -756,6 +784,12 @@ struct AppPreferencesView: View {
                                 label: "Default Open Page",
                                 selection: $defaultPage,
                                 options: DefaultPagePreference.allCases.map { ($0.rawValue, $0.displayName, "") }
+                            )
+
+                            // Capture Mode
+                            CaptureModePickerRow(
+                                selection: $captureMode,
+                                appState: appState
                             )
                         }
 
@@ -957,6 +991,8 @@ struct AppPreferencesView: View {
         dateFormat = DateFormatPreference.system.rawValue
         timeZone = TimeZonePreference.device.rawValue
         defaultPage = DefaultPagePreference.home.rawValue
+        captureMode = CapturePreference.camera.rawValue
+        appState.setCaptureMode(CapturePreference.camera.rawValue)
 
         Haptics.success()
         statusMessage = "✓ Preferences restored to defaults"
@@ -988,6 +1024,8 @@ struct AppPreferencesView: View {
             dateFormat = DateFormatPreference.system.rawValue
             timeZone = TimeZonePreference.device.rawValue
             defaultPage = DefaultPagePreference.home.rawValue
+            captureMode = CapturePreference.camera.rawValue
+            appState.setCaptureMode(CapturePreference.camera.rawValue)
 
             Haptics.success()
             statusMessage = "✓ App reset complete"
@@ -1050,6 +1088,66 @@ struct PreferencePickerRow: View {
 
     private var selectedDisplayName: String {
         options.first(where: { $0.value == selection })?.name ?? "Unknown"
+    }
+}
+
+// MARK: - Capture Mode Picker Row
+/// Special picker for capture mode that syncs with AppState
+struct CaptureModePickerRow: View {
+    @Binding var selection: String
+    var appState: AppState
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Default Capture Mode")
+                    .font(.system(size: 15))
+                    .foregroundStyle(.white)
+                Text("Long-press center button to toggle")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+            Spacer()
+            Menu {
+                ForEach(CapturePreference.allCases, id: \.rawValue) { option in
+                    Button(action: {
+                        Haptics.selection()
+                        selection = option.rawValue
+                        // Sync with AppState
+                        appState.setCaptureMode(option.rawValue)
+                    }) {
+                        HStack {
+                            Image(systemName: option.icon)
+                            Text(option.displayName)
+                            Text("- \(option.description)")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: selectedIcon)
+                        .font(.system(size: 14))
+                        .foregroundStyle(AppColors.linkBlue)
+                    Text(selectedDisplayName)
+                        .font(.system(size: 15))
+                        .foregroundStyle(AppColors.linkBlue)
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 10))
+                        .foregroundStyle(AppColors.linkBlue.opacity(0.7))
+                }
+            }
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+    }
+
+    private var selectedDisplayName: String {
+        CapturePreference(rawValue: selection)?.displayName ?? "Camera"
+    }
+
+    private var selectedIcon: String {
+        CapturePreference(rawValue: selection)?.icon ?? "camera"
     }
 }
 
