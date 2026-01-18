@@ -179,7 +179,6 @@ struct SettingsScrollContent: View {
 
     // Sheet presentation states for other settings
     @State private var showingAppPreferences = false
-    @State private var showingSystemSettings = false
     @State private var showingAbout = false
     @State private var showingDeveloperTools = false
 
@@ -211,15 +210,7 @@ struct SettingsScrollContent: View {
                     Haptics.light()
                     showingAppPreferences = true
                 }) {
-                    SettingsRowContent(icon: "square.3.layers.3d", title: "App Preferences", subtitle: "Configure application behavior")
-                }
-
-                // System
-                Button(action: {
-                    Haptics.light()
-                    showingSystemSettings = true
-                }) {
-                    SettingsRowContent(icon: "switch.2", title: "System", subtitle: "Modify system settings")
+                    SettingsRowContent(icon: "slider.horizontal.3", title: "App Preferences", subtitle: "Display, behavior, and data management")
                 }
 
                 // About
@@ -247,9 +238,6 @@ struct SettingsScrollContent: View {
         // Sheet presentations (Account Settings handled at SettingsPage level)
         .sheet(isPresented: $showingAppPreferences) {
             AppPreferencesView()
-        }
-        .sheet(isPresented: $showingSystemSettings) {
-            SystemSettingsView()
         }
         .sheet(isPresented: $showingAbout) {
             AboutView()
@@ -717,12 +705,18 @@ enum DefaultPagePreference: String, CaseIterable {
 
 struct AppPreferencesView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
 
     // Preferences stored in UserDefaults
     @AppStorage(AppPreferences.timeFormatKey) private var timeFormat: String = TimeFormatPreference.system.rawValue
     @AppStorage(AppPreferences.dateFormatKey) private var dateFormat: String = DateFormatPreference.system.rawValue
     @AppStorage(AppPreferences.timeZoneKey) private var timeZone: String = TimeZonePreference.device.rawValue
     @AppStorage(AppPreferences.defaultPageKey) private var defaultPage: String = DefaultPagePreference.home.rawValue
+
+    // Data management confirmation dialogs
+    @State private var showingDeleteConfirmation = false
+    @State private var showingResetConfirmation = false
+    @State private var statusMessage: String? = nil
 
     var body: some View {
         NavigationStack {
@@ -765,6 +759,95 @@ struct AppPreferencesView: View {
                             )
                         }
 
+                        // Data Management Section
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("DATA MANAGEMENT")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.5))
+                                .padding(.leading, 4)
+
+                            // Status message
+                            if let message = statusMessage {
+                                Text(message)
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundStyle(message.starts(with: "✓") ? AppColors.success : AppColors.error)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(.vertical, 8)
+                            }
+
+                            VStack(spacing: 12) {
+                                // Delete All Aircraft
+                                Button(action: {
+                                    Haptics.warning()
+                                    showingDeleteConfirmation = true
+                                }) {
+                                    HStack(spacing: 14) {
+                                        Image(systemName: "trash")
+                                            .font(.system(size: 18))
+                                            .foregroundStyle(AppColors.warning)
+                                            .frame(width: 24)
+
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text("Delete All Aircraft")
+                                                .font(.system(size: 15, weight: .medium))
+                                                .foregroundStyle(.white)
+                                            Text("Remove all captured aircraft records")
+                                                .font(.system(size: 12))
+                                                .foregroundStyle(.white.opacity(0.5))
+                                        }
+
+                                        Spacer()
+
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundStyle(.white.opacity(0.3))
+                                    }
+                                    .padding(.vertical, 14)
+                                    .padding(.horizontal, 16)
+                                    .background(AppColors.settingsRow)
+                                    .cornerRadius(10)
+                                }
+
+                                // Reset App
+                                Button(action: {
+                                    Haptics.warning()
+                                    showingResetConfirmation = true
+                                }) {
+                                    HStack(spacing: 14) {
+                                        Image(systemName: "arrow.counterclockwise")
+                                            .font(.system(size: 18))
+                                            .foregroundStyle(AppColors.error)
+                                            .frame(width: 24)
+
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text("Reset App")
+                                                .font(.system(size: 15, weight: .medium))
+                                                .foregroundStyle(.white)
+                                            Text("Clear all data and restore defaults")
+                                                .font(.system(size: 12))
+                                                .foregroundStyle(.white.opacity(0.5))
+                                        }
+
+                                        Spacer()
+
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundStyle(.white.opacity(0.3))
+                                    }
+                                    .padding(.vertical, 14)
+                                    .padding(.horizontal, 16)
+                                    .background(AppColors.settingsRow)
+                                    .cornerRadius(10)
+                                }
+                            }
+
+                            Text("These actions cannot be undone.")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.white.opacity(0.4))
+                                .padding(.leading, 4)
+                                .padding(.top, 4)
+                        }
+
                         Spacer().frame(height: 40)
                     }
                     .padding(.horizontal, 16)
@@ -787,6 +870,18 @@ struct AppPreferencesView: View {
                     }
                 }
             }
+            .confirmationDialog("Delete All Aircraft?", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
+                Button("Delete All Aircraft", role: .destructive) { deleteAllAircraft() }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This will permanently delete all captured aircraft records. This action cannot be undone.")
+            }
+            .confirmationDialog("Reset App?", isPresented: $showingResetConfirmation, titleVisibility: .visible) {
+                Button("Reset Everything", role: .destructive) { resetApp() }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This will delete ALL data including aircraft records and user profiles, and restore default settings. This action cannot be undone.")
+            }
         }
     }
 
@@ -804,6 +899,49 @@ struct AppPreferencesView: View {
             }
             .background(AppColors.settingsRow)
             .cornerRadius(10)
+        }
+    }
+
+    // MARK: - Data Management Functions
+
+    private func deleteAllAircraft() {
+        do {
+            try modelContext.delete(model: CapturedAircraft.self)
+            try modelContext.save()
+            Haptics.success()
+            statusMessage = "✓ All aircraft deleted"
+            clearStatusAfterDelay()
+        } catch {
+            Haptics.error()
+            statusMessage = "✗ Error: \(error.localizedDescription)"
+        }
+    }
+
+    private func resetApp() {
+        do {
+            // Delete all data
+            try modelContext.delete(model: CapturedAircraft.self)
+            try modelContext.delete(model: User.self)
+            try modelContext.save()
+
+            // Reset preferences to defaults
+            timeFormat = TimeFormatPreference.system.rawValue
+            dateFormat = DateFormatPreference.system.rawValue
+            timeZone = TimeZonePreference.device.rawValue
+            defaultPage = DefaultPagePreference.home.rawValue
+
+            Haptics.success()
+            statusMessage = "✓ App reset complete"
+            clearStatusAfterDelay()
+        } catch {
+            Haptics.error()
+            statusMessage = "✗ Error: \(error.localizedDescription)"
+        }
+    }
+
+    private func clearStatusAfterDelay() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            statusMessage = nil
         }
     }
 }
@@ -853,46 +991,6 @@ struct PreferencePickerRow: View {
 
     private var selectedDisplayName: String {
         options.first(where: { $0.value == selection })?.name ?? "Unknown"
-    }
-}
-
-// MARK: - System Settings View (Placeholder)
-struct SystemSettingsView: View {
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                AppColors.settingsBackground.ignoresSafeArea()
-
-                VStack(spacing: 20) {
-                    Image(systemName: "switch.2")
-                        .font(.system(size: 60))
-                        .foregroundStyle(AppColors.linkBlue)
-
-                    Text("System Settings")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundStyle(.white)
-
-                    Text("Coming Soon")
-                        .font(.system(size: 16))
-                        .foregroundStyle(.white.opacity(0.6))
-                }
-            }
-            .navigationTitle("System")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "chevron.left")
-                            Text("Back")
-                        }
-                        .foregroundStyle(AppColors.linkBlue)
-                    }
-                }
-            }
-        }
     }
 }
 
