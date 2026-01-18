@@ -369,7 +369,7 @@ struct AircraftMapAnnotation: View {
             // White text with black outline - no background box
             if showLabel {
                 Text(aircraft.icao)
-                    .font(.system(size: 10, weight: .bold))
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(.white)
                     // Black outline effect using multiple shadows
                     .shadow(color: .black, radius: 0.5, x: 0, y: 0)
