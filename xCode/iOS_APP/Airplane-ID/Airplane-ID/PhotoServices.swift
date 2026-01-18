@@ -16,6 +16,7 @@ import SwiftUI
 import Photos
 import PhotosUI
 import UIKit
+import Combine
 
 // MARK: - Photo Library Manager
 /// Singleton managing PHPhotoLibrary authorization and photo operations
