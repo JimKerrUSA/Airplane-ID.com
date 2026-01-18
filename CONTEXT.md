@@ -1818,7 +1818,48 @@ Image(systemName: "airplane")
 ```
 3. Remove `mapIconName` property from CapturedAircraft extension
 
-**Future Enhancements (if icons work well):**
-- Add more specific ICAO-matched icons
+### ICAO-Specific Icons with Prefix Interpolation
+
+**Status:** Implemented - 65 ICAO-specific icons available
+
+**How It Works:**
+1. Try exact ICAO match (e.g., `C172` → `icao-C172`)
+2. Try prefix interpolation (e.g., `M20J` → no exact match → try `M20` → finds `icao-M20T` or `icao-M20P`)
+3. Fall back to generic type icon (e.g., `icon-single-prop`)
+
+**Example Matching:**
+| Aircraft ICAO | Matching Logic | Result Icon |
+|--------------|----------------|-------------|
+| C172 | Exact match | icao-C172 |
+| C172S | No exact → prefix C172 exists | icao-C172 |
+| M20J | No exact → prefix M20 → finds M20T | icao-M20T |
+| B737 | No match at any level | icon-jet (generic) |
+
+**MapIconHelper Class:**
+```swift
+enum MapIconHelper {
+    static let availableICAOs: Set<String> = [...]  // 65 codes
+    static func findICAOIcon(for icao: String) -> String?
+}
+```
+
+**Available ICAO Icons (65 total):**
+- Cessna: C140, C150, C172, C180, C182, C185, C206, C207, C208, C210, C310, C421
+- Piper: PA11-PA46, P28A, P28R, P46T
+- Beechcraft: BE23, BE35, BE55, BE58
+- Mooney: M20P, M20T, M600
+- Robinson: R22, R44, R66
+- Cirrus: SR22, SF50
+- Van's RV: RV6, RV10, RV12
+- Others: DA40, DR40, PC12, J3, JAB4, GA7, CH60, HDJT, etc.
+
+**Adding New ICAO Icons:**
+1. Copy SVG to source folder
+2. Run copy script to create imageset
+3. Add ICAO code to `MapIconHelper.availableICAOs` set
+4. Rebuild
+
+**Future Enhancements:**
 - Create simplified silhouette versions if detail is lost at small sizes
 - Add icon for glider with longer wingspan silhouette
+- Add more ICAO-specific icons as SVGs become available

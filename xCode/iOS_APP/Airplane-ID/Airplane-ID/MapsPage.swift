@@ -41,10 +41,22 @@ extension CapturedAircraft {
         return "\(model) \(manufacturer)"
     }
 
-    /// Returns the appropriate map icon name based on aircraft type and engine type
+    /// Returns the appropriate map icon name based on ICAO code, aircraft type, and engine type
+    /// Priority: 1) Exact ICAO match, 2) ICAO prefix match, 3) Generic type fallback
     /// Icons are in Assets.xcassets/MapIcons/
     /// - Returns: Asset name for the map icon
     var mapIconName: String {
+        // Try ICAO-specific icon first (exact match, then prefix interpolation)
+        if let icaoIcon = MapIconHelper.findICAOIcon(for: icao) {
+            return icaoIcon
+        }
+
+        // Fall back to generic type-based icon
+        return genericTypeIcon
+    }
+
+    /// Generic icon based on aircraft type and engine type (fallback when no ICAO match)
+    private var genericTypeIcon: String {
         // Aircraft type codes:
         // "1" = Glider, "2" = Balloon, "3" = Blimp, "4" = FW Single, "5" = FW Multi
         // "6" = Rotorcraft, "7" = Weight Shift, "8" = Powered Parachute, "9" = Gyroplane
@@ -78,6 +90,68 @@ extension CapturedAircraft {
         default:   // "O" = Other or unknown - use single-prop as default
             return "MapIcons/icon-single-prop"
         }
+    }
+}
+
+// MARK: - Map Icon Helper
+/// Helper for finding ICAO-specific map icons with prefix interpolation
+enum MapIconHelper {
+    /// Set of available ICAO codes that have custom icons
+    /// These correspond to icao-{CODE}.imageset in Assets.xcassets/MapIcons/
+    static let availableICAOs: Set<String> = [
+        "ACAM", "AS20", "AS50", "AT5T", "BALL",
+        "BE23", "BE35", "BE55", "BE58", "BL17",
+        "C140", "C150", "C172", "C180", "C182", "C185", "C206", "C207", "C208", "C210", "C310", "C421",
+        "CH60", "COZY",
+        "DA40", "DR40",
+        "EC20", "ECHO",
+        "GA7", "GSIS",
+        "HDJT",
+        "J3", "JAB4",
+        "KODI",
+        "M20P", "M20T", "M600",
+        "NG5",
+        "P28A", "P28R", "P46T",
+        "PA11", "PA12", "PA18", "PA22", "PA24", "PA25", "PA27", "PA31", "PA32", "PA34", "PA44", "PA46",
+        "PC12",
+        "R22", "R44", "R66",
+        "qsgt",
+        "RV6", "RV10", "RV12",
+        "SF50", "SIRA", "SR22",
+        "T34P"
+    ]
+
+    /// Attempts to find an ICAO-specific icon for the given code
+    /// Uses prefix interpolation: M20J → tries M20J, then M20, then M2, then M
+    /// - Parameter icao: The aircraft's ICAO code
+    /// - Returns: Asset path if found, nil otherwise
+    static func findICAOIcon(for icao: String) -> String? {
+        let code = icao.uppercased().trimmingCharacters(in: .whitespaces)
+        guard !code.isEmpty else { return nil }
+
+        // Try exact match first
+        if availableICAOs.contains(code) {
+            return "MapIcons/icao-\(code)"
+        }
+
+        // Try progressively shorter prefixes (minimum 2 characters)
+        var prefix = code
+        while prefix.count > 1 {
+            prefix = String(prefix.dropLast())
+
+            // Find any ICAO that starts with this prefix
+            if let match = availableICAOs.first(where: { $0.hasPrefix(prefix) }) {
+                // Prefer exact prefix match over partial
+                if availableICAOs.contains(prefix) {
+                    return "MapIcons/icao-\(prefix)"
+                }
+                // Use the first match found
+                return "MapIcons/icao-\(match)"
+            }
+        }
+
+        // No ICAO match found
+        return nil
     }
 }
 
