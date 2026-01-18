@@ -193,7 +193,7 @@ struct Airplane_IDApp: App {
             }
             .task {
                 // Check and request photo permissions on every app launch
-                await photoManager.checkAndRequestAuthorization()
+                _ = await photoManager.checkAndRequestAuthorization()
             }
         }
         .modelContainer(sharedModelContainer)

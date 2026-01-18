@@ -91,7 +91,7 @@ class PhotoLibraryManager: ObservableObject {
 
     /// Open photo in Photos app
     func openInPhotos(localIdentifier: String) {
-        guard let asset = fetchAsset(localIdentifier: localIdentifier) else { return }
+        guard fetchAsset(localIdentifier: localIdentifier) != nil else { return }
 
         // Use the photos-redirect URL scheme to open specific asset
         // This requires fetching the asset's URL which isn't directly available,
