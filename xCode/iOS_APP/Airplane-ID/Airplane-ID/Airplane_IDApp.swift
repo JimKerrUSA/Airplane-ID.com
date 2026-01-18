@@ -161,6 +161,7 @@ struct MainView: View {
 struct Airplane_IDApp: App {
     @State private var appState = AppState()
     @StateObject private var photoManager = PhotoLibraryManager.shared
+    @Environment(\.scenePhase) private var scenePhase
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -194,6 +195,14 @@ struct Airplane_IDApp: App {
             .task {
                 // Check and request photo permissions on every app launch
                 _ = await photoManager.checkAndRequestAuthorization()
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                // Re-check permissions when returning from Settings
+                if newPhase == .active {
+                    Task {
+                        _ = await photoManager.checkAuthorization()
+                    }
+                }
             }
         }
         .modelContainer(sharedModelContainer)

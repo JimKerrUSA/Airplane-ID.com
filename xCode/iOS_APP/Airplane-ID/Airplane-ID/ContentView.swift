@@ -20,10 +20,17 @@ enum NavigationDestination: String, CaseIterable {
 }
 
 // MARK: - App Configuration
-/// Global configuration flags - set developerToolsEnabled to false before App Store release
+/// Global configuration flags
 struct AppConfig {
-    /// Set to false before publishing to App Store
-    static let developerToolsEnabled = true
+    /// Developer tools are automatically enabled in DEBUG builds only.
+    /// In Release builds (App Store), this is always false.
+    static var developerToolsEnabled: Bool {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }
 }
 
 // MARK: - Screen Scale for Responsive Design

@@ -187,11 +187,6 @@ class PhotoLibraryManager: ObservableObject {
             UIApplication.shared.open(url)
         }
     }
-
-    /// Exit app gracefully
-    func exitApp() {
-        exit(0)
-    }
 }
 
 // MARK: - Thumbnail Generator
@@ -515,11 +510,12 @@ struct FullScreenPhotoViewer: View {
 
 // MARK: - Photo Permission View
 /// Blocking overlay shown when photo library permission is denied
+/// User must grant permission in Settings to use the app
 struct PhotoPermissionView: View {
     var body: some View {
         ZStack {
-            // Semi-transparent dark background
-            Color.black.opacity(0.95)
+            // Opaque dark background - completely blocks app
+            Color.black
                 .ignoresSafeArea()
 
             VStack(spacing: 24) {
@@ -536,7 +532,7 @@ struct PhotoPermissionView: View {
                     .foregroundStyle(.white)
 
                 // Message
-                Text("Photo library access is required for our app to function. Please grant full access to your Photo Library.")
+                Text("Photo library access is required for Airplane-ID to function.\n\nPlease grant full access in Settings, then return to this app.")
                     .font(.system(size: 16))
                     .foregroundStyle(.white.opacity(0.8))
                     .multilineTextAlignment(.center)
@@ -544,40 +540,20 @@ struct PhotoPermissionView: View {
 
                 Spacer()
 
-                // Buttons
-                VStack(spacing: 12) {
-                    // Settings button (primary)
-                    Button(action: {
-                        PhotoLibraryManager.shared.openSettings()
-                        // Small delay then exit
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            PhotoLibraryManager.shared.exitApp()
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: "gear")
-                            Text("Open Settings")
-                        }
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(AppColors.primaryBlue)
-                        .cornerRadius(12)
+                // Settings button
+                Button(action: {
+                    PhotoLibraryManager.shared.openSettings()
+                }) {
+                    HStack {
+                        Image(systemName: "gear")
+                        Text("Open Settings")
                     }
-
-                    // OK button (secondary)
-                    Button(action: {
-                        PhotoLibraryManager.shared.exitApp()
-                    }) {
-                        Text("OK")
-                            .font(.system(size: 17, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.8))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(Color.white.opacity(0.1))
-                            .cornerRadius(12)
-                    }
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(AppColors.primaryBlue)
+                    .cornerRadius(12)
                 }
                 .padding(.horizontal, 32)
                 .padding(.bottom, 48)
