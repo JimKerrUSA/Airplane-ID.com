@@ -41,12 +41,14 @@ struct MainView: View {
     }
 
     /// Loads bundled reference data on first launch
+    @MainActor
     private func loadReferenceDataIfNeeded() async {
         await loadAirlineCodesIfNeeded()
         await loadICAOCodesIfNeeded()
     }
 
     /// Load airline codes from bundled CSV if table is empty
+    @MainActor
     private func loadAirlineCodesIfNeeded() async {
         let descriptor = FetchDescriptor<AirlineLookup>()
         let existingCount = (try? modelContext.fetchCount(descriptor)) ?? 0
@@ -89,6 +91,7 @@ struct MainView: View {
     }
 
     /// Load ICAO aircraft type codes from bundled CSV if table is empty
+    @MainActor
     private func loadICAOCodesIfNeeded() async {
         let descriptor = FetchDescriptor<ICAOLookup>()
         let existingCount = (try? modelContext.fetchCount(descriptor)) ?? 0

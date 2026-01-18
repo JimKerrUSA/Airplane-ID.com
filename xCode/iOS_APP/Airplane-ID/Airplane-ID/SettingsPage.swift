@@ -9,6 +9,46 @@ import SwiftUI
 import SwiftData
 import UIKit
 
+// MARK: - CSV Parsing Utilities
+
+/// Parsed aircraft data from CSV - Sendable for safe transfer between threads
+struct ParsedAircraftData: Sendable {
+    let captureDate: Date
+    let longitude: Double
+    let latitude: Double
+    let year: Int?
+    let month: Int?
+    let day: Int?
+    let icao: String?
+    let manufacturer: String?
+    let model: String?
+    let engineType: Int?
+    let engineCount: Int?
+    let registration: String?
+    let aircraftType: String?
+    let aircraftClassification: Int?
+    let rating: Double?
+    let thumbsUp: Bool?
+}
+
+/// Thread-safe CSV parsing utility
+enum CSVParser {
+    static func parseLine(_ line: String) -> [String] {
+        var result: [String] = []
+        var current = ""
+        var inQuotes = false
+        for char in line {
+            if char == "\"" { inQuotes.toggle() }
+            else if char == "," && !inQuotes {
+                result.append(current.trimmingCharacters(in: .whitespaces))
+                current = ""
+            } else { current.append(char) }
+        }
+        result.append(current.trimmingCharacters(in: .whitespaces))
+        return result
+    }
+}
+
 // MARK: - Settings Page
 /// Settings page with dark background (#121516)
 /// Custom orientation handling to ensure dark background covers entire screen including footer area
@@ -895,19 +935,35 @@ struct DeveloperToolsView: View {
     private func importFromCSV(count: Int) {
         statusMessage = "Importing \(count) aircraft..."
 
-        // Parse CSV on background thread, then insert on main thread
-        DispatchQueue.global(qos: .userInitiated).async {
+        // Use Swift concurrency for thread-safe CSV import
+        Task {
+            // Parse CSV in background
+            let result = await parseCSVInBackground(count: count)
+
+            // Insert into SwiftData on main actor
+            await MainActor.run {
+                switch result {
+                case .success(let parsedData):
+                    insertParsedAircraft(parsedData)
+                case .failure(let error):
+                    statusMessage = "✗ \(error)"
+                }
+            }
+        }
+    }
+
+    /// Parse CSV file in background - returns parsed data or error message
+    private func parseCSVInBackground(count: Int) async -> Result<[ParsedAircraftData], String> {
+        await Task.detached(priority: .userInitiated) {
             guard let csvURL = Bundle.main.url(forResource: "AirplaneID-TestData", withExtension: "csv") else {
-                DispatchQueue.main.async { self.statusMessage = "✗ CSV file not found" }
-                return
+                return .failure("CSV file not found")
             }
 
             do {
                 let csvContent = try String(contentsOf: csvURL, encoding: .utf8)
                 let lines = csvContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
                 guard lines.count > 1 else {
-                    DispatchQueue.main.async { self.statusMessage = "✗ CSV file is empty" }
-                    return
+                    return .failure("CSV file is empty")
                 }
 
                 let dataLines = Array(lines.dropFirst().prefix(count))
@@ -915,94 +971,76 @@ struct DeveloperToolsView: View {
                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 dateFormatter.timeZone = TimeZone(identifier: "UTC")
 
-                // Parse CSV into raw data tuples on background thread
-                // CSV columns: icao(0), manufacturer(1), model(2), registration(3), engine_type(4),
-                //              num_engines(5), aircraft_type(6), aircraft_classification(7),
-                //              latitude(8), longitude(9), capture_date(10), capture_time(11),
-                //              year(12), month(13), day(14), near_airport(15)
-                // Tuple: (captureDate, longitude, latitude, year, month, day, icao, manufacturer, model, engineType, engineCount, registration, aircraftType, aircraftClassification, rating, thumbsUp)
-                var parsedData: [(Date, Double, Double, Int?, Int?, Int?, String?, String?, String?, Int?, Int?, String?, String?, Int?, Double?, Bool?)] = []
+                var parsedData: [ParsedAircraftData] = []
 
                 for line in dataLines {
-                    let columns = self.parseCSVLine(line)
+                    let columns = CSVParser.parseLine(line)
                     guard columns.count >= 15 else { continue }
 
                     let captureDate = dateFormatter.date(from: "\(columns[10]) \(columns[11])") ?? Date()
-                    parsedData.append((
-                        captureDate,
-                        Double(columns[9]) ?? 0.0,   // longitude
-                        Double(columns[8]) ?? 0.0,   // latitude
-                        Int(columns[12]),            // year
-                        Int(columns[13]),            // month
-                        Int(columns[14]),            // day
-                        columns[0],                  // icao
-                        columns[1],                  // manufacturer
-                        columns[2],                  // model
-                        columns[4].isEmpty ? nil : Int(columns[4]),  // engineType (Int?)
-                        Int(columns[5]) ?? 1,        // engineCount
-                        columns[3],                  // registration
-                        columns[6].isEmpty ? nil : columns[6],  // aircraftType (String)
-                        columns[7].isEmpty ? nil : Int(columns[7]),  // aircraftClassification (Int)
-                        [nil, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0].randomElement()! as Double?,  // rating
-                        [nil, true, false].randomElement()!   // thumbsUp
+                    parsedData.append(ParsedAircraftData(
+                        captureDate: captureDate,
+                        longitude: Double(columns[9]) ?? 0.0,
+                        latitude: Double(columns[8]) ?? 0.0,
+                        year: Int(columns[12]),
+                        month: Int(columns[13]),
+                        day: Int(columns[14]),
+                        icao: columns[0],
+                        manufacturer: columns[1],
+                        model: columns[2],
+                        engineType: columns[4].isEmpty ? nil : Int(columns[4]),
+                        engineCount: Int(columns[5]) ?? 1,
+                        registration: columns[3],
+                        aircraftType: columns[6].isEmpty ? nil : columns[6],
+                        aircraftClassification: columns[7].isEmpty ? nil : Int(columns[7]),
+                        rating: [nil, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0].randomElement()!,
+                        thumbsUp: [nil, true, false].randomElement()!
                     ))
                 }
 
-                // Insert into SwiftData on main thread (thread-safe)
-                DispatchQueue.main.async {
-                    do {
-                        for data in parsedData {
-                            let aircraft = CapturedAircraft(
-                                // Required - from device
-                                captureTime: data.0,
-                                captureDate: data.0,
-                                year: data.3 ?? 0,
-                                month: data.4 ?? 0,
-                                day: data.5 ?? 0,
-                                gpsLongitude: data.1,
-                                gpsLatitude: data.2,
-                                iPhotoReference: "test-import-\(UUID().uuidString)",  // Placeholder for test data
-                                // Required - from AI
-                                icao: data.6 ?? "",
-                                manufacturer: data.7 ?? "",
-                                model: data.8 ?? "",
-                                // Optional
-                                registration: data.11,
-                                aircraftClassification: data.13,  // Int? (1-9)
-                                aircraftType: data.12,            // String? (1-9, H, O)
-                                engineType: data.9,
-                                engineCount: data.10,
-                                rating: data.14,
-                                thumbsUp: data.15
-                            )
-                            self.modelContext.insert(aircraft)
-                        }
-                        try self.modelContext.save()
-                        self.statusMessage = "✓ Imported \(parsedData.count) aircraft"
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { self.statusMessage = nil }
-                    } catch {
-                        self.statusMessage = "✗ Error saving: \(error.localizedDescription)"
-                    }
-                }
+                return .success(parsedData)
             } catch {
-                DispatchQueue.main.async { self.statusMessage = "✗ Error: \(error.localizedDescription)" }
+                return .failure("Error: \(error.localizedDescription)")
             }
-        }
+        }.value
     }
 
-    private func parseCSVLine(_ line: String) -> [String] {
-        var result: [String] = []
-        var current = ""
-        var inQuotes = false
-        for char in line {
-            if char == "\"" { inQuotes.toggle() }
-            else if char == "," && !inQuotes {
-                result.append(current.trimmingCharacters(in: .whitespaces))
-                current = ""
-            } else { current.append(char) }
+    /// Insert parsed aircraft data into SwiftData (must be called on MainActor)
+    @MainActor
+    private func insertParsedAircraft(_ parsedData: [ParsedAircraftData]) {
+        do {
+            for data in parsedData {
+                let aircraft = CapturedAircraft(
+                    captureTime: data.captureDate,
+                    captureDate: data.captureDate,
+                    year: data.year ?? 0,
+                    month: data.month ?? 0,
+                    day: data.day ?? 0,
+                    gpsLongitude: data.longitude,
+                    gpsLatitude: data.latitude,
+                    iPhotoReference: "test-import-\(UUID().uuidString)",
+                    icao: data.icao ?? "",
+                    manufacturer: data.manufacturer ?? "",
+                    model: data.model ?? "",
+                    registration: data.registration,
+                    aircraftClassification: data.aircraftClassification,
+                    aircraftType: data.aircraftType,
+                    engineType: data.engineType,
+                    engineCount: data.engineCount,
+                    rating: data.rating,
+                    thumbsUp: data.thumbsUp
+                )
+                modelContext.insert(aircraft)
+            }
+            try modelContext.save()
+            statusMessage = "✓ Imported \(parsedData.count) aircraft"
+            Task {
+                try? await Task.sleep(for: .seconds(3))
+                await MainActor.run { statusMessage = nil }
+            }
+        } catch {
+            statusMessage = "✗ Error saving: \(error.localizedDescription)"
         }
-        result.append(current.trimmingCharacters(in: .whitespaces))
-        return result
     }
 
     private func importUserFromCSV() {
@@ -1026,7 +1064,7 @@ struct DeveloperToolsView: View {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
 
-            let columns = parseCSVLine(lines[1])
+            let columns = CSVParser.parseLine(lines[1])
             guard columns.count >= 10 else {
                 statusMessage = "✗ Invalid CSV format"
                 return

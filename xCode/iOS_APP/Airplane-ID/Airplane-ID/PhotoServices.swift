@@ -83,7 +83,11 @@ class PhotoLibraryManager: ObservableObject {
                 targetSize: PHImageManagerMaximumSize,
                 contentMode: .aspectFit,
                 options: options
-            ) { image, _ in
+            ) { image, info in
+                // PHImageManager may call this handler multiple times with degraded images.
+                // Only resume continuation when we have the final high-quality image.
+                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                guard !isDegraded else { return }
                 continuation.resume(returning: image)
             }
         }
@@ -258,7 +262,12 @@ struct ThumbnailGenerator {
                 targetSize: requestSize,
                 contentMode: .aspectFit,
                 options: options
-            ) { image, _ in
+            ) { image, info in
+                // PHImageManager may call this handler multiple times with degraded images.
+                // Only resume continuation when we have the final high-quality image.
+                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                guard !isDegraded else { return }
+
                 if let image = image {
                     continuation.resume(returning: generateThumbnail(from: image))
                 } else {

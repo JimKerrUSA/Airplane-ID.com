@@ -1440,3 +1440,57 @@ GeometryReader { geometry in
 5. **Consistent placeholder** - Same sizing logic for empty state
 
 **Note:** Existing photos with black bars baked into thumbnail data will still show bars. Re-selecting the photo regenerates the thumbnail correctly.
+
+---
+
+## Code Review & Bug Fixes - 2026-01-17 (ongoing)
+
+### Overview
+
+Comprehensive code review identified 26 issues across security, best practices, thread safety, error handling, and code organization. Fixes being implemented in small batches with testing between each batch.
+
+### Batch 1: Critical Security Fixes ✅
+
+**Commits:** (part of ongoing session)
+
+1. **Removed `exit(0)` call (App Store rejection risk)**
+   - `exit(0)` violates Apple's Human Interface Guidelines
+   - Changed `PhotoPermissionView`: removed "OK" button that called exit, kept only "Open Settings" button
+   - App now stays on permission screen until user grants access and returns
+
+2. **Changed `developerToolsEnabled` to compile-time check**
+   - Was: `static let developerToolsEnabled = true` (exposed in release builds)
+   - Now: `static var developerToolsEnabled: Bool { #if DEBUG return true #else return false #endif }`
+   - Developer Tools completely excluded from release builds
+
+### Batch 2: Thread Safety Fixes ✅
+
+1. **Added `@MainActor` to data loading functions (Airplane_IDApp.swift)**
+   - `loadReferenceDataIfNeeded()` - ensures main thread
+   - `loadAirlineCodesIfNeeded()` - SwiftData ModelContext is not thread-safe
+   - `loadICAOCodesIfNeeded()` - SwiftData ModelContext is not thread-safe
+   - Added `scenePhase` monitoring to re-check permissions when returning from Settings
+
+2. **Fixed CSV import thread safety (SettingsPage.swift)**
+   - Created `ParsedAircraftData` struct marked `Sendable` for thread-safe data transfer
+   - Created `CSVParser` enum with static `parseLine()` function
+   - Refactored `importFromCSV()` to use Swift concurrency:
+     - Parse CSV on background thread via `Task.detached`
+     - Insert into SwiftData on `MainActor.run`
+   - Updated `importUserFromCSV()` to use `CSVParser.parseLine()`
+   - Removed duplicate private `parseCSVLine()` function
+
+3. **Fixed PHImageManager continuation double-call (PhotoServices.swift)**
+   - **Problem:** `PHImageManager.requestImage` can call its handler twice - first with degraded image, then full quality
+   - **Risk:** Calling `continuation.resume()` twice crashes the app
+   - **Fix:** Check `info?[PHImageResultIsDegradedKey]` and skip degraded callbacks
+   - Applied to:
+     - `fetchFullSizeImage(localIdentifier:)`
+     - `ThumbnailGenerator.generateThumbnail(from asset:)`
+
+### Remaining Batches (Pending)
+
+- **Batch 3:** Error Handling improvements
+- **Batch 4:** Code Deduplication
+- **Batch 5:** File Organization
+- **Batch 6:** Polish & Standards
