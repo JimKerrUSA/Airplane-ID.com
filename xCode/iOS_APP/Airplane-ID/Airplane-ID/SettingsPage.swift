@@ -944,12 +944,19 @@ struct AboutView: View {
                                 .foregroundStyle(AppColors.gold)
                                 .multilineTextAlignment(.center)
 
-                            Text("Airplane-ID transforms every flight into a discovery. Use your camera to instantly identify aircraft overhead, build your personal collection of sightings, and become a master planespotter. Our advanced Hangar catalog lets you organize, filter, and explore your collection by manufacturer, type, airline, and more—tracking everything from vintage props to modern jets.")
-                                .font(.system(size: 15))
-                                .foregroundStyle(.white.opacity(0.8))
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(4)
-                                .padding(.horizontal, 8)
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Airplane-ID transforms every flight into a discovery. Use your camera to instantly identify aircraft overhead, build your personal collection of sightings, and become a master planespotter.")
+                                    .font(.system(size: 15))
+                                    .foregroundStyle(.white.opacity(0.8))
+                                    .lineSpacing(4)
+
+                                Text("Our advanced Hangar catalog lets you organize, filter, and explore your collection by manufacturer, type, airline, and more—tracking everything from vintage props to modern jets.")
+                                    .font(.system(size: 15))
+                                    .foregroundStyle(.white.opacity(0.8))
+                                    .lineSpacing(4)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 8)
 
                             Text("Join thousands of aviation enthusiasts documenting the skies.")
                                 .font(.system(size: 14, weight: .medium))
