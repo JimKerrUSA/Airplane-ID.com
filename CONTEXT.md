@@ -1392,3 +1392,51 @@ User goes to Albums tab → Airplane-ID album
         ↓
 All their aircraft photos are there, organized together
 ```
+
+### Photo Display Fix - Responsive Layout
+
+**Commits:** 0599493, b27b9a3
+
+#### The Problem
+
+The photo display in AircraftDetailView was causing layout issues on smaller iPhone screens:
+1. Fixed 220px height forced width reduction to maintain aspect ratio
+2. `.fill` mode with `.clipped()` caused image width to push layout wider than screen
+3. Black bars appeared on left/right sides of images
+
+#### The Solution
+
+Used `GeometryReader` to measure exact available width and calculate dimensions explicitly:
+
+```swift
+GeometryReader { geometry in
+    ZStack(alignment: .bottomLeading) {
+        Image(uiImage: uiImage)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: geometry.size.width, height: geometry.size.width * 9/16)
+            .clipped()
+        // ... overlays
+    }
+}
+.aspectRatio(16/9, contentMode: .fit)
+```
+
+#### How It Works
+
+| Property | Value |
+|----------|-------|
+| **Width** | 100% of container (measured by GeometryReader) |
+| **Height** | Calculated as `width * 9/16` (maintains 16:9) |
+| **Aspect Mode** | `.fill` with `.clipped()` - no gaps |
+| **Responsive** | Scales to any screen size |
+
+#### Key Changes
+
+1. **Removed fixed height** - No more `frame(height: 220)`
+2. **GeometryReader for exact width** - Measures actual available space
+3. **Explicit frame calculation** - `width: geometry.size.width, height: width * 9/16`
+4. **Fill mode** - Image fills frame completely, overflow clipped
+5. **Consistent placeholder** - Same sizing logic for empty state
+
+**Note:** Existing photos with black bars baked into thumbnail data will still show bars. Re-selecting the photo regenerates the thumbnail correctly.
