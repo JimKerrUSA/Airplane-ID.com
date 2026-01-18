@@ -1187,3 +1187,114 @@ The app must handle large datasets efficiently:
     - Uses `.labelsHidden()` on DatePicker with separate Text label above
     - Matches layout pattern of other editable fields
     - Commit: f588732
+
+---
+
+## Photo Library Integration (Next Feature)
+
+### Overview
+Integrate with iOS Photos library to allow users to attach aircraft photos to their sightings. Photos are a core feature - library access is REQUIRED to use the app.
+
+### Requirements Summary
+
+| Requirement | Implementation |
+|-------------|----------------|
+| **Permission Level** | Full library access (`.readWrite`) - REQUIRED |
+| **Permission Timing** | Check on EVERY app launch, before login |
+| **Denial Handling** | Block app access until granted |
+| **Thumbnail Size** | 1280x720 (16:9 HD) |
+| **Image Format** | JPEG ~0.75 quality |
+| **Storage** | `thumbnailData: Data?` in CapturedAircraft |
+| **Photo Reference** | `iPhotoReference` stores PHAsset.localIdentifier |
+| **Photo Picker** | PHPickerViewController (native iOS search UI) |
+| **Full-Size Viewer** | In-app viewer with pinch-zoom, "Open in Photos" option |
+
+### Permission Flow
+
+1. **On Every App Launch:**
+   - Check `PHPhotoLibrary.authorizationStatus(for: .readWrite)`
+   - If `.authorized` or `.limited` → proceed to app
+   - If `.notDetermined` → request authorization
+   - If `.denied` or `.restricted` → show permission required screen
+
+2. **Permission Required Screen:**
+   - Message: "Photo library access is required for our app to function. Please grant full access to your iPhoto library."
+   - **OK button** → closes app
+   - **Settings button** → opens Airplane-ID permissions in Settings, closes app
+   - Endless loop until access granted
+
+3. **Info.plist Required:**
+   - `NSPhotoLibraryUsageDescription` - explain why we need photo access
+
+### Photo Selection Flow (Edit Mode)
+
+1. **No Photo Exists:**
+   - Tap photo placeholder → immediately opens PHPicker
+   - Native iOS search UI for finding photos
+   - Select image → process and save
+
+2. **Photo Already Exists:**
+   - Must click Edit first
+   - Then tap existing photo → opens PHPicker
+   - Select new image → replaces existing
+
+3. **Portrait Photo Handling:**
+   - Detect portrait orientation on selection
+   - Show warning: "You are attempting to upload a photo in portrait orientation. Our app is optimized for landscape images. Would you like to continue or upload a different image?"
+   - **Continue** → Scale height to fit, add black letterbox bars on sides
+   - **Cancel** → Return to photo picker
+
+### Thumbnail Generation
+
+1. **Target Size:** 1280x720 (16:9 HD ratio)
+2. **Landscape Photos:** Scale to fit 1280x720
+3. **Portrait Photos:** Scale height to 720, center horizontally with black bars
+4. **Format:** JPEG at 0.75 quality (~100-200KB per image)
+5. **Save:** Store in `thumbnailData: Data?` field
+
+### Photo Display (View Mode)
+
+1. **Thumbnail Display:**
+   - Show 1280x720 thumbnail from database
+   - Fits photo area edge-to-edge (16:9)
+
+2. **Tap to View Full-Size:**
+   - Fetch original from Photos library using `iPhotoReference`
+   - Open in-app full-screen viewer
+   - Features: pinch-to-zoom, double-tap zoom, swipe to dismiss
+   - "Open in Photos" button to jump to Photos app
+
+3. **Deleted Photo Handling:**
+   - If original photo deleted from Photos library:
+   - Show dialog: "Photo no longer on device. Would you like to view the thumbnail?"
+   - **Yes** → Show thumbnail in viewer
+   - **No** → Close dialog
+   - Keep `iPhotoReference` (user may restore library)
+
+### Data Model Changes
+
+```swift
+// Add to CapturedAircraft model
+var thumbnailData: Data?  // JPEG thumbnail 1280x720
+
+// Existing field - will store PHAsset.localIdentifier
+var iPhotoReference: String
+```
+
+**NOTE:** This is a schema change - requires app reinstall.
+
+### New Components Needed
+
+1. **PhotoPermissionManager** - Handle authorization checks and requests
+2. **PermissionGatekeeperView** - Blocks app until permissions granted
+3. **PhotoPickerView** - UIViewControllerRepresentable wrapping PHPicker
+4. **FullSizeImageViewer** - Zoomable full-screen image viewer
+5. **ThumbnailGenerator** - Resize/compress images to 1280x720 JPEG
+
+### Files to Modify
+
+- `Info.plist` - Add NSPhotoLibraryUsageDescription
+- `Airplane_IDApp.swift` - Add permission gatekeeper at app entry
+- `Item.swift` - Add thumbnailData field
+- `HangarPage.swift` - Update AircraftDetailView photo handling
+- New file: `PhotoServices.swift` - All photo-related utilities
