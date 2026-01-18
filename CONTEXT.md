@@ -1922,6 +1922,49 @@ Now individual aircraft visible with labels
 
 **Styling Reference (matches Apple Maps):**
 - Icon with black outline/shadow for visibility
-- Label in white rounded rectangle, close to icon
+- ICAO label in white text with black outline (no background box)
 - Side positioning (HStack) vs below (default)
 - Labels hidden when map density would cause overlap
+
+### Performance Optimizations
+
+**Problem:** Rendering 2000+ aircraft annotations caused map to be sluggish and unresponsive.
+
+**Solution:** Viewport-based filtering with limits
+
+1. **Viewport Filtering**
+   - Only render aircraft within the visible map region
+   - Buffer zone (1.5x viewport) for smoother panning
+   - Aircraft outside viewport are not rendered at all
+
+2. **Aircraft Limit**
+   - Maximum 150 aircraft rendered at once (`maxVisibleAircraft = 150`)
+   - Prevents overload even when zoomed out over dense areas
+   - Sufficient for typical viewing without performance impact
+
+3. **Camera Change Optimization**
+   - Uses `.onMapCameraChange(frequency: .onEnd)` instead of continuous
+   - Only recalculates when user stops panning/zooming
+   - Prevents constant re-rendering during gestures
+
+4. **Cleaner Map Style**
+   - Uses `.mapStyle(.standard(pointsOfInterest: .excludingAll))`
+   - Removes POI clutter (restaurants, shops, etc.)
+   - Reduces visual noise so aircraft stand out better
+
+**Performance Constants:**
+```swift
+private let maxVisibleAircraft = 150      // Max annotations rendered
+private let viewportBuffer: Double = 1.5  // Extend visible region by 50%
+```
+
+**Computed Properties:**
+- `allAircraftWithLocation` - All aircraft with valid GPS (unchanged by viewport)
+- `visibleAircraft` - Filtered to viewport + limited count
+- `aircraftClusters` - Uses `visibleAircraft` (not all aircraft)
+- `filteredAircraft` - Search still queries ALL aircraft (user expects full search)
+
+**Label Display:**
+- Shows ICAO code (e.g., "C172", "PA28") - always available
+- White text with black outline (no background box)
+- More recognizable to aviation enthusiasts than registration numbers

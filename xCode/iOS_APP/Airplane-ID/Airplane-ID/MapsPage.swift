@@ -241,35 +241,23 @@ struct AircraftMapAnnotation: View {
     let showLabel: Bool
     let onTap: () -> Void
 
-    /// Short label for map display (registration or abbreviated model)
-    private var shortLabel: String {
-        if let reg = aircraft.registration, !reg.isEmpty {
-            return reg
-        }
-        // Fallback to abbreviated model (first 8 chars)
-        let model = aircraft.model
-        if model.count > 8 {
-            return String(model.prefix(8))
-        }
-        return model
-    }
-
     var body: some View {
-        HStack(alignment: .center, spacing: 4) {
+        HStack(alignment: .center, spacing: 3) {
             // Aircraft icon with black outline effect
             aircraftIcon
 
-            // Label positioned to the side (only when zoomed in)
+            // ICAO label positioned to the side (only when zoomed in)
+            // White text with black outline - no background box
             if showLabel {
-                Text(shortLabel)
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(.black)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    .background(
-                        RoundedRectangle(cornerRadius: 3)
-                            .fill(.white.opacity(0.9))
-                    )
+                Text(aircraft.icao)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(.white)
+                    // Black outline effect using multiple shadows
+                    .shadow(color: .black, radius: 0.5, x: 0, y: 0)
+                    .shadow(color: .black, radius: 0.5, x: 1, y: 0)
+                    .shadow(color: .black, radius: 0.5, x: -1, y: 0)
+                    .shadow(color: .black, radius: 0.5, x: 0, y: 1)
+                    .shadow(color: .black, radius: 0.5, x: 0, y: -1)
                     .lineLimit(1)
             }
         }
@@ -445,6 +433,11 @@ struct MapsPage: View {
     @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var showingSearchSheet = false
     @State private var mapSpan: Double = 0.05  // Track zoom level (smaller = more zoomed in)
+    @State private var mapCenter: CLLocationCoordinate2D?  // Track visible region center
+
+    // Performance constants
+    private let maxVisibleAircraft = 150  // Limit aircraft rendered for performance
+    private let viewportBuffer: Double = 1.5  // Extend visible region by 50% for smoother panning
 
     /// Whether to show labels based on current zoom level
     /// Labels hidden when zoomed out far enough that they would overlap
@@ -465,17 +458,45 @@ struct MapsPage: View {
     // Query aircraft with valid locations
     @Query private var allAircraft: [CapturedAircraft]
 
-    /// Aircraft that have valid GPS coordinates for map display
-    private var aircraftWithLocation: [CapturedAircraft] {
+    /// All aircraft that have valid GPS coordinates
+    private var allAircraftWithLocation: [CapturedAircraft] {
         allAircraft.filter { $0.hasValidLocation }
     }
 
-    /// Clustered aircraft based on current zoom level
-    private var aircraftClusters: [AircraftCluster] {
-        AircraftClusterHelper.cluster(aircraftWithLocation, mapSpan: mapSpan)
+    /// Aircraft visible in current viewport (filtered for performance)
+    /// Only includes aircraft within the visible region + buffer, limited to maxVisibleAircraft
+    private var visibleAircraft: [CapturedAircraft] {
+        guard let center = mapCenter else {
+            // No center yet - return limited set
+            return Array(allAircraftWithLocation.prefix(maxVisibleAircraft))
+        }
+
+        // Calculate viewport bounds with buffer
+        let latBuffer = mapSpan * viewportBuffer
+        let lonBuffer = mapSpan * viewportBuffer
+
+        let minLat = center.latitude - latBuffer
+        let maxLat = center.latitude + latBuffer
+        let minLon = center.longitude - lonBuffer
+        let maxLon = center.longitude + lonBuffer
+
+        // Filter to viewport and limit count
+        let inViewport = allAircraftWithLocation.filter { aircraft in
+            let coord = aircraft.displayCoordinate
+            return coord.latitude >= minLat && coord.latitude <= maxLat &&
+                   coord.longitude >= minLon && coord.longitude <= maxLon
+        }
+
+        // Limit total rendered for performance
+        return Array(inViewport.prefix(maxVisibleAircraft))
     }
 
-    /// Filtered aircraft matching search text
+    /// Clustered aircraft based on current zoom level (uses viewport-filtered aircraft)
+    private var aircraftClusters: [AircraftCluster] {
+        AircraftClusterHelper.cluster(visibleAircraft, mapSpan: mapSpan)
+    }
+
+    /// Filtered aircraft matching search text (searches ALL aircraft, not just visible)
     private var filteredAircraft: [CapturedAircraft] {
         let searchText = searchState.searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !searchText.isEmpty else { return [] }
@@ -483,7 +504,7 @@ struct MapsPage: View {
         let keywords = searchText.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
         guard !keywords.isEmpty else { return [] }
 
-        return aircraftWithLocation.filter { aircraft in
+        return allAircraftWithLocation.filter { aircraft in
             let searchable = "\(aircraft.icao) \(aircraft.manufacturer) \(aircraft.model) \(aircraft.registration ?? "")"
                 .lowercased()
             return keywords.allSatisfy { searchable.contains($0) }
@@ -594,10 +615,13 @@ struct MapsPage: View {
                 }
             }
         }
-        .onMapCameraChange { context in
-            // Track zoom level to control label visibility and clustering
+        .onMapCameraChange(frequency: .onEnd) { context in
+            // Track zoom level and center for viewport-based filtering
+            // Uses .onEnd to only recalculate when user stops panning (better performance)
             mapSpan = context.region.span.latitudeDelta
+            mapCenter = context.region.center
         }
+        .mapStyle(.standard(pointsOfInterest: .excludingAll))  // Cleaner map without POI clutter
         .mapControls {
             MapCompass()
             MapScaleView()
