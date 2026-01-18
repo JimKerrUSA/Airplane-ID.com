@@ -1068,21 +1068,12 @@ struct AboutView: View {
                     VStack(spacing: 24) {
                         // App Logo and Name
                         VStack(spacing: 12) {
-                            ZStack {
-                                Circle()
-                                    .fill(LinearGradient(
-                                        colors: [AppColors.primaryBlue, AppColors.darkBlue],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ))
-                                    .frame(width: 100, height: 100)
-
-                                Image(systemName: "airplane")
-                                    .font(.system(size: 50, weight: .medium))
-                                    .foregroundStyle(AppColors.orange)
-                                    .rotationEffect(.degrees(-45))
-                            }
-                            .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
+                            Image("AirplaneID-icon")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 100, height: 100)
+                                .clipShape(RoundedRectangle(cornerRadius: 22))
+                                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
 
                             Text(AppConfig.appName)
                                 .font(.system(size: 32, weight: .bold))
