@@ -1746,3 +1746,25 @@ appState.currentScreen = .maps
    - `gpsLatitudeNow/gpsLongitudeNow` (current position from server) takes precedence
    - Falls back to `gpsLatitude/gpsLongitude` (capture location)
    - Only aircraft with valid (non-zero) coordinates shown on map
+
+### Aircraft Search Results Display Format
+
+**Line 1 (always shown):** Model + Manufacturer
+- Example: "G450 Gulfstream Aerospace Corp"
+
+**Line 2 (if registration OR owner exists):** Registration + Owner
+- Example: "N119JE John Smith, Inc."
+- If only registration: "N119JE"
+- If only owner: "John Smith, Inc."
+
+**Line 2 fallback (if NO registration AND NO owner):** Aircraft Type + Engine Type
+- Example: "Fixed Wing Multi-Engine Turbo-Jet"
+- Uses `AircraftLookup.typeName()` and `AircraftLookup.engineTypeName()` from Theme.swift
+
+**Map Annotation Label (`mapDisplayLabel`):**
+- With registration: "G450 Gulfstream Aerospace Corp (N119JE)"
+- Without registration: "G450 Gulfstream Aerospace Corp"
+
+**Helper function:** `aircraftSearchSecondLine(_:)` in MapsSearchSheet
+- Returns the appropriate second line based on available data
+- Returns nil if no data available for any line

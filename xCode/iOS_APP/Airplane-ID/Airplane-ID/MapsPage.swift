@@ -33,10 +33,12 @@ extension CapturedAircraft {
         return CLLocationCoordinate2D(latitude: gpsLatitude, longitude: gpsLongitude)
     }
 
-    /// Display label for map annotation: "Registration, Manufacturer, Model"
+    /// Display label for map annotation: "Model Manufacturer (Registration)"
     var mapDisplayLabel: String {
-        let reg = registration ?? "N/A"
-        return "\(reg), \(manufacturer), \(model)"
+        if let reg = registration, !reg.isEmpty {
+            return "\(model) \(manufacturer) (\(reg))"
+        }
+        return "\(model) \(manufacturer)"
     }
 }
 
@@ -574,20 +576,21 @@ struct MapsSearchSheet: View {
                                 .frame(width: 24)
 
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(aircraft.registration ?? "N/A")
+                                // Line 1: Model + Manufacturer (always shown)
+                                Text("\(aircraft.model) \(aircraft.manufacturer)")
                                     .font(.headline)
                                     .foregroundStyle(.primary)
 
-                                Text("\(aircraft.manufacturer), \(aircraft.model)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                // Line 2: Registration + Owner (if either exists)
+                                // Line 3 fallback: Aircraft Type + Engine Type
+                                if let secondLine = aircraftSearchSecondLine(aircraft) {
+                                    Text(secondLine)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
 
                             Spacer()
-
-                            Text(aircraft.icao)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -595,6 +598,46 @@ struct MapsSearchSheet: View {
                 Text("Aircraft (\(filteredAircraft.count))")
             }
         }
+    }
+
+    /// Determines the second line for aircraft search results
+    /// Priority: Registration + Owner, fallback to Aircraft Type + Engine Type
+    private func aircraftSearchSecondLine(_ aircraft: CapturedAircraft) -> String? {
+        // Try Line 2: Registration + Owner
+        let registration = aircraft.registration
+        let owner = aircraft.registeredOwner
+
+        if registration != nil || owner != nil {
+            // Build line with available data
+            var parts: [String] = []
+            if let reg = registration, !reg.isEmpty {
+                parts.append(reg)
+            }
+            if let own = owner, !own.isEmpty {
+                parts.append(own)
+            }
+            if !parts.isEmpty {
+                return parts.joined(separator: " ")
+            }
+        }
+
+        // Fallback to Line 3: Aircraft Type + Engine Type
+        let typeName = AircraftLookup.typeName(aircraft.aircraftType)
+        let engineName = AircraftLookup.engineTypeName(aircraft.engineType)
+
+        var fallbackParts: [String] = []
+        if let type = typeName {
+            fallbackParts.append(type)
+        }
+        if let engine = engineName {
+            fallbackParts.append(engine)
+        }
+
+        if !fallbackParts.isEmpty {
+            return fallbackParts.joined(separator: " ")
+        }
+
+        return nil
     }
 }
 
