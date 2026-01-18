@@ -856,6 +856,10 @@ struct AircraftDetailView: View {
     @State private var showingDeletedPhotoAlert = false
     @State private var pendingPhoto: (image: UIImage, identifier: String)?
 
+    // Error handling
+    @State private var showingSaveError = false
+    @State private var saveErrorMessage = ""
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -1142,7 +1146,12 @@ struct AircraftDetailView: View {
                     currentRating: aircraft.rating,
                     onSelect: { newRating in
                         aircraft.rating = newRating
-                        try? modelContext.save()
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            saveErrorMessage = "Could not save rating: \(error.localizedDescription)"
+                            showingSaveError = true
+                        }
                     }
                 )
                 .presentationDetents([.height(280)])
@@ -1191,6 +1200,11 @@ struct AircraftDetailView: View {
                 Button("Cancel", role: .cancel) { }
             } message: {
                 Text("The original photo is no longer on this device. Would you like to view the thumbnail?")
+            }
+            .alert("Save Failed", isPresented: $showingSaveError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(saveErrorMessage)
             }
             .onChange(of: editICAO) { oldValue, newValue in
                 // Auto-populate fields when ICAO is changed during editing
@@ -1400,11 +1414,17 @@ struct AircraftDetailView: View {
         if let thumbnailData = ThumbnailGenerator.generateThumbnail(from: image) {
             aircraft.thumbnailData = thumbnailData
             aircraft.iPhotoReference = identifier
-            try? modelContext.save()
 
-            // Add photo to Airplane-ID album in background
-            Task {
-                _ = await PhotoLibraryManager.shared.addPhotoToAppAlbum(localIdentifier: identifier)
+            do {
+                try modelContext.save()
+
+                // Add photo to Airplane-ID album in background
+                Task {
+                    _ = await PhotoLibraryManager.shared.addPhotoToAppAlbum(localIdentifier: identifier)
+                }
+            } catch {
+                saveErrorMessage = "Could not save photo: \(error.localizedDescription)"
+                showingSaveError = true
             }
         }
     }
@@ -1462,8 +1482,13 @@ struct AircraftDetailView: View {
         aircraft.month = Calendar.current.component(.month, from: editCaptureTime)
         aircraft.day = Calendar.current.component(.day, from: editCaptureTime)
 
-        try? modelContext.save()
-        isEditing = false
+        do {
+            try modelContext.save()
+            isEditing = false
+        } catch {
+            saveErrorMessage = "Could not save changes: \(error.localizedDescription)"
+            showingSaveError = true
+        }
     }
 }
 

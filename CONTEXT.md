@@ -1503,9 +1503,22 @@ Comprehensive code review identified 26 issues across security, best practices, 
 - ContentView.swift: "@preconcurrency on conformance to 'OptionSet' has no effect"
 - This is harmless - removing it causes worse Swift 6 actor isolation errors
 
+### Batch 3: Error Handling Improvements ✅
+
+1. **Removed force unwrapping in test data generation (SettingsPage.swift)**
+   - Changed `randomElement()!` to `randomElement() ?? nil`
+   - Safer pattern even though arrays are non-empty literals
+
+2. **Added user feedback for save errors (HangarPage.swift)**
+   - Added `@State showingSaveError` and `saveErrorMessage` to AircraftDetailView
+   - Added "Save Failed" alert to display errors to user
+   - Updated `saveChanges()` with do-catch and error alert
+   - Updated rating save with do-catch and error alert
+   - Updated photo save with do-catch and error alert
+   - User now sees alert if database save fails instead of silent failure
+
 ### Remaining Batches (Pending)
 
-- **Batch 3:** Error Handling improvements
 - **Batch 4:** Code Deduplication
 - **Batch 5:** File Organization
 - **Batch 6:** Polish & Standards

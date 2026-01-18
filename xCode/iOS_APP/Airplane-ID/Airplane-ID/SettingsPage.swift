@@ -1008,8 +1008,8 @@ struct DeveloperToolsView: View {
                         registration: columns[3],
                         aircraftType: columns[6].isEmpty ? nil : columns[6],
                         aircraftClassification: columns[7].isEmpty ? nil : Int(columns[7]),
-                        rating: [nil, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0].randomElement()!,
-                        thumbsUp: [nil, true, false].randomElement()!
+                        rating: [nil, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0].randomElement() ?? nil,
+                        thumbsUp: [nil, true, false].randomElement() ?? nil
                     ))
                 }
 
