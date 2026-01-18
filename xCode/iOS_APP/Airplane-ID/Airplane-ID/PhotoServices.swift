@@ -495,7 +495,7 @@ struct FullScreenPhotoViewer: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("Locate the original image in the Photos album named \"\(PhotoLibraryManager.albumName)\"")
+            Text("Find this photo in the Airplane-ID album")
         }
     }
 
