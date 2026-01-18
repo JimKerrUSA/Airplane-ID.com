@@ -2408,3 +2408,87 @@ ZStack {
 - MapsPage now matches this pattern with footer in its own VStack with Spacer, positioned by ZStack
 - Control buttons padding reduced from 16 to 8 to maintain proper spacing above footer
 
+
+---
+
+### 2026-01-18 (Session 2)
+
+## AircraftDetailView Enhancements
+
+### Editable Dropdown Pickers Added
+
+All the following fields now use dropdown pickers instead of text fields:
+
+| Field | Picker Type | Values |
+|-------|-------------|--------|
+| Category | CategoryPickerRow | Land, Sea, Amphibian |
+| Classification | ClassificationPickerRow | STANDARD, LIMITED, RESTRICTED, EXPERIMENTAL, etc. |
+| Engine Type | EngineTypePickerRow | None, Reciprocating, Turbo-prop, Turbo-jet, etc. |
+| Weight Class | WeightClassPickerRow | Up to 12,499 lbs, 12,500-19,999 lbs, 20,000+ lbs, UAV |
+| Owner Type | OwnerTypePickerRow | Individual, Partnership, Corporation, LLC, etc. |
+| Country | CountryPickerRow | Searchable list of ~195 countries |
+
+### Lookup Tables Added (Theme.swift - AircraftLookup)
+
+```swift
+// Weight Class (1-4)
+static let weightClasses: [Int: String] = [
+    1: "Up to 12,499 lbs",
+    2: "12,500 - 19,999 lbs",
+    3: "20,000 lbs and over",
+    4: "UAV up to 55g"
+]
+
+// Owner Type (1-9, no 6)
+static let ownerTypes: [Int: String] = [
+    1: "Individual",
+    2: "Partnership",
+    3: "Corporation",
+    4: "Co-Owned",
+    5: "Government",
+    7: "LLC",
+    8: "Non Citizen Corporation",
+    9: "Non Citizen Co-Owned"
+]
+```
+
+### Model Changes (Item.swift)
+
+- `weightClass`: Changed from `String?` to `Int?`
+- `ownerType`: Changed from `String?` to `Int?`
+- Added `CountryLookup` model for country code lookup
+
+### Country Lookup System
+
+Similar to ICAO lookup:
+- **CountryLookup model**: `code` (2-letter ISO), `name` (full name)
+- **CountryCodes.csv**: ~195 countries bundled with app
+- **CountrySearchSheet**: Searchable by name or code
+- **CountryPickerRow**: Shows "Country Name (XX)" format
+
+### Clickable Location Coordinates
+
+- "Location" renamed to "Spotted LOC" (original capture location)
+- Added "Current LOC" (last known position from server)
+- Both are clickable - tap navigates to Maps page centered on that coordinate
+- Uses `appState.navigateToMap(latitude:longitude:aircraftICAO:)` for navigation
+
+### Haptic Feedback Extended
+
+Added haptics to:
+- AircraftDetailView (photo tap, toolbar buttons, rating)
+- RatingSelectorSheet (star selection)
+- All new picker rows (selection feedback on choose)
+
+### Important: Schema Migration
+
+When changing field types (String? to Int?), must delete app and reinstall to clear old database. SwiftData cannot auto-migrate type changes.
+
+### Files Modified
+
+- `Theme.swift` - Added weightClasses, ownerTypes lookup tables
+- `Item.swift` - Changed weightClass/ownerType types, added CountryLookup
+- `HangarPage.swift` - Added all picker row components and search sheets
+- `Airplane_IDApp.swift` - Added CountryLookup to schema, country CSV loader
+- `CountryCodes.csv` - New file with country data
+
