@@ -109,6 +109,10 @@ extension CapturedAircraft {
             }
             return "MapIcons/icon-twin-prop"
         case "6":  // Rotorcraft
+            // Check if it's a quadcopter/drone (4+ motors)
+            if let engines = engineCount, engines >= 4 {
+                return "MapIcons/icao-F4"  // Quadcopter drone icon
+            }
             return "MapIcons/icon-helicopter"
         case "9":  // Gyroplane - use helicopter
             return "MapIcons/icon-helicopter"
