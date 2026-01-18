@@ -1904,6 +1904,114 @@ static func isAirlinerManufacturer(_ manufacturer: String) -> Bool
 static func findICAOIcon(for icao: String, manufacturer: String) -> String?
 ```
 
+### Manual ICAO Override System
+
+**Purpose:** Fix icon mismatches that automatic matching can't handle
+
+**Location:** `MapsPage.swift` → `MapIconHelper.icaoOverrides` (near line 137)
+
+**Format:**
+```swift
+static let icaoOverrides: [String: String] = [
+    "AIRCRAFT_ICAO": "ICON_ICAO",  // Comment explaining why
+    "AT3T": "AT5T",   // Air Tractor AT-301 → use AT-502 icon
+    // Add more as needed...
+]
+```
+
+**How It Works:**
+1. Overrides are checked FIRST, before any other matching logic
+2. Bypasses manufacturer verification (for cross-manufacturer matches)
+3. If override icon doesn't exist in `icaoToManufacturer`, falls through to normal matching
+
+**When to Add an Override:**
+- Aircraft shows wrong icon (e.g., AT3T showing as C172)
+- Aircraft from same family should share an icon (e.g., all Air Tractors → AT5T)
+- Manufacturer matching fails due to naming variations
+
+**To Add a New Override:**
+1. Open `MapsPage.swift`
+2. Find `icaoOverrides` dictionary (search for "MANUAL ICAO OVERRIDES")
+3. Add: `"WRONG_ICAO": "CORRECT_ICON_ICAO",`
+4. Rebuild app
+
+### Drone/Quadcopter Detection
+
+**Problem:** DJI Phantoms and commercial drones (Amazon, etc.) are classified as "rotorcraft" but showing helicopter icons.
+
+**Solution:** Auto-detect quadcopters based on engine count
+
+**Logic in `genericTypeIcon`:**
+```swift
+case "6":  // Rotorcraft
+    // Quadcopter/drone has 4+ motors
+    if let engines = engineCount, engines >= 4 {
+        return "MapIcons/icao-F4"  // Drone icon
+    }
+    return "MapIcons/icon-helicopter"
+```
+
+**Drone Icon (icao-F4):**
+- Custom quadcopter SVG with 4 propeller discs
+- DJI Phantom-style silhouette
+- Located at: `Assets.xcassets/MapIcons/icao-F4.imageset/drone.svg`
+
+**Detection Criteria:**
+| Aircraft Type | Engine Count | Icon Used |
+|---------------|--------------|-----------|
+| Rotorcraft (6) | 4+ | Drone (icao-F4) |
+| Rotorcraft (6) | 1-3 or nil | Helicopter |
+| Any other type | Any | Normal matching |
+
+**Why This Matters:**
+- DJI drones appearing in FAA registrations
+- Amazon/commercial delivery drones increasing
+- Test data already shows multiple DJI aircraft
+- Future-proofs for UAV growth
+
+**Covered Automatically:**
+- DJI Phantom (ICAO: F4) - also has direct ICAO match
+- Amazon Prime Air drones
+- Commercial inspection drones
+- Any rotorcraft with 4+ engines
+
+### Complete Icon Matching Flow
+
+```
+1. isAirliner check
+   ├─ YES → return "sf.airplane" (SF Symbol)
+   └─ NO → continue
+
+2. Check icaoOverrides dictionary
+   ├─ FOUND → return override icon
+   └─ NOT FOUND → continue
+
+3. Exact ICAO match (with manufacturer verification)
+   ├─ FOUND + manufacturer matches → return ICAO icon
+   └─ NOT FOUND or mfg mismatch → continue
+
+4. Prefix ICAO match (with manufacturer verification)
+   ├─ FOUND + manufacturer matches → return matched icon
+   └─ NOT FOUND → continue
+
+5. Generic type fallback
+   ├─ Balloon/Blimp/Parachute → icon-balloon
+   ├─ Single-engine FW → icon-single-prop
+   ├─ Multi-engine FW + jet → icon-jet
+   ├─ Multi-engine FW + prop → icon-twin-prop
+   ├─ Rotorcraft + 4+ engines → icao-F4 (drone)
+   ├─ Rotorcraft + <4 engines → icon-helicopter
+   ├─ Hybrid lift → sf.airplane
+   └─ Unknown → icon-single-prop
+```
+
+**Troubleshooting Wrong Icons:**
+1. Check if aircraft is an airliner (Boeing/Airbus) → should show SF Symbol
+2. Check `icaoOverrides` for existing override
+3. Check if ICAO exists in `icaoToManufacturer`
+4. Check if manufacturer normalization is working
+5. Add override if automatic matching fails
+
 **Future Enhancements:**
 - Create simplified silhouette versions if detail is lost at small sizes
 - Add icon for glider with longer wingspan silhouette
@@ -1926,10 +2034,9 @@ static func findICAOIcon(for icao: String, manufacturer: String) -> String?
 
 3. **Side-Positioned Labels**
    - Labels appear to the RIGHT of icons (not below like default Annotation)
-   - Tight padding (4px horizontal, 2px vertical)
-   - White semi-transparent background with rounded corners
-   - Font: 10pt semibold, black text
-   - Shows registration if available, otherwise abbreviated model (first 8 chars)
+   - White text with black outline (no background box)
+   - Font: 15pt bold
+   - Shows ICAO code (more recognizable to aviation enthusiasts than registration)
 
 4. **Zoom-Level Label Visibility**
    - Labels automatically hide when zoomed out
