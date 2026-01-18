@@ -117,14 +117,14 @@ final class CapturedAircraft: Identifiable {
     var engineType: Int?               // FAA TYPE-ENG: 0=None, 1=Recip, 2=Turbo-prop, 3=Turbo-shaft, 4=Turbo-jet, 9=Unknown, 10=Electric
     var engineCount: Int?              // Number of engines
     var seatCount: Int?                // Number of seats
-    var weightClass: String?           // Weight class
+    var weightClass: Int?              // Weight class (1-4, see AircraftLookup.weightClasses)
 
     // Registration/certification details (optional - populated via cloud sync)
     var country: String?               // Country of registration
     var airworthinessDate: Date?       // Airworthiness certificate date
     var certificateIssueDate: Date?    // Certificate issue date
     var certificateExpireDate: Date?   // Certificate expiration date
-    var ownerType: String?             // Owner type (individual, corporate, etc.)
+    var ownerType: Int?                // Owner type (1-9, see AircraftLookup.ownerTypes)
 
     // Registered owner info (optional - populated via cloud sync)
     var registeredOwner: String?       // Owner name
@@ -167,12 +167,12 @@ final class CapturedAircraft: Identifiable {
         engineType: Int? = nil,
         engineCount: Int? = nil,
         seatCount: Int? = nil,
-        weightClass: String? = nil,
+        weightClass: Int? = nil,
         country: String? = nil,
         airworthinessDate: Date? = nil,
         certificateIssueDate: Date? = nil,
         certificateExpireDate: Date? = nil,
-        ownerType: String? = nil,
+        ownerType: Int? = nil,
         registeredOwner: String? = nil,
         registeredAddress1: String? = nil,
         registeredAddress2: String? = nil,
@@ -274,5 +274,19 @@ final class ICAOLookup {
         self.aircraftType = aircraftType
         self.engineCount = engineCount
         self.engineType = engineType
+    }
+}
+
+// MARK: - CountryLookup Model
+/// Reference table for country codes (ISO 3166-1 alpha-2)
+/// Used for aircraft registration country selection
+@Model
+final class CountryLookup {
+    @Attribute(.unique) var code: String    // 2-letter country code (e.g., "US", "GB", "CN")
+    var name: String                         // Full country name (e.g., "United States", "United Kingdom", "China")
+
+    init(code: String, name: String) {
+        self.code = code
+        self.name = name
     }
 }

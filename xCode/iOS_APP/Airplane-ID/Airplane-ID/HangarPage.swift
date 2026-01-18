@@ -799,12 +799,13 @@ struct AircraftDetailView: View {
     @State private var editModel = ""
     @State private var editRegistration = ""
     @State private var editICAO = ""
-    @State private var editCountry = ""
+    @State private var editCountry: String? = nil
+    @State private var showingCountrySearch = false
 
     // Operator
     @State private var editAirlineCode: String? = nil
     @State private var editOwner = ""
-    @State private var editOwnerType = ""
+    @State private var editOwnerType: Int? = nil
     @State private var editAddress1 = ""
     @State private var editAddress2 = ""
     @State private var editCity = ""
@@ -820,7 +821,7 @@ struct AircraftDetailView: View {
     @State private var editEngineType: Int? = nil
     @State private var editEngineCount: Int? = nil
     @State private var editSeatCount: Int? = nil
-    @State private var editWeightClass = ""
+    @State private var editWeightClass: Int? = nil
 
     // Sighting
     @State private var editCaptureTime: Date = Date()
@@ -944,8 +945,15 @@ struct AircraftDetailView: View {
                                 EditableDetailRow(label: "Registration", value: $editRegistration, isEditing: isEditing, placeholder: "e.g. N12345")
                             }
                             // Country
-                            if !editCountry.isEmpty || isEditing {
-                                EditableDetailRow(label: "Country", value: $editCountry, isEditing: isEditing, placeholder: "e.g. US")
+                            if editCountry != nil || isEditing {
+                                CountryPickerRow(
+                                    selectedCountryCode: $editCountry,
+                                    isEditing: isEditing,
+                                    onTap: {
+                                        Haptics.light()
+                                        showingCountrySearch = true
+                                    }
+                                )
                             }
                         }
 
@@ -962,8 +970,11 @@ struct AircraftDetailView: View {
                                 if !editOwner.isEmpty || isEditing {
                                     EditableDetailRow(label: "Owner", value: $editOwner, isEditing: isEditing)
                                 }
-                                if !editOwnerType.isEmpty || isEditing {
-                                    EditableDetailRow(label: "Owner Type", value: $editOwnerType, isEditing: isEditing)
+                                if editOwnerType != nil || isEditing {
+                                    OwnerTypePickerRow(
+                                        selectedOwnerType: $editOwnerType,
+                                        isEditing: isEditing
+                                    )
                                 }
                                 if !editAddress1.isEmpty || isEditing {
                                     EditableDetailRow(label: "Address", value: $editAddress1, isEditing: isEditing)
@@ -995,9 +1006,8 @@ struct AircraftDetailView: View {
                                 }
                                 // Classification - editable
                                 if editAircraftClassification != nil || isEditing {
-                                    LookupDisplayRow(
-                                        label: "Classification",
-                                        displayValue: AircraftLookup.classificationName(editAircraftClassification),
+                                    ClassificationPickerRow(
+                                        selectedClassification: $editAircraftClassification,
                                         isEditing: isEditing
                                     )
                                 }
@@ -1033,8 +1043,11 @@ struct AircraftDetailView: View {
                                     EditableIntRow(label: "Seat Count", value: $editSeatCount, isEditing: isEditing, placeholder: "e.g. 4")
                                 }
                                 // Weight Class - editable
-                                if !editWeightClass.isEmpty || isEditing {
-                                    EditableDetailRow(label: "Weight Class", value: $editWeightClass, isEditing: isEditing)
+                                if editWeightClass != nil || isEditing {
+                                    WeightClassPickerRow(
+                                        selectedWeightClass: $editWeightClass,
+                                        isEditing: isEditing
+                                    )
                                 }
                             }
                         }
@@ -1165,6 +1178,10 @@ struct AircraftDetailView: View {
                 )
                 .presentationDetents([.large])
             }
+            .sheet(isPresented: $showingCountrySearch) {
+                CountrySearchSheet(selectedCountryCode: $editCountry)
+                    .presentationDetents([.medium, .large])
+            }
             .sheet(isPresented: $showingPhotoPicker) {
                 PhotoPickerView(
                     onSelect: { image, identifier in
@@ -1222,12 +1239,12 @@ struct AircraftDetailView: View {
         editModel = aircraft.model
         editICAO = aircraft.icao
         editRegistration = aircraft.registration ?? ""
-        editCountry = aircraft.country ?? ""
+        editCountry = aircraft.country
 
         // Operator
         editAirlineCode = aircraft.airlineCode
         editOwner = aircraft.registeredOwner ?? ""
-        editOwnerType = aircraft.ownerType ?? ""
+        editOwnerType = aircraft.ownerType
         editAddress1 = aircraft.registeredAddress1 ?? ""
         editAddress2 = aircraft.registeredAddress2 ?? ""
         editCity = aircraft.registeredCity ?? ""
@@ -1243,7 +1260,7 @@ struct AircraftDetailView: View {
         editEngineType = aircraft.engineType
         editEngineCount = aircraft.engineCount
         editSeatCount = aircraft.seatCount
-        editWeightClass = aircraft.weightClass ?? ""
+        editWeightClass = aircraft.weightClass
 
         // Sighting
         editCaptureTime = aircraft.captureTime
@@ -1305,7 +1322,7 @@ struct AircraftDetailView: View {
     private var hasOperatorData: Bool {
         (aircraft.airlineCode != nil && !aircraft.airlineCode!.isEmpty) ||
         (aircraft.registeredOwner != nil && !aircraft.registeredOwner!.isEmpty) ||
-        (aircraft.ownerType != nil && !aircraft.ownerType!.isEmpty) ||
+        aircraft.ownerType != nil ||
         (aircraft.registeredAddress1 != nil && !aircraft.registeredAddress1!.isEmpty) ||
         (aircraft.registeredCity != nil && !aircraft.registeredCity!.isEmpty) ||
         (aircraft.registeredState != nil && !aircraft.registeredState!.isEmpty) ||
@@ -1321,7 +1338,7 @@ struct AircraftDetailView: View {
         aircraft.engineType != nil ||
         aircraft.engineCount != nil ||
         aircraft.seatCount != nil ||
-        (aircraft.weightClass != nil && !aircraft.weightClass!.isEmpty)
+        aircraft.weightClass != nil
     }
 
     private var hasCertificationData: Bool {
@@ -1432,12 +1449,12 @@ struct AircraftDetailView: View {
         aircraft.model = editModel
         aircraft.icao = editICAO
         aircraft.registration = editRegistration.isEmpty ? nil : editRegistration
-        aircraft.country = editCountry.isEmpty ? nil : editCountry
+        aircraft.country = editCountry
 
         // Operator
         aircraft.airlineCode = editAirlineCode
         aircraft.registeredOwner = editOwner.isEmpty ? nil : editOwner
-        aircraft.ownerType = editOwnerType.isEmpty ? nil : editOwnerType
+        aircraft.ownerType = editOwnerType
         aircraft.registeredAddress1 = editAddress1.isEmpty ? nil : editAddress1
         aircraft.registeredAddress2 = editAddress2.isEmpty ? nil : editAddress2
         aircraft.registeredCity = editCity.isEmpty ? nil : editCity
@@ -1453,7 +1470,7 @@ struct AircraftDetailView: View {
         aircraft.engineType = editEngineType
         aircraft.engineCount = editEngineCount
         aircraft.seatCount = editSeatCount
-        aircraft.weightClass = editWeightClass.isEmpty ? nil : editWeightClass
+        aircraft.weightClass = editWeightClass
 
         // Sighting - update date components too
         aircraft.captureTime = editCaptureTime
@@ -1876,6 +1893,58 @@ struct CategoryPickerRow: View {
     }
 }
 
+// MARK: - Classification Picker Row
+/// Inline picker for aircraft classification
+struct ClassificationPickerRow: View {
+    @Binding var selectedClassification: Int?
+    let isEditing: Bool
+
+    var body: some View {
+        HStack {
+            Text("Classification")
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                Menu {
+                    Button("None") {
+                        Haptics.selection()
+                        selectedClassification = nil
+                    }
+                    ForEach(Array(AircraftLookup.classifications.keys.sorted()), id: \.self) { code in
+                        Button(AircraftLookup.classifications[code] ?? "") {
+                            Haptics.selection()
+                            selectedClassification = code
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(displayText)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(selectedClassification == nil ? .white.opacity(0.3) : .white)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            } else {
+                Text(displayText)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(selectedClassification == nil ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var displayText: String {
+        AircraftLookup.classificationName(selectedClassification) ?? "—"
+    }
+}
+
 // MARK: - Engine Type Picker Row
 /// Inline picker for engine type
 struct EngineTypePickerRow: View {
@@ -1925,6 +1994,246 @@ struct EngineTypePickerRow: View {
 
     private var displayText: String {
         AircraftLookup.engineTypeName(selectedEngineType) ?? "—"
+    }
+}
+
+// MARK: - Weight Class Picker Row
+/// Inline picker for weight class
+struct WeightClassPickerRow: View {
+    @Binding var selectedWeightClass: Int?
+    let isEditing: Bool
+
+    var body: some View {
+        HStack {
+            Text("Weight Class")
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                Menu {
+                    Button("None") {
+                        Haptics.selection()
+                        selectedWeightClass = nil
+                    }
+                    ForEach(Array(AircraftLookup.weightClasses.keys.sorted()), id: \.self) { code in
+                        Button(AircraftLookup.weightClasses[code] ?? "") {
+                            Haptics.selection()
+                            selectedWeightClass = code
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(displayText)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(selectedWeightClass == nil ? .white.opacity(0.3) : .white)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            } else {
+                Text(displayText)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(selectedWeightClass == nil ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var displayText: String {
+        AircraftLookup.weightClassName(selectedWeightClass) ?? "—"
+    }
+}
+
+// MARK: - Owner Type Picker Row
+/// Inline picker for owner type
+struct OwnerTypePickerRow: View {
+    @Binding var selectedOwnerType: Int?
+    let isEditing: Bool
+
+    var body: some View {
+        HStack {
+            Text("Owner Type")
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                Menu {
+                    Button("None") {
+                        Haptics.selection()
+                        selectedOwnerType = nil
+                    }
+                    ForEach(Array(AircraftLookup.ownerTypes.keys.sorted()), id: \.self) { code in
+                        Button(AircraftLookup.ownerTypes[code] ?? "") {
+                            Haptics.selection()
+                            selectedOwnerType = code
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(displayText)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(selectedOwnerType == nil ? .white.opacity(0.3) : .white)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            } else {
+                Text(displayText)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(selectedOwnerType == nil ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var displayText: String {
+        AircraftLookup.ownerTypeName(selectedOwnerType) ?? "—"
+    }
+}
+
+// MARK: - Country Picker Row
+/// Row that displays selected country and opens search when tapped
+struct CountryPickerRow: View {
+    @Binding var selectedCountryCode: String?
+    let isEditing: Bool
+    let onTap: () -> Void
+
+    @Query(sort: \CountryLookup.name) private var countries: [CountryLookup]
+
+    var body: some View {
+        HStack {
+            Text("Country")
+                .font(.system(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
+            Spacer()
+            if isEditing {
+                Button(action: onTap) {
+                    HStack(spacing: 4) {
+                        Text(selectedCountryName)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(selectedCountryCode == nil ? .white.opacity(0.3) : .white)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
+            } else {
+                Text(selectedCountryName)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(selectedCountryCode == nil ? .white.opacity(0.3) : .white)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(AppColors.settingsRow)
+        .cornerRadius(10)
+    }
+
+    private var selectedCountryName: String {
+        guard let code = selectedCountryCode,
+              let country = countries.first(where: { $0.code == code }) else {
+            return "—"
+        }
+        return "\(country.name) (\(country.code))"
+    }
+}
+
+// MARK: - Country Search Sheet
+/// Searchable sheet for selecting a country from the lookup table
+struct CountrySearchSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedCountryCode: String?
+
+    @Query(sort: \CountryLookup.name) private var allCountries: [CountryLookup]
+    @State private var searchText = ""
+
+    private var filteredCountries: [CountryLookup] {
+        if searchText.isEmpty {
+            return allCountries
+        }
+
+        let searchLower = searchText.lowercased()
+        return allCountries.filter { country in
+            country.name.lowercased().contains(searchLower) ||
+            country.code.lowercased().contains(searchLower)
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Search field
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(AppColors.darkGray)
+                    TextField("Search countries...", text: $searchText)
+                        .textFieldStyle(.plain)
+                        .foregroundStyle(AppColors.darkGray)
+                        .autocorrectionDisabled()
+                    if !searchText.isEmpty {
+                        Button(action: { searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(AppColors.darkGray)
+                        }
+                    }
+                }
+                .padding(12)
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding()
+
+                // Results list
+                List {
+                    // Clear selection option
+                    Button(action: {
+                        Haptics.selection()
+                        selectedCountryCode = nil
+                        dismiss()
+                    }) {
+                        Text("None")
+                            .foregroundStyle(selectedCountryCode == nil ? AppColors.linkBlue : .primary)
+                    }
+
+                    ForEach(filteredCountries, id: \.code) { country in
+                        Button(action: {
+                            Haptics.selection()
+                            selectedCountryCode = country.code
+                            dismiss()
+                        }) {
+                            HStack {
+                                Text(country.name)
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Text(country.code)
+                                    .foregroundStyle(.secondary)
+                                    .font(.system(size: 14, weight: .medium))
+                            }
+                        }
+                    }
+                }
+                .listStyle(.plain)
+            }
+            .navigationTitle("Select Country")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -45,6 +45,7 @@ struct MainView: View {
     private func loadReferenceDataIfNeeded() async {
         await loadAirlineCodesIfNeeded()
         await loadICAOCodesIfNeeded()
+        await loadCountryCodesIfNeeded()
     }
 
     /// Load airline codes from bundled CSV if table is empty
@@ -154,6 +155,50 @@ struct MainView: View {
             #endif
         }
     }
+
+    /// Load country codes from bundled CSV if table is empty
+    @MainActor
+    private func loadCountryCodesIfNeeded() async {
+        let descriptor = FetchDescriptor<CountryLookup>()
+        let existingCount = (try? modelContext.fetchCount(descriptor)) ?? 0
+        guard existingCount == 0 else { return }
+
+        guard let csvURL = Bundle.main.url(forResource: "CountryCodes", withExtension: "csv") else {
+            #if DEBUG
+            print("CountryCodes.csv not found in bundle")
+            #endif
+            return
+        }
+
+        do {
+            let csvContent = try String(contentsOf: csvURL, encoding: .utf8)
+            let lines = csvContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
+            guard lines.count > 1 else { return }
+
+            // Columns: code(0), name(1)
+            for line in lines.dropFirst() {
+                let columns = CSVParser.parseLine(line)
+                guard columns.count >= 2 else { continue }
+
+                let code = columns[0].trimmingCharacters(in: .whitespaces).uppercased()
+                let name = columns[1].trimmingCharacters(in: .whitespaces)
+
+                guard code.count == 2 && !name.isEmpty else { continue }
+
+                let country = CountryLookup(code: code, name: name)
+                modelContext.insert(country)
+            }
+
+            try modelContext.save()
+            #if DEBUG
+            print("Loaded \(lines.count - 1) country codes from bundle")
+            #endif
+        } catch {
+            #if DEBUG
+            print("Error loading country codes: \(error)")
+            #endif
+        }
+    }
 }
 
 // MARK: - App Entry Point
@@ -169,6 +214,7 @@ struct Airplane_IDApp: App {
             User.self,
             AirlineLookup.self,
             ICAOLookup.self,
+            CountryLookup.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

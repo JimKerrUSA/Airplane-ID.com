@@ -173,6 +173,41 @@ enum AircraftLookup {
         guard let code = code else { return nil }
         return engineTypes[code]
     }
+
+    // MARK: Weight Class (FAA weight class)
+    // Stored as Int (1-4), displayed as weight range
+    static let weightClasses: [Int: String] = [
+        1: "Up to 12,499 lbs",
+        2: "12,500 - 19,999 lbs",
+        3: "20,000 lbs and over",
+        4: "UAV up to 55g"
+    ]
+
+    /// Returns weight class display name or nil if not found
+    static func weightClassName(_ code: Int?) -> String? {
+        guard let code = code else { return nil }
+        return weightClasses[code]
+    }
+
+    // MARK: Owner Type (FAA registrant type)
+    // Stored as Int (1-9, no 6), displayed as owner type
+    static let ownerTypes: [Int: String] = [
+        1: "Individual",
+        2: "Partnership",
+        3: "Corporation",
+        4: "Co-Owned",
+        5: "Government",
+        // Note: 6 is not defined in FAA data
+        7: "LLC",
+        8: "Non Citizen Corporation",
+        9: "Non Citizen Co-Owned"
+    ]
+
+    /// Returns owner type display name or nil if not found
+    static func ownerTypeName(_ code: Int?) -> String? {
+        guard let code = code else { return nil }
+        return ownerTypes[code]
+    }
 }
 
 // MARK: - Haptic Feedback Manager
