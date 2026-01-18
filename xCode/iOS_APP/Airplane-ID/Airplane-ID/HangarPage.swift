@@ -1037,14 +1037,21 @@ struct AircraftDetailView: View {
                         detailSection(title: "Sighting Details") {
                             // Date/Time - editable
                             if isEditing {
-                                DatePicker("Date & Time", selection: $editCaptureTime, displayedComponents: [.date, .hourAndMinute])
-                                    .font(.system(size: 15))
-                                    .foregroundStyle(.white)
-                                    .tint(.white)
-                                    .padding(.vertical, 6)
-                                    .padding(.horizontal, 16)
-                                    .background(AppColors.settingsRow)
-                                    .cornerRadius(10)
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Date & Time")
+                                        .font(.system(size: 15))
+                                        .foregroundStyle(.white.opacity(0.6))
+
+                                    DatePicker("", selection: $editCaptureTime, displayedComponents: [.date, .hourAndMinute])
+                                        .labelsHidden()
+                                        .font(.system(size: 15))
+                                        .foregroundStyle(.white)
+                                        .tint(.white)
+                                }
+                                .padding(.vertical, 10)
+                                .padding(.horizontal, 16)
+                                .background(AppColors.settingsRow)
+                                .cornerRadius(10)
                             } else {
                                 DetailRow(label: "Date", value: formatDateTime(aircraft.captureTime))
                             }
