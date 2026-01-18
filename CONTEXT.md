@@ -1317,10 +1317,78 @@ var iPhotoReference: String
 3. **Missing import fix:**
    - Added `import Combine` to PhotoServices.swift for ObservableObject support
 
-4. **Album organization feature (commit 68716b8):**
-   - Created "Airplane-ID" album in Photos library
-   - Photos automatically added to album when selected
-   - Album uses references (no photo duplication)
-   - "Open in Photos" button renamed to "View in Photos"
-   - Shows alert: "Locate the original image in the Photos album named Airplane-ID"
-   - iOS doesn't support deep-linking to specific albums, but clear messaging helps users find photos
+### Airplane-ID Album Feature
+
+**Commits:** 68716b8, 6c29848
+
+#### The Problem
+
+When users tap "View in Photos" to see their full-resolution aircraft photo, iOS opens the Photos app but doesn't navigate to the specific image. Apple doesn't provide a public API to deep-link to a specific photo or album using `PHAsset.localIdentifier`. The `photos-redirect://` URL scheme just opens Photos to wherever the user was last viewing.
+
+This left users stranded in their photo library with thousands of images, unsure where to find the aircraft photo they wanted to see.
+
+#### The Solution
+
+Create a dedicated **"Airplane-ID" album** in the user's Photos library. When users select a photo for an aircraft sighting, we automatically add that photo to our album. This gives users a single, predictable location to find all their aircraft photos.
+
+#### How It Works
+
+1. **Album Creation (automatic):**
+   - First time a user selects a photo, we check if "Airplane-ID" album exists
+   - If not, we create it using `PHAssetCollectionChangeRequest.creationRequestForAssetCollection`
+   - Album persists in user's Photos library
+
+2. **Adding Photos to Album:**
+   - When photo is selected in our app, we save the thumbnail to our database
+   - In background, we add a *reference* to the photo in the Airplane-ID album
+   - No duplication - the album contains references, not copies
+   - Same photo can exist in multiple albums (Recents, Airplane-ID, user albums)
+
+3. **"View in Photos" Button:**
+   - Renamed from "Open in Photos" for clarity
+   - Shows alert with message: **"Find this photo in the Airplane-ID album"**
+   - User taps "Open Photos" → Photos app opens
+   - User navigates to Albums → Airplane-ID → finds their photo
+
+#### Why This Approach
+
+| Alternative Considered | Why We Didn't Use It |
+|------------------------|----------------------|
+| Deep-link to photo | iOS doesn't support this via public API |
+| Write metadata/tags | iOS doesn't expose API to write photo captions or tags |
+| Copy photo to app sandbox | Wastes storage, loses edits user makes in Photos |
+| Just open Photos app | Users couldn't find their photos among thousands |
+
+The album approach is the best available solution because:
+- Users know exactly where to look (Albums → Airplane-ID)
+- No storage duplication
+- Photos stay in user's library (can be backed up, edited, shared normally)
+- Clear, simple messaging that non-technical users understand
+
+#### PhotoLibraryManager Functions Added
+
+```swift
+static let albumName = "Airplane-ID"
+
+func fetchAppAlbum() -> PHAssetCollection?           // Find existing album
+func createAppAlbum() async -> PHAssetCollection?    // Create new album
+func getOrCreateAppAlbum() async -> PHAssetCollection?  // Get or create
+func addPhotoToAppAlbum(localIdentifier: String) async -> Bool  // Add photo
+func openPhotosApp()  // Open Photos app
+```
+
+#### User Experience Flow
+
+```
+User taps "View in Photos" button
+        ↓
+Alert appears: "Find this photo in the Airplane-ID album"
+        ↓
+User taps "Open Photos"
+        ↓
+Photos app opens
+        ↓
+User goes to Albums tab → Airplane-ID album
+        ↓
+All their aircraft photos are there, organized together
+```
