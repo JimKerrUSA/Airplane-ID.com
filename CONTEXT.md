@@ -1535,7 +1535,26 @@ Comprehensive code review identified 26 issues across security, best practices, 
    - Removed duplicate `formatCoordinates()` from HangarPage.swift
    - All usages updated to `DateFormatting.formatDate()`, etc.
 
+### Batch 5: File Organization ✅
+
+1. **Created Utilities.swift for shared code**
+   - Moved `ParsedAircraftData` struct from SettingsPage.swift
+   - Moved `CSVParser` enum from SettingsPage.swift
+   - Moved `CSVImportError` enum from SettingsPage.swift
+   - These utilities are used by both Airplane_IDApp.swift and SettingsPage.swift
+   - Centralizes shared parsing code in one location
+
+2. **File structure after reorganization:**
+   - `Utilities.swift` - Shared parsing utilities (new)
+   - `Theme.swift` - Colors, fonts, spacing, date formatting, lookup tables
+   - `PhotoServices.swift` - Photo library management
+   - `Item.swift` - SwiftData models
+   - `Airplane_IDApp.swift` - App entry point, data loading
+   - `ContentView.swift` - Templates, app state, footer
+   - Page files: `HomePage.swift`, `HangarPage.swift`, `SettingsPage.swift`, etc.
+
+**Note:** New file `Utilities.swift` must be added to the Xcode project.
+
 ### Remaining Batches (Pending)
 
-- **Batch 5:** File Organization
 - **Batch 6:** Polish & Standards
