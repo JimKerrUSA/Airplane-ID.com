@@ -282,9 +282,28 @@ enum MapIconHelper {
             }
         }
 
+        // 2. Special handling for Van's RV aircraft
+        // RV homebuilts often list builder's name as manufacturer, not "Van's Aircraft"
+        // If ICAO starts with "RV", try to match to our RV icons directly
+        if code.hasPrefix("RV") {
+            // Try exact match first
+            if icaoToManufacturer[code] != nil {
+                return "MapIcons/icao-\(code)"
+            }
+            // Try to find any RV icon that matches the prefix (RV6, RV10, RV12)
+            let rvIcons = ["RV6", "RV10", "RV12"]
+            for rvIcon in rvIcons {
+                if code.hasPrefix(rvIcon.dropLast()) || code == rvIcon {
+                    return "MapIcons/icao-\(rvIcon)"
+                }
+            }
+            // Fall back to RV6 as generic RV silhouette
+            return "MapIcons/icao-RV6"
+        }
+
         let normalizedMfg = normalizeManufacturer(manufacturer)
 
-        // 2. Try exact match - verify manufacturer matches
+        // 3. Try exact match - verify manufacturer matches
         if let iconMfg = icaoToManufacturer[code] {
             if iconMfg == normalizedMfg {
                 return "MapIcons/icao-\(code)"
@@ -293,7 +312,7 @@ enum MapIconHelper {
             return nil
         }
 
-        // 3. Try prefix matching with manufacturer verification
+        // 4. Try prefix matching with manufacturer verification
         var prefix = code
         while prefix.count >= 2 {
             prefix = String(prefix.dropLast())

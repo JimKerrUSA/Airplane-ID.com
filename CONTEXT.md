@@ -1975,6 +1975,39 @@ case "6":  // Rotorcraft
 - Commercial inspection drones
 - Any rotorcraft with 4+ engines
 
+### Van's RV Aircraft Special Handling
+
+**Problem:** RV homebuilts (RV-6, RV-10, etc.) often list the builder's name as manufacturer in FAA records, not "Van's Aircraft". This breaks manufacturer verification.
+
+**Example:** N1067S is an RV6, but manufacturer might be "SMITH JOHN" instead of "VANS AIRCRAFT"
+
+**Solution:** If ICAO starts with "RV", bypass manufacturer check and use RV icons directly
+
+**Logic:**
+```swift
+if code.hasPrefix("RV") {
+    // Try exact match (RV6, RV10, RV12)
+    // Try prefix match
+    // Fall back to RV6 as generic RV silhouette
+}
+```
+
+**Available RV Icons:** RV6, RV10, RV12
+
+**Matching Examples:**
+| ICAO | Manufacturer | Result |
+|------|--------------|--------|
+| RV6 | SMITH JOHN | `icao-RV6` ✓ |
+| RV7 | DOE JANE | `icao-RV6` (fallback) |
+| RV10 | VANS AIRCRAFT | `icao-RV10` ✓ |
+| RV14 | ANYONE | `icao-RV6` (fallback) |
+
+**Why This Matters:**
+- RV aircraft are extremely popular among aviation enthusiasts
+- Many app users will fly or spot RVs
+- Distinctive low-wing appearance - wrong icon would be obvious
+- Homebuilt registration quirk requires special handling
+
 ### Complete Icon Matching Flow
 
 ```
@@ -1986,15 +2019,20 @@ case "6":  // Rotorcraft
    ├─ FOUND → return override icon
    └─ NOT FOUND → continue
 
-3. Exact ICAO match (with manufacturer verification)
+3. Van's RV special handling (ICAO starts with "RV")
+   ├─ Exact RV match (RV6, RV10, RV12) → return that icon
+   ├─ Other RV variant → return RV6 as fallback
+   └─ NOT an RV → continue
+
+4. Exact ICAO match (with manufacturer verification)
    ├─ FOUND + manufacturer matches → return ICAO icon
    └─ NOT FOUND or mfg mismatch → continue
 
-4. Prefix ICAO match (with manufacturer verification)
+5. Prefix ICAO match (with manufacturer verification)
    ├─ FOUND + manufacturer matches → return matched icon
    └─ NOT FOUND → continue
 
-5. Generic type fallback
+6. Generic type fallback
    ├─ Balloon/Blimp/Parachute → icon-balloon
    ├─ Single-engine FW → icon-single-prop
    ├─ Multi-engine FW + jet → icon-jet
