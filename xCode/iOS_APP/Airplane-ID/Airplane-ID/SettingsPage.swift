@@ -759,12 +759,59 @@ struct AppPreferencesView: View {
                             )
                         }
 
-                        // Data Management Section
+                        // Reset Preferences Section
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("DATA MANAGEMENT")
+                            Text("PREFERENCES")
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(.white.opacity(0.5))
                                 .padding(.leading, 4)
+
+                            Button(action: {
+                                Haptics.light()
+                                resetPreferencesOnly()
+                            }) {
+                                HStack(spacing: 14) {
+                                    Image(systemName: "slider.horizontal.3")
+                                        .font(.system(size: 18))
+                                        .foregroundStyle(AppColors.linkBlue)
+                                        .frame(width: 24)
+
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Reset Preferences")
+                                            .font(.system(size: 15, weight: .medium))
+                                            .foregroundStyle(.white)
+                                        Text("Restore default settings (keeps your data)")
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(.white.opacity(0.5))
+                                    }
+
+                                    Spacer()
+
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 12, weight: .semibold))
+                                        .foregroundStyle(.white.opacity(0.3))
+                                }
+                                .padding(.vertical, 14)
+                                .padding(.horizontal, 16)
+                                .background(AppColors.settingsRow)
+                                .cornerRadius(10)
+                            }
+                        }
+
+                        // Spacer between preferences and danger zone
+                        Spacer().frame(height: 24)
+
+                        // Danger Zone Section
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .font(.system(size: 12))
+                                    .foregroundStyle(AppColors.error)
+                                Text("DANGER ZONE")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundStyle(AppColors.error)
+                            }
+                            .padding(.leading, 4)
 
                             // Status message
                             if let message = statusMessage {
@@ -903,6 +950,18 @@ struct AppPreferencesView: View {
     }
 
     // MARK: - Data Management Functions
+
+    private func resetPreferencesOnly() {
+        // Reset preferences to defaults without deleting any data
+        timeFormat = TimeFormatPreference.system.rawValue
+        dateFormat = DateFormatPreference.system.rawValue
+        timeZone = TimeZonePreference.device.rawValue
+        defaultPage = DefaultPagePreference.home.rawValue
+
+        Haptics.success()
+        statusMessage = "✓ Preferences restored to defaults"
+        clearStatusAfterDelay()
+    }
 
     private func deleteAllAircraft() {
         do {
