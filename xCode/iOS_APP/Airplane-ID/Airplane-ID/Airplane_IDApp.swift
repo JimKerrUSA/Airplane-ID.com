@@ -55,7 +55,9 @@ struct MainView: View {
         guard existingCount == 0 else { return }
 
         guard let csvURL = Bundle.main.url(forResource: "AirlineCodes", withExtension: "csv") else {
+            #if DEBUG
             print("AirlineCodes.csv not found in bundle")
+            #endif
             return
         }
 
@@ -84,9 +86,13 @@ struct MainView: View {
             }
 
             try modelContext.save()
+            #if DEBUG
             print("Loaded \(lines.count - 1) airline codes from bundle")
+            #endif
         } catch {
+            #if DEBUG
             print("Error loading airline codes: \(error)")
+            #endif
         }
     }
 
@@ -98,7 +104,9 @@ struct MainView: View {
         guard existingCount == 0 else { return }
 
         guard let csvURL = Bundle.main.url(forResource: "ICAOCodes", withExtension: "csv") else {
+            #if DEBUG
             print("ICAOCodes.csv not found in bundle")
+            #endif
             return
         }
 
@@ -137,9 +145,13 @@ struct MainView: View {
             }
 
             try modelContext.save()
+            #if DEBUG
             print("Loaded \(lines.count - 1) ICAO aircraft types from bundle")
+            #endif
         } catch {
+            #if DEBUG
             print("Error loading ICAO codes: \(error)")
+            #endif
         }
     }
 }

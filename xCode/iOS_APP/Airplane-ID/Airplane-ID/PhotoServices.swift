@@ -139,7 +139,9 @@ class PhotoLibraryManager: ObservableObject {
             )
             return fetchResult.firstObject
         } catch {
+            #if DEBUG
             print("Error creating album: \(error)")
+            #endif
             return nil
         }
     }
@@ -155,12 +157,16 @@ class PhotoLibraryManager: ObservableObject {
     /// Add a photo to the Airplane-ID album
     func addPhotoToAppAlbum(localIdentifier: String) async -> Bool {
         guard let asset = fetchAsset(localIdentifier: localIdentifier) else {
+            #if DEBUG
             print("Asset not found: \(localIdentifier)")
+            #endif
             return false
         }
 
         guard let album = await getOrCreateAppAlbum() else {
+            #if DEBUG
             print("Could not get or create album")
+            #endif
             return false
         }
 
@@ -180,7 +186,9 @@ class PhotoLibraryManager: ObservableObject {
             }
             return true
         } catch {
+            #if DEBUG
             print("Error adding photo to album: \(error)")
+            #endif
             return false
         }
     }
