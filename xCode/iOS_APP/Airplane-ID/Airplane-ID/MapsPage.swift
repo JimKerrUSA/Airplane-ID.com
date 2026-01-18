@@ -123,6 +123,30 @@ extension CapturedAircraft {
 // MARK: - Map Icon Helper
 /// Helper for finding ICAO-specific map icons with manufacturer verification
 enum MapIconHelper {
+
+    // =========================================================================
+    // MANUAL ICAO OVERRIDES - Edit this dictionary to fix icon mismatches
+    // =========================================================================
+    // Format: "AIRCRAFT_ICAO": "ICON_ICAO"
+    // - AIRCRAFT_ICAO = The ICAO code of the plane being displayed
+    // - ICON_ICAO = The ICAO code of the icon to use (must exist in icaoToManufacturer)
+    //
+    // Add a row when you discover an aircraft showing the wrong icon.
+    // These overrides are checked FIRST, before any other matching logic.
+    // =========================================================================
+    static let icaoOverrides: [String: String] = [
+        // Air Tractor variants → use AT-502 icon
+        "AT3T": "AT5T",   // AT-301 Turbo
+        "AT30": "AT5T",   // AT-300
+        "AT40": "AT5T",   // AT-400
+        "AT50": "AT5T",   // AT-500
+        "AT60": "AT5T",   // AT-600
+        "AT80": "AT5T",   // AT-800
+
+        // Add more overrides below as needed:
+        // "WRONG_ICAO": "CORRECT_ICON_ICAO",
+    ]
+
     /// ICAO codes mapped to their manufacturers (normalized to uppercase for matching)
     /// Only includes general aviation aircraft - NOT airliners
     static let icaoToManufacturer: [String: String] = [
@@ -234,6 +258,7 @@ enum MapIconHelper {
     }
 
     /// Attempts to find an ICAO-specific icon that matches both code and manufacturer
+    /// Checks manual overrides first, then exact match, then prefix matching
     /// - Parameters:
     ///   - icao: The aircraft's ICAO code
     ///   - manufacturer: The aircraft's manufacturer (for verification)
@@ -242,9 +267,17 @@ enum MapIconHelper {
         let code = icao.uppercased().trimmingCharacters(in: .whitespaces)
         guard !code.isEmpty else { return nil }
 
+        // 1. Check manual overrides FIRST (bypasses manufacturer check)
+        if let overrideIcon = icaoOverrides[code] {
+            // Verify the override icon exists
+            if icaoToManufacturer[overrideIcon] != nil {
+                return "MapIcons/icao-\(overrideIcon)"
+            }
+        }
+
         let normalizedMfg = normalizeManufacturer(manufacturer)
 
-        // Try exact match first - verify manufacturer matches
+        // 2. Try exact match - verify manufacturer matches
         if let iconMfg = icaoToManufacturer[code] {
             if iconMfg == normalizedMfg {
                 return "MapIcons/icao-\(code)"
@@ -253,7 +286,7 @@ enum MapIconHelper {
             return nil
         }
 
-        // Try prefix matching with manufacturer verification
+        // 3. Try prefix matching with manufacturer verification
         var prefix = code
         while prefix.count >= 2 {
             prefix = String(prefix.dropLast())
@@ -369,7 +402,7 @@ struct AircraftMapAnnotation: View {
             // White text with black outline - no background box
             if showLabel {
                 Text(aircraft.icao)
-                    .font(.system(size: 13, weight: .bold))
+                    .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(.white)
                     // Black outline effect using multiple shadows
                     .shadow(color: .black, radius: 0.5, x: 0, y: 0)
