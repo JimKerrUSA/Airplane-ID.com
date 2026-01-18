@@ -49,6 +49,21 @@ enum CSVParser {
     }
 }
 
+/// Error type for CSV import operations
+enum CSVImportError: Error, LocalizedError {
+    case fileNotFound
+    case emptyFile
+    case parseError(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .fileNotFound: return "CSV file not found"
+        case .emptyFile: return "CSV file is empty"
+        case .parseError(let message): return message
+        }
+    }
+}
+
 // MARK: - Settings Page
 /// Settings page with dark background (#121516)
 /// Custom orientation handling to ensure dark background covers entire screen including footer area
@@ -946,24 +961,24 @@ struct DeveloperToolsView: View {
                 case .success(let parsedData):
                     insertParsedAircraft(parsedData)
                 case .failure(let error):
-                    statusMessage = "✗ \(error)"
+                    statusMessage = "✗ \(error.localizedDescription)"
                 }
             }
         }
     }
 
-    /// Parse CSV file in background - returns parsed data or error message
-    private func parseCSVInBackground(count: Int) async -> Result<[ParsedAircraftData], String> {
+    /// Parse CSV file in background - returns parsed data or error
+    private func parseCSVInBackground(count: Int) async -> Result<[ParsedAircraftData], CSVImportError> {
         await Task.detached(priority: .userInitiated) {
             guard let csvURL = Bundle.main.url(forResource: "AirplaneID-TestData", withExtension: "csv") else {
-                return .failure("CSV file not found")
+                return .failure(.fileNotFound)
             }
 
             do {
                 let csvContent = try String(contentsOf: csvURL, encoding: .utf8)
                 let lines = csvContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
                 guard lines.count > 1 else {
-                    return .failure("CSV file is empty")
+                    return .failure(.emptyFile)
                 }
 
                 let dataLines = Array(lines.dropFirst().prefix(count))
@@ -1000,7 +1015,7 @@ struct DeveloperToolsView: View {
 
                 return .success(parsedData)
             } catch {
-                return .failure("Error: \(error.localizedDescription)")
+                return .failure(.parseError(error.localizedDescription))
             }
         }.value
     }
