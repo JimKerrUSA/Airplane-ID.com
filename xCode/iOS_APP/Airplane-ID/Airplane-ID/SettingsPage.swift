@@ -896,39 +896,177 @@ struct SystemSettingsView: View {
     }
 }
 
-// MARK: - About View (Placeholder)
+// MARK: - About View
+/// Professional about page with app description, legal links, and company info
 struct AboutView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         NavigationStack {
             ZStack {
                 AppColors.settingsBackground.ignoresSafeArea()
 
-                VStack(spacing: 20) {
-                    Image(systemName: "airplane")
-                        .font(.system(size: 60))
-                        .foregroundStyle(AppColors.orange)
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // App Logo and Name
+                        VStack(spacing: 12) {
+                            ZStack {
+                                Circle()
+                                    .fill(LinearGradient(
+                                        colors: [AppColors.primaryBlue, AppColors.darkBlue],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ))
+                                    .frame(width: 100, height: 100)
 
-                    Text("Airplane-ID")
-                        .font(.system(size: 28, weight: .bold))
-                        .foregroundStyle(.white)
+                                Image(systemName: "airplane")
+                                    .font(.system(size: 50, weight: .medium))
+                                    .foregroundStyle(AppColors.orange)
+                                    .rotationEffect(.degrees(-45))
+                            }
+                            .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
 
-                    Text("Version 1.0.0")
-                        .font(.system(size: 16))
-                        .foregroundStyle(.white.opacity(0.6))
+                            Text(AppConfig.appName)
+                                .font(.system(size: 32, weight: .bold))
+                                .foregroundStyle(.white)
 
-                    Text("© 2026 LJ Aero")
-                        .font(.system(size: 14))
-                        .foregroundStyle(.white.opacity(0.4))
+                            Text("Version \(AppConfig.appVersion)")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.5))
+                        }
                         .padding(.top, 20)
+
+                        // App Description
+                        VStack(spacing: 16) {
+                            Text("Your Personal Aircraft Identification Companion")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundStyle(AppColors.gold)
+                                .multilineTextAlignment(.center)
+
+                            Text("Airplane-ID transforms every flight into a discovery. Use your camera to instantly identify aircraft overhead, build your personal collection of sightings, and become a master planespotter. Our advanced Hangar catalog lets you organize, filter, and explore your collection by manufacturer, type, airline, and more—tracking everything from vintage props to modern jets.")
+                                .font(.system(size: 15))
+                                .foregroundStyle(.white.opacity(0.8))
+                                .multilineTextAlignment(.center)
+                                .lineSpacing(4)
+                                .padding(.horizontal, 8)
+
+                            Text("Join thousands of aviation enthusiasts documenting the skies.")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.6))
+                                .italic()
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 20)
+                        .background(AppColors.settingsRow)
+                        .cornerRadius(12)
+                        .padding(.horizontal, 16)
+
+                        // Legal Section
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("LEGAL")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.5))
+                                .padding(.leading, 4)
+
+                            VStack(spacing: 1) {
+                                AboutLinkRow(title: "Privacy Policy", icon: "hand.raised.fill") {
+                                    if let url = URL(string: AppConfig.privacyPolicyURL) {
+                                        openURL(url)
+                                    }
+                                }
+
+                                AboutLinkRow(title: "Terms of Service", icon: "doc.text.fill") {
+                                    if let url = URL(string: AppConfig.termsOfServiceURL) {
+                                        openURL(url)
+                                    }
+                                }
+
+                                AboutLinkRow(title: "End User License Agreement", icon: "signature") {
+                                    if let url = URL(string: AppConfig.eulaURL) {
+                                        openURL(url)
+                                    }
+                                }
+                            }
+                            .background(AppColors.settingsRow)
+                            .cornerRadius(10)
+                        }
+                        .padding(.horizontal, 16)
+
+                        // Support Section
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("SUPPORT")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.5))
+                                .padding(.leading, 4)
+
+                            VStack(spacing: 1) {
+                                AboutLinkRow(title: "Help Center", icon: "questionmark.circle.fill") {
+                                    if let url = URL(string: AppConfig.supportURL) {
+                                        openURL(url)
+                                    }
+                                }
+
+                                AboutLinkRow(title: "Contact Support", icon: "envelope.fill") {
+                                    if let url = URL(string: "mailto:\(AppConfig.supportEmail)") {
+                                        openURL(url)
+                                    }
+                                }
+
+                                AboutLinkRow(title: "Visit Our Website", icon: "globe") {
+                                    if let url = URL(string: AppConfig.websiteURL) {
+                                        openURL(url)
+                                    }
+                                }
+                            }
+                            .background(AppColors.settingsRow)
+                            .cornerRadius(10)
+                        }
+                        .padding(.horizontal, 16)
+
+                        // Company Info Footer
+                        VStack(spacing: 8) {
+                            Divider()
+                                .background(.white.opacity(0.2))
+                                .padding(.horizontal, 40)
+
+                            Image(systemName: "building.2.fill")
+                                .font(.system(size: 20))
+                                .foregroundStyle(.white.opacity(0.3))
+                                .padding(.top, 8)
+
+                            Text(AppConfig.companyName)
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.6))
+
+                            Text("© \(AppConfig.copyrightYear) \(AppConfig.companyName)")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.white.opacity(0.4))
+
+                            Text("All Rights Reserved")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.white.opacity(0.3))
+
+                            Text("Made with ❤️ for aviation enthusiasts")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.white.opacity(0.3))
+                                .padding(.top, 4)
+                        }
+                        .padding(.vertical, 20)
+
+                        Spacer().frame(height: 20)
+                    }
                 }
             }
             .navigationTitle("About")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
+                    Button(action: {
+                        Haptics.light()
+                        dismiss()
+                    }) {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
                             Text("Back")
@@ -937,6 +1075,40 @@ struct AboutView: View {
                     }
                 }
             }
+        }
+    }
+}
+
+// MARK: - About Link Row
+/// Tappable row for legal/support links in About page
+struct AboutLinkRow: View {
+    let title: String
+    let icon: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: {
+            Haptics.light()
+            action()
+        }) {
+            HStack(spacing: 14) {
+                Image(systemName: icon)
+                    .font(.system(size: 18))
+                    .foregroundStyle(AppColors.linkBlue)
+                    .frame(width: 24)
+
+                Text(title)
+                    .font(.system(size: 15))
+                    .foregroundStyle(.white)
+
+                Spacer()
+
+                Image(systemName: "arrow.up.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.4))
+            }
+            .padding(.vertical, 14)
+            .padding(.horizontal, 16)
         }
     }
 }

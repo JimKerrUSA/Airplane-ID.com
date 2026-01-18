@@ -20,8 +20,31 @@ enum NavigationDestination: String, CaseIterable {
 }
 
 // MARK: - App Configuration
-/// Global configuration flags
+/// Global configuration flags and app metadata
 struct AppConfig {
+    /// App version string - UPDATE THIS when releasing new versions
+    /// Format: Major.Minor.Patch.Build (e.g., 1.0.1.0)
+    static let appVersion = "1.0.1.0"
+
+    /// App name
+    static let appName = "Airplane-ID"
+
+    /// Company name
+    static let companyName = "Passion Highway, Inc."
+
+    /// Copyright year
+    static let copyrightYear = "2026"
+
+    /// Support email
+    static let supportEmail = "support@airplane-id.com"
+
+    /// Website URLs
+    static let privacyPolicyURL = "https://airplane-id.com/privacy.html"
+    static let termsOfServiceURL = "https://airplane-id.com/terms.html"
+    static let eulaURL = "https://airplane-id.com/eula.html"
+    static let supportURL = "https://airplane-id.com/support.html"
+    static let websiteURL = "https://airplane-id.com"
+
     /// Developer tools are automatically enabled in DEBUG builds only.
     /// In Release builds (App Store), this is always false.
     static var developerToolsEnabled: Bool {
