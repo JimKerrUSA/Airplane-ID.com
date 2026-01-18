@@ -2544,3 +2544,79 @@ When changing field types (String? to Int?), must delete app and reinstall to cl
 - URL constants for all legal/support pages
 - Version shown in About page reads from this global constant
 
+### 2026-01-18 (continued)
+
+**App Preferences Implementation:**
+- Time Format: System Default, 12 Hour, 24 Hour
+- Date Format: System Default, DMY, MDY, YMD
+- Time Zone: Device, UTC (appends " UTC" suffix)
+- Open Page: Home, Hangar, Maps, Journey, Camera
+- DateFormatting in Theme.swift reads from UserDefaults preferences
+- AppState.init() loads default page on app launch
+
+**Settings Consolidation:**
+- Removed System Settings menu item (was placeholder)
+- Settings menu now: Account Settings, App Preferences, About, Developer Tools (debug only)
+- Added "Reset Preferences" option (restores defaults, keeps data)
+- Added "DANGER ZONE" section with red warning styling:
+  - Delete All Aircraft
+  - Reset App
+- Clear visual separation between safe and destructive options
+
+**Professional About Page:**
+- Uses app icon from Assets (AirplaneID-icon) instead of system image
+- Three-paragraph description highlighting:
+  - Camera identification and PlaneSpotter journey
+  - Advanced Hangar catalog filtering
+  - Interactive map tracking feature
+- Legal section: Privacy Policy, Terms of Service, EULA
+- Support section: Help Center, Contact Support, Website
+- Company footer: Passion Highway, Inc.
+- Version reads from AppConfig.appVersion global constant
+
+**Capture Mode Toggle Feature (Camera vs Upload):**
+
+New functionality allowing users to choose between camera capture and photo upload:
+
+*New Files:*
+- `UploadPage.swift` - Placeholder page with photo.badge.plus icon
+
+*Footer Center Button Behavior:*
+- **Tap**: Navigates to Camera or Upload page based on current mode
+- **Long Press (0.5s)**: Toggles mode AND navigates to new page
+  - Strong haptic feedback (success pattern)
+  - Toast notification: "Switched to Upload Mode" / "Switched to Camera Mode"
+  - Toast auto-dismisses after 2 seconds
+
+*App Preferences:*
+- "Capture Mode" picker in App Behavior section
+  - Camera - Take new photos
+  - Upload - Select from library
+- Hint text: "Long-press button to toggle"
+
+*Icon Changes:*
+- Camera mode: `camera` icon
+- Upload mode: `photo.badge.plus` icon
+
+*Technical Implementation:*
+- Added `captureModeKey` to AppConfig
+- AppState properties: `captureModeIcon`, `captureModeDestination`
+- AppState methods: `toggleCaptureMode()`, `setCaptureMode()`
+- `CapturePreference` enum with displayName, description, icon
+- `CaptureModePickerRow` component syncs with AppState
+- Toast overlay in Airplane_IDApp.swift
+- Both portrait and landscape BottomMenuView updated
+- Reset functions include capture mode
+
+*Preference Labels (shortened for space):*
+- "Default Open Page" → "Open Page"
+- "Default Capture Mode" → "Capture Mode"
+- "Photo Upload" → "Upload"
+
+### Files Modified This Session
+- `ContentView.swift` - AppConfig constants, AppState capture mode, BottomMenuView updates
+- `SettingsPage.swift` - App Preferences UI, CapturePreference enum, CaptureModePickerRow, About page updates
+- `Theme.swift` - DateFormatting reads from UserDefaults
+- `Airplane_IDApp.swift` - Upload navigation case, toast overlay
+- `UploadPage.swift` - New file (placeholder)
+
