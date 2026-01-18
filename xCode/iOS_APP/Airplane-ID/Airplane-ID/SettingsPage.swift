@@ -31,9 +31,9 @@ struct ParsedAircraftData: Sendable {
     let thumbsUp: Bool?
 }
 
-/// Thread-safe CSV parsing utility
-enum CSVParser {
-    static func parseLine(_ line: String) -> [String] {
+/// Thread-safe CSV parsing utility - nonisolated for use from any actor
+enum CSVParser: Sendable {
+    nonisolated static func parseLine(_ line: String) -> [String] {
         var result: [String] = []
         var current = ""
         var inQuotes = false

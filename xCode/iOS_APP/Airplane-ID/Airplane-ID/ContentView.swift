@@ -719,10 +719,10 @@ extension View {
     }
 }
 
-struct RectCorner: @preconcurrency OptionSet, Sendable {
+struct RectCorner: OptionSet, Sendable {
     let rawValue: Int
 
-    init(rawValue: Int) {
+    nonisolated init(rawValue: Int) {
         self.rawValue = rawValue
     }
 
