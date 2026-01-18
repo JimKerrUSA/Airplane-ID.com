@@ -159,14 +159,16 @@ class AppState {
         captureMode == "upload" ? .upload : .camera
     }
 
-    /// Toggle between camera and upload mode, persist to UserDefaults
+    /// Toggle between camera and upload mode, persist to UserDefaults, and navigate to the new page
     func toggleCaptureMode() {
         if captureMode == "camera" {
             captureMode = "upload"
             captureToastMessage = "Switched to Upload Mode"
+            currentScreen = .upload
         } else {
             captureMode = "camera"
             captureToastMessage = "Switched to Camera Mode"
+            currentScreen = .camera
         }
         // Persist to UserDefaults
         UserDefaults.standard.set(captureMode, forKey: AppConfig.captureModeKey)
