@@ -2519,3 +2519,28 @@ When changing field types (String? to Int?), must delete app and reinstall to cl
 - `Theme.swift` - DateFormatting now reads from UserDefaults preferences
 - `ContentView.swift` - AppState.init() reads default page preference
 
+**Professional About Page:**
+- Rebuilt AboutView with corporate-quality layout
+- App logo with gradient background and shadow effect
+- Marketing description: "Your Personal Aircraft Identification Companion"
+- Highlights Hangar catalog filtering capabilities
+- Legal section with external links:
+  - Privacy Policy (https://airplane-id.com/privacy.html)
+  - Terms of Service (https://airplane-id.com/terms.html)
+  - End User License Agreement (https://airplane-id.com/eula.html)
+- Support section:
+  - Help Center (https://airplane-id.com/support.html)
+  - Contact Support (mailto:support@airplane-id.com)
+  - Visit Our Website (https://airplane-id.com)
+- Company footer: Passion Highway, Inc.
+- Copyright notice with "All Rights Reserved"
+
+**Global App Configuration (AppConfig):**
+- `appVersion` - "1.0.1.0" (update when releasing)
+- `appName` - "Airplane-ID"
+- `companyName` - "Passion Highway, Inc."
+- `copyrightYear` - "2026"
+- `supportEmail` - "support@airplane-id.com"
+- URL constants for all legal/support pages
+- Version shown in About page reads from this global constant
+
