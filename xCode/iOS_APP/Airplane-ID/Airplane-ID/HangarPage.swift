@@ -849,6 +849,13 @@ struct AircraftDetailView: View {
     @State private var showingAirlineSearch = false
     @State private var showingICAOSearch = false
 
+    // Photo handling
+    @State private var showingPhotoPicker = false
+    @State private var showingPhotoViewer = false
+    @State private var showingPortraitWarning = false
+    @State private var showingDeletedPhotoAlert = false
+    @State private var pendingPhoto: (image: UIImage, identifier: String)?
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -856,22 +863,47 @@ struct AircraftDetailView: View {
 
                 ScrollView {
                     VStack(spacing: 0) {
-                        // Photo placeholder with rating overlay
+                        // Photo area with rating overlay
                         ZStack(alignment: .bottomLeading) {
-                            // Photo background
-                            Rectangle()
-                                .fill(AppColors.darkBlue.opacity(0.3))
+                            // Photo display or placeholder
+                            if let thumbnailData = aircraft.thumbnailData,
+                               let uiImage = UIImage(data: thumbnailData) {
+                                // Show thumbnail image
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(height: 220)
+                                    .clipped()
+                            } else {
+                                // Show placeholder
+                                Rectangle()
+                                    .fill(AppColors.darkBlue.opacity(0.3))
 
-                            // Photo placeholder content
-                            VStack(spacing: 12) {
-                                Image(systemName: "photo")
-                                    .font(.system(size: 60))
-                                    .foregroundStyle(.white.opacity(0.5))
-                                Text("Aircraft Photo")
-                                    .font(.custom("Helvetica", size: 14))
-                                    .foregroundStyle(.white.opacity(0.5))
+                                VStack(spacing: 12) {
+                                    Image(systemName: isEditing || aircraft.thumbnailData == nil ? "photo.badge.plus" : "photo")
+                                        .font(.system(size: 60))
+                                        .foregroundStyle(.white.opacity(0.5))
+                                    Text(isEditing || aircraft.thumbnailData == nil ? "Add Photo" : "Aircraft Photo")
+                                        .font(.custom("Helvetica", size: 14))
+                                        .foregroundStyle(.white.opacity(0.5))
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                            // Edit overlay (shown when in edit mode and has photo)
+                            if isEditing && aircraft.thumbnailData != nil {
+                                VStack {
+                                    Spacer()
+                                    HStack {
+                                        Spacer()
+                                        Image(systemName: "pencil.circle.fill")
+                                            .font(.system(size: 36))
+                                            .foregroundStyle(.white)
+                                            .shadow(radius: 4)
+                                            .padding(12)
+                                    }
+                                }
+                            }
 
                             // Star rating overlay at bottom-left
                             starRatingOverlay
@@ -879,6 +911,9 @@ struct AircraftDetailView: View {
                                 .padding(.bottom, 2)
                         }
                         .frame(height: 220)
+                        .onTapGesture {
+                            handlePhotoTap()
+                        }
 
                         // Aircraft identification section
                         VStack(alignment: .leading, spacing: 2) {
@@ -1121,6 +1156,39 @@ struct AircraftDetailView: View {
                 )
                 .presentationDetents([.large])
             }
+            .sheet(isPresented: $showingPhotoPicker) {
+                PhotoPickerView(
+                    onSelect: { image, identifier in
+                        handlePhotoSelected(image: image, identifier: identifier)
+                    },
+                    onCancel: { }
+                )
+            }
+            .fullScreenCover(isPresented: $showingPhotoViewer) {
+                FullScreenPhotoViewer(
+                    localIdentifier: aircraft.iPhotoReference,
+                    thumbnailData: aircraft.thumbnailData
+                )
+            }
+            .alert("Portrait Photo", isPresented: $showingPortraitWarning) {
+                Button("Continue") {
+                    savePortraitPhoto()
+                }
+                Button("Choose Different", role: .cancel) {
+                    pendingPhoto = nil
+                    showingPhotoPicker = true
+                }
+            } message: {
+                Text("You are attempting to upload a photo in portrait orientation. Our app is optimized for landscape images. Would you like to continue or upload a different image?")
+            }
+            .alert("Photo Unavailable", isPresented: $showingDeletedPhotoAlert) {
+                Button("View Thumbnail") {
+                    showingPhotoViewer = true
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("The original photo is no longer on this device. Would you like to view the thumbnail?")
+            }
             .onChange(of: editICAO) { oldValue, newValue in
                 // Auto-populate fields when ICAO is changed during editing
                 if isEditing && !newValue.isEmpty && newValue != oldValue {
@@ -1275,6 +1343,62 @@ struct AircraftDetailView: View {
     private func cancelEditing() {
         populateEditValues()  // Revert to original values
         isEditing = false
+    }
+
+    // MARK: - Photo Handling Functions
+
+    /// Handle tap on photo area
+    private func handlePhotoTap() {
+        if aircraft.thumbnailData == nil {
+            // No photo - always open picker (no edit mode required for first photo)
+            showingPhotoPicker = true
+        } else if isEditing {
+            // Has photo + edit mode - open picker to change
+            showingPhotoPicker = true
+        } else {
+            // Has photo + view mode - open viewer (check if original exists)
+            checkAndShowPhotoViewer()
+        }
+    }
+
+    /// Check if original photo exists and show appropriate viewer
+    private func checkAndShowPhotoViewer() {
+        if PhotoLibraryManager.shared.fetchAsset(localIdentifier: aircraft.iPhotoReference) != nil {
+            showingPhotoViewer = true
+        } else if aircraft.thumbnailData != nil {
+            // Original deleted but we have thumbnail
+            showingDeletedPhotoAlert = true
+        }
+    }
+
+    /// Handle photo selection from picker
+    private func handlePhotoSelected(image: UIImage, identifier: String) {
+        // Check if portrait
+        if ThumbnailGenerator.isPortrait(image) {
+            pendingPhoto = (image, identifier)
+            showingPortraitWarning = true
+        } else {
+            // Landscape - save directly
+            savePhoto(image: image, identifier: identifier)
+        }
+    }
+
+    /// Save portrait photo after user confirms
+    private func savePortraitPhoto() {
+        if let photo = pendingPhoto {
+            savePhoto(image: photo.image, identifier: photo.identifier)
+            pendingPhoto = nil
+        }
+    }
+
+    /// Save photo to aircraft model
+    private func savePhoto(image: UIImage, identifier: String) {
+        // Generate thumbnail
+        if let thumbnailData = ThumbnailGenerator.generateThumbnail(from: image) {
+            aircraft.thumbnailData = thumbnailData
+            aircraft.iPhotoReference = identifier
+            try? modelContext.save()
+        }
     }
 
     /// Auto-populate fields from ICAO lookup when user selects an aircraft type

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Photos
 
 // MARK: - Main View (Navigation Router)
 /// Switches between screens based on appState.currentScreen
@@ -159,6 +160,7 @@ struct MainView: View {
 @main
 struct Airplane_IDApp: App {
     @State private var appState = AppState()
+    @StateObject private var photoManager = PhotoLibraryManager.shared
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -178,8 +180,21 @@ struct Airplane_IDApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainView()
-                .environment(appState)
+            ZStack {
+                MainView()
+                    .environment(appState)
+
+                // Permission gatekeeper - blocks app if photo access denied
+                if photoManager.authorizationStatus == .denied ||
+                   photoManager.authorizationStatus == .restricted {
+                    PhotoPermissionView()
+                        .transition(.opacity)
+                }
+            }
+            .task {
+                // Check and request photo permissions on every app launch
+                await photoManager.checkAndRequestAuthorization()
+            }
         }
         .modelContainer(sharedModelContainer)
     }

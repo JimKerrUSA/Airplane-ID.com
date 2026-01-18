@@ -96,7 +96,8 @@ final class CapturedAircraft: Identifiable {
     var gpsLatitude: Double            // Photo location (where captured)
     var gpsLongitudeNow: Double?       // Current aircraft location (for map, future)
     var gpsLatitudeNow: Double?        // Current aircraft location (for map, future)
-    var iPhotoReference: String        // Link to photo in device iPhoto library
+    var iPhotoReference: String        // PHAsset.localIdentifier for full-size photo in Photos library
+    var thumbnailData: Data?           // Cached JPEG thumbnail (1280x720, 16:9 HD, ~100-200KB)
 
     // Aircraft identification (required at save - from AI recognition)
     var icao: String                   // ICAO aircraft type code
@@ -149,6 +150,7 @@ final class CapturedAircraft: Identifiable {
         gpsLongitudeNow: Double? = nil,
         gpsLatitudeNow: Double? = nil,
         iPhotoReference: String,
+        thumbnailData: Data? = nil,
         // Required - from AI recognition
         icao: String,
         manufacturer: String,
@@ -191,6 +193,7 @@ final class CapturedAircraft: Identifiable {
         self.gpsLongitudeNow = gpsLongitudeNow
         self.gpsLatitudeNow = gpsLatitudeNow
         self.iPhotoReference = iPhotoReference
+        self.thumbnailData = thumbnailData
         self.icao = icao
         self.manufacturer = manufacturer
         self.model = model
