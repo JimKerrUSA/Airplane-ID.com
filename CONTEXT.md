@@ -1585,3 +1585,164 @@ All 6 batches implemented and tested:
 - **Batch 4:** Code Deduplication (CSV parser, date formatting)
 - **Batch 5:** File Organization (Utilities.swift)
 - **Batch 6:** Polish & Standards (debug logging)
+
+---
+
+### 2026-01-18
+
+## MapsPage Implementation - COMPLETED
+
+Full Apple Maps integration with aircraft location display and search capabilities.
+
+### Files Created/Modified
+
+| File | Action | Description |
+|------|--------|-------------|
+| `LocationServices.swift` | **CREATED** | LocationManager singleton for CLLocationManager |
+| `MapsPage.swift` | **MODIFIED** | Complete rewrite with full map implementation |
+| `Info.plist` | **REQUIRES MANUAL** | Add NSLocationWhenInUseUsageDescription in Xcode |
+
+### Features Implemented
+
+1. **Full-Screen Map Display**
+   - Map takes full screen below header, above footer
+   - User location shown as blue dot (UserAnnotation)
+   - Map controls: compass, scale view
+   - Pan/zoom gestures work natively
+
+2. **Aircraft Annotations**
+   - All aircraft with GPS coordinates shown on map
+   - Orange airplane icons with -45° rotation
+   - Annotation labels show: Registration, Manufacturer, Model
+   - Location priority: `gpsLatitudeNow/gpsLongitudeNow` > `gpsLatitude/gpsLongitude`
+
+3. **Control Buttons (right side)**
+   - **Location button** (top): White circle, blue icon, returns to user location
+   - **Search button** (bottom): Gray circle, white magnifying glass, opens search sheet
+
+4. **Search Sheet** (bottom-up modal)
+   - Segmented picker: Locations | Aircraft
+   - Search text field with clear button and loading indicator
+   - **Location search:** Uses MKLocalSearch with 300ms debounce
+     - Searches cities, airports, countries, regions
+     - Shows up to 20 results
+   - **Aircraft search:** Filters aircraft database
+     - Searches ICAO, manufacturer, model, registration
+     - Only shows aircraft with GPS coordinates
+     - Multi-keyword AND search
+   - **Recent searches:** Persisted in UserDefaults (max 6 items)
+     - Swipe to delete individual items
+     - Shows icon indicating location/aircraft type
+
+5. **Map Navigation**
+   - Selecting location/aircraft pans map with animation
+   - Zoom level: 0.05 lat/lon delta (appropriate detail)
+   - Location button returns to user position
+
+### CapturedAircraft Extensions (MapsPage.swift)
+
+```swift
+extension CapturedAircraft {
+    var hasValidLocation: Bool    // Checks for non-zero GPS coords
+    var displayCoordinate: CLLocationCoordinate2D  // Priority: now > capture
+    var mapDisplayLabel: String   // "Registration, Manufacturer, Model"
+}
+```
+
+### New Classes
+
+**LocationManager** (LocationServices.swift)
+- Singleton pattern: `LocationManager.shared`
+- `@MainActor` with `@Observable` for SwiftUI
+- Handles authorization, location updates
+- CLLocationManagerDelegate implementation
+
+**MapsSearchState** (MapsPage.swift)
+- `@Observable` class for search state
+- SearchMode enum: `.location`, `.aircraft`
+- UserDefaults persistence for recent searches
+- Add/remove/clear recent searches
+
+**RecentSearch** (MapsPage.swift)
+- Codable struct for persistence
+- Fields: id, text, type, timestamp
+
+### Manual Step Required
+
+**Add to Info.plist in Xcode:**
+1. Open Xcode project
+2. Select target > Info tab > Custom iOS Target Properties
+3. Add row: `NSLocationWhenInUseUsageDescription`
+4. Value: "Airplane-ID uses your location to show aircraft sightings near you."
+
+### Verification Checklist
+
+- [x] Map displays full-screen below header
+- [x] User location shows as blue dot
+- [x] Pan/zoom gestures work
+- [x] Aircraft show as orange airplane icons
+- [x] Search button opens bottom sheet
+- [x] Segmented control toggles Location/Aircraft
+- [x] Location search finds cities, airports, countries
+- [x] Aircraft search finds by ICAO, manufacturer, model, registration
+- [x] Only aircraft with GPS coords appear in results
+- [x] Selecting location pans map to spot
+- [x] Selecting aircraft pans map to aircraft location
+- [x] Location button returns to user position
+- [x] Recent searches persist (max 6)
+- [x] Footer navigation works
+
+### How to Navigate to Map from Other Pages
+
+To pan the map to a specific aircraft location from any page:
+
+```swift
+// 1. Set the aircraft to show on map (add to AppState if needed)
+// 2. Navigate to maps page
+appState.currentScreen = .maps
+
+// Future enhancement: Add selectedAircraftForMap to AppState
+// appState.selectedAircraftForMap = aircraft
+// Then MapsPage can check this on appear and pan to that location
+```
+
+**Current pattern for linking:**
+- From HangarPage: User taps aircraft → detail view → future "Show on Map" button
+- From HomePage: Recent sightings → tap → detail view → future "Show on Map" button
+- Direct navigation: Footer tap on map icon
+
+### iOS 26 Compatibility Notes
+
+**MKMapItem API Changes:**
+- `placemark` property deprecated → use `location` (CLLocation) instead
+- `placemark.coordinate` → `mapItem.location.coordinate`
+- `MKAddress` properties changed - `locality`/`country` not available
+- Current implementation shows only `mapItem.name` for search results
+- Future: Investigate `MKAddress` properties available in iOS 26
+
+**ForEach with MKMapItem:**
+- `MKMapItem` Hashable conformance changed in iOS 26
+- Use index-based ForEach: `ForEach(Array(items.enumerated()), id: \.offset)`
+- Avoid `ForEach(items, id: \.self)` with MKMapItem
+
+### Architecture Decisions
+
+1. **ZStack Overlay Approach** (not OrientationAwarePage)
+   - Map needs to ignore safe areas for full-screen display
+   - Header/footer/buttons overlaid on top of map
+   - Allows map to extend edge-to-edge
+
+2. **LocationManager Singleton**
+   - Similar pattern to PhotoLibraryManager
+   - `@MainActor` + `@Observable` for SwiftUI compatibility
+   - Handles all CLLocationManager delegate callbacks
+
+3. **Search State Separation**
+   - MapsSearchState is `@Observable` class (not struct)
+   - Allows mutation and UserDefaults persistence
+   - Passed to sheet as `@Bindable` for two-way binding on searchText
+
+4. **Aircraft Location Priority**
+   - `gpsLatitudeNow/gpsLongitudeNow` (current position from server) takes precedence
+   - Falls back to `gpsLatitude/gpsLongitude` (capture location)
+   - Only aircraft with valid (non-zero) coordinates shown on map
