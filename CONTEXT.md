@@ -1190,10 +1190,12 @@ The app must handle large datasets efficiently:
 
 ---
 
-## Photo Library Integration (Next Feature)
+## Photo Library Integration - COMPLETED
 
 ### Overview
-Integrate with iOS Photos library to allow users to attach aircraft photos to their sightings. Photos are a core feature - library access is REQUIRED to use the app.
+Integrated iOS Photos library to allow users to attach aircraft photos to their sightings. Photos are a core feature - library access is REQUIRED to use the app.
+
+**Commit:** 27b1723
 
 ### Requirements Summary
 
@@ -1283,18 +1285,19 @@ var iPhotoReference: String
 
 **NOTE:** This is a schema change - requires app reinstall.
 
-### New Components Needed
+### Components Created (PhotoServices.swift)
 
-1. **PhotoPermissionManager** - Handle authorization checks and requests
-2. **PermissionGatekeeperView** - Blocks app until permissions granted
+1. **PhotoLibraryManager** - Singleton for authorization checks, asset fetching, opening Photos app
+2. **PhotoPermissionView** - Blocking overlay when permission denied (OK/Settings buttons)
 3. **PhotoPickerView** - UIViewControllerRepresentable wrapping PHPicker
-4. **FullSizeImageViewer** - Zoomable full-screen image viewer
-5. **ThumbnailGenerator** - Resize/compress images to 1280x720 JPEG
+4. **FullScreenPhotoViewer** - Zoomable viewer with pinch-zoom, "Open in Photos" button
+5. **ThumbnailGenerator** - Generates 1280x720 JPEG thumbnails with letterboxing
+6. **ThumbnailImageView** - Reusable component for displaying thumbnails
 
-### Files to Modify
+### Files Modified
 
-- `Info.plist` - Add NSPhotoLibraryUsageDescription
-- `Airplane_IDApp.swift` - Add permission gatekeeper at app entry
-- `Item.swift` - Add thumbnailData field
-- `HangarPage.swift` - Update AircraftDetailView photo handling
-- New file: `PhotoServices.swift` - All photo-related utilities
+- `Info.plist` - Created with NSPhotoLibraryUsageDescription
+- `Airplane_IDApp.swift` - Added permission gatekeeper overlay at app entry
+- `Item.swift` - Added `thumbnailData: Data?` field to CapturedAircraft
+- `HangarPage.swift` - Integrated photo display/selection in AircraftDetailView
+- `PhotoServices.swift` - New file with all photo-related utilities (~500 lines)
