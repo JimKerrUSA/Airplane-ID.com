@@ -868,26 +868,26 @@ struct AircraftDetailView: View {
                             // Photo display or placeholder
                             if let thumbnailData = aircraft.thumbnailData,
                                let uiImage = UIImage(data: thumbnailData) {
-                                // Show thumbnail image
+                                // Show thumbnail image - 100% width, height scales with 16:9 aspect ratio
                                 Image(uiImage: uiImage)
                                     .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(height: 220)
-                                    .clipped()
+                                    .aspectRatio(16/9, contentMode: .fit)
+                                    .frame(maxWidth: .infinity)
                             } else {
-                                // Show placeholder
+                                // Show placeholder - 16:9 aspect ratio
                                 Rectangle()
                                     .fill(AppColors.darkBlue.opacity(0.3))
-
-                                VStack(spacing: 12) {
-                                    Image(systemName: isEditing || aircraft.thumbnailData == nil ? "photo.badge.plus" : "photo")
-                                        .font(.system(size: 60))
-                                        .foregroundStyle(.white.opacity(0.5))
-                                    Text(isEditing || aircraft.thumbnailData == nil ? "Add Photo" : "Aircraft Photo")
-                                        .font(.custom("Helvetica", size: 14))
-                                        .foregroundStyle(.white.opacity(0.5))
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .aspectRatio(16/9, contentMode: .fit)
+                                    .overlay {
+                                        VStack(spacing: 12) {
+                                            Image(systemName: isEditing || aircraft.thumbnailData == nil ? "photo.badge.plus" : "photo")
+                                                .font(.system(size: 60))
+                                                .foregroundStyle(.white.opacity(0.5))
+                                            Text(isEditing || aircraft.thumbnailData == nil ? "Add Photo" : "Aircraft Photo")
+                                                .font(.custom("Helvetica", size: 14))
+                                                .foregroundStyle(.white.opacity(0.5))
+                                        }
+                                    }
                             }
 
                             // Edit overlay (shown when in edit mode and has photo)
@@ -910,7 +910,7 @@ struct AircraftDetailView: View {
                                 .padding(.leading, 2)
                                 .padding(.bottom, 2)
                         }
-                        .frame(height: 220)
+                        .frame(maxWidth: .infinity)
                         .onTapGesture {
                             handlePhotoTap()
                         }
