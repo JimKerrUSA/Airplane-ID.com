@@ -1301,3 +1301,18 @@ var iPhotoReference: String
 - `Item.swift` - Added `thumbnailData: Data?` field to CapturedAircraft
 - `HangarPage.swift` - Integrated photo display/selection in AircraftDetailView
 - `PhotoServices.swift` - New file with all photo-related utilities (~500 lines)
+
+### Additional Fixes (after feature complete)
+
+1. **Build warning fixes:**
+   - Added `_ =` before `checkAndRequestAuthorization()` to fix unused result warning
+   - Changed `guard let asset = fetchAsset(...)` to `guard fetchAsset(...) != nil` to fix unused variable warning
+   - Commit: 7642adc
+
+2. **Info.plist conflict resolution:**
+   - Deleted manual Info.plist file (Xcode generates its own from project settings)
+   - NSPhotoLibraryUsageDescription must be added via Xcode: Target > Info > Custom iOS Target Properties
+   - Value: "Airplane-ID needs access to your Photo Library to store and display aircraft photos you capture."
+
+3. **Missing import fix:**
+   - Added `import Combine` to PhotoServices.swift for ObservableObject support
