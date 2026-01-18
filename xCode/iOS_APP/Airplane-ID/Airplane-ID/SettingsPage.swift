@@ -199,28 +199,43 @@ struct SettingsScrollContent: View {
             // Settings menu items
             VStack(spacing: 15) {
                 // Account Settings
-                Button(action: { showingAccountSettings = true }) {
+                Button(action: {
+                    Haptics.light()
+                    showingAccountSettings = true
+                }) {
                     SettingsRowContent(icon: "person.circle", title: "Account Settings", subtitle: "Manage your account")
                 }
 
                 // App Preferences
-                Button(action: { showingAppPreferences = true }) {
+                Button(action: {
+                    Haptics.light()
+                    showingAppPreferences = true
+                }) {
                     SettingsRowContent(icon: "square.3.layers.3d", title: "App Preferences", subtitle: "Configure application behavior")
                 }
 
                 // System
-                Button(action: { showingSystemSettings = true }) {
+                Button(action: {
+                    Haptics.light()
+                    showingSystemSettings = true
+                }) {
                     SettingsRowContent(icon: "switch.2", title: "System", subtitle: "Modify system settings")
                 }
 
                 // About
-                Button(action: { showingAbout = true }) {
+                Button(action: {
+                    Haptics.light()
+                    showingAbout = true
+                }) {
                     SettingsRowContent(icon: "info.circle", title: "About", subtitle: "Version and credits")
                 }
 
                 // Developer Tools (only if enabled)
                 if AppConfig.developerToolsEnabled {
-                    Button(action: { showingDeveloperTools = true }) {
+                    Button(action: {
+                        Haptics.light()
+                        showingDeveloperTools = true
+                    }) {
                         SettingsRowContent(icon: "wrench.and.screwdriver", title: "Developer Tools", subtitle: "Testing and debug options")
                     }
                 }

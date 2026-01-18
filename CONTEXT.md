@@ -2350,3 +2350,61 @@ private let viewportBuffer: Double = 1.5  // Extend visible region by 50%
 - Shows ICAO code (e.g., "C172", "PA28") - always available
 - White text with black outline (no background box)
 - More recognizable to aviation enthusiasts than registration numbers
+
+---
+
+### 2026-01-18 (continued)
+
+## Haptic Feedback Expansion - Additional Pages
+
+Extended haptic feedback to all interactive elements throughout the app.
+
+**New Haptics Added:**
+
+| Component | File | Haptic Type | Interaction |
+|-----------|------|-------------|-------------|
+| AircraftDetailView | HangarPage.swift | light | Photo tap, Back button, Edit button, Cancel button, Rate button |
+| AircraftDetailView | HangarPage.swift | success | Save button (successful save feel) |
+| RatingSelectorSheet | HangarPage.swift | selection | Star rating selection |
+| RatingSelectorSheet | HangarPage.swift | light | Clear Rating, Cancel |
+| HomePage | HomePage.swift | light | Recent Sightings aircraft tap |
+
+**MapsPage Footer Position Fix:**
+
+The footer was positioned incorrectly (moved up) on the Maps page. The issue was that the footer was in a VStack with control buttons, instead of using ZStack overlay like other pages.
+
+**Before (incorrect):**
+```swift
+VStack(spacing: 0) {
+    mapsHeader
+    Spacer()
+    HStack { /* control buttons */ }
+        .padding(.bottom, 16)  // This pushed footer up
+    BottomMenuView()  // In VStack = pushed by content above
+}
+```
+
+**After (correct):**
+```swift
+ZStack {
+    mapView
+    
+    VStack(spacing: 0) {
+        mapsHeader
+        Spacer()
+    }
+    
+    VStack {
+        Spacer()
+        HStack { /* control buttons */ }
+            .padding(.bottom, 8)
+        BottomMenuView()  // In separate VStack with Spacer = always at bottom
+    }
+}
+```
+
+**Footer Position Architecture:**
+- Other pages (Home, Hangar, Settings) use PortraitTemplate which has BottomMenuView in a ZStack overlay
+- MapsPage now matches this pattern with footer in its own VStack with Spacer, positioned by ZStack
+- Control buttons padding reduced from 16 to 8 to maintain proper spacing above footer
+

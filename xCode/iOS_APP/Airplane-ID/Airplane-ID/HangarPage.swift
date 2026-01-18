@@ -926,6 +926,7 @@ struct AircraftDetailView: View {
                         }
                         .aspectRatio(16/9, contentMode: .fit)
                         .onTapGesture {
+                            Haptics.light()
                             handlePhotoTap()
                         }
 
@@ -1117,7 +1118,10 @@ struct AircraftDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if !isEditing {
-                        Button(action: { dismiss() }) {
+                        Button(action: {
+                            Haptics.light()
+                            dismiss()
+                        }) {
                             HStack(spacing: 4) {
                                 Image(systemName: "chevron.left")
                                 Text("Back")
@@ -1130,11 +1134,13 @@ struct AircraftDetailView: View {
                     if isEditing {
                         HStack(spacing: 16) {
                             Button("Cancel") {
+                                Haptics.light()
                                 cancelEditing()
                             }
                             .foregroundStyle(.white.opacity(0.6))
 
                             Button("Save") {
+                                Haptics.success()
                                 saveChanges()
                             }
                             .foregroundStyle(AppColors.linkBlue)
@@ -1142,6 +1148,7 @@ struct AircraftDetailView: View {
                         }
                     } else {
                         Button("Edit") {
+                            Haptics.light()
                             startEditing()
                         }
                         .foregroundStyle(AppColors.linkBlue)
@@ -1267,6 +1274,7 @@ struct AircraftDetailView: View {
             // Rated: Show stars (tappable only in edit mode)
             Button(action: {
                 if isEditing {
+                    Haptics.light()
                     showingRatingSelector = true
                 }
             }) {
@@ -1276,6 +1284,7 @@ struct AircraftDetailView: View {
         } else {
             // Unrated: Show "Rate" text (always tappable)
             Button(action: {
+                Haptics.light()
                 showingRatingSelector = true
             }) {
                 Text("Rate")
@@ -1684,6 +1693,7 @@ struct RatingSelectorSheet: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 12) {
                     ForEach(ratings, id: \.self) { rating in
                         Button(action: {
+                            Haptics.selection()
                             onSelect(rating)
                             dismiss()
                         }) {
@@ -1707,6 +1717,7 @@ struct RatingSelectorSheet: View {
                 // Clear rating button
                 if currentRating != nil {
                     Button(action: {
+                        Haptics.light()
                         onSelect(nil)
                         dismiss()
                     }) {
@@ -1723,6 +1734,7 @@ struct RatingSelectorSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Cancel") {
+                        Haptics.light()
                         dismiss()
                     }
                 }

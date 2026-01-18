@@ -752,60 +752,66 @@ struct MapsPage: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Full-screen map
-                mapView
-                    .ignoresSafeArea()
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Header
+                mapsHeader
 
-                // UI Overlays
-                VStack(spacing: 0) {
-                    // Header
-                    mapsHeader
-
-                    // Spacer pushes footer to bottom
-                    Spacer()
+                // Main content area - ZStack for map + overlays + footer
+                ZStack(alignment: .bottom) {
+                    // Full-screen map
+                    mapView
+                        .ignoresSafeArea()
 
                     // Control buttons positioned above footer
-                    HStack {
+                    VStack {
                         Spacer()
-                        VStack(spacing: 12) {
-                            // Return to location button
-                            Button(action: {
-                                Haptics.light()
-                                centerOnUserLocation()
-                            }) {
-                                Image(systemName: "location.fill")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(AppColors.primaryBlue)
-                                    .frame(width: 44, height: 44)
-                                    .background(Color.white)
-                                    .clipShape(Circle())
-                                    .shadow(radius: 3)
-                            }
+                        HStack {
+                            Spacer()
+                            VStack(spacing: 12) {
+                                // Return to location button
+                                Button(action: {
+                                    Haptics.light()
+                                    centerOnUserLocation()
+                                }) {
+                                    Image(systemName: "location.fill")
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(AppColors.primaryBlue)
+                                        .frame(width: 44, height: 44)
+                                        .background(Color.white)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 3)
+                                }
 
-                            // Search button
-                            Button(action: {
-                                Haptics.light()
-                                showingSearchSheet = true
-                            }) {
-                                Image(systemName: "magnifyingglass")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(.white)
-                                    .frame(width: 44, height: 44)
-                                    .background(AppColors.mediumGray)
-                                    .clipShape(Circle())
-                                    .shadow(radius: 3)
+                                // Search button
+                                Button(action: {
+                                    Haptics.light()
+                                    showingSearchSheet = true
+                                }) {
+                                    Image(systemName: "magnifyingglass")
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(.white)
+                                        .frame(width: 44, height: 44)
+                                        .background(AppColors.mediumGray)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 3)
+                                }
                             }
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 90) // Space for footer
                         }
-                        .padding(.trailing, 16)
-                        .padding(.bottom, 16)
                     }
 
-                    // Footer
+                    // Footer - same pattern as PortraitTemplate/SettingsPage
                     BottomMenuView()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            .background(AppColors.primaryBlue)
+            .ignoresSafeArea()
+#if os(iOS)
+            .navigationBarHidden(true)
+#endif
         }
         .onAppear {
             locationManager.checkAndRequestAuthorization()
