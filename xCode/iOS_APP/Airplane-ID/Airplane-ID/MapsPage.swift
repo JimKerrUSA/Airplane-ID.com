@@ -202,7 +202,9 @@ enum MapIconHelper {
         // Balloon
         "BALL": "BALLOON",
         // Others
-        "ECHO": "ECHO", "GSIS": "GSIS", "NG5": "NG5", "qsgt": "QSGT", "T34P": "BEECH"
+        "ECHO": "ECHO", "GSIS": "GSIS", "NG5": "NG5", "qsgt": "QSGT", "T34P": "BEECH",
+        // Drones/UAV
+        "F4": "DJI"  // DJI Phantom quadcopter
     ]
 
     /// Major airliner manufacturers - these should use the generic jet SF Symbol
@@ -247,6 +249,7 @@ enum MapIconHelper {
         if normalized.contains("QUEST") || normalized.contains("KODIAK") { return "KODIAK" }
         if normalized.contains("JABIRU") { return "JABIRU" }
         if normalized.contains("HONDA") { return "HONDA" }
+        if normalized.contains("DJI") { return "DJI" }
 
         return normalized
     }
