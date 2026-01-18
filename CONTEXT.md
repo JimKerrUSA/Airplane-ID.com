@@ -1488,6 +1488,21 @@ Comprehensive code review identified 26 issues across security, best practices, 
      - `fetchFullSizeImage(localIdentifier:)`
      - `ThumbnailGenerator.generateThumbnail(from asset:)`
 
+4. **Added proper Error type for CSV import (SettingsPage.swift)**
+   - Created `CSVImportError` enum conforming to `Error` and `LocalizedError`
+   - Cases: `.fileNotFound`, `.emptyFile`, `.parseError(String)`
+   - Swift's `Result` type requires `Failure` to conform to `Error`
+
+5. **Made CSVParser explicitly nonisolated (SettingsPage.swift)**
+   - Added `Sendable` conformance to `CSVParser` enum
+   - Marked `parseLine()` as `nonisolated` for use from `Task.detached`
+
+**Commits:** 56a604d, b8c2ff7, 74b1d6c, 85ab907
+
+**Known Warning (acceptable):**
+- ContentView.swift: "@preconcurrency on conformance to 'OptionSet' has no effect"
+- This is harmless - removing it causes worse Swift 6 actor isolation errors
+
 ### Remaining Batches (Pending)
 
 - **Batch 3:** Error Handling improvements
