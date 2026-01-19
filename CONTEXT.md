@@ -2620,3 +2620,94 @@ New functionality allowing users to choose between camera capture and photo uplo
 - `Airplane_IDApp.swift` - Upload navigation case, toast overlay
 - `UploadPage.swift` - New file (placeholder)
 
+---
+
+### 2026-01-18 (Session 3)
+
+## Upload Feature - Full Implementation
+
+Complete photo upload workflow for manually creating aircraft sighting records.
+
+### User Flow
+
+1. **Select Photo** - Two source options:
+   - Photo Library (PHPickerViewController)
+   - Files App (UIDocumentPickerViewController)
+
+2. **Enter Details** - Form with:
+   - Photo preview (16:9 aspect ratio)
+   - Aircraft Type (ICAO search, required)
+   - Airline (airline search, optional)
+   - Registration (text field, optional)
+   - Spotted On (date/time picker)
+
+3. **Scanning** (Placeholder for future AI):
+   - Animated radar-style scanner with rotating sweep
+   - 2.5 second delay before showing results
+
+4. **Results & Feedback**:
+   - Photo display
+   - Manufacturer/Model from ICAO lookup
+   - Specs: Type, Engine Type, Engine Count
+   - Thumbs up/down feedback buttons
+   - "Save to Hangar" button
+   - "Start Over" option
+
+### State Machine
+
+```swift
+enum UploadState {
+    case selectPhoto    // Initial - show source buttons
+    case enterDetails   // Photo selected - show form
+    case scanning       // Processing animation (AI placeholder)
+    case results        // Show results with feedback
+}
+```
+
+### New Components
+
+**PhotoServices.swift:**
+- `DocumentPickerView` - UIDocumentPickerViewController wrapper for Files app import
+
+**UploadPage.swift:**
+- `UploadState` enum - 4-state workflow
+- `UploadFormData` class - @Observable form data holder
+- `UploadPage` view - Main upload interface
+- `UploadPickerRow` - Tappable picker row (ICAO, Airline)
+- `UploadTextField` - Text input with label
+- `UploadDateTimeRow` - Date/time picker row
+- `UploadResultRow` - Display row for specs
+
+### ICAO Lookup Integration
+
+When user selects an ICAO code:
+- Automatically populates: manufacturer, model, icaoClass, aircraftCategoryCode, aircraftType, engineCount, engineType
+- Data fetched from ICAOLookup table
+
+### Save Workflow
+
+1. Generate 1280x720 JPEG thumbnail
+2. For Files imports: Save image to Photo Library first
+3. Add photo to "Airplane-ID" album
+4. Create CapturedAircraft record with:
+   - All user-entered fields
+   - ICAO lookup data
+   - Date components
+   - Thumbnail data
+   - Photo library reference
+   - Thumbs up/down feedback
+5. Insert into SwiftData
+6. Success haptic feedback
+7. Reset form
+
+### Technical Notes
+
+- Reuses existing `ICAOSearchSheet` and `AirlineSearchSheet` from HangarPage
+- Reuses `PhotoPickerView` and `ThumbnailGenerator` from PhotoServices
+- Files picker uses `UTType.image` for supported types
+- Haptic feedback on all interactive elements
+
+### Files Modified
+- `PhotoServices.swift` - Added DocumentPickerView, UniformTypeIdentifiers import
+- `UploadPage.swift` - Complete rewrite from placeholder to full implementation
+

@@ -8,6 +8,7 @@
 //  - PhotoLibraryManager: Authorization and asset management
 //  - ThumbnailGenerator: 1280x720 JPEG thumbnail creation
 //  - PhotoPickerView: PHPicker wrapper for image selection
+//  - DocumentPickerView: Files app wrapper for image import
 //  - FullScreenPhotoViewer: Zoomable image viewer
 //  - PhotoPermissionView: Blocking overlay when permission denied
 //
@@ -17,6 +18,7 @@ import Photos
 import PhotosUI
 import UIKit
 import Combine
+import UniformTypeIdentifiers
 
 // MARK: - Photo Library Manager
 /// Singleton managing PHPhotoLibrary authorization and photo operations
@@ -350,6 +352,67 @@ struct PhotoPickerView: UIViewControllerRepresentable {
                 parent.dismiss()
                 parent.onCancel()
             }
+        }
+    }
+}
+
+// MARK: - Document Picker View
+/// SwiftUI wrapper for UIDocumentPickerViewController (Files app import)
+struct DocumentPickerView: UIViewControllerRepresentable {
+    @Environment(\.dismiss) private var dismiss
+
+    let onSelect: (UIImage) -> Void
+    let onCancel: () -> Void
+
+    init(onSelect: @escaping (UIImage) -> Void, onCancel: @escaping () -> Void = {}) {
+        self.onSelect = onSelect
+        self.onCancel = onCancel
+    }
+
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        let picker = UIDocumentPickerViewController(
+            forOpeningContentTypes: [UTType.image],
+            asCopy: true  // Copy file to app sandbox
+        )
+        picker.delegate = context.coordinator
+        picker.allowsMultipleSelection = false
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UIDocumentPickerDelegate {
+        let parent: DocumentPickerView
+
+        init(_ parent: DocumentPickerView) {
+            self.parent = parent
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            guard let url = urls.first else {
+                parent.dismiss()
+                parent.onCancel()
+                return
+            }
+
+            // Load image from file URL
+            if let data = try? Data(contentsOf: url),
+               let image = UIImage(data: data) {
+                parent.dismiss()
+                parent.onSelect(image)
+            } else {
+                parent.dismiss()
+                parent.onCancel()
+            }
+        }
+
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            parent.dismiss()
+            parent.onCancel()
         }
     }
 }
