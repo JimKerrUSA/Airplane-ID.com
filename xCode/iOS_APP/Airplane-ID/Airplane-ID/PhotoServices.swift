@@ -19,6 +19,8 @@ import PhotosUI
 import UIKit
 import Combine
 import UniformTypeIdentifiers
+import CoreLocation
+import ImageIO
 
 // MARK: - Photo Library Manager
 /// Singleton managing PHPhotoLibrary authorization and photo operations
@@ -201,7 +203,140 @@ class PhotoLibraryManager: ObservableObject {
             UIApplication.shared.open(url)
         }
     }
+
+    /// Get GPS coordinates from a PHAsset
+    func getLocation(from localIdentifier: String) -> CLLocationCoordinate2D? {
+        guard let asset = fetchAsset(localIdentifier: localIdentifier) else {
+            return nil
+        }
+        return asset.location?.coordinate
+    }
+
+    /// Get GPS coordinates from a PHAsset (async version that fetches additional metadata if needed)
+    func getLocationAsync(from localIdentifier: String) async -> CLLocationCoordinate2D? {
+        guard let asset = fetchAsset(localIdentifier: localIdentifier) else {
+            return nil
+        }
+        return asset.location?.coordinate
+    }
+
+    /// Get creation date from a PHAsset
+    func getCreationDate(from localIdentifier: String) -> Date? {
+        guard let asset = fetchAsset(localIdentifier: localIdentifier) else {
+            return nil
+        }
+        return asset.creationDate
+    }
+
+    /// Get both GPS and creation date from a PHAsset in one call
+    func getMetadata(from localIdentifier: String) -> (gps: CLLocationCoordinate2D?, date: Date?) {
+        guard let asset = fetchAsset(localIdentifier: localIdentifier) else {
+            return (nil, nil)
+        }
+        return (asset.location?.coordinate, asset.creationDate)
+    }
 }
+
+// MARK: - EXIF Metadata Extraction
+/// Utilities for extracting GPS coordinates and dates from image EXIF metadata
+struct EXIFExtractor {
+    /// Extract GPS coordinates from image data (JPEG/HEIC with EXIF)
+    static func extractGPS(from imageData: Data) -> CLLocationCoordinate2D? {
+        guard let source = CGImageSourceCreateWithData(imageData as CFData, nil),
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+              let gpsData = properties[kCGImagePropertyGPSDictionary as String] as? [String: Any] else {
+            return nil
+        }
+
+        // Extract latitude
+        guard let latitude = gpsData[kCGImagePropertyGPSLatitude as String] as? Double,
+              let latitudeRef = gpsData[kCGImagePropertyGPSLatitudeRef as String] as? String else {
+            return nil
+        }
+
+        // Extract longitude
+        guard let longitude = gpsData[kCGImagePropertyGPSLongitude as String] as? Double,
+              let longitudeRef = gpsData[kCGImagePropertyGPSLongitudeRef as String] as? String else {
+            return nil
+        }
+
+        // Apply hemisphere reference (N/S for latitude, E/W for longitude)
+        let finalLatitude = latitudeRef == "S" ? -latitude : latitude
+        let finalLongitude = longitudeRef == "W" ? -longitude : longitude
+
+        return CLLocationCoordinate2D(latitude: finalLatitude, longitude: finalLongitude)
+    }
+
+    /// Extract capture date from image EXIF data
+    /// Tries DateTimeOriginal first (when photo was taken), then DateTimeDigitized
+    static func extractDate(from imageData: Data) -> Date? {
+        guard let source = CGImageSourceCreateWithData(imageData as CFData, nil),
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+              let exifData = properties[kCGImagePropertyExifDictionary as String] as? [String: Any] else {
+            return nil
+        }
+
+        // Try DateTimeOriginal first (when photo was actually taken)
+        if let dateString = exifData[kCGImagePropertyExifDateTimeOriginal as String] as? String {
+            if let date = parseEXIFDate(dateString) {
+                return date
+            }
+        }
+
+        // Fall back to DateTimeDigitized
+        if let dateString = exifData[kCGImagePropertyExifDateTimeDigitized as String] as? String {
+            if let date = parseEXIFDate(dateString) {
+                return date
+            }
+        }
+
+        return nil
+    }
+
+    /// Parse EXIF date string format: "YYYY:MM:DD HH:MM:SS"
+    private static func parseEXIFDate(_ dateString: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        formatter.timeZone = TimeZone.current
+        return formatter.date(from: dateString)
+    }
+
+    /// Extract both GPS and date from image data in one pass (more efficient)
+    static func extractMetadata(from imageData: Data) -> (gps: CLLocationCoordinate2D?, date: Date?) {
+        guard let source = CGImageSourceCreateWithData(imageData as CFData, nil),
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
+            return (nil, nil)
+        }
+
+        // Extract GPS
+        var gps: CLLocationCoordinate2D? = nil
+        if let gpsData = properties[kCGImagePropertyGPSDictionary as String] as? [String: Any],
+           let latitude = gpsData[kCGImagePropertyGPSLatitude as String] as? Double,
+           let latitudeRef = gpsData[kCGImagePropertyGPSLatitudeRef as String] as? String,
+           let longitude = gpsData[kCGImagePropertyGPSLongitude as String] as? Double,
+           let longitudeRef = gpsData[kCGImagePropertyGPSLongitudeRef as String] as? String {
+            let finalLatitude = latitudeRef == "S" ? -latitude : latitude
+            let finalLongitude = longitudeRef == "W" ? -longitude : longitude
+            gps = CLLocationCoordinate2D(latitude: finalLatitude, longitude: finalLongitude)
+        }
+
+        // Extract date
+        var date: Date? = nil
+        if let exifData = properties[kCGImagePropertyExifDictionary as String] as? [String: Any] {
+            if let dateString = exifData[kCGImagePropertyExifDateTimeOriginal as String] as? String {
+                date = parseEXIFDate(dateString)
+            }
+            if date == nil, let dateString = exifData[kCGImagePropertyExifDateTimeDigitized as String] as? String {
+                date = parseEXIFDate(dateString)
+            }
+        }
+
+        return (gps, date)
+    }
+}
+
+/// Backward compatibility alias
+typealias GPSExtractor = EXIFExtractor
 
 // MARK: - Thumbnail Generator
 /// Generates 1280x720 JPEG thumbnails from images
@@ -358,13 +493,14 @@ struct PhotoPickerView: UIViewControllerRepresentable {
 
 // MARK: - Document Picker View
 /// SwiftUI wrapper for UIDocumentPickerViewController (Files app import)
+/// Returns both UIImage and raw Data for EXIF/GPS extraction
 struct DocumentPickerView: UIViewControllerRepresentable {
     @Environment(\.dismiss) private var dismiss
 
-    let onSelect: (UIImage) -> Void
+    let onSelect: (UIImage, Data) -> Void  // (image, rawData for EXIF extraction)
     let onCancel: () -> Void
 
-    init(onSelect: @escaping (UIImage) -> Void, onCancel: @escaping () -> Void = {}) {
+    init(onSelect: @escaping (UIImage, Data) -> Void, onCancel: @escaping () -> Void = {}) {
         self.onSelect = onSelect
         self.onCancel = onCancel
     }
@@ -399,11 +535,11 @@ struct DocumentPickerView: UIViewControllerRepresentable {
                 return
             }
 
-            // Load image from file URL
+            // Load image from file URL, keeping raw data for EXIF extraction
             if let data = try? Data(contentsOf: url),
                let image = UIImage(data: data) {
                 parent.dismiss()
-                parent.onSelect(image)
+                parent.onSelect(image, data)
             } else {
                 parent.dismiss()
                 parent.onCancel()

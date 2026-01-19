@@ -15,6 +15,7 @@
 import SwiftUI
 import SwiftData
 import Photos
+import CoreLocation
 
 // MARK: - Upload State
 /// State machine for the upload workflow
@@ -33,6 +34,12 @@ class UploadFormData {
     var selectedImage: UIImage?
     var photoIdentifier: String?        // PHAsset localIdentifier (for library photos)
     var isFromFilesApp: Bool = false    // true if imported from Files
+    var imageData: Data?                // Raw image data (for Files imports - needed for EXIF extraction)
+
+    // GPS coordinates (extracted from photo metadata)
+    var gpsLatitude: Double = 0
+    var gpsLongitude: Double = 0
+    var hasGPS: Bool { gpsLatitude != 0 || gpsLongitude != 0 }
 
     // User input
     var selectedICAO: String?           // From ICAOSearchSheet
@@ -66,6 +73,9 @@ class UploadFormData {
         selectedImage = nil
         photoIdentifier = nil
         isFromFilesApp = false
+        imageData = nil
+        gpsLatitude = 0
+        gpsLongitude = 0
         selectedICAO = nil
         selectedAirlineCode = nil
         registration = ""
@@ -114,7 +124,7 @@ struct UploadPage: View {
     @State private var showingPortraitWarning = false
     @State private var showingMissingDataAlert = false
     @State private var showingMissingRatingAlert = false
-    @State private var pendingPhoto: (image: UIImage, identifier: String?)?
+    @State private var pendingPhoto: (image: UIImage, identifier: String?, imageData: Data?)?
 
     // Animation states
     @State private var scanAngle: Double = 0
@@ -138,8 +148,8 @@ struct UploadPage: View {
         }
         .sheet(isPresented: $showingDocumentPicker) {
             DocumentPickerView(
-                onSelect: { image in
-                    handlePhotoSelectedFromFiles(image: image)
+                onSelect: { image, imageData in
+                    handlePhotoSelectedFromFiles(image: image, imageData: imageData)
                 },
                 onCancel: { }
             )
@@ -166,6 +176,40 @@ struct UploadPage: View {
                     formData.selectedImage = photo.image
                     formData.photoIdentifier = photo.identifier
                     formData.isFromFilesApp = photo.identifier == nil
+                    formData.imageData = photo.imageData
+
+                    // Extract GPS and date from the accepted portrait photo
+                    if let identifier = photo.identifier {
+                        // Photo Library - extract from PHAsset
+                        let metadata = PhotoLibraryManager.shared.getMetadata(from: identifier)
+                        if let coordinate = metadata.gps {
+                            formData.gpsLatitude = coordinate.latitude
+                            formData.gpsLongitude = coordinate.longitude
+                        } else {
+                            formData.gpsLatitude = 0
+                            formData.gpsLongitude = 0
+                        }
+                        if let date = metadata.date {
+                            formData.captureDateTime = date
+                        }
+                    } else if let imageData = photo.imageData {
+                        // Files app - extract from EXIF
+                        let metadata = EXIFExtractor.extractMetadata(from: imageData)
+                        if let coordinate = metadata.gps {
+                            formData.gpsLatitude = coordinate.latitude
+                            formData.gpsLongitude = coordinate.longitude
+                        } else {
+                            formData.gpsLatitude = 0
+                            formData.gpsLongitude = 0
+                        }
+                        if let date = metadata.date {
+                            formData.captureDateTime = date
+                        }
+                    } else {
+                        formData.gpsLatitude = 0
+                        formData.gpsLongitude = 0
+                    }
+
                     pendingPhoto = nil
                 }
             }
@@ -274,7 +318,7 @@ struct UploadPage: View {
 
                     // Row 2: Registration & Date (side by side)
                     HStack(spacing: 12) {
-                        // Registration
+                        // Registration - gets more space
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Registration")
                                 .font(.system(size: 12))
@@ -293,20 +337,19 @@ struct UploadPage: View {
                         }
                         .frame(maxWidth: .infinity)
 
-                        // Date/Time
+                        // Date only (no time) - fixed width, pinned right
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Spotted On")
                                 .font(.system(size: 12))
                                 .foregroundStyle(.white.opacity(0.7))
 
-                            DatePicker("", selection: $formData.captureDateTime)
+                            DatePicker("", selection: $formData.captureDateTime, displayedComponents: .date)
                                 .datePickerStyle(.compact)
                                 .labelsHidden()
                                 .colorScheme(.dark)
-                                .scaleEffect(0.85, anchor: .leading)
                                 .frame(height: 36)
                         }
-                        .frame(maxWidth: .infinity)
+                        .fixedSize(horizontal: true, vertical: false)
                     }
                     .padding(.horizontal, 15)
                     .padding(.top, 20)
@@ -784,23 +827,67 @@ struct UploadPage: View {
 
     private func handlePhotoSelected(image: UIImage, identifier: String) {
         if ThumbnailGenerator.isPortrait(image) {
-            pendingPhoto = (image, identifier)
+            pendingPhoto = (image, identifier, nil)
             showingPortraitWarning = true
         } else {
             formData.selectedImage = image
             formData.photoIdentifier = identifier
             formData.isFromFilesApp = false
+            formData.imageData = nil
+
+            // Extract GPS and date from PHAsset
+            let metadata = PhotoLibraryManager.shared.getMetadata(from: identifier)
+
+            if let coordinate = metadata.gps {
+                formData.gpsLatitude = coordinate.latitude
+                formData.gpsLongitude = coordinate.longitude
+                #if DEBUG
+                print("GPS extracted from Photo Library: \(coordinate.latitude), \(coordinate.longitude)")
+                #endif
+            } else {
+                formData.gpsLatitude = 0
+                formData.gpsLongitude = 0
+            }
+
+            if let date = metadata.date {
+                formData.captureDateTime = date
+                #if DEBUG
+                print("Date extracted from Photo Library: \(date)")
+                #endif
+            }
         }
     }
 
-    private func handlePhotoSelectedFromFiles(image: UIImage) {
+    private func handlePhotoSelectedFromFiles(image: UIImage, imageData: Data) {
         if ThumbnailGenerator.isPortrait(image) {
-            pendingPhoto = (image, nil)
+            pendingPhoto = (image, nil, imageData)
             showingPortraitWarning = true
         } else {
             formData.selectedImage = image
             formData.photoIdentifier = nil
             formData.isFromFilesApp = true
+            formData.imageData = imageData
+
+            // Extract GPS and date from EXIF metadata
+            let metadata = EXIFExtractor.extractMetadata(from: imageData)
+
+            if let coordinate = metadata.gps {
+                formData.gpsLatitude = coordinate.latitude
+                formData.gpsLongitude = coordinate.longitude
+                #if DEBUG
+                print("GPS extracted from EXIF: \(coordinate.latitude), \(coordinate.longitude)")
+                #endif
+            } else {
+                formData.gpsLatitude = 0
+                formData.gpsLongitude = 0
+            }
+
+            if let date = metadata.date {
+                formData.captureDateTime = date
+                #if DEBUG
+                print("Date extracted from EXIF: \(date)")
+                #endif
+            }
         }
     }
 
@@ -935,15 +1022,15 @@ struct UploadPage: View {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day], from: formData.captureDateTime)
 
-        // 5. Create CapturedAircraft record
+        // 5. Create CapturedAircraft record with extracted GPS coordinates
         let aircraft = CapturedAircraft(
             captureTime: formData.captureDateTime,
             captureDate: calendar.startOfDay(for: formData.captureDateTime),
             year: components.year ?? 2026,
             month: components.month ?? 1,
             day: components.day ?? 1,
-            gpsLongitude: 0,
-            gpsLatitude: 0,
+            gpsLongitude: formData.gpsLongitude,
+            gpsLatitude: formData.gpsLatitude,
             iPhotoReference: photoIdentifier,
             thumbnailData: thumbnailData,
             icao: icao,
