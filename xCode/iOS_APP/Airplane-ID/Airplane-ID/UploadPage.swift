@@ -113,6 +113,7 @@ struct UploadPage: View {
     // Alert states
     @State private var showingPortraitWarning = false
     @State private var showingMissingDataAlert = false
+    @State private var showingMissingRatingAlert = false
     @State private var pendingPhoto: (image: UIImage, identifier: String?)?
 
     // Animation states
@@ -184,6 +185,16 @@ struct UploadPage: View {
             }
         } message: {
             Text("Please select Aircraft Type and Registration. This info helps improve the accuracy of the AI model.")
+        }
+        .alert("Rate the Results", isPresented: $showingMissingRatingAlert) {
+            Button("Return") {
+                // Stay on results to rate
+            }
+            Button("Save Anyway") {
+                Task { await saveAircraftConfirmed() }
+            }
+        } message: {
+            Text("Please rate the identification results using thumbs up or down. This helps us improve the AI model accuracy.")
         }
     }
 
@@ -730,7 +741,7 @@ struct UploadPage: View {
                     Spacer()
 
                     // Save Button
-                    Button(action: { Task { await saveAircraft() } }) {
+                    Button(action: handleSaveTapped) {
                         HStack(spacing: 6) {
                             Image(systemName: "square.and.arrow.down")
                                 .font(.system(size: 14))
@@ -888,8 +899,18 @@ struct UploadPage: View {
         }
     }
 
+    private func handleSaveTapped() {
+        // Check if user has rated the results
+        if formData.thumbsUp == nil {
+            Haptics.warning()
+            showingMissingRatingAlert = true
+        } else {
+            Task { await saveAircraftConfirmed() }
+        }
+    }
+
     @MainActor
-    private func saveAircraft() async {
+    private func saveAircraftConfirmed() async {
         guard let image = formData.selectedImage,
               let icao = formData.selectedICAO,
               let manufacturer = formData.manufacturer,

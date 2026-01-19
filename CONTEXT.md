@@ -2797,5 +2797,13 @@ When user selects an ICAO code:
   - Changed HomePage @Query to sort by `createdAt` instead of `captureDate`
   - This ensures last-added records appear first, regardless of user-selected date
 - **Schema change:** CapturedAircraft now has `createdAt` field
-- Next: Test HomePage shows new aircraft in insertion order
+
+### 2026-01-18 (continued - Rating validation)
+- **Added thumbs up/down rating validation on save:**
+  - New `showingMissingRatingAlert` state
+  - `handleSaveTapped()` checks if `formData.thumbsUp == nil`
+  - If no rating, shows "Rate the Results" popup
+  - Buttons: "Return" (stay to rate) or "Save Anyway" (bypass)
+  - Renamed `saveAircraft()` to `saveAircraftConfirmed()`
+- Next: Test rating validation flow
 
