@@ -2790,3 +2790,12 @@ When user selects an ICAO code:
   - Updated UploadPage.swift to use new function instead of raw `icaoClass` value
 - Next: Test category display shows correct names
 
+### 2026-01-18 (continued - HomePage recent sightings fix)
+- **Fixed HomePage not showing recently added aircraft:**
+  - Added `createdAt: Date` field to CapturedAircraft model for true insertion ordering
+  - Field is auto-set to `Date()` in init (not user-editable)
+  - Changed HomePage @Query to sort by `createdAt` instead of `captureDate`
+  - This ensures last-added records appear first, regardless of user-selected date
+- **Schema change:** CapturedAircraft now has `createdAt` field
+- Next: Test HomePage shows new aircraft in insertion order
+

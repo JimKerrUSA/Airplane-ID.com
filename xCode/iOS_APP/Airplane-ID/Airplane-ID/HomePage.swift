@@ -11,9 +11,9 @@ import SwiftData
 struct HomePage: View {
     @Environment(AppState.self) private var appState
 
-    // Query to fetch the most recent aircraft captures
+    // Query to fetch the most recent aircraft captures (sorted by insertion order, newest first)
     @Query(
-        sort: \CapturedAircraft.captureDate,
+        sort: \CapturedAircraft.createdAt,
         order: .reverse
     ) private var allAircraft: [CapturedAircraft]
 

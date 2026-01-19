@@ -83,11 +83,14 @@ final class User {
 
 // MARK: - CapturedAircraft Model
 /// Represents an aircraft that has been captured/identified by the user
-/// Key fields: captureDate (sorting), icao (unique types), registration (search)
+/// Key fields: createdAt (insertion order), captureDate (user-selected date), icao (unique types), registration (search)
 @Model
 final class CapturedAircraft: Identifiable {
+    // Database metadata
+    var createdAt: Date                // Timestamp when record was added to database (for insertion ordering)
+
     // Capture metadata (required at save - from device)
-    var captureTime: Date              // Full timestamp when photo taken/uploaded
+    var captureTime: Date              // Full timestamp when photo taken/uploaded (user can modify)
     var captureDate: Date              // Date only (derived from captureTime)
     var year: Int                      // Derived from captureTime (for filtering)
     var month: Int                     // Derived from captureTime (for filtering)
@@ -183,6 +186,7 @@ final class CapturedAircraft: Identifiable {
         rating: Double? = nil,
         thumbsUp: Bool? = nil
     ) {
+        self.createdAt = Date()  // Always set to current time for insertion ordering
         self.captureTime = captureTime
         self.captureDate = captureDate
         self.year = year
