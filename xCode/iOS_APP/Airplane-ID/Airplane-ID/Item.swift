@@ -87,7 +87,7 @@ final class User {
 @Model
 final class CapturedAircraft: Identifiable {
     // Database metadata
-    var createdAt: Date                // Timestamp when record was added to database (for insertion ordering)
+    var createdAt: Date = Date()       // Timestamp when record was added to database (for insertion ordering)
 
     // Capture metadata (required at save - from device)
     var captureTime: Date              // Full timestamp when photo taken/uploaded (user can modify)
