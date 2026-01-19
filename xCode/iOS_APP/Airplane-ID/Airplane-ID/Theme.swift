@@ -271,6 +271,23 @@ enum AircraftLookup {
         return categories[code]
     }
 
+    // MARK: ICAO Class (from ICAO data)
+    // Stored as String, converted to clean display name
+    static let icaoClasses: [String: String] = [
+        "LandPlane": "Land",
+        "SeaPlane": "Sea",
+        "Amphibian": "Amphibian",
+        "Helicopter": "Helicopter",
+        "Gyrocopter": "Gyrocopter",
+        "Tiltrotor": "Tiltrotor"
+    ]
+
+    /// Returns ICAO class display name or the original value if not found
+    static func icaoClassDisplayName(_ icaoClass: String?) -> String? {
+        guard let icaoClass = icaoClass else { return nil }
+        return icaoClasses[icaoClass] ?? icaoClass
+    }
+
     // MARK: Engine Type (TYPE-ENG in FAA data)
     // Stored as Int (0-10), displayed in Title Case
     static let engineTypes: [Int: String] = [

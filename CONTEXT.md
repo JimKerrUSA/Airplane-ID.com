@@ -2782,3 +2782,11 @@ When user selects an ICAO code:
   - Layout now: Row 1 (Mfr|Model), Row 2 (Reg|Class), Row 3 (Type|Category), Row 4 (Engine|Count)
 - Next: Test validation flow and category display
 
+### 2026-01-18 (continued - Category display name fix)
+- **Fixed Category display showing "LandPlane" instead of "Land":**
+  - Added `icaoClasses` dictionary to Theme.swift mapping raw values to display names
+  - LandPlane → Land, SeaPlane → Sea, Amphibian → Amphibian, etc.
+  - Added `AircraftLookup.icaoClassDisplayName()` function
+  - Updated UploadPage.swift to use new function instead of raw `icaoClass` value
+- Next: Test category display shows correct names
+

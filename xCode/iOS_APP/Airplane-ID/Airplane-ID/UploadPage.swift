@@ -668,7 +668,7 @@ struct UploadPage: View {
                         Text("Category")
                             .font(.system(size: 11))
                             .foregroundStyle(AppColors.darkBlue.opacity(0.6))
-                        Text(formData.icaoClass ?? "—")
+                        Text(AircraftLookup.icaoClassDisplayName(formData.icaoClass) ?? "—")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(AppColors.darkBlue)
                     }
