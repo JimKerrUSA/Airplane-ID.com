@@ -2711,3 +2711,40 @@ When user selects an ICAO code:
 - `PhotoServices.swift` - Added DocumentPickerView, UniformTypeIdentifiers import
 - `UploadPage.swift` - Complete rewrite from placeholder to full implementation
 
+### 2026-01-18 (continued)
+- Fixed UploadPage.swift UI based on user feedback:
+  - Added portrait image warning (uses ThumbnailGenerator.isPortrait())
+  - Created UploadSourceButton styled like SettingsRowContent (icon, title, subtitle, chevron)
+  - Added photo placeholder at top (16:9 aspect ratio, darkBlue.opacity(0.3) background)
+  - Made compact form layout with side-by-side pickers (ICAO/Airline, Registration/Date)
+  - Added white box with blue header for Submit area (matches HomePage stat boxes)
+  - Results box shows: Manufacturer/Model grouped, Type on own line, Engine info grouped
+  - Thumbs up/down buttons positioned to left/right of Save button
+  - Reduced upload workflow to 3 states (removed selectPhoto, starts at enterDetails)
+- Fixed syntax errors: `.padding(.bottom: 25)` → `.padding(.bottom, 25)` (2 instances)
+
+### 2026-01-18 (continued - UI polish and scanning animation)
+- **Photo placeholder improvements:**
+  - Darker background: changed from darkBlue.opacity(0.3) to 0.6
+  - Added horizontal scanlines (1px every 4px) for video/CRT effect using Canvas
+- **Orange CLEAR button:**
+  - Added below Submit box, styled like Hangar page filter clear button
+  - Orange background, white "CLEAR" text, Helvetica-Bold 14pt
+  - Only appears when user has input (ICAO, Airline, or Registration text)
+  - `hasUserInput` computed property added to UploadFormData
+  - Clears all form data including photo
+- **Validation popup for missing Aircraft Type:**
+  - Shows "Missing Information" alert when clicking submit without ICAO
+  - Message explains this helps improve AI accuracy
+  - Two buttons: "Return" (stay on form) or "Process Anyway" (proceed anyway)
+  - Haptics.warning() feedback on popup
+- **Image scanning animation (barcode/grid scanner effect):**
+  - New `imageScan` state added to UploadState enum (4 states now)
+  - `ScanLinesOverlay` component: diagonal green lines (#00FF00, 2px wide, 40px spacing)
+  - Lines animate from top-left to bottom-right over 1.5 seconds
+  - White flash overlay for 0.5 seconds after scan completes
+  - Then transitions to radar spinner "Identifying Aircraft..." screen
+- **State flow:** enterDetails → imageScan → scanning → results
+- Build verified in Xcode
+- Next: Test on device, continue UI refinement
+

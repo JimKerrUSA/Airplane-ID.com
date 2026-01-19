@@ -19,9 +19,9 @@ import Photos
 // MARK: - Upload State
 /// State machine for the upload workflow
 enum UploadState {
-    case selectPhoto           // Initial state - show source selection buttons
-    case enterDetails          // Photo selected - show form
-    case scanning              // Processing animation (placeholder for future AI)
+    case enterDetails          // Initial/form entry state
+    case imageScan             // Green scan lines animation on image
+    case scanning              // Processing animation (radar spinner)
     case results               // Show results with feedback options
 }
 
@@ -52,8 +52,14 @@ class UploadFormData {
     // Feedback
     var thumbsUp: Bool?                 // nil = not rated, true = 👍, false = 👎
 
+    /// Check if photo and ICAO are selected
     var isValid: Bool {
         selectedImage != nil && selectedICAO != nil
+    }
+
+    /// Check if user has entered any data (for showing CLEAR button)
+    var hasUserInput: Bool {
+        selectedICAO != nil || selectedAirlineCode != nil || !registration.isEmpty
     }
 
     func reset() {
@@ -73,6 +79,20 @@ class UploadFormData {
         engineType = nil
         thumbsUp = nil
     }
+
+    /// Clear only the form fields (not the photo)
+    func clearFormFields() {
+        selectedICAO = nil
+        selectedAirlineCode = nil
+        registration = ""
+        manufacturer = nil
+        model = nil
+        icaoClass = nil
+        aircraftCategoryCode = nil
+        aircraftType = nil
+        engineCount = nil
+        engineType = nil
+    }
 }
 
 // MARK: - Upload Page
@@ -81,7 +101,7 @@ struct UploadPage: View {
     @Environment(AppState.self) private var appState
     @Environment(\.modelContext) private var modelContext
 
-    @State private var uploadState: UploadState = .selectPhoto
+    @State private var uploadState: UploadState = .enterDetails
     @State private var formData = UploadFormData()
 
     // Sheet states
@@ -90,8 +110,15 @@ struct UploadPage: View {
     @State private var showingICAOSearch = false
     @State private var showingAirlineSearch = false
 
-    // Animation
+    // Alert states
+    @State private var showingPortraitWarning = false
+    @State private var showingMissingDataAlert = false
+    @State private var pendingPhoto: (image: UIImage, identifier: String?)?
+
+    // Animation states
     @State private var scanAngle: Double = 0
+    @State private var scanLineOffset: CGFloat = 0
+    @State private var showWhiteFlash: Bool = false
 
     var body: some View {
         OrientationAwarePage(
@@ -102,10 +129,7 @@ struct UploadPage: View {
         .sheet(isPresented: $showingPhotoPicker) {
             PhotoPickerView(
                 onSelect: { image, identifier in
-                    formData.selectedImage = image
-                    formData.photoIdentifier = identifier
-                    formData.isFromFilesApp = false
-                    uploadState = .enterDetails
+                    handlePhotoSelected(image: image, identifier: identifier)
                 },
                 onCancel: { }
             )
@@ -113,10 +137,7 @@ struct UploadPage: View {
         .sheet(isPresented: $showingDocumentPicker) {
             DocumentPickerView(
                 onSelect: { image in
-                    formData.selectedImage = image
-                    formData.photoIdentifier = nil
-                    formData.isFromFilesApp = true
-                    uploadState = .enterDetails
+                    handlePhotoSelectedFromFiles(image: image)
                 },
                 onCancel: { }
             )
@@ -137,15 +158,41 @@ struct UploadPage: View {
                 set: { formData.selectedAirlineCode = $0 }
             ))
         }
+        .alert("Portrait Photo Detected", isPresented: $showingPortraitWarning) {
+            Button("Use Anyway") {
+                if let photo = pendingPhoto {
+                    formData.selectedImage = photo.image
+                    formData.photoIdentifier = photo.identifier
+                    formData.isFromFilesApp = photo.identifier == nil
+                    pendingPhoto = nil
+                }
+            }
+            Button("Choose Different", role: .cancel) {
+                pendingPhoto = nil
+                showingPhotoPicker = true
+            }
+        } message: {
+            Text("You are attempting to upload a photo in portrait orientation. Our app is optimized for landscape images. Would you like to continue or upload a different image?")
+        }
+        .alert("Missing Information", isPresented: $showingMissingDataAlert) {
+            Button("Return") {
+                // Stay on form
+            }
+            Button("Process Anyway") {
+                startImageScan()
+            }
+        } message: {
+            Text("Please select Aircraft Type and Registration. This info helps improve the accuracy of the AI model.")
+        }
     }
 
     @ViewBuilder
     private var uploadContent: some View {
         switch uploadState {
-        case .selectPhoto:
-            selectPhotoView
         case .enterDetails:
             enterDetailsView
+        case .imageScan:
+            imageScanView
         case .scanning:
             scanningView
         case .results:
@@ -153,140 +200,293 @@ struct UploadPage: View {
         }
     }
 
-    // MARK: - Select Photo View
-    private var selectPhotoView: some View {
-        VStack(spacing: 24) {
-            Spacer()
-
-            Image(systemName: "photo.badge.plus")
-                .font(.system(size: 80))
-                .foregroundStyle(.white.opacity(0.6))
-
-            Text("Add Aircraft")
-                .font(.system(size: 28, weight: .bold))
-                .foregroundStyle(.white)
-
-            Text("Select a photo to identify")
-                .foregroundStyle(.white.opacity(0.7))
-
-            VStack(spacing: 16) {
-                // Photo Library button
-                Button(action: {
-                    Haptics.light()
-                    showingPhotoPicker = true
-                }) {
-                    HStack {
-                        Image(systemName: "photo.on.rectangle")
-                        Text("Photo Library")
-                    }
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(AppColors.primaryBlue)
-                    .cornerRadius(12)
-                }
-
-                // Files button
-                Button(action: {
-                    Haptics.light()
-                    showingDocumentPicker = true
-                }) {
-                    HStack {
-                        Image(systemName: "folder")
-                        Text("Browse Files")
-                    }
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(AppColors.mediumGray)
-                    .cornerRadius(12)
-                }
-            }
-            .padding(.horizontal, 40)
-
-            Spacer()
-        }
-    }
-
     // MARK: - Enter Details View
     private var enterDetailsView: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Photo preview (16:9 aspect ratio)
-                if let image = formData.selectedImage {
-                    ZStack(alignment: .topTrailing) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(height: UIScreen.main.bounds.width * 9/16)
-                            .clipped()
-                            .cornerRadius(12)
+        GeometryReader { geometry in
+            let contentWidth = geometry.size.width - 30  // 15px padding each side
 
-                        // Change photo button
+            ScrollView {
+                VStack(spacing: 0) {
+                    // Photo placeholder / preview area (16:9 aspect ratio)
+                    photoPreviewArea(width: contentWidth)
+                        .padding(.horizontal, 15)
+                        .padding(.top, 10)
+
+                    // Photo source buttons
+                    VStack(spacing: 12) {
+                        UploadSourceButton(
+                            icon: "photo.on.rectangle",
+                            title: "Photo Library",
+                            subtitle: "Select from your photos"
+                        ) {
+                            Haptics.light()
+                            showingPhotoPicker = true
+                        }
+
+                        UploadSourceButton(
+                            icon: "folder",
+                            title: "Browse Files",
+                            subtitle: "Import from iCloud, Dropbox, etc."
+                        ) {
+                            Haptics.light()
+                            showingDocumentPicker = true
+                        }
+                    }
+                    .padding(.horizontal, 15)
+                    .padding(.top, 15)
+
+                    // Row 1: Aircraft Type & Airline (side by side)
+                    HStack(spacing: 12) {
+                        // Aircraft Type (ICAO)
+                        UploadCompactPicker(
+                            label: "Aircraft Type",
+                            value: formData.selectedICAO,
+                            placeholder: "Select"
+                        ) {
+                            Haptics.light()
+                            showingICAOSearch = true
+                        }
+
+                        // Airline
+                        UploadCompactPicker(
+                            label: "Airline",
+                            value: formData.selectedAirlineCode,
+                            placeholder: "Select"
+                        ) {
+                            Haptics.light()
+                            showingAirlineSearch = true
+                        }
+                    }
+                    .padding(.horizontal, 15)
+                    .padding(.top, 20)
+
+                    // Row 2: Registration & Date (side by side)
+                    HStack(spacing: 12) {
+                        // Registration
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Registration")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.white.opacity(0.7))
+
+                            TextField("N12345", text: $formData.registration)
+                                .textFieldStyle(.plain)
+                                .font(.system(size: 14))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 10)
+                                .background(AppColors.settingsRow)
+                                .cornerRadius(8)
+                                .foregroundStyle(.white)
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.characters)
+                        }
+                        .frame(maxWidth: .infinity)
+
+                        // Date/Time
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Spotted On")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.white.opacity(0.7))
+
+                            DatePicker("", selection: $formData.captureDateTime)
+                                .datePickerStyle(.compact)
+                                .labelsHidden()
+                                .colorScheme(.dark)
+                                .scaleEffect(0.85, anchor: .leading)
+                                .frame(height: 36)
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                    .padding(.horizontal, 15)
+                    .padding(.top, 20)
+
+                    // Submit box
+                    submitBox(width: contentWidth)
+                        .padding(.horizontal, 15)
+                        .padding(.top, 15)
+
+                    // CLEAR button (only visible when user has input)
+                    if formData.hasUserInput {
                         Button(action: {
                             Haptics.light()
                             formData.reset()
-                            uploadState = .selectPhoto
                         }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 28))
+                            Text("CLEAR")
+                                .font(.custom("Helvetica-Bold", size: 14))
                                 .foregroundStyle(.white)
-                                .shadow(radius: 2)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(AppColors.orange)
+                                .cornerRadius(6)
                         }
-                        .padding(8)
+                        .padding(.top, 12)
                     }
+
+                    Spacer(minLength: 100) // Space for footer
                 }
-
-                // ICAO Search (Required)
-                UploadPickerRow(
-                    label: "Aircraft Type",
-                    value: formData.selectedICAO,
-                    placeholder: "Select aircraft type...",
-                    isRequired: true,
-                    onTap: { showingICAOSearch = true }
-                )
-
-                // Airline Search (Optional)
-                UploadPickerRow(
-                    label: "Airline",
-                    value: formData.selectedAirlineCode,
-                    placeholder: "Select airline (optional)",
-                    isRequired: false,
-                    onTap: { showingAirlineSearch = true }
-                )
-
-                // Registration (Optional)
-                UploadTextField(
-                    label: "Registration",
-                    placeholder: "e.g. N12345 (optional)",
-                    text: $formData.registration
-                )
-
-                // Date/Time Picker
-                UploadDateTimeRow(
-                    label: "Spotted On",
-                    selectedDate: $formData.captureDateTime
-                )
-
-                // Submit Button
-                Button(action: submitForScanning) {
-                    Text("Submit")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(formData.isValid ? AppColors.primaryBlue : AppColors.mediumGray)
-                        .cornerRadius(12)
-                }
-                .disabled(!formData.isValid)
+                .padding(.bottom, 25)
             }
-            .padding()
         }
     }
 
-    // MARK: - Scanning View
+    // MARK: - Photo Preview Area
+    @ViewBuilder
+    private func photoPreviewArea(width: CGFloat) -> some View {
+        let height = width * 9/16
+
+        ZStack {
+            if let image = formData.selectedImage {
+                // Show selected image
+                ZStack(alignment: .topTrailing) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: width, height: height)
+                        .clipped()
+                        .cornerRadius(10)
+
+                    // Remove photo button
+                    Button(action: {
+                        Haptics.light()
+                        formData.selectedImage = nil
+                        formData.photoIdentifier = nil
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 26))
+                            .foregroundStyle(.white)
+                            .shadow(radius: 2)
+                    }
+                    .padding(8)
+                }
+            } else {
+                // Show placeholder - darker with video-like color hint
+                ZStack {
+                    // Base dark background
+                    Rectangle()
+                        .fill(AppColors.darkBlue.opacity(0.6))
+
+                    // Subtle horizontal scanlines for video effect
+                    Canvas { context, size in
+                        for y in stride(from: 0, to: size.height, by: 4) {
+                            let rect = CGRect(x: 0, y: y, width: size.width, height: 1)
+                            context.fill(Path(rect), with: .color(.black.opacity(0.15)))
+                        }
+                    }
+
+                    // Content
+                    VStack(spacing: 12) {
+                        Image(systemName: "photo.badge.plus")
+                            .font(.system(size: 60))
+                            .foregroundStyle(.white.opacity(0.5))
+                        Text("Add Photo")
+                            .font(.custom("Helvetica", size: 14))
+                            .foregroundStyle(.white.opacity(0.5))
+                    }
+                }
+                .frame(width: width, height: height)
+                .cornerRadius(10)
+            }
+        }
+    }
+
+    // MARK: - Submit Box
+    @ViewBuilder
+    private func submitBox(width: CGFloat) -> some View {
+        VStack(spacing: 0) {
+            // Header
+            ZStack {
+                AppColors.darkBlue
+                Text("Submit")
+                    .font(.custom("Helvetica-Bold", size: 14))
+                    .foregroundStyle(.white)
+            }
+            .frame(width: width, height: 28)
+            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
+
+            // Body
+            ZStack {
+                AppColors.white
+
+                Button(action: handleSubmitTapped) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "paperplane.fill")
+                            .font(.system(size: 16))
+                        Text("Identify Aircraft")
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(formData.selectedImage != nil ? AppColors.primaryBlue : AppColors.mediumGray)
+                    .cornerRadius(8)
+                }
+                .disabled(formData.selectedImage == nil)
+            }
+            .frame(width: width, height: 70)
+            .overlay(
+                RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight])
+                    .stroke(AppColors.borderBlue, lineWidth: 1)
+            )
+            .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
+        }
+    }
+
+    // MARK: - Image Scan View (Green diagonal lines scanning the image)
+    private var imageScanView: some View {
+        GeometryReader { geometry in
+            let contentWidth = geometry.size.width - 30
+            let imageHeight = contentWidth * 9/16
+
+            ZStack {
+                // Dark background
+                Color.black
+
+                VStack {
+                    Spacer()
+
+                    // Image with scan effect overlay
+                    ZStack {
+                        // The image
+                        if let image = formData.selectedImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: contentWidth, height: imageHeight)
+                                .clipped()
+                                .cornerRadius(10)
+                        }
+
+                        // White flash overlay
+                        if showWhiteFlash {
+                            Color.white
+                                .frame(width: contentWidth, height: imageHeight)
+                                .cornerRadius(10)
+                        }
+
+                        // Diagonal scan lines
+                        ScanLinesOverlay(offset: scanLineOffset, lineSpacing: 40)
+                            .frame(width: contentWidth, height: imageHeight)
+                            .cornerRadius(10)
+                            .clipped()
+                    }
+
+                    Spacer()
+
+                    // Status text
+                    Text("Scanning Image...")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .padding(.bottom, 50)
+
+                    Spacer()
+                }
+            }
+        }
+        .onAppear {
+            startScanAnimation()
+        }
+    }
+
+    // MARK: - Scanning View (Radar spinner)
     private var scanningView: some View {
         VStack(spacing: 24) {
             Spacer()
@@ -310,11 +510,11 @@ struct UploadPage: View {
                     .rotationEffect(.degrees(scanAngle))
             }
 
-            Text("Scanning Aircraft...")
+            Text("Identifying Aircraft...")
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(.white)
 
-            Text("Identifying aircraft type")
+            Text("Processing with AI")
                 .foregroundStyle(.white.opacity(0.6))
 
             Spacer()
@@ -335,115 +535,248 @@ struct UploadPage: View {
 
     // MARK: - Results View
     private var resultsView: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Photo
-                if let image = formData.selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(height: UIScreen.main.bounds.width * 9/16)
-                        .clipped()
-                        .cornerRadius(12)
-                }
+        GeometryReader { geometry in
+            let contentWidth = geometry.size.width - 30
 
-                // Aircraft Identification
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(formData.manufacturer?.uppercased() ?? "UNKNOWN")
-                        .font(.custom("Helvetica-Bold", size: 24))
-                        .foregroundStyle(.white)
-                    Text(formData.model ?? "Unknown Model")
-                        .font(.system(size: 18))
-                        .foregroundStyle(.white)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                // Specs from ICAO lookup (read-only display)
-                VStack(spacing: 8) {
-                    if let typeName = AircraftLookup.typeName(formData.aircraftType) {
-                        UploadResultRow(label: "Type", value: typeName)
+            ScrollView {
+                VStack(spacing: 0) {
+                    // Photo preview
+                    if let image = formData.selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: contentWidth, height: contentWidth * 9/16)
+                            .clipped()
+                            .cornerRadius(10)
+                            .padding(.horizontal, 15)
+                            .padding(.top, 10)
                     }
-                    if let engineType = formData.engineType {
-                        UploadResultRow(label: "Engine", value: AircraftLookup.engineTypeName(engineType) ?? "Unknown")
+
+                    // Results box
+                    resultsBox(width: contentWidth)
+                        .padding(.horizontal, 15)
+                        .padding(.top, 15)
+                        .padding(.bottom, 25)
+
+                    // Start Over link
+                    Button(action: {
+                        Haptics.light()
+                        formData.reset()
+                        scanAngle = 0
+                        scanLineOffset = 0
+                        showWhiteFlash = false
+                        uploadState = .enterDetails
+                    }) {
+                        Text("Start Over")
+                            .font(.system(size: 14))
+                            .foregroundStyle(AppColors.linkBlue)
                     }
-                    if let engineCount = formData.engineCount, engineCount > 0 {
-                        UploadResultRow(label: "Engines", value: "\(engineCount)")
-                    }
-                }
-                .padding()
-                .background(AppColors.settingsRow)
-                .cornerRadius(10)
+                    .padding(.bottom, 20)
 
-                // Thumbs Up/Down Feedback
-                VStack(spacing: 8) {
-                    Text("How did we do?")
-                        .font(.system(size: 14))
-                        .foregroundStyle(.white.opacity(0.7))
-
-                    HStack(spacing: 40) {
-                        Button(action: {
-                            formData.thumbsUp = true
-                            Haptics.light()
-                        }) {
-                            VStack {
-                                Image(systemName: formData.thumbsUp == true ? "hand.thumbsup.fill" : "hand.thumbsup")
-                                    .font(.system(size: 32))
-                                Text("Correct")
-                                    .font(.caption)
-                            }
-                            .foregroundStyle(formData.thumbsUp == true ? AppColors.success : .white.opacity(0.7))
-                        }
-
-                        Button(action: {
-                            formData.thumbsUp = false
-                            Haptics.light()
-                        }) {
-                            VStack {
-                                Image(systemName: formData.thumbsUp == false ? "hand.thumbsdown.fill" : "hand.thumbsdown")
-                                    .font(.system(size: 32))
-                                Text("Wrong")
-                                    .font(.caption)
-                            }
-                            .foregroundStyle(formData.thumbsUp == false ? AppColors.error : .white.opacity(0.7))
-                        }
-                    }
-                }
-
-                // Save Button
-                Button(action: { Task { await saveAircraft() } }) {
-                    HStack {
-                        Image(systemName: "square.and.arrow.down")
-                        Text("Save to Hangar")
-                    }
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(AppColors.primaryBlue)
-                    .cornerRadius(12)
-                }
-
-                // Start Over Button
-                Button(action: {
-                    Haptics.light()
-                    formData.reset()
-                    scanAngle = 0
-                    uploadState = .selectPhoto
-                }) {
-                    Text("Start Over")
-                        .font(.system(size: 15))
-                        .foregroundStyle(.white.opacity(0.7))
+                    Spacer(minLength: 100)
                 }
             }
-            .padding()
+        }
+    }
+
+    // MARK: - Results Box
+    @ViewBuilder
+    private func resultsBox(width: CGFloat) -> some View {
+        VStack(spacing: 0) {
+            // Header
+            ZStack {
+                AppColors.darkBlue
+                Text("Aircraft Identified")
+                    .font(.custom("Helvetica-Bold", size: 14))
+                    .foregroundStyle(.white)
+            }
+            .frame(width: width, height: 28)
+            .clipShape(RoundedCorner(radius: 10, corners: [.topLeft, .topRight]))
+
+            // Body
+            VStack(spacing: 12) {
+                // Manufacturer & Model
+                HStack(alignment: .top, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Manufacturer")
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                        Text(formData.manufacturer?.uppercased() ?? "UNKNOWN")
+                            .font(.custom("Helvetica-Bold", size: 16))
+                            .foregroundStyle(AppColors.darkBlue)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Model")
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                        Text(formData.model ?? "Unknown")
+                            .font(.custom("Helvetica-Bold", size: 16))
+                            .foregroundStyle(AppColors.darkBlue)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
+                // Aircraft Type (full width - can be long)
+                if let typeName = AircraftLookup.typeName(formData.aircraftType) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Type")
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                        Text(typeName)
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(AppColors.darkBlue)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
+                // Engine info (side by side if both exist)
+                HStack(alignment: .top, spacing: 20) {
+                    if let engineType = formData.engineType,
+                       let engineName = AircraftLookup.engineTypeName(engineType) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Engine")
+                                .font(.system(size: 11))
+                                .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                            Text(engineName)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(AppColors.darkBlue)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+
+                    if let engineCount = formData.engineCount, engineCount > 0 {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Engines")
+                                .font(.system(size: 11))
+                                .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                            Text("\(engineCount)")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(AppColors.darkBlue)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+
+                Divider()
+                    .background(AppColors.borderBlue)
+
+                // Feedback row: Thumbs Down - Save Button - Thumbs Up
+                HStack(spacing: 0) {
+                    // Thumbs Down
+                    Button(action: {
+                        formData.thumbsUp = false
+                        Haptics.light()
+                    }) {
+                        Image(systemName: formData.thumbsUp == false ? "hand.thumbsdown.fill" : "hand.thumbsdown")
+                            .font(.system(size: 28))
+                            .foregroundStyle(formData.thumbsUp == false ? AppColors.error : AppColors.darkBlue.opacity(0.4))
+                    }
+                    .frame(width: 50)
+
+                    Spacer()
+
+                    // Save Button
+                    Button(action: { Task { await saveAircraft() } }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "square.and.arrow.down")
+                                .font(.system(size: 14))
+                            Text("Save to Hangar")
+                                .font(.system(size: 14, weight: .semibold))
+                        }
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(AppColors.primaryBlue)
+                        .cornerRadius(8)
+                    }
+
+                    Spacer()
+
+                    // Thumbs Up
+                    Button(action: {
+                        formData.thumbsUp = true
+                        Haptics.light()
+                    }) {
+                        Image(systemName: formData.thumbsUp == true ? "hand.thumbsup.fill" : "hand.thumbsup")
+                            .font(.system(size: 28))
+                            .foregroundStyle(formData.thumbsUp == true ? AppColors.success : AppColors.darkBlue.opacity(0.4))
+                    }
+                    .frame(width: 50)
+                }
+            }
+            .padding(16)
+            .frame(width: width)
+            .background(AppColors.white)
+            .overlay(
+                RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight])
+                    .stroke(AppColors.borderBlue, lineWidth: 1)
+            )
+            .clipShape(RoundedCorner(radius: 10, corners: [.bottomLeft, .bottomRight]))
         }
     }
 
     // MARK: - Actions
 
-    private func submitForScanning() {
+    private func handlePhotoSelected(image: UIImage, identifier: String) {
+        if ThumbnailGenerator.isPortrait(image) {
+            pendingPhoto = (image, identifier)
+            showingPortraitWarning = true
+        } else {
+            formData.selectedImage = image
+            formData.photoIdentifier = identifier
+            formData.isFromFilesApp = false
+        }
+    }
+
+    private func handlePhotoSelectedFromFiles(image: UIImage) {
+        if ThumbnailGenerator.isPortrait(image) {
+            pendingPhoto = (image, nil)
+            showingPortraitWarning = true
+        } else {
+            formData.selectedImage = image
+            formData.photoIdentifier = nil
+            formData.isFromFilesApp = true
+        }
+    }
+
+    private func handleSubmitTapped() {
+        guard formData.selectedImage != nil else { return }
+
+        // Check if Aircraft Type is missing
+        if formData.selectedICAO == nil {
+            Haptics.warning()
+            showingMissingDataAlert = true
+        } else {
+            startImageScan()
+        }
+    }
+
+    private func startImageScan() {
         Haptics.selection()
-        uploadState = .scanning
+        uploadState = .imageScan
+    }
+
+    private func startScanAnimation() {
+        // Animate scan lines from top-left to bottom-right
+        // Duration: about 1.5 seconds for the scan
+        withAnimation(.linear(duration: 1.5)) {
+            scanLineOffset = 500  // Move lines across
+        }
+
+        // After scan completes, show white flash
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            withAnimation(.easeIn(duration: 0.1)) {
+                showWhiteFlash = true
+            }
+
+            // Hold flash for 0.5 seconds, then transition
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                showWhiteFlash = false
+                uploadState = .scanning
+            }
+        }
     }
 
     private func handleICAOSelection(_ icao: String) {
@@ -466,7 +799,6 @@ struct UploadPage: View {
     }
 
     private func populateFromICAOLookup() {
-        // Called during scanning phase to ensure data is populated
         if let icao = formData.selectedICAO {
             handleICAOSelection(icao)
         }
@@ -486,7 +818,6 @@ struct UploadPage: View {
         var photoIdentifier = formData.photoIdentifier ?? ""
 
         if formData.isFromFilesApp {
-            // For files import: save to photo library first
             photoIdentifier = await saveImageToPhotoLibrary(image)
         }
 
@@ -506,7 +837,7 @@ struct UploadPage: View {
             year: components.year ?? 2026,
             month: components.month ?? 1,
             day: components.day ?? 1,
-            gpsLongitude: 0,  // TODO: Extract from photo EXIF if available
+            gpsLongitude: 0,
             gpsLatitude: 0,
             iPhotoReference: photoIdentifier,
             thumbnailData: thumbnailData,
@@ -529,13 +860,14 @@ struct UploadPage: View {
         // 7. Success feedback
         Haptics.success()
 
-        // 8. Reset form and return to select photo state
+        // 8. Reset form
         formData.reset()
         scanAngle = 0
-        uploadState = .selectPhoto
+        scanLineOffset = 0
+        showWhiteFlash = false
+        uploadState = .enterDetails
     }
 
-    /// Save image from Files app to Photo Library
     private func saveImageToPhotoLibrary(_ image: UIImage) async -> String {
         return await withCheckedContinuation { continuation in
             var localId = ""
@@ -549,114 +881,118 @@ struct UploadPage: View {
     }
 }
 
+// MARK: - Scan Lines Overlay
+/// Animated diagonal green scan lines that sweep across the image
+struct ScanLinesOverlay: View {
+    let offset: CGFloat
+    let lineSpacing: CGFloat
+
+    var body: some View {
+        Canvas { context, size in
+            let lineWidth: CGFloat = 2
+            let totalDiagonal = size.width + size.height
+
+            // Draw diagonal lines from top-left to bottom-right
+            // Lines start off-screen to the top-left and move to bottom-right
+            let startOffset = -totalDiagonal + offset
+
+            for i in stride(from: startOffset, to: totalDiagonal, by: lineSpacing) {
+                let path = Path { p in
+                    // Line goes from (i, 0) to (i + height, height)
+                    // This creates lines at 45 degrees
+                    p.move(to: CGPoint(x: i, y: 0))
+                    p.addLine(to: CGPoint(x: i + size.height, y: size.height))
+                }
+
+                context.stroke(
+                    path,
+                    with: .color(Color(hex: "00FF00").opacity(0.7)),  // Bright green
+                    lineWidth: lineWidth
+                )
+            }
+        }
+    }
+}
+
 // MARK: - Helper Components
 
-/// Picker row for ICAO/Airline selection
-struct UploadPickerRow: View {
-    let label: String
-    let value: String?
-    let placeholder: String
-    let isRequired: Bool
-    let onTap: () -> Void
+/// Source button styled like SettingsRowContent
+struct UploadSourceButton: View {
+    let icon: String
+    let title: String
+    let subtitle: String
+    let action: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(label)
-                    .font(.system(size: 13))
-                    .foregroundStyle(.white.opacity(0.7))
-                if isRequired {
-                    Text("*")
-                        .foregroundStyle(AppColors.orange)
+        Button(action: action) {
+            HStack(spacing: 16) {
+                Image(systemName: icon)
+                    .font(.system(size: 22))
+                    .foregroundStyle(AppColors.linkBlue)
+                    .frame(width: 36)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                    Text(subtitle)
+                        .font(.system(size: 13))
+                        .foregroundStyle(.white.opacity(0.6))
+                        .lineLimit(1)
                 }
-            }
 
-            Button(action: {
-                Haptics.light()
-                onTap()
-            }) {
-                HStack {
-                    Text(value ?? placeholder)
-                        .foregroundStyle(value != nil ? .white : .white.opacity(0.5))
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(.white.opacity(0.5))
-                }
-                .padding()
-                .background(AppColors.settingsRow)
-                .cornerRadius(10)
-            }
-        }
-    }
-}
-
-/// Text field for registration input
-struct UploadTextField: View {
-    let label: String
-    let placeholder: String
-    @Binding var text: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(label)
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.7))
-
-            TextField(placeholder, text: $text)
-                .textFieldStyle(.plain)
-                .padding()
-                .background(AppColors.settingsRow)
-                .cornerRadius(10)
-                .foregroundStyle(.white)
-                .autocorrectionDisabled()
-        }
-    }
-}
-
-/// Date/Time picker row
-struct UploadDateTimeRow: View {
-    let label: String
-    @Binding var selectedDate: Date
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(label)
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.7))
-
-            HStack {
-                DatePicker("", selection: $selectedDate)
-                    .datePickerStyle(.compact)
-                    .labelsHidden()
-                    .colorScheme(.dark)
                 Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.4))
             }
-            .padding()
+            .padding(.vertical, 14)
+            .padding(.horizontal, 14)
             .background(AppColors.settingsRow)
             .cornerRadius(10)
         }
     }
 }
 
-/// Result display row
-struct UploadResultRow: View {
+/// Compact picker for side-by-side layout
+struct UploadCompactPicker: View {
     let label: String
-    let value: String
+    let value: String?
+    let placeholder: String
+    let action: () -> Void
 
     var body: some View {
-        HStack {
+        VStack(alignment: .leading, spacing: 4) {
             Text(label)
+                .font(.system(size: 12))
                 .foregroundStyle(.white.opacity(0.7))
-            Spacer()
-            Text(value)
-                .foregroundStyle(.white)
+
+            Button(action: action) {
+                HStack {
+                    Text(value ?? placeholder)
+                        .font(.system(size: 14))
+                        .foregroundStyle(value != nil ? .white : .white.opacity(0.5))
+                        .lineLimit(1)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.4))
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(AppColors.settingsRow)
+                .cornerRadius(8)
+            }
         }
+        .frame(maxWidth: .infinity)
     }
 }
 
 // MARK: - Previews
 
-#Preview("Portrait - Select Photo") {
+#Preview("Portrait - Enter Details") {
     UploadPage()
         .environment(AppState())
         .modelContainer(for: [CapturedAircraft.self, ICAOLookup.self, AirlineLookup.self])
@@ -664,34 +1000,16 @@ struct UploadResultRow: View {
 
 #Preview("Landscape Left", traits: .landscapeLeft) {
     LandscapeLeftTemplate {
-        VStack(spacing: 24) {
-            Image(systemName: "photo.badge.plus")
-                .font(.system(size: 60))
-                .foregroundStyle(.white.opacity(0.6))
-            Text("Add Aircraft")
-                .font(.system(size: 24, weight: .bold))
-                .foregroundStyle(.white)
-            Text("Select a photo to identify")
-                .foregroundStyle(.white.opacity(0.7))
-        }
-        .padding(.leading, 120)
+        Text("Upload - Landscape")
+            .foregroundStyle(.white)
     }
     .environment(AppState())
 }
 
 #Preview("Landscape Right", traits: .landscapeRight) {
     LandscapeRightTemplate {
-        VStack(spacing: 24) {
-            Image(systemName: "photo.badge.plus")
-                .font(.system(size: 60))
-                .foregroundStyle(.white.opacity(0.6))
-            Text("Add Aircraft")
-                .font(.system(size: 24, weight: .bold))
-                .foregroundStyle(.white)
-            Text("Select a photo to identify")
-                .foregroundStyle(.white.opacity(0.7))
-        }
-        .padding(.trailing, 120)
+        Text("Upload - Landscape")
+            .foregroundStyle(.white)
     }
     .environment(AppState())
 }
