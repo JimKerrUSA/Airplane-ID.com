@@ -2768,3 +2768,17 @@ When user selects an ICAO code:
   - All fields show "—" when data is missing
 - Next: Build and test animation timing
 
+### 2026-01-18 (continued - Registration validation, Category field)
+- **Registration field fix:**
+  - Removed "N12345" placeholder text (was showing as faint gray text)
+  - TextField now has empty string placeholder
+- **Validation updated:**
+  - `handleSubmitTapped()` now checks for BOTH Aircraft Type AND Registration
+  - Missing either triggers "Missing Information" popup
+  - User can still proceed with "Process Anyway" button
+- **Results page Category field added:**
+  - Row 3 changed from full-width Type to Type | Category side-by-side
+  - Category shows `formData.icaoClass` (LandPlane, SeaPlane, Amphibian, Helicopter, etc.)
+  - Layout now: Row 1 (Mfr|Model), Row 2 (Reg|Class), Row 3 (Type|Category), Row 4 (Engine|Count)
+- Next: Test validation flow and category display
+

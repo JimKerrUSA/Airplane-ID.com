@@ -269,7 +269,7 @@ struct UploadPage: View {
                                 .font(.system(size: 12))
                                 .foregroundStyle(.white.opacity(0.7))
 
-                            TextField("N12345", text: $formData.registration)
+                            TextField("", text: $formData.registration)
                                 .textFieldStyle(.plain)
                                 .font(.system(size: 14))
                                 .padding(.horizontal, 12)
@@ -652,16 +652,28 @@ struct UploadPage: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
-                // Row 3: Type (full width - can be long like "Fixed Wing Single-Engine")
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Type")
-                        .font(.system(size: 11))
-                        .foregroundStyle(AppColors.darkBlue.opacity(0.6))
-                    Text(AircraftLookup.typeName(formData.aircraftType) ?? "—")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(AppColors.darkBlue)
+                // Row 3: Type & Category
+                HStack(alignment: .top, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Type")
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                        Text(AircraftLookup.typeName(formData.aircraftType) ?? "—")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(AppColors.darkBlue)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Category")
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                        Text(formData.icaoClass ?? "—")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(AppColors.darkBlue)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
 
                 // Row 4: Engine Type & Number of Engines
                 HStack(alignment: .top, spacing: 20) {
@@ -784,8 +796,8 @@ struct UploadPage: View {
     private func handleSubmitTapped() {
         guard formData.selectedImage != nil else { return }
 
-        // Check if Aircraft Type is missing
-        if formData.selectedICAO == nil {
+        // Check if Aircraft Type or Registration is missing
+        if formData.selectedICAO == nil || formData.registration.isEmpty {
             Haptics.warning()
             showingMissingDataAlert = true
         } else {
