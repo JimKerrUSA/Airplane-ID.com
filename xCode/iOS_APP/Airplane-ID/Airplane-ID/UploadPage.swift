@@ -117,8 +117,9 @@ struct UploadPage: View {
 
     // Animation states
     @State private var scanAngle: Double = 0
-    @State private var scanLineOffset: CGFloat = 0
-    @State private var showWhiteFlash: Bool = false
+    @State private var visibleLines: Int = 0
+    @State private var scanPhase: ScanPhase = .idle
+    @State private var showProcessedText: Bool = false
 
     var body: some View {
         OrientationAwarePage(
@@ -430,7 +431,7 @@ struct UploadPage: View {
         }
     }
 
-    // MARK: - Image Scan View (Green diagonal lines scanning the image)
+    // MARK: - Image Scan View (Animated X-pattern grid scan)
     private var imageScanView: some View {
         GeometryReader { geometry in
             let contentWidth = geometry.size.width - 30
@@ -455,24 +456,34 @@ struct UploadPage: View {
                                 .cornerRadius(10)
                         }
 
-                        // White flash overlay
-                        if showWhiteFlash {
-                            Color.white
-                                .frame(width: contentWidth, height: imageHeight)
-                                .cornerRadius(10)
-                        }
+                        // X-pattern grid scan overlay
+                        XPatternScanOverlay(
+                            visibleLines: visibleLines,
+                            phase: scanPhase,
+                            lineSpacing: 30
+                        )
+                        .frame(width: contentWidth, height: imageHeight)
+                        .cornerRadius(10)
+                        .clipped()
 
-                        // Diagonal scan lines
-                        ScanLinesOverlay(offset: scanLineOffset, lineSpacing: 40)
+                        // White flash with PROCESSED text
+                        if showProcessedText {
+                            ZStack {
+                                Color.white
+
+                                Text("PROCESSED")
+                                    .font(.custom("Helvetica-Bold", size: 40))
+                                    .foregroundStyle(Color.gray.opacity(0.3))
+                            }
                             .frame(width: contentWidth, height: imageHeight)
                             .cornerRadius(10)
-                            .clipped()
+                        }
                     }
 
                     Spacer()
 
                     // Status text
-                    Text("Scanning Image...")
+                    Text(showProcessedText ? "Complete!" : "Scanning Image...")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(.white)
                         .padding(.bottom, 50)
@@ -482,7 +493,7 @@ struct UploadPage: View {
             }
         }
         .onAppear {
-            startScanAnimation()
+            startXPatternScan()
         }
     }
 
@@ -556,20 +567,20 @@ struct UploadPage: View {
                     resultsBox(width: contentWidth)
                         .padding(.horizontal, 15)
                         .padding(.top, 15)
-                        .padding(.bottom, 25)
+                        .padding(.bottom, 15)
 
-                    // Start Over link
+                    // Start Over button (orange box style)
                     Button(action: {
                         Haptics.light()
-                        formData.reset()
-                        scanAngle = 0
-                        scanLineOffset = 0
-                        showWhiteFlash = false
-                        uploadState = .enterDetails
+                        resetAllState()
                     }) {
-                        Text("Start Over")
-                            .font(.system(size: 14))
-                            .foregroundStyle(AppColors.linkBlue)
+                        Text("START OVER")
+                            .font(.custom("Helvetica-Bold", size: 14))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(AppColors.orange)
+                            .cornerRadius(6)
                     }
                     .padding(.bottom, 20)
 
@@ -595,7 +606,7 @@ struct UploadPage: View {
 
             // Body
             VStack(spacing: 12) {
-                // Manufacturer & Model
+                // Row 1: Manufacturer & Model
                 HStack(alignment: .top, spacing: 20) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Manufacturer")
@@ -618,45 +629,74 @@ struct UploadPage: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
-                // Aircraft Type (full width - can be long)
-                if let typeName = AircraftLookup.typeName(formData.aircraftType) {
+                // Row 2: Registration & Classification
+                HStack(alignment: .top, spacing: 20) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Type")
+                        Text("Registration")
                             .font(.system(size: 11))
                             .foregroundStyle(AppColors.darkBlue.opacity(0.6))
-                        Text(typeName)
+                        Text(formData.registration.isEmpty ? "—" : formData.registration.uppercased())
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(AppColors.darkBlue)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Classification")
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                        Text(AircraftLookup.classificationName(formData.aircraftCategoryCode) ?? "—")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(AppColors.darkBlue)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
-                // Engine info (side by side if both exist)
+                // Row 3: Type (full width - can be long like "Fixed Wing Single-Engine")
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Type")
+                        .font(.system(size: 11))
+                        .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                    Text(AircraftLookup.typeName(formData.aircraftType) ?? "—")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(AppColors.darkBlue)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                // Row 4: Engine Type & Number of Engines
                 HStack(alignment: .top, spacing: 20) {
-                    if let engineType = formData.engineType,
-                       let engineName = AircraftLookup.engineTypeName(engineType) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Engine")
-                                .font(.system(size: 11))
-                                .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Engine Type")
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                        if let engineType = formData.engineType,
+                           let engineName = AircraftLookup.engineTypeName(engineType) {
                             Text(engineName)
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundStyle(AppColors.darkBlue)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-
-                    if let engineCount = formData.engineCount, engineCount > 0 {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Engines")
-                                .font(.system(size: 11))
-                                .foregroundStyle(AppColors.darkBlue.opacity(0.6))
-                            Text("\(engineCount)")
+                        } else {
+                            Text("—")
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundStyle(AppColors.darkBlue)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Num Engines")
+                            .font(.system(size: 11))
+                            .foregroundStyle(AppColors.darkBlue.opacity(0.6))
+                        if let count = formData.engineCount, count > 0 {
+                            Text("\(count)")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(AppColors.darkBlue)
+                        } else {
+                            Text("—")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(AppColors.darkBlue)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
                 Divider()
@@ -755,28 +795,60 @@ struct UploadPage: View {
 
     private func startImageScan() {
         Haptics.selection()
+        // Reset scan state
+        visibleLines = 0
+        scanPhase = .idle
+        showProcessedText = false
         uploadState = .imageScan
     }
 
-    private func startScanAnimation() {
-        // Animate scan lines from top-left to bottom-right
-        // Duration: about 1.5 seconds for the scan
-        withAnimation(.linear(duration: 1.5)) {
-            scanLineOffset = 500  // Move lines across
+    private func startXPatternScan() {
+        // Calculate total lines needed (approximately)
+        let totalLinesPerDirection = 20  // Adjust based on spacing
+        let delayBetweenLines: Double = 0.025  // 25ms between lines
+
+        // Phase 1: Draw lines from top-left to bottom-right
+        scanPhase = .topLeftToBottomRight
+        for i in 0..<totalLinesPerDirection {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * delayBetweenLines) {
+                visibleLines = i + 1
+            }
         }
 
-        // After scan completes, show white flash
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        // Phase 2: Draw lines from top-right to bottom-left
+        let phase2Start = Double(totalLinesPerDirection) * delayBetweenLines
+        DispatchQueue.main.asyncAfter(deadline: .now() + phase2Start) {
+            scanPhase = .topRightToBottomLeft
+            visibleLines = 0
+        }
+
+        for i in 0..<totalLinesPerDirection {
+            DispatchQueue.main.asyncAfter(deadline: .now() + phase2Start + Double(i) * delayBetweenLines) {
+                visibleLines = i + 1
+            }
+        }
+
+        // Phase 3: Flash with PROCESSED
+        let flashStart = phase2Start + Double(totalLinesPerDirection) * delayBetweenLines
+        DispatchQueue.main.asyncAfter(deadline: .now() + flashStart) {
             withAnimation(.easeIn(duration: 0.1)) {
-                showWhiteFlash = true
+                showProcessedText = true
             }
 
-            // Hold flash for 0.5 seconds, then transition
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                showWhiteFlash = false
+            // Transition after showing PROCESSED for 0.6 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                 uploadState = .scanning
             }
         }
+    }
+
+    private func resetAllState() {
+        formData.reset()
+        scanAngle = 0
+        visibleLines = 0
+        scanPhase = .idle
+        showProcessedText = false
+        uploadState = .enterDetails
     }
 
     private func handleICAOSelection(_ icao: String) {
@@ -861,11 +933,7 @@ struct UploadPage: View {
         Haptics.success()
 
         // 8. Reset form
-        formData.reset()
-        scanAngle = 0
-        scanLineOffset = 0
-        showWhiteFlash = false
-        uploadState = .enterDetails
+        resetAllState()
     }
 
     private func saveImageToPhotoLibrary(_ image: UIImage) async -> String {
@@ -881,34 +949,67 @@ struct UploadPage: View {
     }
 }
 
-// MARK: - Scan Lines Overlay
-/// Animated diagonal green scan lines that sweep across the image
-struct ScanLinesOverlay: View {
-    let offset: CGFloat
+// MARK: - Scan Phase
+enum ScanPhase {
+    case idle
+    case topLeftToBottomRight
+    case topRightToBottomLeft
+}
+
+// MARK: - X-Pattern Scan Overlay
+/// Animated X-pattern grid with lines drawn sequentially
+struct XPatternScanOverlay: View {
+    let visibleLines: Int
+    let phase: ScanPhase
     let lineSpacing: CGFloat
+
+    // Persistent state for completed phases
+    @State private var phase1Complete: Bool = false
 
     var body: some View {
         Canvas { context, size in
-            let lineWidth: CGFloat = 2
-            let totalDiagonal = size.width + size.height
+            let lineWidth: CGFloat = 1
+            let greenColor = Color(hex: "00FF00").opacity(0.8)
 
-            // Draw diagonal lines from top-left to bottom-right
-            // Lines start off-screen to the top-left and move to bottom-right
-            let startOffset = -totalDiagonal + offset
+            // Always draw phase 1 lines if completed or currently drawing
+            if phase == .topLeftToBottomRight || phase1Complete || phase == .topRightToBottomLeft {
+                let linesToDraw = phase == .topLeftToBottomRight ? visibleLines : Int(ceil((size.width + size.height) / lineSpacing))
 
-            for i in stride(from: startOffset, to: totalDiagonal, by: lineSpacing) {
-                let path = Path { p in
-                    // Line goes from (i, 0) to (i + height, height)
-                    // This creates lines at 45 degrees
-                    p.move(to: CGPoint(x: i, y: 0))
-                    p.addLine(to: CGPoint(x: i + size.height, y: size.height))
+                // Draw top-left to bottom-right diagonal lines
+                var lineIndex = 0
+                var startX: CGFloat = -size.height
+                while startX < size.width && lineIndex < linesToDraw {
+                    let path = Path { p in
+                        p.move(to: CGPoint(x: startX, y: 0))
+                        p.addLine(to: CGPoint(x: startX + size.height, y: size.height))
+                    }
+                    context.stroke(path, with: .color(greenColor), lineWidth: lineWidth)
+                    startX += lineSpacing
+                    lineIndex += 1
                 }
+            }
 
-                context.stroke(
-                    path,
-                    with: .color(Color(hex: "00FF00").opacity(0.7)),  // Bright green
-                    lineWidth: lineWidth
-                )
+            // Draw phase 2 lines (top-right to bottom-left)
+            if phase == .topRightToBottomLeft {
+                var lineIndex = 0
+                var startX: CGFloat = size.width + size.height
+                while startX > 0 && lineIndex < visibleLines {
+                    let path = Path { p in
+                        p.move(to: CGPoint(x: startX, y: 0))
+                        p.addLine(to: CGPoint(x: startX - size.height, y: size.height))
+                    }
+                    context.stroke(path, with: .color(greenColor), lineWidth: lineWidth)
+                    startX -= lineSpacing
+                    lineIndex += 1
+                }
+            }
+        }
+        .onChange(of: phase) { oldPhase, newPhase in
+            if oldPhase == .topLeftToBottomRight && newPhase == .topRightToBottomLeft {
+                phase1Complete = true
+            }
+            if newPhase == .idle {
+                phase1Complete = false
             }
         }
     }

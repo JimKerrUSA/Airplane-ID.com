@@ -2746,5 +2746,25 @@ When user selects an ICAO code:
   - Then transitions to radar spinner "Identifying Aircraft..." screen
 - **State flow:** enterDetails → imageScan → scanning → results
 - Build verified in Xcode
-- Next: Test on device, continue UI refinement
+
+### 2026-01-18 (continued - X-pattern scan animation, results layout)
+- **X-pattern grid scan animation (replaced static lines):**
+  - Sequential line drawing with 25ms delay between each line
+  - Phase 1: Diagonal lines top-left → bottom-right
+  - Phase 2: Diagonal lines top-right → bottom-left (creates X/grid pattern)
+  - Lines are 1pt wide (reduced from 2pt), 30px spacing
+  - `ScanPhase` enum: idle, topLeftToBottomRight, topRightToBottomLeft
+  - `XPatternScanOverlay` component with `@State` to persist phase1 lines
+  - White flash with "PROCESSED" text (40pt Helvetica-Bold, gray at 30% opacity)
+  - Status text changes to "Complete!" during flash
+- **Start Over button restyled:**
+  - Changed from blue link text to orange box button (matches CLEAR button style)
+  - Text: "START OVER", Helvetica-Bold 14pt, white on orange background
+- **Results page data layout reordered:**
+  - Row 1: Manufacturer | Model
+  - Row 2: Registration | Classification (uses `AircraftLookup.classificationName`)
+  - Row 3: Type (full width for long text like "Fixed Wing Single-Engine")
+  - Row 4: Engine Type | Num Engines
+  - All fields show "—" when data is missing
+- Next: Build and test animation timing
 
